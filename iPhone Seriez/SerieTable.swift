@@ -136,7 +136,7 @@ class SerieTable: UITableViewController {
         super.viewDidLoad()
         
         // Initialisation des token de data sources et de la watchlist
-        //trakt.downloadToken(key: "1060FF04")
+        //trakt.downloadToken(key: "A0F0010E")
         trakt.start()
         theTVdb.initializeToken()
         
