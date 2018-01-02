@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		623D28921FED45D0005488D5 /* A.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 623D28901FED45D0005488D5 /* A.jpg */; };
 		623D28931FED45D0005488D5 /* A-small.png in Resources */ = {isa = PBXBuildFile; fileRef = 623D28911FED45D0005488D5 /* A-small.png */; };
+		624D27471FFBBEFF00B49702 /* ViewAbandonnees.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624D27461FFBBEFF00B49702 /* ViewAbandonnees.swift */; };
+		624D27491FFBD4E100B49702 /* ViewAccueil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624D27481FFBD4E100B49702 /* ViewAccueil.swift */; };
 		6254806B1FE6D7740099A3D2 /* comedy.png in Resources */ = {isa = PBXBuildFile; fileRef = 625480561FE6D7710099A3D2 /* comedy.png */; };
 		6254806C1FE6D7740099A3D2 /* action.png in Resources */ = {isa = PBXBuildFile; fileRef = 625480571FE6D7710099A3D2 /* action.png */; };
 		6254806D1FE6D7740099A3D2 /* musical.png in Resources */ = {isa = PBXBuildFile; fileRef = 625480581FE6D7720099A3D2 /* musical.png */; };
@@ -40,7 +42,7 @@
 		62DD877A1FB766C600A9B9EE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 62DD87781FB766C600A9B9EE /* LaunchScreen.storyboard */; };
 		62DD87851FB766C700A9B9EE /* iPhone_SeriezTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD87841FB766C700A9B9EE /* iPhone_SeriezTests.swift */; };
 		62DD87901FB766C700A9B9EE /* iPhone_SeriezUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD878F1FB766C700A9B9EE /* iPhone_SeriezUITests.swift */; };
-		62DD879E1FB767B900A9B9EE /* SerieTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD879D1FB767B900A9B9EE /* SerieTable.swift */; };
+		62DD879E1FB767B900A9B9EE /* ViewAdecouvrir.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD879D1FB767B900A9B9EE /* ViewAdecouvrir.swift */; };
 		62DD87A41FB76F5D00A9B9EE /* TheTVdb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD879F1FB76F5D00A9B9EE /* TheTVdb.swift */; };
 		62DD87A81FB76F5D00A9B9EE /* Trakt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD87A31FB76F5D00A9B9EE /* Trakt.swift */; };
 		62DD87AA1FB7838400A9B9EE /* SerieFiche.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD87A91FB7838400A9B9EE /* SerieFiche.swift */; };
@@ -74,6 +76,8 @@
 /* Begin PBXFileReference section */
 		623D28901FED45D0005488D5 /* A.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = A.jpg; sourceTree = "<group>"; };
 		623D28911FED45D0005488D5 /* A-small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "A-small.png"; sourceTree = "<group>"; };
+		624D27461FFBBEFF00B49702 /* ViewAbandonnees.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewAbandonnees.swift; sourceTree = "<group>"; };
+		624D27481FFBD4E100B49702 /* ViewAccueil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewAccueil.swift; sourceTree = "<group>"; };
 		625480561FE6D7710099A3D2 /* comedy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = comedy.png; sourceTree = "<group>"; };
 		625480571FE6D7710099A3D2 /* action.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = action.png; sourceTree = "<group>"; };
 		625480581FE6D7720099A3D2 /* musical.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = musical.png; sourceTree = "<group>"; };
@@ -111,7 +115,7 @@
 		62DD878B1FB766C700A9B9EE /* SerieAUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SerieAUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		62DD878F1FB766C700A9B9EE /* iPhone_SeriezUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iPhone_SeriezUITests.swift; sourceTree = "<group>"; };
 		62DD87911FB766C700A9B9EE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		62DD879D1FB767B900A9B9EE /* SerieTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerieTable.swift; sourceTree = "<group>"; };
+		62DD879D1FB767B900A9B9EE /* ViewAdecouvrir.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewAdecouvrir.swift; sourceTree = "<group>"; };
 		62DD879F1FB76F5D00A9B9EE /* TheTVdb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TheTVdb.swift; sourceTree = "<group>"; };
 		62DD87A31FB76F5D00A9B9EE /* Trakt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Trakt.swift; sourceTree = "<group>"; };
 		62DD87A91FB7838400A9B9EE /* SerieFiche.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerieFiche.swift; sourceTree = "<group>"; };
@@ -227,15 +231,17 @@
 				62DD87A31FB76F5D00A9B9EE /* Trakt.swift */,
 				623D28911FED45D0005488D5 /* A-small.png */,
 				623D28901FED45D0005488D5 /* A.jpg */,
-				62DD87AC1FB89E7D00A9B9EE /* Episode.swift */,
 				625480551FE6D7450099A3D2 /* Icones genres */,
 				625480531FE6D7140099A3D2 /* Icones sources */,
 				625480541FE6D7360099A3D2 /* Icones status */,
-				62DD87AB1FB89E7D00A9B9EE /* Saison.swift */,
 				62DD87AD1FB89E7D00A9B9EE /* Serie.swift */,
+				62DD87AB1FB89E7D00A9B9EE /* Saison.swift */,
+				62DD87AC1FB89E7D00A9B9EE /* Episode.swift */,
 				62DD876F1FB766C600A9B9EE /* AppDelegate.swift */,
 				62DD87B91FB8C15500A9B9EE /* BetaSeries.swift */,
-				62DD879D1FB767B900A9B9EE /* SerieTable.swift */,
+				624D27481FFBD4E100B49702 /* ViewAccueil.swift */,
+				62DD879D1FB767B900A9B9EE /* ViewAdecouvrir.swift */,
+				624D27461FFBBEFF00B49702 /* ViewAbandonnees.swift */,
 				62DD87A91FB7838400A9B9EE /* SerieFiche.swift */,
 				62DD87731FB766C600A9B9EE /* Main.storyboard */,
 				62DD87761FB766C600A9B9EE /* Assets.xcassets */,
@@ -429,13 +435,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				62DD87AA1FB7838400A9B9EE /* SerieFiche.swift in Sources */,
-				62DD879E1FB767B900A9B9EE /* SerieTable.swift in Sources */,
+				62DD879E1FB767B900A9B9EE /* ViewAdecouvrir.swift in Sources */,
 				62DD87AF1FB89E7D00A9B9EE /* Episode.swift in Sources */,
 				62DD87AE1FB89E7D00A9B9EE /* Saison.swift in Sources */,
 				62DD87BA1FB8C15600A9B9EE /* BetaSeries.swift in Sources */,
 				62DD87B21FB8A2E000A9B9EE /* Graph.swift in Sources */,
+				624D27471FFBBEFF00B49702 /* ViewAbandonnees.swift in Sources */,
 				62DD87A41FB76F5D00A9B9EE /* TheTVdb.swift in Sources */,
 				62DD87A81FB76F5D00A9B9EE /* Trakt.swift in Sources */,
+				624D27491FFBD4E100B49702 /* ViewAccueil.swift in Sources */,
 				62DD87B01FB89E7D00A9B9EE /* Serie.swift in Sources */,
 				62DD87701FB766C600A9B9EE /* AppDelegate.swift in Sources */,
 			);

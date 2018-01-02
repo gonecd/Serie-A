@@ -40,6 +40,7 @@ class TheTVdb : NSObject
                     do {
                         let jsonToken : NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
                         self.Token = jsonToken.object(forKey: "token") as! String!
+                        print("Token = \(self.Token)")
                     } catch let error as NSError { print("TheTVdb::getToken failed: \(error.localizedDescription)") }
                 }
                 else { print("TheTVdb::getToken error code \(response.statusCode)") }
@@ -59,6 +60,7 @@ class TheTVdb : NSObject
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue("en", forHTTPHeaderField: "Accept-Language")
         request.addValue("Bearer \(self.Token)", forHTTPHeaderField: "Authorization")
         
         var session = URLSession.shared
@@ -68,6 +70,7 @@ class TheTVdb : NSObject
                     if response.statusCode == 200 {
                         
                         let jsonResponse : NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
+
                         uneSerie.banner = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "banner") as! String
                         uneSerie.status = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "status") as! String
                         uneSerie.ratingTVdb = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "siteRating") as! Double
@@ -86,7 +89,63 @@ class TheTVdb : NSObject
         task.resume()
         while (task.state != URLSessionTask.State.completed) { usleep(1000) }
         
+        // Récupération d'un poster
+        url = URL(string: "https://api.thetvdb.com/series/\(uneSerie.idTVdb)/images/query?keyType=poster")!
+        request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue("en", forHTTPHeaderField: "Accept-Language")
+        request.addValue("Bearer \(self.Token)", forHTTPHeaderField: "Authorization")
+
+        session = URLSession.shared
+        task = session.dataTask(with: request, completionHandler: { data, response, error in
+            if let data = data, let response = response as? HTTPURLResponse {
+                do {
+                    if response.statusCode == 200 {
+                        
+                        let jsonResponse : NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
+                        
+                        var bestVotedRating = 0.0
+                        var selectedVotedPoster = ""
+                        
+                        var bestRating = 0.0
+                        var selectedPoster = ""
+                        
+                        for fiche in jsonResponse.object(forKey: "data")! as! NSArray
+                        {
+                            //let fichier = (fiche as AnyObject).object(forKey: "fileName") as? String ?? ""
+                            let thumb = (fiche as AnyObject).object(forKey: "thumbnail") as? String ?? ""
+                            let rating = ((fiche as AnyObject).object(forKey: "ratingsInfo")  as AnyObject).object(forKey: "average") as? Double ?? 0.0
+                            let raters = ((fiche as AnyObject).object(forKey: "ratingsInfo")  as AnyObject).object(forKey: "count") as? Int ?? 0
+                            
+                            if (raters > 5) {
+                                if (rating > bestVotedRating) {
+                                    bestVotedRating = rating
+                                    selectedVotedPoster = thumb
+                                }
+                            }
+                            
+                            if (rating > bestRating) {
+                                bestRating = rating
+                                selectedPoster = thumb
+                            }
+                        }
+                        
+                        if (selectedVotedPoster == "") { uneSerie.poster = selectedPoster }
+                        else { uneSerie.poster = selectedVotedPoster }
+                    }
+                    else
+                    {
+                        print ("TheTVdb::getSerieInfos failed: code erreur \(response.statusCode)")
+                    }
+                } catch let error as NSError { print("TheTVdb::getSerieInfos failed: \(error.localizedDescription)") }
+            } else { print(error as Any) }
+        })
         
+        task.resume()
+        while (task.state != URLSessionTask.State.completed) { usleep(10000) }
+
+
         while ( continuer )
         {
             // Parsing de la saison
@@ -94,6 +153,7 @@ class TheTVdb : NSObject
             request = URLRequest(url: url)
             request.httpMethod = "GET"
             request.addValue("application/json", forHTTPHeaderField: "Accept")
+            request.addValue("en", forHTTPHeaderField: "Accept-Language")
             request.addValue("Bearer \(self.Token)", forHTTPHeaderField: "Authorization")
             
             let dateFormatter = DateFormatter()
@@ -109,36 +169,34 @@ class TheTVdb : NSObject
                             
                             for fiche in jsonResponse.object(forKey: "data")! as! NSArray
                             {
-                                if (((fiche as AnyObject).object(forKey: "airedSeason") as? Int ?? 0) != 0)
+                                let laSaison : Int = ((fiche as AnyObject).object(forKey: "airedSeason") as? Int ?? 0)
+                                
+                                if (laSaison != 0)
                                 {
-                                    if (((fiche as AnyObject).object(forKey: "airedSeason") as? Int ?? 0) > uneSerie.saisons.count)
+                                    if (laSaison > uneSerie.saisons.count)
                                     {
-                                        // Il manque une saison, on crée toutes les saisons manquantes
+                                        // Il manque une (ou des) saison(s), on crée toutes les saisons manquantes
                                         var uneSaison : Saison
-                                        
-                                        for i:Int in uneSerie.saisons.count ..< ((fiche as AnyObject).object(forKey: "airedSeason") as! Int)
+                                        for i:Int in uneSerie.saisons.count ..< laSaison
                                         {
                                             uneSaison = Saison(serie: uneSerie.serie, saison: i+1)
                                             uneSerie.saisons.append(uneSaison)
                                         }
                                     }
                                     
-                                    if (((fiche as AnyObject).object(forKey: "airedEpisodeNumber") as! Int) > uneSerie.saisons[((fiche as AnyObject).object(forKey: "airedSeason") as! Int) - 1].episodes.count)
+                                    let lEpisode : Int = ((fiche as AnyObject).object(forKey: "airedEpisodeNumber") as! Int)
+                                    if (lEpisode > uneSerie.saisons[laSaison - 1].episodes.count)
                                     {
-                                        // Il manque un épisode, on crée tous les épisodes manquants
+                                        // Il manque un (ou des) épisode(s), on crée tous les épisodes manquants
                                         var unEpisode : Episode
-                                        
-                                        for i:Int in uneSerie.saisons[((fiche as AnyObject).object(forKey: "airedSeason") as! Int) - 1].episodes.count ..< ((fiche as AnyObject).object(forKey: "airedEpisodeNumber") as! Int)
+                                        for i:Int in uneSerie.saisons[laSaison - 1].episodes.count ..< lEpisode
                                         {
-                                            unEpisode = Episode(serie: uneSerie.serie,
-                                                                fichier: "",
-                                                                saison: (fiche as AnyObject).object(forKey: "airedSeason") as! Int,
-                                                                episode: i+1)
-                                            uneSerie.saisons[((fiche as AnyObject).object(forKey: "airedSeason") as! Int) - 1].episodes.append(unEpisode)
+                                            unEpisode = Episode(serie: uneSerie.serie, fichier: "", saison: laSaison, episode: i+1)
+                                            uneSerie.saisons[laSaison - 1].episodes.append(unEpisode)
                                         }
                                     }
                                     
-                                    uneSerie.saisons[((fiche as AnyObject).object(forKey: "airedSeason") as! Int) - 1].episodes[((fiche as AnyObject).object(forKey: "airedEpisodeNumber") as! Int) - 1].idTVdb = (fiche as AnyObject).object(forKey: "id") as? Int ?? 0
+                                    uneSerie.saisons[laSaison - 1].episodes[lEpisode - 1].idTVdb = (fiche as AnyObject).object(forKey: "id") as? Int ?? 0
                                 }
                             }
                         }
@@ -175,6 +233,7 @@ class TheTVdb : NSObject
                     request = URLRequest(url: url)
                     request.httpMethod = "GET"
                     request.addValue("application/json", forHTTPHeaderField: "Accept")
+                    request.addValue("en", forHTTPHeaderField: "Accept-Language")
                     request.addValue("Bearer \(self.Token)", forHTTPHeaderField: "Authorization")
                     
                     session = URLSession.shared

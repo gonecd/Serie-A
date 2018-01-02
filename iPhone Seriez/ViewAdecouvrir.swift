@@ -1,5 +1,5 @@
 //
-//  SerieTable.swift
+//  ViewAdecouvrir.swift
 //  iPhone Seriez
 //
 //  Created by Cyril Delamare on 11/11/2017.
@@ -9,7 +9,7 @@
 import UIKit
 
 
-class SerieCell: UITableViewCell {
+class CellAdecouvrir: UITableViewCell {
     
     @IBOutlet weak var banniereSerie: UIImageView!
     @IBOutlet weak var note: UILabel!
@@ -17,7 +17,7 @@ class SerieCell: UITableViewCell {
 }
 
 
-class SerieTable: UITableViewController {
+class ViewAdecouvrir: UITableViewController {
     
     var allSeries: [Serie] = [Serie]()
     let trakt : Trakt = Trakt.init()
@@ -159,7 +159,7 @@ class SerieTable: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "serieCell", for: indexPath) as! SerieCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CellAdecouvrir", for: indexPath) as! CellAdecouvrir
         
         cell.banniereSerie?.image = getImage(allSeries[indexPath.row].banner)
         cell.index = indexPath.row
@@ -174,7 +174,7 @@ class SerieTable: UITableViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let viewController = segue.destination as! SerieFiche
-        let tableCell : SerieCell = sender as! SerieCell
+        let tableCell : CellAdecouvrir = sender as! CellAdecouvrir
         viewController.serie = allSeries[tableCell.index]
         viewController.image = getImage(allSeries[tableCell.index].banner)
     }

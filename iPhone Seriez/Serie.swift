@@ -25,6 +25,7 @@ class Serie : NSObject, NSCoding
     var ratersTVdb : Int = 0
     var network : String = String()
     var banner : String = String()
+    var poster : String = String()
     var status : String = String()
     var resume : String = String()
     var genres : [String] = []
@@ -49,6 +50,7 @@ class Serie : NSObject, NSCoding
         self.ratingTVdb = decoder.decodeDouble(forKey: "ratingTVdb")
         self.network = decoder.decodeObject(forKey: "network") as? String ?? ""
         self.banner = decoder.decodeObject(forKey: "banner") as? String ?? ""
+        self.poster = decoder.decodeObject(forKey: "poster") as? String ?? ""
         self.status = decoder.decodeObject(forKey: "status") as? String ?? ""
         self.resume = decoder.decodeObject(forKey: "resume") as? String ?? ""
         self.genres = decoder.decodeObject(forKey: "genres") as? [String] ?? []
@@ -68,6 +70,7 @@ class Serie : NSObject, NSCoding
         coder.encode(self.ratingTVdb, forKey: "ratingTVdb")
         coder.encode(self.network, forKey: "network")
         coder.encode(self.banner, forKey: "banner")
+        coder.encode(self.poster, forKey: "poster")
         coder.encode(self.status, forKey: "status")
         coder.encode(self.resume, forKey: "resume")
         coder.encode(self.genres, forKey: "genres")
@@ -88,6 +91,7 @@ class Serie : NSObject, NSCoding
         if (uneSerie.ratersTVdb != 0)       { self.ratersTVdb = uneSerie.ratersTVdb }
         if (uneSerie.network != "")         { self.network = uneSerie.network }
         if (uneSerie.banner != "")          { self.banner = uneSerie.banner }
+        if (uneSerie.poster != "")          { self.banner = uneSerie.poster }
         if (uneSerie.status != "")          { self.status = uneSerie.status }
         if (uneSerie.resume != "")          { self.resume = uneSerie.resume }
         if (uneSerie.genres != [])          { self.genres = uneSerie.genres }

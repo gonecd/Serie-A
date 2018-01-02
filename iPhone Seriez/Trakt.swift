@@ -340,7 +340,41 @@ class Trakt : NSObject
         }
     }
     
-    
+    func getStopped() -> [Serie]
+    {
+        var request = URLRequest(url: URL(string: "https://api.trakt.tv/users/gonecd/lists/Abandon/items/shows")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("Bearer \(self.Token)", forHTTPHeaderField: "Authorization")
+        request.addValue("2", forHTTPHeaderField: "trakt-api-version")
+        request.addValue("\(self.TraktClientID)", forHTTPHeaderField: "trakt-api-key")
+        
+        var returnSeries: [Serie] = [Serie]()
+        var serie: Serie = Serie(serie: "")
+        
+        let task = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
+            if let data = data, let response = response as? HTTPURLResponse {
+                do {
+                    
+                    if (response.statusCode != 200) { print("Trakt::getStopped error \(response.statusCode) received "); return; }
+                    
+                    let jsonResponse : NSArray = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSArray
+                    
+                    for fiche in jsonResponse {
+                        serie = Serie.init(serie: ((fiche as AnyObject).object(forKey: "show")! as AnyObject).object(forKey: "title") as! String)
+                        serie.idIMdb = (((fiche as AnyObject).object(forKey: "show")! as AnyObject).object(forKey: "ids")! as AnyObject).object(forKey: "imdb") as! String
+                        serie.idTVdb = String((((fiche as AnyObject).object(forKey: "show")! as AnyObject).object(forKey: "ids")! as AnyObject).object(forKey: "tvdb") as! Int)
+                        serie.idTrakt = String((((fiche as AnyObject).object(forKey: "show")! as AnyObject).object(forKey: "ids")! as AnyObject).object(forKey: "trakt") as! Int)
+                        
+                        returnSeries.append(serie)
+                    }
+                } catch let error as NSError { print("Trakt::getStopped failed: \(error.localizedDescription)") }
+            } else { print(error as Any) }
+        })
+        
+        task.resume()
+        while (task.state != URLSessionTask.State.completed) { sleep(1) }
+        return returnSeries
+    }
 }
 
 
