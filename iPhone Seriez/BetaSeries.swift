@@ -18,7 +18,7 @@ class BetaSeries : NSObject
     }
     
     
-    func getSerieInfos(_ uneSerie: Serie)
+    func getEpisodesRatings(_ uneSerie: Serie)
     {
         var url : URL
         var request : URLRequest

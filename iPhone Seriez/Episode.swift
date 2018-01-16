@@ -15,11 +15,14 @@ class Episode : NSObject, NSCoding
     var saison : Int = 0
     var episode : Int = 0
     
+    var watched : Bool = false
+
     // Source TheTVdb
     var ratingTVdb : Double = 0.0
     var ratersTVdb : Int = 0
     var idTVdb : Int = 0
-    
+    var date : Date = Date.init(timeIntervalSince1970: 0)
+
     // Source Trakt
     var ratingTrakt : Double = 0.0
     var ratersTrakt : Int = 0
@@ -43,8 +46,10 @@ class Episode : NSObject, NSCoding
         self.serie = decoder.decodeObject(forKey: "serie") as? String ?? ""
         self.saison = decoder.decodeInteger(forKey: "saison")
         self.episode = decoder.decodeInteger(forKey: "episode")
+        self.watched = decoder.decodeBool(forKey: "watched")
         self.ratingTVdb = decoder.decodeDouble(forKey: "ratingTVdb")
         self.idTVdb = decoder.decodeInteger(forKey: "idTVdb")
+        self.date = (decoder.decodeObject(forKey: "date") ?? Date.init(timeIntervalSince1970: 0)) as! Date
         self.ratersTVdb = decoder.decodeInteger(forKey: "ratersTVdb")
         self.ratingTrakt = decoder.decodeDouble(forKey: "ratingTrakt")
         self.ratersTrakt = decoder.decodeInteger(forKey: "ratersTrakt")
@@ -58,8 +63,10 @@ class Episode : NSObject, NSCoding
         coder.encode(self.serie, forKey: "serie")
         coder.encodeCInt(Int32(self.saison), forKey: "saison")
         coder.encodeCInt(Int32(self.episode), forKey: "episode")
+        coder.encode(self.watched, forKey: "watched")
         coder.encode(self.ratingTVdb, forKey: "ratingTVdb")
         coder.encodeCInt(Int32(self.idTVdb), forKey: "idTVdb")
+        coder.encode(self.date, forKey: "date")
         coder.encodeCInt(Int32(self.ratersTVdb), forKey: "ratersTVdb")
         coder.encode(self.ratingTrakt, forKey: "ratingTrakt")
         coder.encodeCInt(Int32(self.ratersTrakt), forKey: "ratersTrakt")
@@ -95,9 +102,11 @@ class Episode : NSObject, NSCoding
         if (unEpisode.serie != "")         { self.serie = unEpisode.serie }
         if (unEpisode.saison != 0)         { self.saison = unEpisode.saison }
         if (unEpisode.episode != 0)        { self.episode = unEpisode.episode }
+        if (unEpisode.watched != false)    { self.watched = unEpisode.watched }
         if (unEpisode.ratingTVdb != 0.0)   { self.ratingTVdb = unEpisode.ratingTVdb }
         if (unEpisode.ratersTVdb != 0)     { self.ratersTVdb = unEpisode.ratersTVdb }
         if (unEpisode.idTVdb != 0)         { self.idTVdb = unEpisode.idTVdb }
+        if (unEpisode.date != Date.init(timeIntervalSince1970: 0))       { self.date = unEpisode.date }
         if (unEpisode.ratingTrakt != 0.0)      { self.ratingTrakt = unEpisode.ratingTrakt }
         if (unEpisode.ratersTrakt != 0)        { self.ratersTrakt = unEpisode.ratersTrakt }
         if (unEpisode.ratingBetaSeries != 0.0) { self.ratingBetaSeries = unEpisode.ratingBetaSeries }

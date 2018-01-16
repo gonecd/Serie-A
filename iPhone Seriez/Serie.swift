@@ -18,8 +18,11 @@ class Serie : NSObject, NSCoding
     var idIMdb : String = String()
     var idTrakt : String = String()
     var idTVdb : String = String()
-    var idTVRage : String = String()
-    
+    var message : String = String()
+
+    var unfollowed : Bool = false
+    var watchlist : Bool = false
+
     // Source TheTVdb
     var ratingTVdb : Double = 0.0
     var ratersTVdb : Int = 0
@@ -45,8 +48,11 @@ class Serie : NSObject, NSCoding
         self.idIMdb = decoder.decodeObject(forKey: "idIMdb") as? String ?? ""
         self.idTrakt = decoder.decodeObject(forKey: "idTrakt") as? String ?? ""
         self.idTVdb = decoder.decodeObject(forKey: "idTVdb") as? String ?? ""
-        self.idTVRage = decoder.decodeObject(forKey: "idTVRage") as? String ?? ""
-        
+        self.message = decoder.decodeObject(forKey: "message") as? String ?? ""
+
+        self.unfollowed = decoder.decodeBool(forKey: "unfollowed")
+        self.watchlist = decoder.decodeBool(forKey: "watchlist")
+
         self.ratingTVdb = decoder.decodeDouble(forKey: "ratingTVdb")
         self.network = decoder.decodeObject(forKey: "network") as? String ?? ""
         self.banner = decoder.decodeObject(forKey: "banner") as? String ?? ""
@@ -65,8 +71,11 @@ class Serie : NSObject, NSCoding
         coder.encode(self.idIMdb, forKey: "idIMdb")
         coder.encode(self.idTrakt, forKey: "idTrakt")
         coder.encode(self.idTVdb, forKey: "idTVdb")
-        coder.encode(self.idTVRage, forKey: "idTVRage")
-        
+        coder.encode(self.message, forKey: "message")
+
+        coder.encode(self.unfollowed, forKey: "unfollowed")
+        coder.encode(self.watchlist, forKey: "watchlist")
+
         coder.encode(self.ratingTVdb, forKey: "ratingTVdb")
         coder.encode(self.network, forKey: "network")
         coder.encode(self.banner, forKey: "banner")
@@ -98,7 +107,10 @@ class Serie : NSObject, NSCoding
         if (uneSerie.idIMdb != "")          { self.idIMdb = uneSerie.idIMdb }
         if (uneSerie.idTrakt != "")         { self.idTrakt = uneSerie.idTrakt }
         if (uneSerie.idTVdb != "")          { self.idTVdb = uneSerie.idTVdb }
-        if (uneSerie.idTVRage != "")        { self.idTVRage = uneSerie.idTVRage }
+        if (uneSerie.message != "")         { self.message = uneSerie.message }
+        if (uneSerie.unfollowed != false)   { self.unfollowed = uneSerie.unfollowed }
+        if (uneSerie.watchlist != false)    { self.watchlist = uneSerie.watchlist }
+
         if (uneSerie.year != 0)             { self.year = uneSerie.year }
 
         for uneSaison in uneSerie.saisons

@@ -43,7 +43,7 @@ class Trakt : NSObject
         }
         else
         {
-            self.downloadToken(key: "6D863238")
+            self.downloadToken(key: "78C58EAD")
             return false
         }
     }
@@ -265,6 +265,7 @@ class Trakt : NSObject
                         serie.idIMdb = (((fiche as AnyObject).object(forKey: "show")! as AnyObject).object(forKey: "ids")! as AnyObject).object(forKey: "imdb") as! String
                         serie.idTVdb = String((((fiche as AnyObject).object(forKey: "show")! as AnyObject).object(forKey: "ids")! as AnyObject).object(forKey: "tvdb") as! Int)
                         serie.idTrakt = String((((fiche as AnyObject).object(forKey: "show")! as AnyObject).object(forKey: "ids")! as AnyObject).object(forKey: "trakt") as! Int)
+                        serie.watchlist = true
                         
                         returnSeries.append(serie)
                     }
@@ -279,7 +280,7 @@ class Trakt : NSObject
     }
     
     
-    func getSerieInfos(_ uneSerie: Serie)
+    func getEpisodesRatings(_ uneSerie: Serie)
     {
         for uneSaison in uneSerie.saisons
         {
@@ -364,6 +365,7 @@ class Trakt : NSObject
                         serie.idIMdb = (((fiche as AnyObject).object(forKey: "show")! as AnyObject).object(forKey: "ids")! as AnyObject).object(forKey: "imdb") as! String
                         serie.idTVdb = String((((fiche as AnyObject).object(forKey: "show")! as AnyObject).object(forKey: "ids")! as AnyObject).object(forKey: "tvdb") as! Int)
                         serie.idTrakt = String((((fiche as AnyObject).object(forKey: "show")! as AnyObject).object(forKey: "ids")! as AnyObject).object(forKey: "trakt") as! Int)
+                        serie.unfollowed = true
                         
                         returnSeries.append(serie)
                     }
@@ -375,6 +377,62 @@ class Trakt : NSObject
         while (task.state != URLSessionTask.State.completed) { sleep(1) }
         return returnSeries
     }
+
+    func getWatched() -> [Serie]
+    {
+        let url = URL(string: "https://api.trakt.tv/sync/watched/shows")!
+        var request = URLRequest(url: url)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("Bearer \(self.Token)", forHTTPHeaderField: "Authorization")
+        request.addValue("2", forHTTPHeaderField: "trakt-api-version")
+        request.addValue("\(self.TraktClientID)", forHTTPHeaderField: "trakt-api-key")
+        
+        //        let session = URLSession.shared
+        var returnSeries: [Serie] = [Serie]()
+        var serie: Serie = Serie(serie: "")
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            //        let task = session.dataTask(with: request, completionHandler: { data, response, error in
+            if let data = data {
+                do {
+                    let jsonResponse : NSArray = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSArray
+                    
+                    for fiche in jsonResponse {
+                        
+                        serie = Serie.init(serie: ((fiche as AnyObject).object(forKey: "show")! as AnyObject).object(forKey: "title") as! String)
+                        serie.idIMdb = (((fiche as AnyObject).object(forKey: "show")! as AnyObject).object(forKey: "ids")! as AnyObject).object(forKey: "imdb") as! String
+                        serie.idTVdb = String((((fiche as AnyObject).object(forKey: "show")! as AnyObject).object(forKey: "ids")! as AnyObject).object(forKey: "tvdb") as! Int)
+                        serie.idTrakt = String((((fiche as AnyObject).object(forKey: "show")! as AnyObject).object(forKey: "ids")! as AnyObject).object(forKey: "trakt") as! Int)
+                        
+                        for fichesaisons in (fiche as AnyObject).object(forKey: "seasons") as! NSArray
+                        {
+                            let uneSaison : Saison = Saison(serie: ((fiche as AnyObject).object(forKey: "show")! as AnyObject).object(forKey: "title") as! String,
+                                                            saison: (fichesaisons as AnyObject).object(forKey: "number") as! Int)
+                            
+                            for ficheepisodes in (fichesaisons as AnyObject).object(forKey: "episodes") as! NSArray
+                            {
+                                let unEpisode : Episode = Episode(serie: ((fiche as AnyObject).object(forKey: "show")! as AnyObject).object(forKey: "title") as! String,
+                                                                  fichier: "",
+                                                                  saison: (fichesaisons as AnyObject).object(forKey: "number") as! Int,
+                                                                  episode: (ficheepisodes as AnyObject).object(forKey: "number") as! Int)
+                                unEpisode.watched = true
+                                uneSaison.episodes.append(unEpisode)
+                            }
+                            
+                            serie.saisons.append(uneSaison)
+                        }
+                        
+                        returnSeries.append(serie)
+                    }
+                } catch let error as NSError { print("Trakt::getWatched failed: \(error.localizedDescription)") }
+            } else { print(error as Any) }
+        }
+        
+        task.resume()
+        while (task.state != URLSessionTask.State.completed) { sleep(1) }
+        return returnSeries
+    }
+
 }
 
 

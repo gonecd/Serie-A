@@ -52,8 +52,8 @@ class ViewAdecouvrir: UITableViewController {
                 if (self.trakt.addToWatchlist(theTVdbId: uneSerie.idTVdb))
                 {
                     self.theTVdb.getSerieInfos(uneSerie)
-                    self.trakt.getSerieInfos(uneSerie)
-                    self.betaSeries.getSerieInfos(uneSerie)
+                    self.trakt.getEpisodesRatings(uneSerie)
+                    self.betaSeries.getEpisodesRatings(uneSerie)
                     uneSerie.computeSerieInfos()
                     
                     self.allSeries.append(uneSerie)
@@ -118,8 +118,8 @@ class ViewAdecouvrir: UITableViewController {
                 }
                 
                 self.theTVdb.getSerieInfos(uneSerie)
-                self.trakt.getSerieInfos(uneSerie)
-                self.self.betaSeries.getSerieInfos(uneSerie)
+                self.trakt.getEpisodesRatings(uneSerie)
+                self.self.betaSeries.getEpisodesRatings(uneSerie)
                 uneSerie.computeSerieInfos()
             }
             self.computeCorrections()

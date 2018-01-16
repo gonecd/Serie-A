@@ -51,6 +51,55 @@ class TheTVdb : NSObject
         while (task.state != URLSessionTask.State.completed) { sleep(1) }
     }
     
+    func getEpisodesRatings(_ uneSerie: Serie)
+    {
+        var request : URLRequest
+        var task : URLSessionDataTask
+        
+        for saison in uneSerie.saisons
+        {
+            var tableauDeTaches: [URLSessionTask] = []
+            var globalStatus: URLSessionTask.State = URLSessionTask.State.running
+            
+            for episode in saison.episodes
+            {
+                if (episode.idTVdb != 0)
+                {
+                    request = URLRequest(url: URL(string: "https://api.thetvdb.com/episodes/\(episode.idTVdb)")!)
+                    request.httpMethod = "GET"
+                    request.addValue("application/json", forHTTPHeaderField: "Accept")
+                    request.addValue("en", forHTTPHeaderField: "Accept-Language")
+                    request.addValue("Bearer \(self.Token)", forHTTPHeaderField: "Authorization")
+                    
+                    task = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
+                        if let data = data, let response = response as? HTTPURLResponse {
+                            do {
+                                if response.statusCode == 200 {
+                                    let jsonResponse : NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
+                                    
+                                    episode.ratingTVdb = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "siteRating") as? Double ?? 0.0
+                                    episode.ratersTVdb = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "siteRatingCount") as? Int ?? 0
+                                }
+                            } catch let error as NSError { print("TheTVdb::getSerieInfos failed for \(uneSerie.serie) s\(saison.saison) e\(episode.episode): \(error.localizedDescription)") }
+                        } else { print(error as Any) }
+                    })
+                    
+                    tableauDeTaches.append(task)
+                    task.resume()
+                }
+                
+                while (globalStatus == URLSessionTask.State.running)
+                {
+                    globalStatus = URLSessionTask.State.completed
+                    usleep(1000)
+                    for uneTache in tableauDeTaches
+                    {
+                        if (uneTache.state == URLSessionTask.State.running) { globalStatus = URLSessionTask.State.running }
+                    }
+                }
+            }
+        }
+    }
     
     func getSerieInfos(_ uneSerie: Serie)
     {
@@ -196,6 +245,16 @@ class TheTVdb : NSObject
                                         }
                                     }
                                     
+                                    let stringDate : String = (fiche as AnyObject).object(forKey: "firstAired") as? String ?? ""
+                                    if (stringDate ==  "")
+                                    {
+                                        uneSerie.saisons[((fiche as AnyObject).object(forKey: "airedSeason") as! Int) - 1].episodes[((fiche as AnyObject).object(forKey: "airedEpisodeNumber") as! Int) - 1].date = Date.distantFuture
+                                    }
+                                    else
+                                    {
+                                        uneSerie.saisons[((fiche as AnyObject).object(forKey: "airedSeason") as! Int) - 1].episodes[((fiche as AnyObject).object(forKey: "airedEpisodeNumber") as! Int) - 1].date = dateFormatter.date(from: stringDate)!
+                                    }
+
                                     uneSerie.saisons[laSaison - 1].episodes[lEpisode - 1].idTVdb = (fiche as AnyObject).object(forKey: "id") as? Int ?? 0
                                 }
                             }
@@ -217,53 +276,6 @@ class TheTVdb : NSObject
             while (task.state != URLSessionTask.State.completed) { usleep(10000) }
             
             pageToLoad = pageToLoad + 1
-        }
-        
-        // Récupération des ratings
-        for saison in uneSerie.saisons
-        {
-            var tableauDeTaches: [URLSessionTask] = []
-            var globalStatus: URLSessionTask.State = URLSessionTask.State.running
-            
-            for episode in saison.episodes
-            {
-                if (episode.idTVdb != 0)
-                {
-                    url = URL(string: "https://api.thetvdb.com/episodes/\(episode.idTVdb)")!
-                    request = URLRequest(url: url)
-                    request.httpMethod = "GET"
-                    request.addValue("application/json", forHTTPHeaderField: "Accept")
-                    request.addValue("en", forHTTPHeaderField: "Accept-Language")
-                    request.addValue("Bearer \(self.Token)", forHTTPHeaderField: "Authorization")
-                    
-                    session = URLSession.shared
-                    task = session.dataTask(with: request, completionHandler: { data, response, error in
-                        if let data = data, let response = response as? HTTPURLResponse {
-                            do {
-                                if response.statusCode == 200 {
-                                    let jsonResponse : NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
-                                    
-                                    episode.ratingTVdb = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "siteRating") as? Double ?? 0.0
-                                    episode.ratersTVdb = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "siteRatingCount") as? Int ?? 0
-                                }
-                            } catch let error as NSError { print("TheTVdb::getSerieInfos failed for \(uneSerie.serie) s\(saison.saison) e\(episode.episode): \(error.localizedDescription)") }
-                        } else { print(error as Any) }
-                    })
-                    
-                    tableauDeTaches.append(task)
-                    task.resume()
-                }
-                
-                while (globalStatus == URLSessionTask.State.running)
-                {
-                    globalStatus = URLSessionTask.State.completed
-                    usleep(1000)
-                    for uneTache in tableauDeTaches
-                    {
-                        if (uneTache.state == URLSessionTask.State.running) { globalStatus = URLSessionTask.State.running }
-                    }
-                }
-            }
         }
     }
 }
