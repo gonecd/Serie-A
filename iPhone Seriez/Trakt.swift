@@ -133,9 +133,6 @@ class Trakt : NSObject
     func recherche(serieArechercher : String) -> [Serie]
     {
         var serieListe : [Serie] = []
-        
-        print("URL = https://api.trakt.tv/search/show?fields=title&query=\(serieArechercher.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)!)")
-        
         var request = URLRequest(url: URL(string: "https://api.trakt.tv/search/show?fields=title&query=\(serieArechercher.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)!)")!)
         
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -159,6 +156,7 @@ class Trakt : NSObject
                         newSerie.idIMdb = (((fiche as AnyObject).object(forKey: "show")! as AnyObject).object(forKey: "ids")! as AnyObject).object(forKey: "imdb") as? String ?? ""
                         newSerie.idTVdb = String((((fiche as AnyObject).object(forKey: "show")! as AnyObject).object(forKey: "ids")! as AnyObject).object(forKey: "tvdb") as? Int ?? 0)
                         newSerie.idTrakt = String((((fiche as AnyObject).object(forKey: "show")! as AnyObject).object(forKey: "ids")! as AnyObject).object(forKey: "trakt") as? Int ?? 0)
+                        newSerie.watchlist = true
                         
                         serieListe.append(newSerie)
                     }
@@ -282,6 +280,8 @@ class Trakt : NSObject
     
     func getEpisodesRatings(_ uneSerie: Serie)
     {
+        let today : Date = Date()
+        
         for uneSaison in uneSerie.saisons
         {
             var tableauDeTaches: [URLSessionTask] = []
@@ -289,53 +289,58 @@ class Trakt : NSObject
             
             for unEpisode in uneSaison.episodes
             {
-                var request = URLRequest(url: URL(string: "https://api.trakt.tv/shows/\(uneSerie.idTrakt)/seasons/\(uneSaison.saison)/episodes/\(unEpisode.episode)/ratings")!)
-                request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-                request.addValue("Bearer \(self.Token)", forHTTPHeaderField: "Authorization")
-                request.addValue("2", forHTTPHeaderField: "trakt-api-version")
-                request.addValue("\(self.TraktClientID)", forHTTPHeaderField: "trakt-api-key")
-                
-                let task = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
-                    if let data = data, let response = response as? HTTPURLResponse {
-                        
-                        if (response.statusCode != 200) { print("Trakt::getSerieInfos error \(response.statusCode) received for \(uneSerie.serie) s\(uneSaison.saison) e\(unEpisode.episode)"); return; }
-                        
-                        do {
-                            let jsonResponse : NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
+                if (unEpisode.date.compare(today) == .orderedAscending)
+                {
+                    var request = URLRequest(url: URL(string: "https://api.trakt.tv/shows/\(uneSerie.idTrakt)/seasons/\(uneSaison.saison)/episodes/\(unEpisode.episode)/ratings")!)
+                    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+                    request.addValue("Bearer \(self.Token)", forHTTPHeaderField: "Authorization")
+                    request.addValue("2", forHTTPHeaderField: "trakt-api-version")
+                    request.addValue("\(self.TraktClientID)", forHTTPHeaderField: "trakt-api-key")
+                    
+                    let task = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
+                        if let data = data, let response = response as? HTTPURLResponse {
                             
-                            var totRating : Int = 0
-                            var totRaters : Int = 0
+                            if (response.statusCode != 200) { print("Trakt::getSerieInfos error \(response.statusCode) received for \(uneSerie.serie) s\(uneSaison.saison) e\(unEpisode.episode)"); return; }
                             
-                            for i:Int in 1..<11
-                            {
-                                totRating = totRating + ( ((jsonResponse.object(forKey: "distribution")! as AnyObject).object(forKey: String(i)) as? Int ?? 0) * i )
-                                totRaters = totRaters + ((jsonResponse.object(forKey: "distribution")! as AnyObject).object(forKey: String(i)) as? Int ?? 0)
-                            }
-                            
-                            unEpisode.ratersTrakt = totRaters
-                            unEpisode.ratingTrakt = Double(totRating) / Double(totRaters)
-                            
-                        } catch let error as NSError { print("Trakt::getSerieInfos failed for \(uneSerie.serie) s\(uneSaison.saison) e\(unEpisode.episode): \(error.localizedDescription)") }
-                    } else {
-                        print(error as Any)
-                    }
-                })
-                
-                tableauDeTaches.append(task)
-                
-                task.resume()
+                            do {
+                                let jsonResponse : NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
+                                
+                                var totRating : Int = 0
+                                var totRaters : Int = 0
+                                
+                                for i:Int in 1..<11
+                                {
+                                    totRating = totRating + ( ((jsonResponse.object(forKey: "distribution")! as AnyObject).object(forKey: String(i)) as? Int ?? 0) * i )
+                                    totRaters = totRaters + ((jsonResponse.object(forKey: "distribution")! as AnyObject).object(forKey: String(i)) as? Int ?? 0)
+                                }
+                                
+                                if (totRaters > 0)
+                                {
+                                    unEpisode.ratersTrakt = totRaters
+                                    unEpisode.ratingTrakt = Double(totRating) / Double(totRaters)
+                                }
+                                
+                            } catch let error as NSError { print("Trakt::getSerieInfos failed for \(uneSerie.serie) s\(uneSaison.saison) e\(unEpisode.episode): \(error.localizedDescription)") }
+                        } else {
+                            print(error as Any)
+                        }
+                    })
+                    
+                    tableauDeTaches.append(task)
+                    
+                    task.resume()
+                }
             }
             
             while (globalStatus == URLSessionTask.State.running)
             {
+                globalStatus = URLSessionTask.State.completed
+
                 for uneTache in tableauDeTaches
                 {
-                    globalStatus = URLSessionTask.State.completed
-                    
-                    if (uneTache.state == URLSessionTask.State.running) {
-                        globalStatus = URLSessionTask.State.running
-                    }
+                    if (uneTache.state == URLSessionTask.State.running) { globalStatus = URLSessionTask.State.running }
                 }
+                
                 usleep(1000)
             }
         }

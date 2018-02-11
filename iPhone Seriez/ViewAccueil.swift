@@ -16,7 +16,8 @@ class ViewAccueil: UIViewController  {
     var betaSeries : BetaSeries = BetaSeries.init()
     
     var allSeries: [Serie] = [Serie]()
-    
+    var imagesCache : NSCache = NSCache<NSString, UIImage>()
+
     @IBOutlet weak var cptAnciennes: UITextField!
     @IBOutlet weak var cptAjour: UITextField!
     @IBOutlet weak var cptAttendre: UITextField!
@@ -28,13 +29,22 @@ class ViewAccueil: UIViewController  {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Affichage du gradient
+        let gradientLayer : CAGradientLayer = CAGradientLayer()
+            gradientLayer.colors = [UIColor.darkGray.cgColor, UIColor.white.cgColor]
+            gradientLayer.locations = [0.0, 1.0]
+            gradientLayer.startPoint = CGPoint(x: 0, y: 0)
+            gradientLayer.endPoint = CGPoint(x: 0, y: 1)
+            gradientLayer.frame = self.view.bounds
+        self.view.layer.insertSublayer(gradientLayer, at: 0)
+        
+        // Connexion aux sources de données
         trakt.start()
-        
         theTVdb.initializeToken()
+        
+        // Chargement de la dernière sauvegarde
         loadDB()
-        
         allSeries = allSeries.sorted(by:  { $0.serie < $1.serie })
-        
         updateCompteurs()
     }
     
@@ -43,19 +53,35 @@ class ViewAccueil: UIViewController  {
         allSeries = self.merge(allSeries, adds: trakt.getStopped())
         allSeries = self.merge(allSeries, adds: trakt.getWatchlist())
         
-        for uneSerie in allSeries
-        {
-            print("Loading \(uneSerie.serie)")
-            theTVdb.getSerieInfos(uneSerie)
-            theTVdb.getEpisodesRatings(uneSerie)
-            trakt.getEpisodesRatings(uneSerie)
-            betaSeries.getEpisodesRatings(uneSerie)
-            uneSerie.computeSerieInfos()
-        }
-        saveDB()
+        let infoWindow : UIAlertController = UIAlertController(title: "Loading ...", message: "", preferredStyle: UIAlertControllerStyle.alert)
+        var compteur : Int = 0
         
-        updateCompteurs()
+        self.present(infoWindow, animated: true, completion: { })
+        
+        DispatchQueue.global(qos: .utility).async {
+
+            let totalCompteur : Int = self.allSeries.count
+            for uneSerie in self.allSeries
+            {
+                compteur = compteur + 1
+                DispatchQueue.main.async { infoWindow.message = "\(uneSerie.serie) (\(compteur)/\(totalCompteur))" }
+                
+                self.theTVdb.getSerieInfos(uneSerie)
+                self.theTVdb.getEpisodesRatings(uneSerie)
+                self.trakt.getEpisodesRatings(uneSerie)
+                self.betaSeries.getEpisodesRatings(uneSerie)
+                uneSerie.computeSerieInfos()
+            }
+            
+            infoWindow.dismiss(animated: true, completion: { })
+            
+            DispatchQueue.main.async {
+                self.saveDB()
+                self.updateCompteurs()
+            }
+        }
     }
+    
     
     func saveDB ()
     {
@@ -82,18 +108,38 @@ class ViewAccueil: UIViewController  {
         super.didReceiveMemoryWarning()
     }
     
+    func getImage(_ url: String) -> UIImage
+    {
+        if (url == "") { return UIImage() }
+        
+        do {
+            if ((imagesCache.object(forKey: url as NSString)) == nil)
+            {
+                let imageData : Data = try Data.init(contentsOf: URL(string: "https://www.thetvdb.com/banners/\(url)")!)
+                imagesCache.setObject(UIImage.init(data: imageData)!, forKey: url as NSString)
+            }
+            return imagesCache.object(forKey: url as NSString)!
+        }
+        catch let error as NSError { print("getImage failed for \(url) : \(error)") }
+        
+        return UIImage()
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let bouton = sender as! UIButton
         var buildList = [Serie]()
-        let viewController = segue.destination as! ViewAbandonnees
+        var buildListMessages = [String]()
+        var buildListSaisons = [Int]()
         let today : Date = Date()
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale.current
         dateFormatter.dateFormat = "dd MMM yy"
-        
+
         switch (bouton.titleLabel?.text ?? "") {
         case "A decouvrir":
+            let viewController = segue.destination as! ViewSeries
             viewController.title = "Séries à découvrir"
+            viewController.accueil = self
             for uneSerie in allSeries
             {
                 if (uneSerie.watchlist)
@@ -102,10 +148,12 @@ class ViewAccueil: UIViewController  {
                     buildList.append(uneSerie)
                 }
             }
-            viewController.allSeries = buildList
+            viewController.viewList = buildList
 
         case "Abandonnees":
+            let viewController = segue.destination as! ViewSeries
             viewController.title = "Séries abandonnées"
+            viewController.accueil = self
             for uneSerie in allSeries
             {
                 if (uneSerie.unfollowed)
@@ -125,10 +173,12 @@ class ViewAccueil: UIViewController  {
                     buildList.append(uneSerie)
                 }
             }
-            viewController.allSeries = buildList
+            viewController.viewList = buildList
             
         case "Anciennes":
+            let viewController = segue.destination as! ViewSeries
             viewController.title = "Séries anciennes et finies"
+            viewController.accueil = self
             for uneSerie in allSeries
             {
                 if ( (uneSerie.saisons[uneSerie.saisons.count - 1].episodes[uneSerie.saisons[uneSerie.saisons.count - 1].episodes.count - 1].watched == true) && (uneSerie.status == "Ended") )
@@ -137,10 +187,12 @@ class ViewAccueil: UIViewController  {
                     buildList.append(uneSerie)
                 }
             }
-            viewController.allSeries = buildList
+            viewController.viewList = buildList
             
         case "A jour":
+            let viewController = segue.destination as! ViewSeries
             viewController.title = "Séries à jour"
+            viewController.accueil = self
             for uneSerie in allSeries
             {
                 if ( (uneSerie.saisons[uneSerie.saisons.count - 1].episodes[uneSerie.saisons[uneSerie.saisons.count - 1].episodes.count - 1].watched == true) && (uneSerie.status != "Ended") )
@@ -148,10 +200,12 @@ class ViewAccueil: UIViewController  {
                     buildList.append(uneSerie)
                 }
             }
-            viewController.allSeries = buildList
+            viewController.viewList = buildList
             
         case "Attendre":
+            let viewController = segue.destination as! ViewSaisons
             viewController.title = "Saisons en cours de diffusion"
+            viewController.accueil = self
             for uneSerie in allSeries
             {
                 for uneSaison in uneSerie.saisons
@@ -162,15 +216,21 @@ class ViewAccueil: UIViewController  {
                         (uneSerie.watchlist == false) &&
                         (uneSerie.unfollowed == false) )
                     {
-                        uneSerie.message = dateFormatter.string(from: uneSaison.episodes[uneSaison.episodes.count - 1].date)
+                        //uneSerie.message = dateFormatter.string(from: uneSaison.episodes[uneSaison.episodes.count - 1].date)
                         buildList.append(uneSerie)
+                        buildListMessages.append(dateFormatter.string(from: uneSaison.episodes[uneSaison.episodes.count - 1].date))
+                        buildListSaisons.append(uneSaison.saison)
                     }
                 }
             }
-            viewController.allSeries = buildList
-            
+            viewController.viewList = buildList
+            viewController.allMessages = buildListMessages
+            viewController.allSaisons = buildListSaisons
+
         case "A voir":
+            let viewController = segue.destination as! ViewSaisons
             viewController.title = "Saisons prêtes à voir"
+            viewController.accueil = self
             for uneSerie in allSeries
             {
                 for uneSaison in uneSerie.saisons
@@ -180,15 +240,21 @@ class ViewAccueil: UIViewController  {
                         (uneSerie.watchlist == false) &&
                         (uneSerie.unfollowed == false) )
                     {
-                        uneSerie.message = "Saison \(uneSaison.saison)"
+                        //uneSerie.message = "Saison \(uneSaison.saison)"
                         buildList.append(uneSerie)
+                        buildListMessages.append("Saison \(uneSaison.saison)")
+                        buildListSaisons.append(uneSaison.saison)
                     }
                 }
             }
-            viewController.allSeries = buildList
-            
+            viewController.viewList = buildList
+            viewController.allMessages = buildListMessages
+            viewController.allSaisons = buildListSaisons
+
         case "A venir":
+            let viewController = segue.destination as! ViewSaisons
             viewController.title = "Nouvelles saisons annoncées"
+            viewController.accueil = self
             for uneSerie in allSeries
             {
                 for uneSaison in uneSerie.saisons
@@ -197,20 +263,25 @@ class ViewAccueil: UIViewController  {
                         (uneSerie.watchlist == false) &&
                         (uneSerie.unfollowed == false) )
                     {
-                        if ( uneSaison.episodes[0].date == Date.distantFuture)
+                        if ( uneSaison.episodes[0].date.compare(dateFormatter.date(from: "01 Jan 90")!) == .orderedAscending)
                         {
-                            uneSerie.message = "TBA"
+                            //uneSerie.message = "TBA"
+                            buildListMessages.append("TBA")
                         }
                         else
                         {
-                            uneSerie.message = dateFormatter.string(from: uneSaison.episodes[0].date)
+                            //uneSerie.message = dateFormatter.string(from: uneSaison.episodes[0].date)
+                            buildListMessages.append(dateFormatter.string(from: uneSaison.episodes[0].date))
                         }
                         buildList.append(uneSerie)
+                        buildListSaisons.append(uneSaison.saison)
                     }
                 }
             }
-            viewController.allSeries = buildList
-            
+            viewController.viewList = buildList
+            viewController.allMessages = buildListMessages
+            viewController.allSaisons = buildListSaisons
+
         default:
             print("Passer à la fenêtre \(bouton.titleLabel?.text ?? "")")
             
@@ -290,5 +361,28 @@ class ViewAccueil: UIViewController  {
         
         return newDB
     }
+    
+    func chercherUneSerieSurTrakt(nomSerie:String) -> [Serie]
+    {
+        return trakt.recherche(serieArechercher: nomSerie)
+    }
+    
+    func ajouterUneSerieDansLaWatchlistTrakt(uneSerie : Serie) -> Bool
+    {
+        if (self.trakt.addToWatchlist(theTVdbId: uneSerie.idTVdb))
+        {
+            self.theTVdb.getSerieInfos(uneSerie)
+            self.trakt.getEpisodesRatings(uneSerie)
+            self.betaSeries.getEpisodesRatings(uneSerie)
+            uneSerie.computeSerieInfos()
+            self.allSeries.append(uneSerie)
+            self.saveDB()
+            
+            return true
+        }
+        return false
+    }
+    
+    
     
 }

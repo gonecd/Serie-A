@@ -55,7 +55,8 @@ class TheTVdb : NSObject
     {
         var request : URLRequest
         var task : URLSessionDataTask
-        
+        let today : Date = Date()
+
         for saison in uneSerie.saisons
         {
             var tableauDeTaches: [URLSessionTask] = []
@@ -63,7 +64,7 @@ class TheTVdb : NSObject
             
             for episode in saison.episodes
             {
-                if (episode.idTVdb != 0)
+                if ( (episode.idTVdb != 0) && (episode.date.compare(today) == .orderedAscending) )
                 {
                     request = URLRequest(url: URL(string: "https://api.thetvdb.com/episodes/\(episode.idTVdb)")!)
                     request.httpMethod = "GET"
@@ -245,10 +246,13 @@ class TheTVdb : NSObject
                                         }
                                     }
                                     
+                                    uneSerie.saisons[((fiche as AnyObject).object(forKey: "airedSeason") as! Int) - 1].episodes[((fiche as AnyObject).object(forKey: "airedEpisodeNumber") as! Int) - 1].titre = (fiche as AnyObject).object(forKey: "episodeName") as? String ?? ""
+                                    uneSerie.saisons[((fiche as AnyObject).object(forKey: "airedSeason") as! Int) - 1].episodes[((fiche as AnyObject).object(forKey: "airedEpisodeNumber") as! Int) - 1].resume = (fiche as AnyObject).object(forKey: "overview") as? String ?? ""
+
                                     let stringDate : String = (fiche as AnyObject).object(forKey: "firstAired") as? String ?? ""
                                     if (stringDate ==  "")
                                     {
-                                        uneSerie.saisons[((fiche as AnyObject).object(forKey: "airedSeason") as! Int) - 1].episodes[((fiche as AnyObject).object(forKey: "airedEpisodeNumber") as! Int) - 1].date = Date.distantFuture
+                                        uneSerie.saisons[((fiche as AnyObject).object(forKey: "airedSeason") as! Int) - 1].episodes[((fiche as AnyObject).object(forKey: "airedEpisodeNumber") as! Int) - 1].date = dateFormatter.date(from: "2099-01-01")!
                                     }
                                     else
                                     {

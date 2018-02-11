@@ -128,5 +128,52 @@ class Serie : NSObject, NSCoding
         self.computeSerieInfos()
     }
     
+    func computeCorrectedRate() -> Int
+    {
+        var totalRatings : Double = 0.0
+        var nbRatings : Int = 0
+        
+        // Correction des notes pour homogénéisation
+        let correctionTVdb : Double = 7.664
+        let correctionBetaSeries : Double = 8.558
+        let correctionTrakt : Double = 7.941
+        
+        
+        for uneSaison in self.saisons
+        {
+            for unEpisode in uneSaison.episodes
+            {
+                if (unEpisode.ratingTVdb != 0.0 && !unEpisode.ratingTVdb.isNaN)
+                {
+                    totalRatings = totalRatings + (80 * unEpisode.ratingTVdb / correctionTVdb)
+                    nbRatings = nbRatings + 1
+                }
+                
+                if (unEpisode.ratingBetaSeries != 0.0 && !unEpisode.ratingBetaSeries.isNaN)
+                {
+                    totalRatings = totalRatings + (80 * unEpisode.ratingBetaSeries / correctionBetaSeries)
+                    nbRatings = nbRatings + 1
+                }
+                
+                if (unEpisode.ratingTrakt != 0.0 && !unEpisode.ratingTrakt.isNaN)
+                {
+                    totalRatings = totalRatings + (80 * unEpisode.ratingTrakt / correctionTrakt)
+                    nbRatings = nbRatings + 1
+                }
+            }
+        }
+        
+        if (nbRatings > 0)
+        {
+            //return Int(totalRatings/Double(nbRatings))
+            let rate = 60+((40/15)*((totalRatings/Double(nbRatings))-75))
+            return Int(rate)
+        }
+        else
+        {
+            return -1
+        }
+    }
+
 }
 

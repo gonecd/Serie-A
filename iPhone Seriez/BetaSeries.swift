@@ -23,7 +23,8 @@ class BetaSeries : NSObject
         var url : URL
         var request : URLRequest
         var task : URLSessionDataTask
-        
+        let today : Date = Date()
+
         // Récupération des ratings
         for saison in uneSerie.saisons
         {
@@ -60,8 +61,11 @@ class BetaSeries : NSObject
                                     
                                     if (cetEpisode < saison.episodes.count)
                                     {
-                                        saison.episodes[cetEpisode].ratingBetaSeries = 2 * (((unEpisode as AnyObject).object(forKey: "note")! as AnyObject).object(forKey: "mean") as? Double ?? 0.0)
-                                        saison.episodes[cetEpisode].ratersBetaSeries = ((unEpisode as AnyObject).object(forKey: "note")! as AnyObject).object(forKey: "total") as? Int ?? 0
+                                        if (saison.episodes[cetEpisode].date.compare(today) == .orderedAscending)
+                                        {
+                                            saison.episodes[cetEpisode].ratingBetaSeries = 2 * (((unEpisode as AnyObject).object(forKey: "note")! as AnyObject).object(forKey: "mean") as? Double ?? 0.0)
+                                            saison.episodes[cetEpisode].ratersBetaSeries = ((unEpisode as AnyObject).object(forKey: "note")! as AnyObject).object(forKey: "total") as? Int ?? 0
+                                        }
                                         
                                     }
                                 }
