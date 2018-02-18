@@ -157,7 +157,6 @@ class TheTVdb : NSObject
                         
                         var bestVotedRating = 0.0
                         var selectedVotedPoster = ""
-                        
                         var bestRating = 0.0
                         var selectedPoster = ""
                         

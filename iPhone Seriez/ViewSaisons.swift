@@ -44,8 +44,6 @@ class ViewSaisons: UICollectionViewController {
     
     // MARK: - UICollectionViewDelegate protocol
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        // handle tap events
-        print("You selected cell #\(indexPath.item)!")
     }
     
 }

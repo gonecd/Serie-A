@@ -36,6 +36,11 @@ class Serie : NSObject, NSCoding
     // computed infos
     var year : Int = 0
     
+    // Correction des notes pour homogénéisation
+    let correctionTVdb : Double = 7.664
+    let correctionBetaSeries : Double = 8.558
+    let correctionTrakt : Double = 7.941
+    
     init(serie:String)
     {
         self.serie = serie
@@ -127,17 +132,26 @@ class Serie : NSObject, NSCoding
         
         self.computeSerieInfos()
     }
-    
+
+    func mergeStatuses(_ uneSerie : Serie)
+    {
+        if (uneSerie.unfollowed != false)   { self.unfollowed = uneSerie.unfollowed }
+        if (uneSerie.watchlist != false)    { self.watchlist = uneSerie.watchlist }
+        
+        for uneSaison in uneSerie.saisons
+        {
+            if (uneSaison.saison <= self.saisons.count)
+            {
+                self.saisons[uneSaison.saison - 1].mergeStatuses(uneSaison)
+            }
+        }
+        
+        self.computeSerieInfos()
+    }
     func computeCorrectedRate() -> Int
     {
         var totalRatings : Double = 0.0
         var nbRatings : Int = 0
-        
-        // Correction des notes pour homogénéisation
-        let correctionTVdb : Double = 7.664
-        let correctionBetaSeries : Double = 8.558
-        let correctionTrakt : Double = 7.941
-        
         
         for uneSaison in self.saisons
         {

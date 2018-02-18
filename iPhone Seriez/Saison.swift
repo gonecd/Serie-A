@@ -109,4 +109,15 @@ class Saison : NSObject, NSCoding
         self.computeSaisonInfos()
     }
 
+    func mergeStatuses(_ uneSaison : Saison)
+    {
+        for unEpisode in uneSaison.episodes
+        {
+            if (unEpisode.episode <= self.episodes.count)
+            {
+                self.episodes[unEpisode.episode - 1].mergeStatuses(unEpisode)
+            }
+        }
+    }
+
 }

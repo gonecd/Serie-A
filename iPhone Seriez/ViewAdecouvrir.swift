@@ -12,140 +12,39 @@ import UIKit
 class CellAdecouvrir: UITableViewCell {
     
     @IBOutlet weak var banniereSerie: UIImageView!
-    @IBOutlet weak var note: UILabel!
+    @IBOutlet weak var titre: UILabel!
+    @IBOutlet weak var saison: UILabel!
+    @IBOutlet weak var debut: UILabel!
+    @IBOutlet weak var fin: UILabel!
+    @IBOutlet weak var ratingBetaSeries: UILabel!
+    @IBOutlet weak var ratingTVdb: UILabel!
+    @IBOutlet weak var ratingTrakt: UILabel!
+    
+    @IBOutlet weak var miniGraphe: GraphMiniSaison!
+    
     var index: Int = 0
 }
 
 
 class ViewAdecouvrir: UITableViewController {
     
-    var allSeries: [Serie] = [Serie]()
-    let trakt : Trakt = Trakt.init()
-    let theTVdb : TheTVdb = TheTVdb.init()
-    let betaSeries : BetaSeries = BetaSeries.init()
+    var viewList: [Serie] = [Serie]()
+    var allSaisons: [Int] = [Int]()
+    let dateFormatter = DateFormatter()
+    var accueil : ViewAccueil = ViewAccueil()
     
     // Correctiond es notes pour homogénéisation
     var correctionTVdb : Double = 1.0
     var correctionBetaSeries : Double = 1.0
     var correctionTrakt : Double = 1.0
-    
-    var popupTextField : UITextField = UITextField()
-    var imagesCache : NSCache = NSCache<NSString, UIImage>()
-    
-    
-    func configurationTextField(textField: UITextField!){
-        textField.placeholder = "Nom de la série"
-        popupTextField = textField
-    }
-    
-    func doNothing(alertView: UIAlertAction!) {}
-    
-    func searchSerie(alertView: UIAlertAction!)
-    {
-        let seriesTrouvees : [Serie] = trakt.recherche(serieArechercher: self.popupTextField.text!)
-        let actionSheetController: UIAlertController = UIAlertController(title: "Ajouter à ma watchlist", message: nil, preferredStyle: .actionSheet)
-        
-        for uneSerie in seriesTrouvees
-        {
-            let uneAction: UIAlertAction = UIAlertAction(title: uneSerie.serie+" ("+String(uneSerie.year)+")", style: UIAlertActionStyle.default) { action -> Void in
-                
-                if (self.trakt.addToWatchlist(theTVdbId: uneSerie.idTVdb))
-                {
-                    self.theTVdb.getSerieInfos(uneSerie)
-                    self.trakt.getEpisodesRatings(uneSerie)
-                    self.betaSeries.getEpisodesRatings(uneSerie)
-                    uneSerie.computeSerieInfos()
-                    
-                    self.allSeries.append(uneSerie)
-                    self.saveDB()
-                    
-                    self.tableView.reloadData()
-                }
-            }
-            actionSheetController.addAction(uneAction)
-        }
-        
-        let cancelAction: UIAlertAction = UIAlertAction(title: "Annuler", style: UIAlertActionStyle.cancel, handler: doNothing)
-        actionSheetController.addAction(cancelAction)
-        
-        present(actionSheetController, animated: true, completion: nil)
-    }
-    
-    func saveDB ()
-    {
-        if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-            let pathToSVG = dir.appendingPathComponent("iPhoneSeriez")
-            let success : Bool = NSKeyedArchiver.archiveRootObject(allSeries, toFile: pathToSVG.path)
-            print("saveDB a réussi : \(success)")
-        }
-    }
-    
-    func loadDB ()
-    {
-        if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-            let pathToSVG = dir.appendingPathComponent("iPhoneSeriez")
-            if (FileManager.default.fileExists(atPath: pathToSVG.path))
-            {
-                allSeries = (NSKeyedUnarchiver.unarchiveObject(withFile: pathToSVG.path) as? [Serie])!
-                computeCorrections()
-                tableView.reloadData()
-            }
-        }
-    }
-    
-    
-    @IBAction func addSerie(_ sender: Any) {
-        let alert = UIAlertController(title: "Série à rechercher", message: "", preferredStyle: UIAlertControllerStyle.alert)
-        
-        alert.addTextField(configurationHandler: configurationTextField)
-        alert.addAction(UIAlertAction(title: "Annuler", style: UIAlertActionStyle.default, handler:doNothing))
-        alert.addAction(UIAlertAction(title: "Valider", style: UIAlertActionStyle.default, handler:searchSerie))
-        
-        self.present(alert, animated: true, completion: { })
-    }
-    
-    @IBAction func refreshAll(_ sender: Any) {
-        allSeries = trakt.getWatchlist()
-        let infoWindow : UIAlertController = UIAlertController(title: "Info", message: "", preferredStyle: UIAlertControllerStyle.alert)
-        
-        self.present(infoWindow, animated: true, completion: { })
-        
-        DispatchQueue.global(qos: .utility).async {
-            for uneSerie:Serie in self.allSeries
-            {
-                DispatchQueue.main.async {
-                    infoWindow.message = "Loading ... \(uneSerie.serie)"
-                }
-                
-                self.theTVdb.getSerieInfos(uneSerie)
-                self.trakt.getEpisodesRatings(uneSerie)
-                self.self.betaSeries.getEpisodesRatings(uneSerie)
-                uneSerie.computeSerieInfos()
-            }
-            self.computeCorrections()
-            infoWindow.dismiss(animated: true, completion: { })
-            
-            DispatchQueue.main.async {
-                self.saveDB()
-                self.tableView.reloadData()
-            }
-        }
-    }
-    
-    
+   
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Initialisation des token de data sources et de la watchlist
-        //trakt.downloadToken(key: "A0F0010E")
-        trakt.start()
-        theTVdb.initializeToken()
-        
-        //self.refreshAll(self)
-        self.loadDB()
-        
-        self.navigationController!.setToolbarHidden(false, animated: true)
+        dateFormatter.locale = Locale.current
+        dateFormatter.dateFormat = "dd MMM yyyy"
+
     }
     
     override func didReceiveMemoryWarning() {
@@ -157,16 +56,65 @@ class ViewAdecouvrir: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return allSeries.count
+        return viewList.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CellAdecouvrir", for: indexPath) as! CellAdecouvrir
         
-        cell.banniereSerie?.image = getImage(allSeries[indexPath.row].banner)
+        cell.banniereSerie?.image = accueil.getImage(viewList[indexPath.row].poster)
         cell.index = indexPath.row
-        cell.note.text = String(computeCorrectedRate(uneSerie: allSeries[indexPath.row]))
+        cell.titre.text = viewList[indexPath.row].serie
         
+        let uneSaison = viewList[indexPath.row].saisons[allSaisons[indexPath.row] - 1]
+        let today = Date()
+        var totBetaSeries : Double = 0.0
+        var totTrakt : Double = 0.0
+        var totTVdb : Double = 0.0
+        var nbEps = 0
+        
+        for eps in uneSaison.episodes
+        {
+            if (eps.date.compare(today) == .orderedAscending)
+            {
+                totBetaSeries = totBetaSeries + eps.ratingBetaSeries
+                totTrakt = totTrakt + eps.ratingTrakt
+                totTVdb = totTVdb + eps.ratingTVdb
+                nbEps = nbEps + 1
+            }
+        }
+
+        var totBetaSeriesMoy : Double = 0.0
+        var totTraktMoy : Double = 0.0
+        var totTVdbMoy : Double = 0.0
+        var nbEpsMoy = 0
+
+        for loopSaison in viewList[indexPath.row].saisons
+        {
+            if (loopSaison.saison < allSaisons[indexPath.row])
+            {
+                for eps in loopSaison.episodes
+                {
+                    totBetaSeriesMoy = totBetaSeriesMoy + eps.ratingBetaSeries
+                    totTraktMoy = totTraktMoy + eps.ratingTrakt
+                    totTVdbMoy = totTVdbMoy + eps.ratingTVdb
+                    nbEpsMoy = nbEpsMoy + 1
+                }
+            }
+        }
+        
+        cell.ratingBetaSeries.text = String(format: "%.1f", totBetaSeries/Double(nbEps))
+        cell.ratingTrakt.text = String(format: "%.1f", totTrakt/Double(nbEps))
+        cell.ratingTVdb.text = String(format: "%.1f", totTVdb/Double(nbEps))
+        cell.saison.text = "Saison " + String(allSaisons[indexPath.row]) + " - ( " + String(nbEps) + " / " + String(uneSaison.episodes.count) + " )"
+        cell.debut.text = dateFormatter.string(from: uneSaison.episodes[0].date)
+        cell.fin.text = dateFormatter.string(from: uneSaison.episodes[uneSaison.episodes.count - 1].date)
+        
+        cell.miniGraphe.theSaison = uneSaison
+        cell.miniGraphe.sendNotes(totTrakt/Double(nbEps), rateTVdb: totTVdb/Double(nbEps), rateBetaSeries: totBetaSeries/Double(nbEps),
+                                  averageTrakt: totTraktMoy/Double(nbEpsMoy), averageTVdb: totTVdbMoy/Double(nbEpsMoy), averageBetaSeries: totBetaSeriesMoy/Double(nbEpsMoy))
+        cell.miniGraphe.setNeedsDisplay()
+
         return cell
     }
     
@@ -175,140 +123,24 @@ class ViewAdecouvrir: UITableViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let viewController = segue.destination as! SerieFiche
+        let viewController = segue.destination as! SaisonFiche
         let tableCell : CellAdecouvrir = sender as! CellAdecouvrir
-        viewController.serie = allSeries[tableCell.index]
-        viewController.image = getImage(allSeries[tableCell.index].banner)
+        viewController.serie = viewList[tableCell.index]
+        viewController.saison = allSaisons[tableCell.index]
+        viewController.image = accueil.getImage(viewList[tableCell.index].banner)
+        viewController.accueil = accueil
     }
     
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    @IBAction func refreshData(_ sender: Any) {
         
-        if (editingStyle == UITableViewCellEditingStyle.delete)
+        for uneSerie in viewList
         {
-            if (self.trakt.removeFromWatchlist(theTVdbId: allSeries[indexPath.row].idTVdb))
-            {
-                self.allSeries.remove(at: indexPath.row)
-                self.saveDB()
-                
-                tableView.reloadData()
-            }
+            accueil.downloadSerieDetails(serie: uneSerie)
         }
+        
+        self.view.setNeedsDisplay()
     }
-    
-    
-    func getImage(_ url: String) -> UIImage
-    {
-        if (url == "") { return UIImage() }
-        
-        do {
-            if ((imagesCache.object(forKey: url as NSString)) == nil)
-            {
-                let imageData : Data = try Data.init(contentsOf: URL(string: "https://www.thetvdb.com/banners/\(url)")!)
-                imagesCache.setObject(UIImage.init(data: imageData)!, forKey: url as NSString)
-            }
-            return imagesCache.object(forKey: url as NSString)!
-        }
-        catch let error as NSError { print("getImage failed for \(url) : \(error)") }
-        
-        return UIImage()
-    }
-    
-    func computeCorrectedRate(uneSerie: Serie) -> Int
-    {
-        var totalRatings : Double = 0.0
-        var nbRatings : Int = 0
-        
-        for uneSaison in uneSerie.saisons
-        {
-            for unEpisode in uneSaison.episodes
-            {
-                if (unEpisode.ratingTVdb != 0.0 && !unEpisode.ratingTVdb.isNaN)
-                {
-                    totalRatings = totalRatings + (80 * unEpisode.ratingTVdb / correctionTVdb)
-                    nbRatings = nbRatings + 1
-                }
-                
-                if (unEpisode.ratingBetaSeries != 0.0 && !unEpisode.ratingBetaSeries.isNaN)
-                {
-                    totalRatings = totalRatings + (80 * unEpisode.ratingBetaSeries / correctionBetaSeries)
-                    nbRatings = nbRatings + 1
-                }
-                
-                if (unEpisode.ratingTrakt != 0.0 && !unEpisode.ratingTrakt.isNaN)
-                {
-                    totalRatings = totalRatings + (80 * unEpisode.ratingTrakt / correctionTrakt)
-                    nbRatings = nbRatings + 1
-                }
-            }
-        }
-        
-        if (nbRatings > 0)
-        {
-            //return Int(totalRatings/Double(nbRatings))
-            let rate = 60+((40/15)*((totalRatings/Double(nbRatings))-75))
-            return Int(rate)
-        }
-        else
-        {
-            return -1
-        }
-    }
-    
-    func computeCorrections()   {
-        var sumTVdb : Double = 0.0
-        var nbTVdb : Int = 0
-        var sumBetaSeries : Double = 0.0
-        var nbBetaSeries : Int = 0
-        var sumTrakt : Double = 0.0
-        var nbTrakt : Int = 0
-        
-        var minTVdb : Double = 10.0
-        var maxTVdb : Double = 0.0
-        var minBetaSeries : Double = 10.0
-        var maxBetaSeries : Double = 0.0
-        var minTrakt : Double = 10.0
-        var maxTrakt : Double = 0.0
-        
-        for uneSerie in allSeries
-        {
-            for uneSaison in uneSerie.saisons
-            {
-                for unEpisode in uneSaison.episodes
-                {
-                    if (unEpisode.ratingTVdb != 0.0 && !unEpisode.ratingTVdb.isNaN)
-                    {
-                        if (unEpisode.ratingTVdb < minTVdb) { minTVdb = unEpisode.ratingTVdb }
-                        if (unEpisode.ratingTVdb > maxTVdb) { maxTVdb = unEpisode.ratingTVdb }
-                        sumTVdb = sumTVdb + unEpisode.ratingTVdb
-                        nbTVdb = nbTVdb + 1
-                    }
-                    
-                    if (unEpisode.ratingBetaSeries != 0.0 && !unEpisode.ratingBetaSeries.isNaN)
-                    {
-                        if (unEpisode.ratingBetaSeries < minBetaSeries) { minBetaSeries = unEpisode.ratingBetaSeries }
-                        if (unEpisode.ratingBetaSeries > maxBetaSeries) { maxBetaSeries = unEpisode.ratingBetaSeries }
-                        sumBetaSeries = sumBetaSeries + unEpisode.ratingBetaSeries
-                        nbBetaSeries = nbBetaSeries + 1
-                    }
-                    
-                    if (unEpisode.ratingTrakt != 0.0 && !unEpisode.ratingTrakt.isNaN)
-                    {
-                        if (unEpisode.ratingTrakt < minTrakt) { minTrakt = unEpisode.ratingTrakt }
-                        if (unEpisode.ratingTrakt > maxTrakt) { maxTrakt = unEpisode.ratingTrakt }
-                        sumTrakt = sumTrakt + unEpisode.ratingTrakt
-                        nbTrakt = nbTrakt + 1
-                    }
-                }
-            }
-        }
-        
-        correctionTVdb = sumTVdb / Double(nbTVdb)
-        correctionBetaSeries = sumBetaSeries / Double(nbBetaSeries)
-        correctionTrakt = sumTrakt / Double(nbTrakt)
-        
-    }
-    
-    
+
 }
 
 

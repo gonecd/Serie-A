@@ -23,6 +23,7 @@ class ViewSeries: UICollectionViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        //self.navigationController!.setToolbarHidden(false, animated: true)
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -47,8 +48,26 @@ class ViewSeries: UICollectionViewController {
         viewController.image = accueil.getImage(viewList[index?.row ?? 0].banner)
     }
 
+    
     @IBAction func deleteSerie(_ sender: Any) {
-        print("Supprimer")
+        let actionSheetController: UIAlertController = UIAlertController(title: "Supprimer de ma watchlist", message: nil, preferredStyle: .actionSheet)
+        
+        for uneSerie in viewList
+        {
+            let uneAction: UIAlertAction = UIAlertAction(title: uneSerie.serie+" ("+String(uneSerie.year)+")", style: UIAlertActionStyle.default) { action -> Void in
+                if (self.accueil.supprimerUneSerieDansLaWatchlistTrakt(uneSerie: uneSerie))
+                {
+                    self.viewList.remove(at: self.viewList.index(of: uneSerie)!)
+                    self.collectionView?.reloadData()
+                }
+            }
+            actionSheetController.addAction(uneAction)
+        }
+        
+        let cancelAction: UIAlertAction = UIAlertAction(title: "Annuler", style: UIAlertActionStyle.cancel, handler: doNothing)
+        actionSheetController.addAction(cancelAction)
+        
+        present(actionSheetController, animated: true, completion: nil)
     }
     
     @IBAction func exploreSerie(_ sender: Any) {
@@ -61,14 +80,11 @@ class ViewSeries: UICollectionViewController {
     
     @IBAction func addSerie(_ sender: Any) {
         let alert = UIAlertController(title: "Série à rechercher", message: "", preferredStyle: UIAlertControllerStyle.alert)
-        
-        alert.addTextField(configurationHandler: configurationTextField)
-        alert.addAction(UIAlertAction(title: "Annuler", style: UIAlertActionStyle.default, handler:doNothing))
-        alert.addAction(UIAlertAction(title: "Valider", style: UIAlertActionStyle.default, handler:searchSerie))
-        
+            alert.addTextField(configurationHandler: configurationTextField)
+            alert.addAction(UIAlertAction(title: "Annuler", style: UIAlertActionStyle.default, handler:doNothing))
+            alert.addAction(UIAlertAction(title: "Valider", style: UIAlertActionStyle.default, handler:searchSerie))
         self.present(alert, animated: true, completion: { })
     }
- 
     
     func configurationTextField(textField: UITextField!){
         textField.placeholder = "Nom de la série"
@@ -89,7 +105,7 @@ class ViewSeries: UICollectionViewController {
                 if (self.accueil.ajouterUneSerieDansLaWatchlistTrakt(uneSerie: uneSerie))
                 {
                     self.viewList.append(uneSerie)
-                    self.view.setNeedsDisplay()
+                    self.collectionView?.reloadData()
                 }
             }
             actionSheetController.addAction(uneAction)
@@ -100,11 +116,8 @@ class ViewSeries: UICollectionViewController {
         
         present(actionSheetController, animated: true, completion: nil)
     }
-
-    
     
     // MARK: - UICollectionViewDelegate protocol
-    
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // handle tap events
         print("You selected cell #\(indexPath.item)!")

@@ -17,7 +17,7 @@ class ViewAccueil: UIViewController  {
     
     var allSeries: [Serie] = [Serie]()
     var imagesCache : NSCache = NSCache<NSString, UIImage>()
-
+    
     @IBOutlet weak var cptAnciennes: UITextField!
     @IBOutlet weak var cptAjour: UITextField!
     @IBOutlet weak var cptAttendre: UITextField!
@@ -26,18 +26,36 @@ class ViewAccueil: UIViewController  {
     @IBOutlet weak var cptAdecouvrir: UITextField!
     @IBOutlet weak var cptAbandonnees: UITextField!
     
+    @IBOutlet weak var cadreSaisonAvenir: UIView!
+    @IBOutlet weak var cadreSaisonAvoir: UIView!
+    @IBOutlet weak var cadreSaisonEncours: UIView!
+    @IBOutlet weak var cadreSerieAbandonnee: UIView!
+    @IBOutlet weak var cadreSerieWatchlist: UIView!
+    @IBOutlet weak var cadreSerieEncours: UIView!
+    @IBOutlet weak var cadreSerieFinie: UIView!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Affichage du gradient
-        let gradientLayer : CAGradientLayer = CAGradientLayer()
-            gradientLayer.colors = [UIColor.darkGray.cgColor, UIColor.white.cgColor]
-            gradientLayer.locations = [0.0, 1.0]
-            gradientLayer.startPoint = CGPoint(x: 0, y: 0)
-            gradientLayer.endPoint = CGPoint(x: 0, y: 1)
-            gradientLayer.frame = self.view.bounds
-        self.view.layer.insertSublayer(gradientLayer, at: 0)
-        
+        // Faire des jolis carrés dégradés à coins ronds
+        makeBlueGradiant(carre: cadreSerieAbandonnee)
+        makeBlueGradiant(carre: cadreSerieWatchlist)
+        makeBlueGradiant(carre: cadreSerieEncours)
+        makeBlueGradiant(carre: cadreSerieFinie)
+        makeRedGradiant(carre: cadreSaisonAvoir)
+        makeRedGradiant(carre: cadreSaisonAvenir)
+        makeRedGradiant(carre: cadreSaisonEncours)
+
+        // Faire des jolis compteurs à coins ronds
+        makeJolisCompteurs(compteur: cptAnciennes)
+        makeJolisCompteurs(compteur: cptAjour)
+        makeJolisCompteurs(compteur: cptAttendre)
+        makeJolisCompteurs(compteur: cptAvoir)
+        makeJolisCompteurs(compteur: cptAvenir)
+        makeJolisCompteurs(compteur: cptAdecouvrir)
+        makeJolisCompteurs(compteur: cptAbandonnees)
+
         // Connexion aux sources de données
         trakt.start()
         theTVdb.initializeToken()
@@ -47,6 +65,54 @@ class ViewAccueil: UIViewController  {
         allSeries = allSeries.sorted(by:  { $0.serie < $1.serie })
         updateCompteurs()
     }
+
+    func makeJolisCompteurs(compteur: UITextField)
+    {
+        compteur.layer.cornerRadius = 15
+        compteur.layer.masksToBounds = true;
+    }
+    
+    func makeRedGradiant(carre : UIView)
+    {
+        let redGradient : CAGradientLayer = CAGradientLayer()
+        redGradient.colors = [UIColor.red.cgColor, UIColor.white.cgColor]
+        redGradient.startPoint = CGPoint(x: 0, y: 0)
+        redGradient.endPoint = CGPoint(x: 1, y: 1)
+        redGradient.frame = carre.bounds
+        
+        carre.layer.cornerRadius = 10;
+        carre.layer.masksToBounds = true;
+        carre.layer.insertSublayer(redGradient, at: 0)
+    }
+    
+    func makeBlueGradiant(carre : UIView)
+    {
+        let blueGradient : CAGradientLayer = CAGradientLayer()
+        blueGradient.colors = [UIColor.blue.cgColor, UIColor.lightGray.cgColor]
+        blueGradient.startPoint = CGPoint(x: 0, y: 0)
+        blueGradient.endPoint = CGPoint(x: 1, y: 1)
+        blueGradient.frame = carre.bounds
+        
+        carre.layer.cornerRadius = 10;
+        carre.layer.masksToBounds = true;
+        carre.layer.insertSublayer(blueGradient, at: 0)
+    }
+    
+    
+    @IBAction func downloadStatuses(_ sender: Any)
+    {
+        var reloadSeries : [Serie] = [Serie]()
+        reloadSeries = trakt.getWatched()
+        reloadSeries = self.merge(reloadSeries, adds: trakt.getStopped())
+        reloadSeries = self.merge(reloadSeries, adds: trakt.getWatchlist())
+
+        allSeries = self.merge(allSeries, adds: reloadSeries)
+        self.saveDB()
+        self.updateCompteurs()
+        self.view.setNeedsDisplay()
+    }
+
+    
     
     @IBAction func downloadAll(_ sender: Any) {
         allSeries = trakt.getWatched()
@@ -54,23 +120,18 @@ class ViewAccueil: UIViewController  {
         allSeries = self.merge(allSeries, adds: trakt.getWatchlist())
         
         let infoWindow : UIAlertController = UIAlertController(title: "Loading ...", message: "", preferredStyle: UIAlertControllerStyle.alert)
-        var compteur : Int = 0
-        
         self.present(infoWindow, animated: true, completion: { })
         
         DispatchQueue.global(qos: .utility).async {
-
+            
             let totalCompteur : Int = self.allSeries.count
+            var compteur : Int = 0
+
             for uneSerie in self.allSeries
             {
                 compteur = compteur + 1
                 DispatchQueue.main.async { infoWindow.message = "\(uneSerie.serie) (\(compteur)/\(totalCompteur))" }
-                
-                self.theTVdb.getSerieInfos(uneSerie)
-                self.theTVdb.getEpisodesRatings(uneSerie)
-                self.trakt.getEpisodesRatings(uneSerie)
-                self.betaSeries.getEpisodesRatings(uneSerie)
-                uneSerie.computeSerieInfos()
+                self.downloadSerieDetails(serie: uneSerie)
             }
             
             infoWindow.dismiss(animated: true, completion: { })
@@ -82,6 +143,14 @@ class ViewAccueil: UIViewController  {
         }
     }
     
+    func downloadSerieDetails(serie : Serie)
+    {
+        self.theTVdb.getSerieInfos(serie)
+        self.theTVdb.getEpisodesRatings(serie)
+        self.trakt.getEpisodesRatings(serie)
+        self.betaSeries.getEpisodesRatings(serie)
+        serie.computeSerieInfos()
+    }
     
     func saveDB ()
     {
@@ -128,15 +197,14 @@ class ViewAccueil: UIViewController  {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let bouton = sender as! UIButton
         var buildList = [Serie]()
-        var buildListMessages = [String]()
         var buildListSaisons = [Int]()
         let today : Date = Date()
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale.current
         dateFormatter.dateFormat = "dd MMM yy"
-
+        
         switch (bouton.titleLabel?.text ?? "") {
-        case "A decouvrir":
+        case "Watchlist":
             let viewController = segue.destination as! ViewSeries
             viewController.title = "Séries à découvrir"
             viewController.accueil = self
@@ -149,8 +217,8 @@ class ViewAccueil: UIViewController  {
                 }
             }
             viewController.viewList = buildList
-
-        case "Abandonnees":
+            
+        case "Abandonnées":
             let viewController = segue.destination as! ViewSeries
             viewController.title = "Séries abandonnées"
             viewController.accueil = self
@@ -161,7 +229,7 @@ class ViewAccueil: UIViewController  {
                     var totalEpisodes : Int = 0
                     var viewedEpisodes : Int = 0
                     var viewedRatio : Int = 0
-
+                    
                     for uneSaison in uneSerie.saisons {
                         for unEpisode in uneSaison.episodes {
                             totalEpisodes = totalEpisodes + 1
@@ -175,7 +243,7 @@ class ViewAccueil: UIViewController  {
             }
             viewController.viewList = buildList
             
-        case "Anciennes":
+        case "Finies":
             let viewController = segue.destination as! ViewSeries
             viewController.title = "Séries anciennes et finies"
             viewController.accueil = self
@@ -189,22 +257,23 @@ class ViewAccueil: UIViewController  {
             }
             viewController.viewList = buildList
             
-        case "A jour":
+        case "En cours":
             let viewController = segue.destination as! ViewSeries
-            viewController.title = "Séries à jour"
+            viewController.title = "Séries en cours"
             viewController.accueil = self
             for uneSerie in allSeries
             {
-                if ( (uneSerie.saisons[uneSerie.saisons.count - 1].episodes[uneSerie.saisons[uneSerie.saisons.count - 1].episodes.count - 1].watched == true) && (uneSerie.status != "Ended") )
+                if ( ((uneSerie.saisons[uneSerie.saisons.count - 1].episodes[uneSerie.saisons[uneSerie.saisons.count - 1].episodes.count - 1].watched == false) || (uneSerie.status != "Ended"))
+                    && (uneSerie.unfollowed == false) && (uneSerie.watchlist == false) )
                 {
                     buildList.append(uneSerie)
                 }
             }
             viewController.viewList = buildList
             
-        case "Attendre":
-            let viewController = segue.destination as! ViewSaisons
-            viewController.title = "Saisons en cours de diffusion"
+        case "On the air":
+            let viewController = segue.destination as! ViewAdecouvrir
+            viewController.title = "Saisons en diffusion"
             viewController.accueil = self
             for uneSerie in allSeries
             {
@@ -216,19 +285,16 @@ class ViewAccueil: UIViewController  {
                         (uneSerie.watchlist == false) &&
                         (uneSerie.unfollowed == false) )
                     {
-                        //uneSerie.message = dateFormatter.string(from: uneSaison.episodes[uneSaison.episodes.count - 1].date)
                         buildList.append(uneSerie)
-                        buildListMessages.append(dateFormatter.string(from: uneSaison.episodes[uneSaison.episodes.count - 1].date))
                         buildListSaisons.append(uneSaison.saison)
                     }
                 }
             }
             viewController.viewList = buildList
-            viewController.allMessages = buildListMessages
             viewController.allSaisons = buildListSaisons
-
-        case "A voir":
-            let viewController = segue.destination as! ViewSaisons
+            
+        case "Diffusées":
+            let viewController = segue.destination as! ViewAdecouvrir
             viewController.title = "Saisons prêtes à voir"
             viewController.accueil = self
             for uneSerie in allSeries
@@ -240,19 +306,16 @@ class ViewAccueil: UIViewController  {
                         (uneSerie.watchlist == false) &&
                         (uneSerie.unfollowed == false) )
                     {
-                        //uneSerie.message = "Saison \(uneSaison.saison)"
                         buildList.append(uneSerie)
-                        buildListMessages.append("Saison \(uneSaison.saison)")
                         buildListSaisons.append(uneSaison.saison)
                     }
                 }
             }
             viewController.viewList = buildList
-            viewController.allMessages = buildListMessages
             viewController.allSaisons = buildListSaisons
-
-        case "A venir":
-            let viewController = segue.destination as! ViewSaisons
+            
+        case "Annoncées":
+            let viewController = segue.destination as! ViewAdecouvrir
             viewController.title = "Nouvelles saisons annoncées"
             viewController.accueil = self
             for uneSerie in allSeries
@@ -263,25 +326,14 @@ class ViewAccueil: UIViewController  {
                         (uneSerie.watchlist == false) &&
                         (uneSerie.unfollowed == false) )
                     {
-                        if ( uneSaison.episodes[0].date.compare(dateFormatter.date(from: "01 Jan 90")!) == .orderedAscending)
-                        {
-                            //uneSerie.message = "TBA"
-                            buildListMessages.append("TBA")
-                        }
-                        else
-                        {
-                            //uneSerie.message = dateFormatter.string(from: uneSaison.episodes[0].date)
-                            buildListMessages.append(dateFormatter.string(from: uneSaison.episodes[0].date))
-                        }
                         buildList.append(uneSerie)
                         buildListSaisons.append(uneSaison.saison)
                     }
                 }
             }
             viewController.viewList = buildList
-            viewController.allMessages = buildListMessages
             viewController.allSaisons = buildListSaisons
-
+            
         default:
             print("Passer à la fenêtre \(bouton.titleLabel?.text ?? "")")
             
@@ -298,14 +350,14 @@ class ViewAccueil: UIViewController  {
         var valptAdecouvrir : Int = 0
         var valAbandonnees : Int = 0
         let today : Date = Date()
-
+        
         for uneSerie in allSeries
         {
             if (uneSerie.unfollowed) { valAbandonnees = valAbandonnees + 1 }
             if (uneSerie.watchlist) { valptAdecouvrir = valptAdecouvrir + 1 }
             if ( (uneSerie.saisons[uneSerie.saisons.count - 1].episodes[uneSerie.saisons[uneSerie.saisons.count - 1].episodes.count - 1].watched == true) && (uneSerie.status == "Ended") ) { valAnciennes = valAnciennes + 1 }
-            if ( (uneSerie.saisons[uneSerie.saisons.count - 1].episodes[uneSerie.saisons[uneSerie.saisons.count - 1].episodes.count - 1].watched == true) && (uneSerie.status != "Ended") ) { valAjour = valAjour + 1 }
-
+            if ( ((uneSerie.saisons[uneSerie.saisons.count - 1].episodes[uneSerie.saisons[uneSerie.saisons.count - 1].episodes.count - 1].watched == false) || (uneSerie.status != "Ended")) && (uneSerie.unfollowed == false) && (uneSerie.watchlist == false) ) { valAjour = valAjour + 1 }
+            
             for uneSaison in uneSerie.saisons
             {
                 if ( (uneSaison.episodes[0].date.compare(today) == .orderedAscending ) &&
@@ -320,7 +372,7 @@ class ViewAccueil: UIViewController  {
                     (uneSerie.watchlist == false) &&
                     (uneSerie.unfollowed == false) )
                 { valAvoir = valAvoir + 1 }
-
+                
                 if ( (uneSaison.episodes[0].date.compare(today) == .orderedDescending ) &&
                     (uneSerie.watchlist == false) &&
                     (uneSerie.unfollowed == false) )
@@ -362,6 +414,19 @@ class ViewAccueil: UIViewController  {
         return newDB
     }
     
+    func mergeStatuses(_ db : [Serie], adds : [Serie]) -> [Serie]
+    {
+        for uneSerie in adds {
+            for dbSerie in db {
+                if (dbSerie.idTrakt == uneSerie.idTrakt) { dbSerie.mergeStatuses(uneSerie) }
+            }
+        }
+        return db
+    }
+    
+    
+
+    // Fonctions de gestion de la watchlist
     func chercherUneSerieSurTrakt(nomSerie:String) -> [Serie]
     {
         return trakt.recherche(serieArechercher: nomSerie)
@@ -383,6 +448,16 @@ class ViewAccueil: UIViewController  {
         return false
     }
     
-    
+    func supprimerUneSerieDansLaWatchlistTrakt(uneSerie: Serie) -> Bool
+    {
+        if (self.trakt.removeFromWatchlist(theTVdbId: uneSerie.idTVdb))
+        {
+            self.allSeries.remove(at: self.allSeries.index(of: uneSerie)!)
+            self.saveDB()
+            
+            return true
+        }
+        return false
+    }
     
 }

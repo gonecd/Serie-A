@@ -25,7 +25,8 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
     var serie : Serie = Serie(serie: "")
     var image : UIImage = UIImage()
     var saison : Int = 0
-    
+    var accueil : ViewAccueil = ViewAccueil()
+
     @IBOutlet weak var banniere: UIImageView!
     @IBOutlet weak var graphe: GraphSaison!
     
@@ -35,18 +36,28 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         banniere.image = image
         graphe.sendSaison(serie.saisons[saison - 1])
     }
-  
+    
     @IBAction func back(_ sender: Any) {
         dismiss(animated: true, completion: {})
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let viewController = segue.destination as! EpisodeFiche
-        let collectionCell : CellEpisode = sender as! CellEpisode
-        viewController.serie = serie
-        viewController.saison = saison
-        viewController.image = image
-        viewController.episode = Int(collectionCell.numero.text!)!
+
+        if (segue.identifier == "showEpisode")
+        {
+            let viewController = segue.destination as! EpisodeFiche
+            let collectionCell : CellEpisode = sender as! CellEpisode
+            viewController.serie = serie
+            viewController.saison = saison
+            viewController.image = image
+            viewController.episode = Int(collectionCell.numero.text!)!
+        }
+        else
+        {
+            let viewController = segue.destination as! SerieFiche
+            viewController.serie = serie
+            viewController.image = image
+        }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -62,17 +73,17 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale.current
         dateFormatter.dateFormat = "dd MMM yy"
-
+        
         cell.numero.text = String(indexPath.row + 1)
         cell.titre.text = serie.saisons[saison - 1].episodes[indexPath.row].titre
         cell.date.text = dateFormatter.string(from: serie.saisons[saison - 1].episodes[indexPath.row].date)
         cell.noteTrakt.text = String(format: "%.1f", serie.saisons[saison - 1].episodes[indexPath.row].ratingTrakt)
         cell.noteTVdb.text = String(format: "%.1f", serie.saisons[saison - 1].episodes[indexPath.row].ratingTVdb)
         cell.noteBetaSeries.text = String(format: "%.1f", serie.saisons[saison - 1].episodes[indexPath.row].ratingBetaSeries)
-
+        
         return cell
     }
-
+    
     
     
 }

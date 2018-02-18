@@ -122,4 +122,11 @@ class Episode : NSObject, NSCoding
         if (unEpisode.ratingIMdb != 0.0)       { self.ratingIMdb = unEpisode.ratingIMdb }
         if (unEpisode.ratersIMdb != 0)         { self.ratersIMdb = unEpisode.ratersIMdb }
     }
+
+
+    func mergeStatuses(_ unEpisode : Episode)
+    {
+        if (unEpisode.watched != false)        { self.watched = unEpisode.watched }
+    }
+
 }
