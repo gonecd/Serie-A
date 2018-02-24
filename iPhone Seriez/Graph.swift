@@ -56,7 +56,9 @@ class Graph: UIView {
         if (grapheType == 0) { UIColor.black.setFill() }
         if (grapheType == 1) { UIColor.gray.setFill() }
         if (grapheType == 2) { UIColor.white.setFill() }
-        
+        self.layer.cornerRadius = 15
+        self.layer.masksToBounds = true
+
         //bounds.fill()
         
         // Lignes

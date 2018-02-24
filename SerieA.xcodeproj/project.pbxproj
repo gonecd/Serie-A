@@ -9,9 +9,8 @@
 /* Begin PBXBuildFile section */
 		623D28921FED45D0005488D5 /* A.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 623D28901FED45D0005488D5 /* A.jpg */; };
 		623D28931FED45D0005488D5 /* A-small.png in Resources */ = {isa = PBXBuildFile; fileRef = 623D28911FED45D0005488D5 /* A-small.png */; };
-		624D27471FFBBEFF00B49702 /* ViewAbandonnees.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624D27461FFBBEFF00B49702 /* ViewAbandonnees.swift */; };
+		624D27471FFBBEFF00B49702 /* ViewSeries.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624D27461FFBBEFF00B49702 /* ViewSeries.swift */; };
 		624D27491FFBD4E100B49702 /* ViewAccueil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624D27481FFBD4E100B49702 /* ViewAccueil.swift */; };
-		624D274B1FFBF4A000B49702 /* ViewGeneric.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624D274A1FFBF4A000B49702 /* ViewGeneric.swift */; };
 		6254806B1FE6D7740099A3D2 /* comedy.png in Resources */ = {isa = PBXBuildFile; fileRef = 625480561FE6D7710099A3D2 /* comedy.png */; };
 		6254806C1FE6D7740099A3D2 /* action.png in Resources */ = {isa = PBXBuildFile; fileRef = 625480571FE6D7710099A3D2 /* action.png */; };
 		6254806D1FE6D7740099A3D2 /* musical.png in Resources */ = {isa = PBXBuildFile; fileRef = 625480581FE6D7720099A3D2 /* musical.png */; };
@@ -33,10 +32,15 @@
 		6254807D1FE6D7740099A3D2 /* romance.png in Resources */ = {isa = PBXBuildFile; fileRef = 625480681FE6D7730099A3D2 /* romance.png */; };
 		6254807E1FE6D7740099A3D2 /* horror.png in Resources */ = {isa = PBXBuildFile; fileRef = 625480691FE6D7740099A3D2 /* horror.png */; };
 		6254807F1FE6D7740099A3D2 /* animation.png in Resources */ = {isa = PBXBuildFile; fileRef = 6254806A1FE6D7740099A3D2 /* animation.png */; };
+		627A0E2820139E8300FE1777 /* GraphSaison.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627A0E2720139E8300FE1777 /* GraphSaison.swift */; };
+		627A0E2A20139E9900FE1777 /* GraphEpisode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627A0E2920139E9900FE1777 /* GraphEpisode.swift */; };
 		62A581E31FBC5330002D8FD3 /* ToBeContinued.png in Resources */ = {isa = PBXBuildFile; fileRef = 62A581E11FBC5330002D8FD3 /* ToBeContinued.png */; };
 		62A581E41FBC5330002D8FD3 /* TheEnd.png in Resources */ = {isa = PBXBuildFile; fileRef = 62A581E21FBC5330002D8FD3 /* TheEnd.png */; };
 		62A581E71FBC5BCB002D8FD3 /* imdb.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62A581E51FBC5BCB002D8FD3 /* imdb.ico */; };
 		62A581E81FBC5BCB002D8FD3 /* rottentomatoes.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62A581E61FBC5BCB002D8FD3 /* rottentomatoes.ico */; };
+		62AC50A0200E58A200A8C841 /* SaisonFiche.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62AC509F200E58A200A8C841 /* SaisonFiche.swift */; };
+		62AC50A2200E59DD00A8C841 /* ViewSaisons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62AC50A1200E59DD00A8C841 /* ViewSaisons.swift */; };
+		62CD57C32038B87D00DE28A1 /* GraphMiniSaison.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62CD57C22038B87D00DE28A1 /* GraphMiniSaison.swift */; };
 		62DD87701FB766C600A9B9EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD876F1FB766C600A9B9EE /* AppDelegate.swift */; };
 		62DD87751FB766C600A9B9EE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 62DD87731FB766C600A9B9EE /* Main.storyboard */; };
 		62DD87771FB766C600A9B9EE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 62DD87761FB766C600A9B9EE /* Assets.xcassets */; };
@@ -55,6 +59,17 @@
 		62DD87B71FB8BE4F00A9B9EE /* trakt.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62DD87B41FB8BE4F00A9B9EE /* trakt.ico */; };
 		62DD87B81FB8BE4F00A9B9EE /* betaseries.png in Resources */ = {isa = PBXBuildFile; fileRef = 62DD87B51FB8BE4F00A9B9EE /* betaseries.png */; };
 		62DD87BA1FB8C15600A9B9EE /* BetaSeries.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD87B91FB8C15500A9B9EE /* BetaSeries.swift */; };
+		62F8ECF42013775800A41EF7 /* EpisodeFiche.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F8ECF32013775800A41EF7 /* EpisodeFiche.swift */; };
+		62FF97C02038C9A3007B658E /* themoviedb.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97BF2038C9A3007B658E /* themoviedb.ico */; };
+		62FF97CE2039016B007B658E /* Stop-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97CA2039016A007B658E /* Stop-icon.png */; };
+		62FF97CF2039016B007B658E /* Play-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97CB2039016B007B658E /* Play-icon.png */; };
+		62FF97D02039016B007B658E /* Eye-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97CC2039016B007B658E /* Eye-icon.png */; };
+		62FF97D12039016B007B658E /* Bio-Hazard-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97CD2039016B007B658E /* Bio-Hazard-icon.png */; };
+		62FF97D320390305007B658E /* List-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97D220390305007B658E /* List-icon.png */; };
+		62FF97D72039076D007B658E /* Calendar-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97D42039076C007B658E /* Calendar-icon.png */; };
+		62FF97D82039076D007B658E /* TV-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97D52039076C007B658E /* TV-icon.png */; };
+		62FF97D92039076D007B658E /* Air-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97D62039076D007B658E /* Air-icon.png */; };
+		62FF97DB2039AAFC007B658E /* Trash-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97DA2039AAFC007B658E /* Trash-icon.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,9 +92,8 @@
 /* Begin PBXFileReference section */
 		623D28901FED45D0005488D5 /* A.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = A.jpg; sourceTree = "<group>"; };
 		623D28911FED45D0005488D5 /* A-small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "A-small.png"; sourceTree = "<group>"; };
-		624D27461FFBBEFF00B49702 /* ViewAbandonnees.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewAbandonnees.swift; sourceTree = "<group>"; };
+		624D27461FFBBEFF00B49702 /* ViewSeries.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewSeries.swift; sourceTree = "<group>"; };
 		624D27481FFBD4E100B49702 /* ViewAccueil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewAccueil.swift; sourceTree = "<group>"; };
-		624D274A1FFBF4A000B49702 /* ViewGeneric.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewGeneric.swift; sourceTree = "<group>"; };
 		625480561FE6D7710099A3D2 /* comedy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = comedy.png; sourceTree = "<group>"; };
 		625480571FE6D7710099A3D2 /* action.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = action.png; sourceTree = "<group>"; };
 		625480581FE6D7720099A3D2 /* musical.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = musical.png; sourceTree = "<group>"; };
@@ -101,10 +115,15 @@
 		625480681FE6D7730099A3D2 /* romance.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = romance.png; sourceTree = "<group>"; };
 		625480691FE6D7740099A3D2 /* horror.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = horror.png; sourceTree = "<group>"; };
 		6254806A1FE6D7740099A3D2 /* animation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = animation.png; sourceTree = "<group>"; };
+		627A0E2720139E8300FE1777 /* GraphSaison.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphSaison.swift; sourceTree = "<group>"; };
+		627A0E2920139E9900FE1777 /* GraphEpisode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphEpisode.swift; sourceTree = "<group>"; };
 		62A581E11FBC5330002D8FD3 /* ToBeContinued.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ToBeContinued.png; sourceTree = "<group>"; };
 		62A581E21FBC5330002D8FD3 /* TheEnd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TheEnd.png; sourceTree = "<group>"; };
 		62A581E51FBC5BCB002D8FD3 /* imdb.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = imdb.ico; sourceTree = "<group>"; };
 		62A581E61FBC5BCB002D8FD3 /* rottentomatoes.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = rottentomatoes.ico; sourceTree = "<group>"; };
+		62AC509F200E58A200A8C841 /* SaisonFiche.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaisonFiche.swift; sourceTree = "<group>"; };
+		62AC50A1200E59DD00A8C841 /* ViewSaisons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewSaisons.swift; sourceTree = "<group>"; };
+		62CD57C22038B87D00DE28A1 /* GraphMiniSaison.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphMiniSaison.swift; sourceTree = "<group>"; };
 		62DD876C1FB766C600A9B9EE /* SerieA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SerieA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		62DD876F1FB766C600A9B9EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		62DD87741FB766C600A9B9EE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -129,6 +148,17 @@
 		62DD87B41FB8BE4F00A9B9EE /* trakt.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = trakt.ico; sourceTree = "<group>"; };
 		62DD87B51FB8BE4F00A9B9EE /* betaseries.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = betaseries.png; sourceTree = "<group>"; };
 		62DD87B91FB8C15500A9B9EE /* BetaSeries.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BetaSeries.swift; sourceTree = "<group>"; };
+		62F8ECF32013775800A41EF7 /* EpisodeFiche.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeFiche.swift; sourceTree = "<group>"; };
+		62FF97BF2038C9A3007B658E /* themoviedb.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = themoviedb.ico; sourceTree = "<group>"; };
+		62FF97CA2039016A007B658E /* Stop-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Stop-icon.png"; sourceTree = "<group>"; };
+		62FF97CB2039016B007B658E /* Play-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Play-icon.png"; sourceTree = "<group>"; };
+		62FF97CC2039016B007B658E /* Eye-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Eye-icon.png"; sourceTree = "<group>"; };
+		62FF97CD2039016B007B658E /* Bio-Hazard-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Bio-Hazard-icon.png"; sourceTree = "<group>"; };
+		62FF97D220390305007B658E /* List-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "List-icon.png"; sourceTree = "<group>"; };
+		62FF97D42039076C007B658E /* Calendar-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Calendar-icon.png"; sourceTree = "<group>"; };
+		62FF97D52039076C007B658E /* TV-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TV-icon.png"; sourceTree = "<group>"; };
+		62FF97D62039076D007B658E /* Air-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Air-icon.png"; sourceTree = "<group>"; };
+		62FF97DA2039AAFC007B658E /* Trash-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Trash-icon.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -159,6 +189,7 @@
 		625480531FE6D7140099A3D2 /* Icones sources */ = {
 			isa = PBXGroup;
 			children = (
+				62FF97BF2038C9A3007B658E /* themoviedb.ico */,
 				62DD87B51FB8BE4F00A9B9EE /* betaseries.png */,
 				62DD87B31FB8BE4F00A9B9EE /* thetvdb.png */,
 				62A581E51FBC5BCB002D8FD3 /* imdb.ico */,
@@ -229,10 +260,14 @@
 			isa = PBXGroup;
 			children = (
 				62DD87B11FB8A2E000A9B9EE /* Graph.swift */,
+				627A0E2720139E8300FE1777 /* GraphSaison.swift */,
+				62CD57C22038B87D00DE28A1 /* GraphMiniSaison.swift */,
+				627A0E2920139E9900FE1777 /* GraphEpisode.swift */,
 				62DD879F1FB76F5D00A9B9EE /* TheTVdb.swift */,
 				62DD87A31FB76F5D00A9B9EE /* Trakt.swift */,
 				623D28911FED45D0005488D5 /* A-small.png */,
 				623D28901FED45D0005488D5 /* A.jpg */,
+				62FF97C12038FA0A007B658E /* Icones accueil */,
 				625480551FE6D7450099A3D2 /* Icones genres */,
 				625480531FE6D7140099A3D2 /* Icones sources */,
 				625480541FE6D7360099A3D2 /* Icones status */,
@@ -242,9 +277,11 @@
 				62DD876F1FB766C600A9B9EE /* AppDelegate.swift */,
 				62DD87B91FB8C15500A9B9EE /* BetaSeries.swift */,
 				624D27481FFBD4E100B49702 /* ViewAccueil.swift */,
-				624D274A1FFBF4A000B49702 /* ViewGeneric.swift */,
 				62DD879D1FB767B900A9B9EE /* ViewAdecouvrir.swift */,
-				624D27461FFBBEFF00B49702 /* ViewAbandonnees.swift */,
+				624D27461FFBBEFF00B49702 /* ViewSeries.swift */,
+				62AC50A1200E59DD00A8C841 /* ViewSaisons.swift */,
+				62AC509F200E58A200A8C841 /* SaisonFiche.swift */,
+				62F8ECF32013775800A41EF7 /* EpisodeFiche.swift */,
 				62DD87A91FB7838400A9B9EE /* SerieFiche.swift */,
 				62DD87731FB766C600A9B9EE /* Main.storyboard */,
 				62DD87761FB766C600A9B9EE /* Assets.xcassets */,
@@ -271,6 +308,22 @@
 				62DD87911FB766C700A9B9EE /* Info.plist */,
 			);
 			path = "iPhone SeriezUITests";
+			sourceTree = "<group>";
+		};
+		62FF97C12038FA0A007B658E /* Icones accueil */ = {
+			isa = PBXGroup;
+			children = (
+				62FF97DA2039AAFC007B658E /* Trash-icon.png */,
+				62FF97D62039076D007B658E /* Air-icon.png */,
+				62FF97D42039076C007B658E /* Calendar-icon.png */,
+				62FF97D52039076C007B658E /* TV-icon.png */,
+				62FF97D220390305007B658E /* List-icon.png */,
+				62FF97CD2039016B007B658E /* Bio-Hazard-icon.png */,
+				62FF97CC2039016B007B658E /* Eye-icon.png */,
+				62FF97CB2039016B007B658E /* Play-icon.png */,
+				62FF97CA2039016A007B658E /* Stop-icon.png */,
+			);
+			path = "Icones accueil";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -385,6 +438,7 @@
 				62DD877A1FB766C600A9B9EE /* LaunchScreen.storyboard in Resources */,
 				62DD87771FB766C600A9B9EE /* Assets.xcassets in Resources */,
 				6254806E1FE6D7740099A3D2 /* thriller.png in Resources */,
+				62FF97CE2039016B007B658E /* Stop-icon.png in Resources */,
 				625480711FE6D7740099A3D2 /* fantasy.png in Resources */,
 				62A581E81FBC5BCB002D8FD3 /* rottentomatoes.ico in Resources */,
 				6254806B1FE6D7740099A3D2 /* comedy.png in Resources */,
@@ -394,25 +448,34 @@
 				6254806D1FE6D7740099A3D2 /* musical.png in Resources */,
 				62A581E31FBC5330002D8FD3 /* ToBeContinued.png in Resources */,
 				625480761FE6D7740099A3D2 /* documentary.png in Resources */,
+				62FF97D12039016B007B658E /* Bio-Hazard-icon.png in Resources */,
 				6254807E1FE6D7740099A3D2 /* horror.png in Resources */,
 				6254807D1FE6D7740099A3D2 /* romance.png in Resources */,
 				6254806C1FE6D7740099A3D2 /* action.png in Resources */,
 				62A581E41FBC5330002D8FD3 /* TheEnd.png in Resources */,
 				625480751FE6D7740099A3D2 /* biography.png in Resources */,
+				62FF97D320390305007B658E /* List-icon.png in Resources */,
 				6254807B1FE6D7740099A3D2 /* drama.png in Resources */,
 				62DD87B71FB8BE4F00A9B9EE /* trakt.ico in Resources */,
+				62FF97DB2039AAFC007B658E /* Trash-icon.png in Resources */,
 				625480731FE6D7740099A3D2 /* mini-series.png in Resources */,
 				623D28921FED45D0005488D5 /* A.jpg in Resources */,
 				6254806F1FE6D7740099A3D2 /* war.png in Resources */,
 				6254807C1FE6D7740099A3D2 /* history.png in Resources */,
 				62DD87B61FB8BE4F00A9B9EE /* thetvdb.png in Resources */,
+				62FF97D82039076D007B658E /* TV-icon.png in Resources */,
 				625480721FE6D7740099A3D2 /* science-fiction.png in Resources */,
 				625480701FE6D7740099A3D2 /* adventure.png in Resources */,
+				62FF97D02039016B007B658E /* Eye-icon.png in Resources */,
+				62FF97C02038C9A3007B658E /* themoviedb.ico in Resources */,
 				625480771FE6D7740099A3D2 /* sports.png in Resources */,
 				625480781FE6D7740099A3D2 /* western.png in Resources */,
+				62FF97CF2039016B007B658E /* Play-icon.png in Resources */,
+				62FF97D72039076D007B658E /* Calendar-icon.png in Resources */,
 				6254807A1FE6D7740099A3D2 /* crime.png in Resources */,
 				62A581E71FBC5BCB002D8FD3 /* imdb.ico in Resources */,
 				6254807F1FE6D7740099A3D2 /* animation.png in Resources */,
+				62FF97D92039076D007B658E /* Air-icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -439,16 +502,21 @@
 			files = (
 				62DD87AA1FB7838400A9B9EE /* SerieFiche.swift in Sources */,
 				62DD879E1FB767B900A9B9EE /* ViewAdecouvrir.swift in Sources */,
+				62AC50A2200E59DD00A8C841 /* ViewSaisons.swift in Sources */,
 				62DD87AF1FB89E7D00A9B9EE /* Episode.swift in Sources */,
 				62DD87AE1FB89E7D00A9B9EE /* Saison.swift in Sources */,
+				62F8ECF42013775800A41EF7 /* EpisodeFiche.swift in Sources */,
+				62CD57C32038B87D00DE28A1 /* GraphMiniSaison.swift in Sources */,
 				62DD87BA1FB8C15600A9B9EE /* BetaSeries.swift in Sources */,
 				62DD87B21FB8A2E000A9B9EE /* Graph.swift in Sources */,
-				624D27471FFBBEFF00B49702 /* ViewAbandonnees.swift in Sources */,
+				624D27471FFBBEFF00B49702 /* ViewSeries.swift in Sources */,
+				627A0E2820139E8300FE1777 /* GraphSaison.swift in Sources */,
+				627A0E2A20139E9900FE1777 /* GraphEpisode.swift in Sources */,
 				62DD87A41FB76F5D00A9B9EE /* TheTVdb.swift in Sources */,
 				62DD87A81FB76F5D00A9B9EE /* Trakt.swift in Sources */,
 				624D27491FFBD4E100B49702 /* ViewAccueil.swift in Sources */,
 				62DD87B01FB89E7D00A9B9EE /* Serie.swift in Sources */,
-				624D274B1FFBF4A000B49702 /* ViewGeneric.swift in Sources */,
+				62AC50A0200E58A200A8C841 /* SaisonFiche.swift in Sources */,
 				62DD87701FB766C600A9B9EE /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

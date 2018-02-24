@@ -69,7 +69,7 @@ class ViewAccueil: UIViewController  {
     func makeJolisCompteurs(compteur: UITextField)
     {
         compteur.layer.cornerRadius = 15
-        compteur.layer.masksToBounds = true;
+        compteur.layer.masksToBounds = true
     }
     
     func makeRedGradiant(carre : UIView)
@@ -81,14 +81,14 @@ class ViewAccueil: UIViewController  {
         redGradient.frame = carre.bounds
         
         carre.layer.cornerRadius = 10;
-        carre.layer.masksToBounds = true;
+        carre.layer.masksToBounds = true
         carre.layer.insertSublayer(redGradient, at: 0)
     }
     
     func makeBlueGradiant(carre : UIView)
     {
         let blueGradient : CAGradientLayer = CAGradientLayer()
-        blueGradient.colors = [UIColor.blue.cgColor, UIColor.lightGray.cgColor]
+        blueGradient.colors = [UIColor.blue.cgColor, UIColor.white.cgColor]
         blueGradient.startPoint = CGPoint(x: 0, y: 0)
         blueGradient.endPoint = CGPoint(x: 1, y: 1)
         blueGradient.frame = carre.bounds

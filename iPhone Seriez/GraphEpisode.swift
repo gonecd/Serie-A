@@ -42,7 +42,10 @@ class GraphEpisode: UIView {
         let textAttributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 10), NSAttributedStringKey.foregroundColor: UIColor.white]
         
         // Colors
-        UIColor.gray.setFill()
+        //UIColor.gray.setFill()
+        self.layer.cornerRadius = 15
+        self.layer.masksToBounds = true
+
         UIColor.white.setStroke()
 
         // Graphe Circles
