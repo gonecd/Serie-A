@@ -51,13 +51,12 @@ class GraphMiniSerie: UIView {
     
     func background()
     {
-        let nbLignesQuadrillage : Int = 2
-        
         // Couleur des lignes
         UIColor.white.setStroke()
         
         // Cadre
         let path : UIBezierPath = UIBezierPath()
+        path.lineWidth = 0.5
         path.move(to: CGPoint(x: origineX, y: origineY))
         path.addLine(to: CGPoint(x:origineX, y:origineY-hauteur))
         path.addLine(to: CGPoint(x:origineX+largeur, y:origineY-hauteur))
@@ -67,13 +66,9 @@ class GraphMiniSerie: UIView {
         
         // Quadrillage
         path.setLineDash([5.0,5.0], count: 2, phase: 5.0)
-        path.lineWidth = 0.5
-        for i:Int in 1 ..< nbLignesQuadrillage
-        {
-            path.move(to: CGPoint(x: origineX, y: origineY - (hauteur * CGFloat(i) / CGFloat(nbLignesQuadrillage))))
-            path.addLine(to: CGPoint(x: origineX + largeur, y: origineY - (hauteur * CGFloat(i) / CGFloat(nbLignesQuadrillage))))
-            path.stroke()
-        }
+        path.move(to: CGPoint(x: origineX, y: origineY - (hauteur / 2)))
+        path.addLine(to: CGPoint(x: origineX + largeur, y: origineY - (hauteur / 2)))
+        path.stroke()
     }
     
     
@@ -91,6 +86,7 @@ class GraphMiniSerie: UIView {
     func traceUneBarre(_ noteX: Int, uneCouleur: UIColor, offset: Int)
     {
         var value = noteX
+        let col : CGFloat = largeur / 24
         
         if ( noteX == 0 ) { return }
         if ( noteX < 70 ) { value = 70 }
@@ -101,19 +97,19 @@ class GraphMiniSerie: UIView {
         
         let path : UIBezierPath = UIBezierPath()
         
-        path.move(to: CGPoint(x: origineX + (CGFloat(offset - 1) * largeur / 6) + (largeur / 12),
+        path.move(to: CGPoint(x: origineX + (CGFloat(offset - 1) * largeur / 6) + col,
                               y: origineY))
         
-        path.addLine(to: CGPoint(x: origineX + (CGFloat(offset - 1) * largeur / 6) + (largeur / 12),
+        path.addLine(to: CGPoint(x: origineX + (CGFloat(offset - 1) * largeur / 6) + col,
                                  y: origineY - ( hauteur * CGFloat(value - 70) / 20) ))
         
-        path.addLine(to: CGPoint(x: origineX + (CGFloat(offset - 1) * largeur / 6) + (largeur / 12) + (largeur / 12 ),
+        path.addLine(to: CGPoint(x: origineX + (CGFloat(offset - 1) * largeur / 6) + col + (largeur / 12),
                                  y: origineY - ( hauteur * CGFloat(value - 70) / 20) ))
 
-        path.addLine(to: CGPoint(x: origineX + (CGFloat(offset - 1) * largeur / 6) + (largeur / 12) + (largeur / 12 ),
+        path.addLine(to: CGPoint(x: origineX + (CGFloat(offset - 1) * largeur / 6) + col + (largeur / 12),
                                  y: origineY))
 
-        path.addLine(to: CGPoint(x: origineX + (CGFloat(offset - 1) * largeur / 6) + (largeur / 12),
+        path.addLine(to: CGPoint(x: origineX + (CGFloat(offset - 1) * largeur / 6) + col,
                                  y: origineY))
         
         path.stroke()
