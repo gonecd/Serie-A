@@ -77,9 +77,9 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         cell.numero.text = String(indexPath.row + 1)
         cell.titre.text = serie.saisons[saison - 1].episodes[indexPath.row].titre
         cell.date.text = dateFormatter.string(from: serie.saisons[saison - 1].episodes[indexPath.row].date)
-        cell.noteTrakt.text = String(format: "%.1f", serie.saisons[saison - 1].episodes[indexPath.row].ratingTrakt)
-        cell.noteTVdb.text = String(format: "%.1f", serie.saisons[saison - 1].episodes[indexPath.row].ratingTVdb)
-        cell.noteBetaSeries.text = String(format: "%.1f", serie.saisons[saison - 1].episodes[indexPath.row].ratingBetaSeries)
+        cell.noteTrakt.text = String(serie.saisons[saison - 1].episodes[indexPath.row].getFairRatingTrakt())
+        cell.noteTVdb.text = String(serie.saisons[saison - 1].episodes[indexPath.row].getFairRatingTVdb())
+        cell.noteBetaSeries.text = String(serie.saisons[saison - 1].episodes[indexPath.row].getFairRatingBetaSeries())
         
         return cell
     }

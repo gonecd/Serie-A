@@ -317,7 +317,7 @@ class Trakt : NSObject
                                 if (totRaters > 0)
                                 {
                                     unEpisode.ratersTrakt = totRaters
-                                    unEpisode.ratingTrakt = Double(totRating) / Double(totRaters)
+                                    unEpisode.ratingTrakt = Int(10 * Double(totRating) / Double(totRaters))
                                 }
                                 
                             } catch let error as NSError { print("Trakt::getSerieInfos failed for \(uneSerie.serie) s\(uneSaison.saison) e\(unEpisode.episode): \(error.localizedDescription)") }

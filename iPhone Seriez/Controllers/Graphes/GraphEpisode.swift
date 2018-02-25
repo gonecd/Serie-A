@@ -25,24 +25,18 @@ class GraphEpisode: UIView {
     
     
     func sendEpisode(_ unEpisode: Episode){
-    
         theEpisode = unEpisode
     }
     
     
     func background()
     {
-        let ratingTrakt : CGFloat = 7.663
-        let ratingBetaSeries : CGFloat = 8.558
-        let ratingTVdb : CGFloat = 7.941
-
         let hauteur : CGFloat = self.frame.height
         let largeur : CGFloat = self.frame.width
         let grandRayon : CGFloat = (largeur - 40.0) / 6
         let textAttributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 10), NSAttributedStringKey.foregroundColor: UIColor.white]
         
         // Colors
-        //UIColor.gray.setFill()
         self.layer.cornerRadius = 15
         self.layer.masksToBounds = true
 
@@ -66,36 +60,10 @@ class GraphEpisode: UIView {
             }
         }
 
-        UIColor.yellow.setStroke()
-        var refPath : UIBezierPath
-
         // On place les logos
         #imageLiteral(resourceName: "trakt.ico").draw(in: CGRect(x: CGFloat(10.0) + grandRayon - 12.0, y:  10.0, width: 24.0, height: 24.0))
-        refPath = UIBezierPath()
-        refPath.addArc(withCenter: CGPoint(x: CGFloat(10.0) + grandRayon, y: hauteur / 2),
-                    radius: grandRayon * (1.0 - (CGFloat(10.0 - ratingTrakt) / 4)),
-                    startAngle: 2 * .pi, endAngle: 0, clockwise: false)
-        refPath.setLineDash([5.0,5.0], count: 2, phase: 2.0)
-        refPath.lineWidth = 2.0
-        refPath.stroke()
-        
         #imageLiteral(resourceName: "thetvdb.png").draw(in: CGRect(x: CGFloat(20.0) + 3*grandRayon - 12.0, y:  10.0, width: 24.0, height: 24.0))
-        refPath = UIBezierPath()
-        refPath.addArc(withCenter: CGPoint(x: CGFloat(20.0) + 3*grandRayon, y: hauteur / 2),
-                       radius: grandRayon * (1.0 - (CGFloat(10.0 - ratingTVdb) / 4)),
-                       startAngle: 2 * .pi, endAngle: 0, clockwise: false)
-        refPath.setLineDash([5.0,5.0], count: 2, phase: 2.0)
-        refPath.lineWidth = 2.0
-        refPath.stroke()
-        
         #imageLiteral(resourceName: "betaseries.png").draw(in: CGRect(x: CGFloat(30.0) + 5*grandRayon - 12.0, y:  10.0, width: 24.0, height: 24.0))
-        refPath = UIBezierPath()
-        refPath.addArc(withCenter: CGPoint(x: CGFloat(30.0) + 5*grandRayon, y: hauteur / 2),
-                       radius: grandRayon * (1.0 - (CGFloat(10.0 - ratingBetaSeries) / 4)),
-                       startAngle: 2 * .pi, endAngle: 0, clockwise: false)
-        refPath.setLineDash([5.0,5.0], count: 2, phase: 2.0)
-        refPath.lineWidth = 2.0
-        refPath.stroke()
     }
     
     func traceGrapheCircles()
@@ -104,11 +72,11 @@ class GraphEpisode: UIView {
         let largeur : CGFloat = self.frame.width
         let grandRayon : CGFloat = (largeur - 40.0) / 6
 
-        UIColor.red.setStroke()
-        UIColor.red.withAlphaComponent(0.25).setFill()
+        colorTrakt.setStroke()
+        colorTrakt.withAlphaComponent(0.25).setFill()
 
         let path : UIBezierPath = UIBezierPath()
-        let locRayon : CGFloat = grandRayon * (1.0 - (CGFloat(10.0 - theEpisode.ratingTrakt) / 4))
+        let locRayon : CGFloat = grandRayon * (1.0 - (CGFloat(100 - theEpisode.getFairRatingTrakt()) / 40))
         path.addArc(withCenter: CGPoint(x: CGFloat(10.0) + grandRayon + CGFloat(0)*(10.0 + 2*grandRayon), y: hauteur / 2),
                     radius: locRayon,
                     startAngle: 2 * .pi, endAngle: 0, clockwise: false)
@@ -116,10 +84,10 @@ class GraphEpisode: UIView {
         path.stroke()
         path.fill()
         
-        UIColor.green.setStroke()
-        UIColor.green.withAlphaComponent(0.25).setFill()
+        colorTVdb.setStroke()
+        colorTVdb.withAlphaComponent(0.25).setFill()
         let path2 : UIBezierPath = UIBezierPath()
-        let locRayon2 : CGFloat = grandRayon * (1.0 - (CGFloat(10.0 - theEpisode.ratingTVdb) / 4))
+        let locRayon2 : CGFloat = grandRayon * (1.0 - (CGFloat(100 - theEpisode.getFairRatingTVdb()) / 40))
         path2.addArc(withCenter: CGPoint(x: CGFloat(10.0) + grandRayon + CGFloat(1)*(10.0 + 2*grandRayon), y: hauteur / 2),
                     radius: locRayon2,
                     startAngle: 2 * .pi, endAngle: 0, clockwise: false)
@@ -127,10 +95,10 @@ class GraphEpisode: UIView {
         path2.stroke()
         path2.fill()
 
-        UIColor.blue.setStroke()
-        UIColor.blue.withAlphaComponent(0.25).setFill()
+        colorBetaSeries.setStroke()
+        colorBetaSeries.withAlphaComponent(0.25).setFill()
         let path3 : UIBezierPath = UIBezierPath()
-        let locRayon3 : CGFloat = grandRayon * (1.0 - (CGFloat(10.0 - theEpisode.ratingBetaSeries) / 4))
+        let locRayon3 : CGFloat = grandRayon * (1.0 - (CGFloat(100 - theEpisode.getFairRatingBetaSeries()) / 40))
         path3.addArc(withCenter: CGPoint(x: CGFloat(10.0) + grandRayon + CGFloat(2)*(10.0 + 2*grandRayon), y: hauteur / 2),
                     radius: locRayon3,
                     startAngle: 2 * .pi, endAngle: 0, clockwise: false)

@@ -149,7 +149,6 @@ class ViewAccueil: UIViewController  {
         self.theTVdb.getEpisodesRatings(serie)
         self.trakt.getEpisodesRatings(serie)
         self.betaSeries.getEpisodesRatings(serie)
-        serie.computeSerieInfos()
     }
     
     func saveDB ()
@@ -205,60 +204,40 @@ class ViewAccueil: UIViewController  {
         
         switch (bouton.titleLabel?.text ?? "") {
         case "Watchlist":
-            let viewController = segue.destination as! ViewSeries
+            let viewController = segue.destination as! ViewSerieListe
             viewController.title = "Séries à découvrir"
             viewController.accueil = self
             for uneSerie in allSeries
             {
-                if (uneSerie.watchlist)
-                {
-                    uneSerie.message = "\(uneSerie.saisons.count) saisons"
-                    buildList.append(uneSerie)
-                }
+                if (uneSerie.watchlist) { buildList.append(uneSerie) }
             }
             viewController.viewList = buildList
             
         case "Abandonnées":
-            let viewController = segue.destination as! ViewSeries
+            let viewController = segue.destination as! ViewSerieListe
             viewController.title = "Séries abandonnées"
             viewController.accueil = self
             for uneSerie in allSeries
             {
-                if (uneSerie.unfollowed)
-                {
-                    var totalEpisodes : Int = 0
-                    var viewedEpisodes : Int = 0
-                    var viewedRatio : Int = 0
-                    
-                    for uneSaison in uneSerie.saisons {
-                        for unEpisode in uneSaison.episodes {
-                            totalEpisodes = totalEpisodes + 1
-                            if (unEpisode.watched) { viewedEpisodes = viewedEpisodes + 1 }
-                        }
-                    }
-                    if (totalEpisodes != 0) { viewedRatio = Int(100 * viewedEpisodes / totalEpisodes) }
-                    uneSerie.message = "\(viewedRatio)% vue"
-                    buildList.append(uneSerie)
-                }
+                if (uneSerie.unfollowed) { buildList.append(uneSerie) }
             }
             viewController.viewList = buildList
             
         case "Finies":
-            let viewController = segue.destination as! ViewSeries
+            let viewController = segue.destination as! ViewSerieListe
             viewController.title = "Séries anciennes et finies"
             viewController.accueil = self
             for uneSerie in allSeries
             {
                 if ( (uneSerie.saisons[uneSerie.saisons.count - 1].episodes[uneSerie.saisons[uneSerie.saisons.count - 1].episodes.count - 1].watched == true) && (uneSerie.status == "Ended") )
                 {
-                    uneSerie.message = "\(uneSerie.saisons.count) saisons"
                     buildList.append(uneSerie)
                 }
             }
             viewController.viewList = buildList
             
         case "En cours":
-            let viewController = segue.destination as! ViewSeries
+            let viewController = segue.destination as! ViewSerieListe
             viewController.title = "Séries en cours"
             viewController.accueil = self
             for uneSerie in allSeries
@@ -439,7 +418,6 @@ class ViewAccueil: UIViewController  {
             self.theTVdb.getSerieInfos(uneSerie)
             self.trakt.getEpisodesRatings(uneSerie)
             self.betaSeries.getEpisodesRatings(uneSerie)
-            uneSerie.computeSerieInfos()
             self.allSeries.append(uneSerie)
             self.saveDB()
             

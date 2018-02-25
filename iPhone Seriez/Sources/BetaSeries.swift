@@ -63,7 +63,7 @@ class BetaSeries : NSObject
                                     {
                                         if (saison.episodes[cetEpisode].date.compare(today) == .orderedAscending)
                                         {
-                                            saison.episodes[cetEpisode].ratingBetaSeries = 2 * (((unEpisode as AnyObject).object(forKey: "note")! as AnyObject).object(forKey: "mean") as? Double ?? 0.0)
+                                            saison.episodes[cetEpisode].ratingBetaSeries = Int(20 * (((unEpisode as AnyObject).object(forKey: "note")! as AnyObject).object(forKey: "mean") as? Double ?? 0.0))
                                             saison.episodes[cetEpisode].ratersBetaSeries = ((unEpisode as AnyObject).object(forKey: "note")! as AnyObject).object(forKey: "total") as? Int ?? 0
                                         }
                                         

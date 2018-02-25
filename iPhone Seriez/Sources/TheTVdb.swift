@@ -56,7 +56,7 @@ class TheTVdb : NSObject
         var request : URLRequest
         var task : URLSessionDataTask
         let today : Date = Date()
-
+        
         for saison in uneSerie.saisons
         {
             var tableauDeTaches: [URLSessionTask] = []
@@ -78,7 +78,7 @@ class TheTVdb : NSObject
                                 if response.statusCode == 200 {
                                     let jsonResponse : NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
                                     
-                                    episode.ratingTVdb = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "siteRating") as? Double ?? 0.0
+                                    episode.ratingTVdb = Int(10 * ((jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "siteRating") as? Double ?? 0.0))
                                     episode.ratersTVdb = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "siteRatingCount") as? Int ?? 0
                                 }
                             } catch let error as NSError { print("TheTVdb::getSerieInfos failed for \(uneSerie.serie) s\(saison.saison) e\(episode.episode): \(error.localizedDescription)") }
@@ -120,10 +120,9 @@ class TheTVdb : NSObject
                     if response.statusCode == 200 {
                         
                         let jsonResponse : NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
-
+                        
                         uneSerie.banner = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "banner") as! String
                         uneSerie.status = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "status") as! String
-                        uneSerie.ratingTVdb = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "siteRating") as! Double
                         uneSerie.network = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "network") as! String
                         uneSerie.resume = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "overview") as? String ?? ""
                         uneSerie.genres = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "genre") as! [String]
@@ -146,7 +145,7 @@ class TheTVdb : NSObject
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("en", forHTTPHeaderField: "Accept-Language")
         request.addValue("Bearer \(self.Token)", forHTTPHeaderField: "Authorization")
-
+        
         session = URLSession.shared
         task = session.dataTask(with: request, completionHandler: { data, response, error in
             if let data = data, let response = response as? HTTPURLResponse {
@@ -193,8 +192,8 @@ class TheTVdb : NSObject
         
         task.resume()
         while (task.state != URLSessionTask.State.completed) { usleep(10000) }
-
-
+        
+        
         while ( continuer )
         {
             // Parsing de la saison
@@ -245,20 +244,31 @@ class TheTVdb : NSObject
                                         }
                                     }
                                     
-                                    uneSerie.saisons[((fiche as AnyObject).object(forKey: "airedSeason") as! Int) - 1].episodes[((fiche as AnyObject).object(forKey: "airedEpisodeNumber") as! Int) - 1].titre = (fiche as AnyObject).object(forKey: "episodeName") as? String ?? ""
-                                    uneSerie.saisons[((fiche as AnyObject).object(forKey: "airedSeason") as! Int) - 1].episodes[((fiche as AnyObject).object(forKey: "airedEpisodeNumber") as! Int) - 1].resume = (fiche as AnyObject).object(forKey: "overview") as? String ?? ""
-
-                                    let stringDate : String = (fiche as AnyObject).object(forKey: "firstAired") as? String ?? ""
-                                    if (stringDate ==  "")
+                                    if (lEpisode != 0)
                                     {
-                                        uneSerie.saisons[((fiche as AnyObject).object(forKey: "airedSeason") as! Int) - 1].episodes[((fiche as AnyObject).object(forKey: "airedEpisodeNumber") as! Int) - 1].date = dateFormatter.date(from: "2099-01-01")!
+                                        uneSerie.saisons[laSaison - 1].episodes[lEpisode - 1].titre = (fiche as AnyObject).object(forKey: "episodeName") as? String ?? ""
+                                        uneSerie.saisons[laSaison - 1].episodes[lEpisode - 1].resume = (fiche as AnyObject).object(forKey: "overview") as? String ?? ""
+                                        
+                                        let stringDate : String = (fiche as AnyObject).object(forKey: "firstAired") as? String ?? ""
+                                        if (stringDate ==  "")
+                                        {
+                                            uneSerie.saisons[laSaison - 1].episodes[lEpisode - 1].date = dateFormatter.date(from: "2099-01-01")!
+                                        }
+                                        else
+                                        {
+                                            uneSerie.saisons[laSaison - 1].episodes[lEpisode - 1].date = dateFormatter.date(from: stringDate)!
+                                        }
+                                        
+                                        uneSerie.saisons[laSaison - 1].episodes[lEpisode - 1].idTVdb = (fiche as AnyObject).object(forKey: "id") as? Int ?? 0
                                     }
                                     else
                                     {
-                                        uneSerie.saisons[((fiche as AnyObject).object(forKey: "airedSeason") as! Int) - 1].episodes[((fiche as AnyObject).object(forKey: "airedEpisodeNumber") as! Int) - 1].date = dateFormatter.date(from: stringDate)!
+                                        print ("TheTVdb::getSerieInfos failed on episode = 0 \(uneSerie.serie) saison \(laSaison)")
                                     }
-
-                                    uneSerie.saisons[laSaison - 1].episodes[lEpisode - 1].idTVdb = (fiche as AnyObject).object(forKey: "id") as? Int ?? 0
+                                }
+                                else
+                                {
+                                    print ("TheTVdb::getSerieInfos failed on saison = 0 \(uneSerie.serie)")
                                 }
                             }
                         }

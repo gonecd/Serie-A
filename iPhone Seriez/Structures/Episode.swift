@@ -18,7 +18,7 @@ class Episode : NSObject, NSCoding
     var watched : Bool = false
 
     // Source TheTVdb
-    var ratingTVdb : Double = 0.0
+    var ratingTVdb : Int = 0
     var ratersTVdb : Int = 0
     var idTVdb : Int = 0
     var date : Date = Date.init(timeIntervalSince1970: 0)
@@ -26,15 +26,15 @@ class Episode : NSObject, NSCoding
     var resume : String = String()
 
     // Source Trakt
-    var ratingTrakt : Double = 0.0
+    var ratingTrakt : Int = 0
     var ratersTrakt : Int = 0
 
     // Source BetaSeries
-    var ratingBetaSeries : Double = 0.0
+    var ratingBetaSeries : Int = 0
     var ratersBetaSeries : Int = 0
     
     // Source IMdb
-    var ratingIMdb : Double = 0.0
+    var ratingIMdb : Int = 0
     var ratersIMdb : Int = 0
     
     required init(serie:String, fichier:String, saison:Int, episode:Int)
@@ -49,17 +49,17 @@ class Episode : NSObject, NSCoding
         self.saison = decoder.decodeInteger(forKey: "saison")
         self.episode = decoder.decodeInteger(forKey: "episode")
         self.watched = decoder.decodeBool(forKey: "watched")
-        self.ratingTVdb = decoder.decodeDouble(forKey: "ratingTVdb")
+        self.ratingTVdb = decoder.decodeInteger(forKey: "ratingTVdb")
         self.idTVdb = decoder.decodeInteger(forKey: "idTVdb")
         self.date = (decoder.decodeObject(forKey: "date") ?? Date.init(timeIntervalSince1970: 0)) as! Date
         self.titre = decoder.decodeObject(forKey: "titre") as? String ?? ""
         self.resume = decoder.decodeObject(forKey: "resume") as? String ?? ""
         self.ratersTVdb = decoder.decodeInteger(forKey: "ratersTVdb")
-        self.ratingTrakt = decoder.decodeDouble(forKey: "ratingTrakt")
+        self.ratingTrakt = decoder.decodeInteger(forKey: "ratingTrakt")
         self.ratersTrakt = decoder.decodeInteger(forKey: "ratersTrakt")
-        self.ratingBetaSeries = decoder.decodeDouble(forKey: "ratingBetaSeries")
+        self.ratingBetaSeries = decoder.decodeInteger(forKey: "ratingBetaSeries")
         self.ratersBetaSeries = decoder.decodeInteger(forKey: "ratersBetaSeries")
-        self.ratingIMdb = decoder.decodeDouble(forKey: "ratingIMdb")
+        self.ratingIMdb = decoder.decodeInteger(forKey: "ratingIMdb")
         self.ratersIMdb = decoder.decodeInteger(forKey: "ratersIMdb")
    }
     
@@ -102,6 +102,41 @@ class Episode : NSObject, NSCoding
         }
     }
     
+    func getFairRatingTrakt() -> Int
+    {
+        if (date.compare(Date()) == .orderedAscending)
+        {
+            return Int(80.0 * Double(ratingTrakt) / Double(correctionTrakt))
+        }
+        else
+        {
+            return 0
+        }
+    }
+    
+    func getFairRatingTVdb() -> Int
+    {
+        if (date.compare(Date()) == .orderedAscending)
+        {
+            return Int(80.0 * Double(ratingTVdb) / Double(correctionTVdb))
+        }
+        else
+        {
+            return 0
+        }
+    }
+    
+    func getFairRatingBetaSeries() -> Int
+    {
+        if (date.compare(Date()) == .orderedAscending)
+        {
+            return Int(80.0 * Double(ratingBetaSeries) / Double(correctionBetaSeries))
+        }
+        else
+        {
+            return 0
+        }
+    }
     
     func merge(_ unEpisode : Episode)
     {
@@ -109,17 +144,17 @@ class Episode : NSObject, NSCoding
         if (unEpisode.saison != 0)             { self.saison = unEpisode.saison }
         if (unEpisode.episode != 0)            { self.episode = unEpisode.episode }
         if (unEpisode.watched != false)        { self.watched = unEpisode.watched }
-        if (unEpisode.ratingTVdb != 0.0)       { self.ratingTVdb = unEpisode.ratingTVdb }
+        if (unEpisode.ratingTVdb != 0)         { self.ratingTVdb = unEpisode.ratingTVdb }
         if (unEpisode.ratersTVdb != 0)         { self.ratersTVdb = unEpisode.ratersTVdb }
         if (unEpisode.idTVdb != 0)             { self.idTVdb = unEpisode.idTVdb }
         if (unEpisode.date != Date.init(timeIntervalSince1970: 0))       { self.date = unEpisode.date }
         if (unEpisode.titre != "")             { self.serie = unEpisode.titre }
         if (unEpisode.resume != "")            { self.serie = unEpisode.resume }
-        if (unEpisode.ratingTrakt != 0.0)      { self.ratingTrakt = unEpisode.ratingTrakt }
+        if (unEpisode.ratingTrakt != 0)        { self.ratingTrakt = unEpisode.ratingTrakt }
         if (unEpisode.ratersTrakt != 0)        { self.ratersTrakt = unEpisode.ratersTrakt }
-        if (unEpisode.ratingBetaSeries != 0.0) { self.ratingBetaSeries = unEpisode.ratingBetaSeries }
+        if (unEpisode.ratingBetaSeries != 0)   { self.ratingBetaSeries = unEpisode.ratingBetaSeries }
         if (unEpisode.ratersBetaSeries != 0)   { self.ratersBetaSeries = unEpisode.ratersBetaSeries }
-        if (unEpisode.ratingIMdb != 0.0)       { self.ratingIMdb = unEpisode.ratingIMdb }
+        if (unEpisode.ratingIMdb != 0)         { self.ratingIMdb = unEpisode.ratingIMdb }
         if (unEpisode.ratersIMdb != 0)         { self.ratersIMdb = unEpisode.ratersIMdb }
     }
 

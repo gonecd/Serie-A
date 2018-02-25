@@ -16,11 +16,8 @@ class CellAdecouvrir: UITableViewCell {
     @IBOutlet weak var saison: UILabel!
     @IBOutlet weak var debut: UILabel!
     @IBOutlet weak var fin: UILabel!
-    @IBOutlet weak var ratingBetaSeries: UILabel!
-    @IBOutlet weak var ratingTVdb: UILabel!
-    @IBOutlet weak var ratingTrakt: UILabel!
-    
     @IBOutlet weak var miniGraphe: GraphMiniSaison!
+    @IBOutlet weak var globalRating: UITextField!
     
     var index: Int = 0
 }
@@ -33,18 +30,12 @@ class ViewAdecouvrir: UITableViewController {
     let dateFormatter = DateFormatter()
     var accueil : ViewAccueil = ViewAccueil()
     
-    // Correctiond es notes pour homogénéisation
-    var correctionTVdb : Double = 1.0
-    var correctionBetaSeries : Double = 1.0
-    var correctionTrakt : Double = 1.0
-   
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
         dateFormatter.locale = Locale.current
         dateFormatter.dateFormat = "dd MMM yyyy"
-
     }
     
     override func didReceiveMemoryWarning() {
@@ -67,52 +58,45 @@ class ViewAdecouvrir: UITableViewController {
         cell.titre.text = viewList[indexPath.row].serie
         
         let uneSaison = viewList[indexPath.row].saisons[allSaisons[indexPath.row] - 1]
-        let today = Date()
-        var totBetaSeries : Double = 0.0
-        var totTrakt : Double = 0.0
-        var totTVdb : Double = 0.0
         var nbEps = 0
-        
+
         for eps in uneSaison.episodes
         {
+            let today = Date()
             if (eps.date.compare(today) == .orderedAscending)
             {
-                totBetaSeries = totBetaSeries + eps.ratingBetaSeries
-                totTrakt = totTrakt + eps.ratingTrakt
-                totTVdb = totTVdb + eps.ratingTVdb
                 nbEps = nbEps + 1
             }
         }
-
-        var totBetaSeriesMoy : Double = 0.0
-        var totTraktMoy : Double = 0.0
-        var totTVdbMoy : Double = 0.0
+        
+        var totBetaSeriesMoy : Int = 0
+        var totTraktMoy : Int = 0
+        var totTVdbMoy : Int = 0
         var nbEpsMoy = 0
 
         for loopSaison in viewList[indexPath.row].saisons
         {
             if (loopSaison.saison < allSaisons[indexPath.row])
             {
-                for eps in loopSaison.episodes
-                {
-                    totBetaSeriesMoy = totBetaSeriesMoy + eps.ratingBetaSeries
-                    totTraktMoy = totTraktMoy + eps.ratingTrakt
-                    totTVdbMoy = totTVdbMoy + eps.ratingTVdb
-                    nbEpsMoy = nbEpsMoy + 1
-                }
+                totBetaSeriesMoy = totBetaSeriesMoy + loopSaison.getFairRatingBetaSeries()
+                totTraktMoy = totTraktMoy + loopSaison.getFairRatingTrakt()
+                totTVdbMoy = totTVdbMoy + loopSaison.getFairRatingTVdb()
+                nbEpsMoy = nbEpsMoy + 1
             }
         }
         
-        cell.ratingBetaSeries.text = String(format: "%.1f", totBetaSeries/Double(nbEps))
-        cell.ratingTrakt.text = String(format: "%.1f", totTrakt/Double(nbEps))
-        cell.ratingTVdb.text = String(format: "%.1f", totTVdb/Double(nbEps))
         cell.saison.text = "Saison " + String(allSaisons[indexPath.row]) + " - ( " + String(nbEps) + " / " + String(uneSaison.episodes.count) + " )"
         cell.debut.text = dateFormatter.string(from: uneSaison.episodes[0].date)
         cell.fin.text = dateFormatter.string(from: uneSaison.episodes[uneSaison.episodes.count - 1].date)
+        cell.globalRating.text = String(viewList[indexPath.row].getGlobalRating())
         
         cell.miniGraphe.theSaison = uneSaison
-        cell.miniGraphe.sendNotes(totTrakt/Double(nbEps), rateTVdb: totTVdb/Double(nbEps), rateBetaSeries: totBetaSeries/Double(nbEps),
-                                  averageTrakt: totTraktMoy/Double(nbEpsMoy), averageTVdb: totTVdbMoy/Double(nbEpsMoy), averageBetaSeries: totBetaSeriesMoy/Double(nbEpsMoy))
+        cell.miniGraphe.sendNotes(uneSaison.getFairRatingTrakt(), 
+                                  rateTVdb: uneSaison.getFairRatingTVdb(),
+                                  rateBetaSeries: uneSaison.getFairRatingBetaSeries(),
+                                  seasonsAverageTrakt: Double(totTraktMoy)/Double(nbEpsMoy),
+                                  seasonsAverageTVdb: Double(totTVdbMoy)/Double(nbEpsMoy),
+                                  seasonsAverageBetaSeries: Double(totBetaSeriesMoy)/Double(nbEpsMoy))
         cell.miniGraphe.setNeedsDisplay()
 
         return cell
@@ -137,7 +121,6 @@ class ViewAdecouvrir: UITableViewController {
         {
             accueil.downloadSerieDetails(serie: uneSerie)
         }
-        
         self.view.setNeedsDisplay()
     }
 

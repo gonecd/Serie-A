@@ -33,9 +33,8 @@ class ViewSeries: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CellAbandonnees", for: indexPath) as! CellAbandonnees
 
-        cell.rating.text = String(viewList[indexPath.item].computeCorrectedRate())
+        cell.rating.text = String(viewList[indexPath.item].getGlobalRating())
         cell.poster.image = accueil.getImage(viewList[indexPath.item].poster)
-        cell.message.text = viewList[indexPath.item].message
         
         return cell
     }

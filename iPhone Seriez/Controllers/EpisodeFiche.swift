@@ -30,7 +30,6 @@ class EpisodeFiche : UIViewController {
         dateFormatter.dateFormat = "dd MMM yy"
 
         resume.text = serie.saisons[saison - 1].episodes[episode - 1].resume
-        //titre.text = String(format: "s%02de%02d - %s", saison - 1, episode - 1, serie.saisons[saison - 1].episodes[episode - 1].titre)
         titre.text = serie.saisons[saison - 1].episodes[episode - 1].titre
         date.text = dateFormatter.string(from: serie.saisons[saison - 1].episodes[episode - 1].date)
         banniere.image = image

@@ -18,28 +18,18 @@ class Serie : NSObject, NSCoding
     var idIMdb : String = String()
     var idTrakt : String = String()
     var idTVdb : String = String()
-    var message : String = String()
-
+    
     var unfollowed : Bool = false
     var watchlist : Bool = false
-
+    
     // Source TheTVdb
-    var ratingTVdb : Double = 0.0
-    var ratersTVdb : Int = 0
     var network : String = String()
     var banner : String = String()
     var poster : String = String()
     var status : String = String()
     var resume : String = String()
     var genres : [String] = []
-    
-    // computed infos
     var year : Int = 0
-    
-    // Correction des notes pour homogénéisation
-    let correctionTVdb : Double = 7.664
-    let correctionBetaSeries : Double = 8.558
-    let correctionTrakt : Double = 7.941
     
     init(serie:String)
     {
@@ -53,12 +43,10 @@ class Serie : NSObject, NSCoding
         self.idIMdb = decoder.decodeObject(forKey: "idIMdb") as? String ?? ""
         self.idTrakt = decoder.decodeObject(forKey: "idTrakt") as? String ?? ""
         self.idTVdb = decoder.decodeObject(forKey: "idTVdb") as? String ?? ""
-        self.message = decoder.decodeObject(forKey: "message") as? String ?? ""
-
+        
         self.unfollowed = decoder.decodeBool(forKey: "unfollowed")
         self.watchlist = decoder.decodeBool(forKey: "watchlist")
-
-        self.ratingTVdb = decoder.decodeDouble(forKey: "ratingTVdb")
+        
         self.network = decoder.decodeObject(forKey: "network") as? String ?? ""
         self.banner = decoder.decodeObject(forKey: "banner") as? String ?? ""
         self.poster = decoder.decodeObject(forKey: "poster") as? String ?? ""
@@ -67,7 +55,6 @@ class Serie : NSObject, NSCoding
         self.genres = decoder.decodeObject(forKey: "genres") as? [String] ?? []
         
         self.year = decoder.decodeInteger(forKey: "year")
-        
     }
     
     func encode(with coder: NSCoder) {
@@ -76,12 +63,10 @@ class Serie : NSObject, NSCoding
         coder.encode(self.idIMdb, forKey: "idIMdb")
         coder.encode(self.idTrakt, forKey: "idTrakt")
         coder.encode(self.idTVdb, forKey: "idTVdb")
-        coder.encode(self.message, forKey: "message")
-
+        
         coder.encode(self.unfollowed, forKey: "unfollowed")
         coder.encode(self.watchlist, forKey: "watchlist")
-
-        coder.encode(self.ratingTVdb, forKey: "ratingTVdb")
+        
         coder.encode(self.network, forKey: "network")
         coder.encode(self.banner, forKey: "banner")
         coder.encode(self.poster, forKey: "poster")
@@ -90,19 +75,10 @@ class Serie : NSObject, NSCoding
         coder.encode(self.genres, forKey: "genres")
         
         coder.encodeCInt(Int32(self.year), forKey: "year")
-        coder.encodeCInt(Int32(self.ratersTVdb), forKey: "ratersTVdb")
-    }
-    
-    func computeSerieInfos() {
-        for saison in self.saisons{
-            saison.computeSaisonInfos()
-        }
     }
     
     func merge(_ uneSerie : Serie)
     {
-        if (uneSerie.ratingTVdb != 0.0)     { self.ratingTVdb = uneSerie.ratingTVdb }
-        if (uneSerie.ratersTVdb != 0)       { self.ratersTVdb = uneSerie.ratersTVdb }
         if (uneSerie.network != "")         { self.network = uneSerie.network }
         if (uneSerie.banner != "")          { self.banner = uneSerie.banner }
         if (uneSerie.poster != "")          { self.banner = uneSerie.poster }
@@ -112,12 +88,11 @@ class Serie : NSObject, NSCoding
         if (uneSerie.idIMdb != "")          { self.idIMdb = uneSerie.idIMdb }
         if (uneSerie.idTrakt != "")         { self.idTrakt = uneSerie.idTrakt }
         if (uneSerie.idTVdb != "")          { self.idTVdb = uneSerie.idTVdb }
-        if (uneSerie.message != "")         { self.message = uneSerie.message }
         if (uneSerie.unfollowed != false)   { self.unfollowed = uneSerie.unfollowed }
         if (uneSerie.watchlist != false)    { self.watchlist = uneSerie.watchlist }
-
+        
         if (uneSerie.year != 0)             { self.year = uneSerie.year }
-
+        
         for uneSaison in uneSerie.saisons
         {
             if (uneSaison.saison <= self.saisons.count)
@@ -129,10 +104,8 @@ class Serie : NSObject, NSCoding
                 self.saisons.append(uneSaison)
             }
         }
-        
-        self.computeSerieInfos()
     }
-
+    
     func mergeStatuses(_ uneSerie : Serie)
     {
         if (uneSerie.unfollowed != false)   { self.unfollowed = uneSerie.unfollowed }
@@ -145,49 +118,91 @@ class Serie : NSObject, NSCoding
                 self.saisons[uneSaison.saison - 1].mergeStatuses(uneSaison)
             }
         }
-        
-        self.computeSerieInfos()
     }
-    func computeCorrectedRate() -> Int
+    
+    func getGlobalRating() -> Int
     {
-        var totalRatings : Double = 0.0
-        var nbRatings : Int = 0
+        var total : Int = 0
+        var nb : Int = 0
         
-        for uneSaison in self.saisons
+        if (getFairRatingTrakt() != 0)
         {
-            for unEpisode in uneSaison.episodes
-            {
-                if (unEpisode.ratingTVdb != 0.0 && !unEpisode.ratingTVdb.isNaN)
-                {
-                    totalRatings = totalRatings + (80 * unEpisode.ratingTVdb / correctionTVdb)
-                    nbRatings = nbRatings + 1
-                }
-                
-                if (unEpisode.ratingBetaSeries != 0.0 && !unEpisode.ratingBetaSeries.isNaN)
-                {
-                    totalRatings = totalRatings + (80 * unEpisode.ratingBetaSeries / correctionBetaSeries)
-                    nbRatings = nbRatings + 1
-                }
-                
-                if (unEpisode.ratingTrakt != 0.0 && !unEpisode.ratingTrakt.isNaN)
-                {
-                    totalRatings = totalRatings + (80 * unEpisode.ratingTrakt / correctionTrakt)
-                    nbRatings = nbRatings + 1
-                }
-            }
+            total = total + getFairRatingTrakt()
+            nb = nb + 1
         }
         
-        if (nbRatings > 0)
+        if (getFairRatingTVdb() != 0)
         {
-            //return Int(totalRatings/Double(nbRatings))
-            let rate = 60+((40/15)*((totalRatings/Double(nbRatings))-75))
-            return Int(rate)
+            total = total + getFairRatingTVdb()
+            nb = nb + 1
+        }
+        
+        if (getFairRatingBetaSeries() != 0)
+        {
+            total = total + getFairRatingBetaSeries()
+            nb = nb + 1
+        }
+        
+        if (nb > 0)
+        {
+            return Int(Double(total) / Double(nb))
         }
         else
         {
-            return -1
+            return 0
         }
     }
-
+    
+    func getFairRatingTrakt() -> Int
+    {
+        var total : Int = 0
+        var nb : Int = 0
+        
+        for saison in self.saisons {
+            if (saison.getFairRatingTrakt() != 0)
+            {
+                total = total + saison.getFairRatingTrakt()
+                nb = nb + 1
+            }
+        }
+        
+        if (nb != 0) { return Int(Double(total) / Double(nb)) }
+        return 0
+    }
+    
+    func getFairRatingTVdb() -> Int
+    {
+        var total : Int = 0
+        var nb : Int = 0
+        
+        for saison in self.saisons {
+            if (saison.getFairRatingTVdb() != 0)
+            {
+                total = total + saison.getFairRatingTVdb()
+                nb = nb + 1
+            }
+        }
+        
+        if (nb != 0) { return Int(Double(total) / Double(nb)) }
+        return 0
+    }
+    
+    func getFairRatingBetaSeries() -> Int
+    {
+        var total : Int = 0
+        var nb : Int = 0
+        
+        for saison in self.saisons {
+            if (saison.getFairRatingBetaSeries() != 0)
+            {
+                total = total + saison.getFairRatingBetaSeries()
+                nb = nb + 1
+            }
+        }
+        
+        if (nb != 0) { return Int(Double(total) / Double(nb)) }
+        return 0
+    }
+    
 }
 
