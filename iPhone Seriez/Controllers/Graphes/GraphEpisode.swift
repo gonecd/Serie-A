@@ -9,18 +9,32 @@ import UIKit
 
 class GraphEpisode: UIView {
     
-    var selectTrakt: Int = 1
-    var selectTVdb:  Int = 1
-    var selectBetaSeries: Int = 1
+    var selectTrakt         : Int = 1
+    var selectTVdb          : Int = 1
+    var selectBetaSeries    : Int = 1
     
     var theEpisode : Episode = Episode(serie: "", fichier: "", saison: 0, episode: 0)
+    
+    var origineX : CGFloat = 0.0
+    var origineY : CGFloat = 0.0
+    var hauteur  : CGFloat = 0.0
+    var largeur  : CGFloat = 0.0
+    var bordure  : CGFloat = 10.0
     
     override func draw(_ dirtyRect: CGRect) {
         super.draw(dirtyRect)
         
+        origineX = 35.0
+        origineY = (self.frame.height - 25.0)
+        hauteur  = (self.frame.height - 25.0 - bordure)
+        largeur  = (self.frame.width - origineX - bordure)
+        
+        self.layer.cornerRadius = 5;
+        self.layer.masksToBounds = true
+        
         // Drawing code here.
         self.background()
-        self.traceGrapheCircles()
+        self.traceBarres()
     }
     
     
@@ -31,81 +45,86 @@ class GraphEpisode: UIView {
     
     func background()
     {
-        let hauteur : CGFloat = self.frame.height
-        let largeur : CGFloat = self.frame.width
-        let grandRayon : CGFloat = (largeur - 40.0) / 6
         let textAttributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 10), NSAttributedStringKey.foregroundColor: UIColor.white]
         
-        // Colors
-        self.layer.cornerRadius = 15
-        self.layer.masksToBounds = true
-
+        // Lignes
         UIColor.white.setStroke()
-
-        // Graphe Circles
-        for i:Int in 0 ..< 3
+        
+        // Cadre
+        let path : UIBezierPath = UIBezierPath()
+        path.move(to: CGPoint(x: origineX, y: origineY))
+        path.addLine(to: CGPoint(x:origineX, y:origineY-hauteur))
+        path.addLine(to: CGPoint(x:origineX+largeur, y:origineY-hauteur))
+        path.addLine(to: CGPoint(x:origineX+largeur, y:origineY))
+        path.addLine(to: CGPoint(x:origineX, y:origineY))
+        path.stroke()
+        
+        // Lignes achurées verticales
+        for i:Int in 0 ..< 5
         {
-            for j:Int in 0 ..< 4
-            {
-                let path : UIBezierPath = UIBezierPath()
-                let locRayon : CGFloat = grandRayon * (1.0 - (CGFloat(j) / 4))
-                path.addArc(withCenter: CGPoint(x: CGFloat(10.0) + grandRayon + CGFloat(i)*(10.0 + 2*grandRayon), y: hauteur / 2),
-                            radius: locRayon,
-                            startAngle: 2 * .pi, endAngle: 0, clockwise: false)
-                path.stroke()
-                
-                let legende : NSString = String(10 - j) as NSString
-                legende.draw(in: CGRect(x: CGFloat(10.0) + grandRayon + CGFloat(i)*(10.0 + 2*grandRayon), y: locRayon + (hauteur / 2),
-                                        width: 20, height: 10), withAttributes: textAttributes)
-            }
+            path.move(to: CGPoint(x: origineX + (largeur * CGFloat(i)/4), y: origineY))
+            path.addLine(to: CGPoint(x: origineX  + (largeur * CGFloat(i)/4), y: origineY - hauteur))
+            
+            path.setLineDash([5.0,5.0], count: 2, phase: 5.0)
+            path.stroke()
+            
+            let episode : NSString = String(60 + (i*10) ) as NSString
+            episode.draw(in: CGRect(x: origineX + (largeur * CGFloat(i)/4) - 7.0,
+                                    y: origineY + 5.0, width: 20, height: 10),
+                         withAttributes: textAttributes)
         }
-
-        // On place les logos
-        #imageLiteral(resourceName: "trakt.ico").draw(in: CGRect(x: CGFloat(10.0) + grandRayon - 12.0, y:  10.0, width: 24.0, height: 24.0))
-        #imageLiteral(resourceName: "thetvdb.png").draw(in: CGRect(x: CGFloat(20.0) + 3*grandRayon - 12.0, y:  10.0, width: 24.0, height: 24.0))
-        #imageLiteral(resourceName: "betaseries.png").draw(in: CGRect(x: CGFloat(30.0) + 5*grandRayon - 12.0, y:  10.0, width: 24.0, height: 24.0))
+        
+        // Positionnement des icones de sources
+        #imageLiteral(resourceName: "thetvdb.png").draw(in: CGRect(x: 10.0, y:  18.0, width: 15.0, height: 15.0))
+        #imageLiteral(resourceName: "trakt.ico").draw(in: CGRect(x: 10.0, y:  44.0, width: 15.0, height: 15.0))
+        #imageLiteral(resourceName: "betaseries.png").draw(in: CGRect(x: 10.0, y:  70.0, width: 15.0, height: 15.0))
+        #imageLiteral(resourceName: "imdb.ico").draw(in: CGRect(x: 10.0, y:  96.0, width: 15.0, height: 15.0))
+        #imageLiteral(resourceName: "rottentomatoes.ico").draw(in: CGRect(x: 10.0, y:  122.0, width: 15.0, height: 15.0))
+        #imageLiteral(resourceName: "themoviedb.ico").draw(in: CGRect(x: 10.0, y:  148.0, width: 15.0, height: 15.0))
+        
     }
     
-    func traceGrapheCircles()
+    func traceBarres()
     {
-        let hauteur : CGFloat = self.frame.height
-        let largeur : CGFloat = self.frame.width
-        let grandRayon : CGFloat = (largeur - 40.0) / 6
+        traceUneBarre(theEpisode.getFairRatingTVdb(),       uneCouleur: colorTVdb,              offset: 6)
+        traceUneBarre(theEpisode.getFairRatingTrakt(),      uneCouleur: colorTrakt,             offset: 5)
+        traceUneBarre(theEpisode.getFairRatingBetaSeries(), uneCouleur: colorBetaSeries,        offset: 4)
+        traceUneBarre(61,                                   uneCouleur: colorIMDB,              offset: 3)
+        traceUneBarre(61,                                   uneCouleur: colorRottenTomatoes,    offset: 2)
+        traceUneBarre(61,                                   uneCouleur: colorMoviedb,           offset: 1)
+    }
+    
+    func traceUneBarre(_ noteX: Int, uneCouleur: UIColor, offset: Int)
+    {
+        var value = noteX
+        let col : CGFloat = hauteur / 24
 
-        colorTrakt.setStroke()
-        colorTrakt.withAlphaComponent(0.25).setFill()
-
+        if ( noteX == 0 ) { return }
+        if ( noteX < 60 ) { value = 60 }
+        if ( noteX > 100 ) { value = 100 }
+        
+        uneCouleur.setStroke()
+        uneCouleur.withAlphaComponent(0.5).setFill()
+        
         let path : UIBezierPath = UIBezierPath()
-        let locRayon : CGFloat = grandRayon * (1.0 - (CGFloat(100 - theEpisode.getFairRatingTrakt()) / 40))
-        path.addArc(withCenter: CGPoint(x: CGFloat(10.0) + grandRayon + CGFloat(0)*(10.0 + 2*grandRayon), y: hauteur / 2),
-                    radius: locRayon,
-                    startAngle: 2 * .pi, endAngle: 0, clockwise: false)
-        path.lineWidth = 2.0
+        
+        path.move(to: CGPoint(x: origineX,
+                              y: origineY - (CGFloat(offset - 1) * hauteur / 6) - col))
+        
+        path.addLine(to: CGPoint(x: origineX + ( largeur * CGFloat(value - 60) / 40),
+                                 y: origineY - (CGFloat(offset - 1) * hauteur / 6) - col))
+        
+        path.addLine(to: CGPoint(x: origineX + ( largeur * CGFloat(value - 60) / 40),
+                                 y: origineY - (CGFloat(offset - 1) * hauteur / 6) - col - (hauteur / 12)))
+        
+        path.addLine(to: CGPoint(x: origineX,
+                                 y: origineY - (CGFloat(offset - 1) * hauteur / 6) - col - (hauteur / 12)))
+        
+        path.addLine(to: CGPoint(x: origineX,
+                                 y: origineY - (CGFloat(offset - 1) * hauteur / 6) - col))
+        
         path.stroke()
         path.fill()
-        
-        colorTVdb.setStroke()
-        colorTVdb.withAlphaComponent(0.25).setFill()
-        let path2 : UIBezierPath = UIBezierPath()
-        let locRayon2 : CGFloat = grandRayon * (1.0 - (CGFloat(100 - theEpisode.getFairRatingTVdb()) / 40))
-        path2.addArc(withCenter: CGPoint(x: CGFloat(10.0) + grandRayon + CGFloat(1)*(10.0 + 2*grandRayon), y: hauteur / 2),
-                    radius: locRayon2,
-                    startAngle: 2 * .pi, endAngle: 0, clockwise: false)
-        path2.lineWidth = 2.0
-        path2.stroke()
-        path2.fill()
-
-        colorBetaSeries.setStroke()
-        colorBetaSeries.withAlphaComponent(0.25).setFill()
-        let path3 : UIBezierPath = UIBezierPath()
-        let locRayon3 : CGFloat = grandRayon * (1.0 - (CGFloat(100 - theEpisode.getFairRatingBetaSeries()) / 40))
-        path3.addArc(withCenter: CGPoint(x: CGFloat(10.0) + grandRayon + CGFloat(2)*(10.0 + 2*grandRayon), y: hauteur / 2),
-                    radius: locRayon3,
-                    startAngle: 2 * .pi, endAngle: 0, clockwise: false)
-        path3.lineWidth = 2.0
-        path3.stroke()
-        path3.fill()
-
     }
 }
 
