@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6224A5E32041F30200450812 /* ViewSerieListe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6224A5E22041F30200450812 /* ViewSerieListe.swift */; };
+		6224A5E52042207800450812 /* Constantes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6224A5E42042207800450812 /* Constantes.swift */; };
+		6224A5E72043141800450812 /* GraphMiniSerie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6224A5E62043141800450812 /* GraphMiniSerie.swift */; };
 		623D28921FED45D0005488D5 /* A.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 623D28901FED45D0005488D5 /* A.jpg */; };
 		623D28931FED45D0005488D5 /* A-small.png in Resources */ = {isa = PBXBuildFile; fileRef = 623D28911FED45D0005488D5 /* A-small.png */; };
 		624D27471FFBBEFF00B49702 /* ViewSeries.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624D27461FFBBEFF00B49702 /* ViewSeries.swift */; };
@@ -90,6 +93,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6224A5E22041F30200450812 /* ViewSerieListe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewSerieListe.swift; sourceTree = "<group>"; };
+		6224A5E42042207800450812 /* Constantes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constantes.swift; sourceTree = "<group>"; };
+		6224A5E62043141800450812 /* GraphMiniSerie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphMiniSerie.swift; sourceTree = "<group>"; };
 		623D28901FED45D0005488D5 /* A.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = A.jpg; sourceTree = "<group>"; };
 		623D28911FED45D0005488D5 /* A-small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "A-small.png"; sourceTree = "<group>"; };
 		624D27461FFBBEFF00B49702 /* ViewSeries.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewSeries.swift; sourceTree = "<group>"; };
@@ -186,6 +192,68 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		624D87492043323A00AFDA06 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				62DD87A31FB76F5D00A9B9EE /* Trakt.swift */,
+				62DD879F1FB76F5D00A9B9EE /* TheTVdb.swift */,
+				62DD87B91FB8C15500A9B9EE /* BetaSeries.swift */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		624D874A2043325600AFDA06 /* Graphes */ = {
+			isa = PBXGroup;
+			children = (
+				62DD87B11FB8A2E000A9B9EE /* Graph.swift */,
+				627A0E2720139E8300FE1777 /* GraphSaison.swift */,
+				62CD57C22038B87D00DE28A1 /* GraphMiniSaison.swift */,
+				6224A5E62043141800450812 /* GraphMiniSerie.swift */,
+				627A0E2920139E9900FE1777 /* GraphEpisode.swift */,
+			);
+			path = Graphes;
+			sourceTree = "<group>";
+		};
+		624D874B2043327B00AFDA06 /* Structures */ = {
+			isa = PBXGroup;
+			children = (
+				6224A5E42042207800450812 /* Constantes.swift */,
+				62DD87AD1FB89E7D00A9B9EE /* Serie.swift */,
+				62DD87AB1FB89E7D00A9B9EE /* Saison.swift */,
+				62DD87AC1FB89E7D00A9B9EE /* Episode.swift */,
+			);
+			path = Structures;
+			sourceTree = "<group>";
+		};
+		624D874C2043329200AFDA06 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				624D874A2043325600AFDA06 /* Graphes */,
+				624D27481FFBD4E100B49702 /* ViewAccueil.swift */,
+				62DD879D1FB767B900A9B9EE /* ViewAdecouvrir.swift */,
+				6224A5E22041F30200450812 /* ViewSerieListe.swift */,
+				624D27461FFBBEFF00B49702 /* ViewSeries.swift */,
+				62AC50A1200E59DD00A8C841 /* ViewSaisons.swift */,
+				62AC509F200E58A200A8C841 /* SaisonFiche.swift */,
+				62F8ECF32013775800A41EF7 /* EpisodeFiche.swift */,
+				62DD87A91FB7838400A9B9EE /* SerieFiche.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		624D874D204332BC00AFDA06 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				623D28911FED45D0005488D5 /* A-small.png */,
+				623D28901FED45D0005488D5 /* A.jpg */,
+				62FF97C12038FA0A007B658E /* Icones accueil */,
+				625480551FE6D7450099A3D2 /* Icones genres */,
+				625480531FE6D7140099A3D2 /* Icones sources */,
+				625480541FE6D7360099A3D2 /* Icones status */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
 		625480531FE6D7140099A3D2 /* Icones sources */ = {
 			isa = PBXGroup;
 			children = (
@@ -259,30 +327,11 @@
 		62DD876E1FB766C600A9B9EE /* iPhone Seriez */ = {
 			isa = PBXGroup;
 			children = (
-				62DD87B11FB8A2E000A9B9EE /* Graph.swift */,
-				627A0E2720139E8300FE1777 /* GraphSaison.swift */,
-				62CD57C22038B87D00DE28A1 /* GraphMiniSaison.swift */,
-				627A0E2920139E9900FE1777 /* GraphEpisode.swift */,
-				62DD879F1FB76F5D00A9B9EE /* TheTVdb.swift */,
-				62DD87A31FB76F5D00A9B9EE /* Trakt.swift */,
-				623D28911FED45D0005488D5 /* A-small.png */,
-				623D28901FED45D0005488D5 /* A.jpg */,
-				62FF97C12038FA0A007B658E /* Icones accueil */,
-				625480551FE6D7450099A3D2 /* Icones genres */,
-				625480531FE6D7140099A3D2 /* Icones sources */,
-				625480541FE6D7360099A3D2 /* Icones status */,
-				62DD87AD1FB89E7D00A9B9EE /* Serie.swift */,
-				62DD87AB1FB89E7D00A9B9EE /* Saison.swift */,
-				62DD87AC1FB89E7D00A9B9EE /* Episode.swift */,
 				62DD876F1FB766C600A9B9EE /* AppDelegate.swift */,
-				62DD87B91FB8C15500A9B9EE /* BetaSeries.swift */,
-				624D27481FFBD4E100B49702 /* ViewAccueil.swift */,
-				62DD879D1FB767B900A9B9EE /* ViewAdecouvrir.swift */,
-				624D27461FFBBEFF00B49702 /* ViewSeries.swift */,
-				62AC50A1200E59DD00A8C841 /* ViewSaisons.swift */,
-				62AC509F200E58A200A8C841 /* SaisonFiche.swift */,
-				62F8ECF32013775800A41EF7 /* EpisodeFiche.swift */,
-				62DD87A91FB7838400A9B9EE /* SerieFiche.swift */,
+				624D87492043323A00AFDA06 /* Sources */,
+				624D874B2043327B00AFDA06 /* Structures */,
+				624D874D204332BC00AFDA06 /* Images */,
+				624D874C2043329200AFDA06 /* Controllers */,
 				62DD87731FB766C600A9B9EE /* Main.storyboard */,
 				62DD87761FB766C600A9B9EE /* Assets.xcassets */,
 				62DD87781FB766C600A9B9EE /* LaunchScreen.storyboard */,
@@ -505,7 +554,9 @@
 				62AC50A2200E59DD00A8C841 /* ViewSaisons.swift in Sources */,
 				62DD87AF1FB89E7D00A9B9EE /* Episode.swift in Sources */,
 				62DD87AE1FB89E7D00A9B9EE /* Saison.swift in Sources */,
+				6224A5E52042207800450812 /* Constantes.swift in Sources */,
 				62F8ECF42013775800A41EF7 /* EpisodeFiche.swift in Sources */,
+				6224A5E72043141800450812 /* GraphMiniSerie.swift in Sources */,
 				62CD57C32038B87D00DE28A1 /* GraphMiniSaison.swift in Sources */,
 				62DD87BA1FB8C15600A9B9EE /* BetaSeries.swift in Sources */,
 				62DD87B21FB8A2E000A9B9EE /* Graph.swift in Sources */,
@@ -513,6 +564,7 @@
 				627A0E2820139E8300FE1777 /* GraphSaison.swift in Sources */,
 				627A0E2A20139E9900FE1777 /* GraphEpisode.swift in Sources */,
 				62DD87A41FB76F5D00A9B9EE /* TheTVdb.swift in Sources */,
+				6224A5E32041F30200450812 /* ViewSerieListe.swift in Sources */,
 				62DD87A81FB76F5D00A9B9EE /* Trakt.swift in Sources */,
 				624D27491FFBD4E100B49702 /* ViewAccueil.swift in Sources */,
 				62DD87B01FB89E7D00A9B9EE /* Serie.swift in Sources */,
