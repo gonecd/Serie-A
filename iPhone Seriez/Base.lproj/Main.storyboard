@@ -13,13 +13,13 @@
         <!--Saisons TableView-->
         <scene sceneID="F8V-7U-IxP">
             <objects>
-                <tableViewController id="g0p-Qf-KTM" customClass="ViewAdecouvrir" customModule="SerieA" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="g0p-Qf-KTM" customClass="ViewSaisonListe" customModule="SerieA" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="150" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="zDx-pQ-SOM">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CellAdecouvrir" rowHeight="150" id="pkU-0D-Gcz" userLabel="CellAdecouvrir" customClass="CellAdecouvrir" customModule="SerieA" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CellSaisonListe" rowHeight="150" id="pkU-0D-Gcz" userLabel="CellSaisonListe" customClass="CellSaisonListe" customModule="SerieA" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="375" height="150"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="pkU-0D-Gcz" id="6E4-IS-UxZ">

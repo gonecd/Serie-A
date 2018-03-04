@@ -254,7 +254,7 @@ class ViewAccueil: UIViewController  {
             viewController.viewList = buildList
             
         case "  On the air":
-            let viewController = segue.destination as! ViewAdecouvrir
+            let viewController = segue.destination as! ViewSaisonListe
             viewController.title = "Saisons en diffusion"
             viewController.accueil = self
             for uneSerie in allSeries
@@ -276,7 +276,7 @@ class ViewAccueil: UIViewController  {
             viewController.allSaisons = buildListSaisons
             
         case "  Diffusées":
-            let viewController = segue.destination as! ViewAdecouvrir
+            let viewController = segue.destination as! ViewSaisonListe
             viewController.title = "Saisons prêtes à voir"
             viewController.accueil = self
             for uneSerie in allSeries
@@ -297,7 +297,7 @@ class ViewAccueil: UIViewController  {
             viewController.allSaisons = buildListSaisons
             
         case "  Annoncées":
-            let viewController = segue.destination as! ViewAdecouvrir
+            let viewController = segue.destination as! ViewSaisonListe
             viewController.title = "Nouvelles saisons annoncées"
             viewController.accueil = self
             for uneSerie in allSeries

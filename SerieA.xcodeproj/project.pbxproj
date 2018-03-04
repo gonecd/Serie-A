@@ -42,13 +42,13 @@
 		62A581E81FBC5BCB002D8FD3 /* rottentomatoes.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62A581E61FBC5BCB002D8FD3 /* rottentomatoes.ico */; };
 		62AC50A0200E58A200A8C841 /* SaisonFiche.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62AC509F200E58A200A8C841 /* SaisonFiche.swift */; };
 		62CD57C32038B87D00DE28A1 /* GraphMiniSaison.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62CD57C22038B87D00DE28A1 /* GraphMiniSaison.swift */; };
+		62D0EBBB204C30BE009774B6 /* ViewSaisonListe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D0EBBA204C30BE009774B6 /* ViewSaisonListe.swift */; };
 		62DD87701FB766C600A9B9EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD876F1FB766C600A9B9EE /* AppDelegate.swift */; };
 		62DD87751FB766C600A9B9EE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 62DD87731FB766C600A9B9EE /* Main.storyboard */; };
 		62DD87771FB766C600A9B9EE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 62DD87761FB766C600A9B9EE /* Assets.xcassets */; };
 		62DD877A1FB766C600A9B9EE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 62DD87781FB766C600A9B9EE /* LaunchScreen.storyboard */; };
 		62DD87851FB766C700A9B9EE /* iPhone_SeriezTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD87841FB766C700A9B9EE /* iPhone_SeriezTests.swift */; };
 		62DD87901FB766C700A9B9EE /* iPhone_SeriezUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD878F1FB766C700A9B9EE /* iPhone_SeriezUITests.swift */; };
-		62DD879E1FB767B900A9B9EE /* ViewAdecouvrir.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD879D1FB767B900A9B9EE /* ViewAdecouvrir.swift */; };
 		62DD87A41FB76F5D00A9B9EE /* TheTVdb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD879F1FB76F5D00A9B9EE /* TheTVdb.swift */; };
 		62DD87A81FB76F5D00A9B9EE /* Trakt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD87A31FB76F5D00A9B9EE /* Trakt.swift */; };
 		62DD87AA1FB7838400A9B9EE /* SerieFiche.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD87A91FB7838400A9B9EE /* SerieFiche.swift */; };
@@ -126,6 +126,7 @@
 		62A581E61FBC5BCB002D8FD3 /* rottentomatoes.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = rottentomatoes.ico; sourceTree = "<group>"; };
 		62AC509F200E58A200A8C841 /* SaisonFiche.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaisonFiche.swift; sourceTree = "<group>"; };
 		62CD57C22038B87D00DE28A1 /* GraphMiniSaison.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphMiniSaison.swift; sourceTree = "<group>"; };
+		62D0EBBA204C30BE009774B6 /* ViewSaisonListe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewSaisonListe.swift; sourceTree = "<group>"; };
 		62DD876C1FB766C600A9B9EE /* SerieA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SerieA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		62DD876F1FB766C600A9B9EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		62DD87741FB766C600A9B9EE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -138,7 +139,6 @@
 		62DD878B1FB766C700A9B9EE /* SerieAUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SerieAUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		62DD878F1FB766C700A9B9EE /* iPhone_SeriezUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iPhone_SeriezUITests.swift; sourceTree = "<group>"; };
 		62DD87911FB766C700A9B9EE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		62DD879D1FB767B900A9B9EE /* ViewAdecouvrir.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewAdecouvrir.swift; sourceTree = "<group>"; };
 		62DD879F1FB76F5D00A9B9EE /* TheTVdb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TheTVdb.swift; sourceTree = "<group>"; };
 		62DD87A31FB76F5D00A9B9EE /* Trakt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Trakt.swift; sourceTree = "<group>"; };
 		62DD87A91FB7838400A9B9EE /* SerieFiche.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerieFiche.swift; sourceTree = "<group>"; };
@@ -226,7 +226,7 @@
 			children = (
 				624D874A2043325600AFDA06 /* Graphes */,
 				624D27481FFBD4E100B49702 /* ViewAccueil.swift */,
-				62DD879D1FB767B900A9B9EE /* ViewAdecouvrir.swift */,
+				62D0EBBA204C30BE009774B6 /* ViewSaisonListe.swift */,
 				6224A5E22041F30200450812 /* ViewSerieListe.swift */,
 				62AC509F200E58A200A8C841 /* SaisonFiche.swift */,
 				62F8ECF32013775800A41EF7 /* EpisodeFiche.swift */,
@@ -544,7 +544,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				62DD87AA1FB7838400A9B9EE /* SerieFiche.swift in Sources */,
-				62DD879E1FB767B900A9B9EE /* ViewAdecouvrir.swift in Sources */,
 				62DD87AF1FB89E7D00A9B9EE /* Episode.swift in Sources */,
 				62DD87AE1FB89E7D00A9B9EE /* Saison.swift in Sources */,
 				6224A5E52042207800450812 /* Constantes.swift in Sources */,
@@ -560,6 +559,7 @@
 				62DD87A81FB76F5D00A9B9EE /* Trakt.swift in Sources */,
 				624D27491FFBD4E100B49702 /* ViewAccueil.swift in Sources */,
 				62DD87B01FB89E7D00A9B9EE /* Serie.swift in Sources */,
+				62D0EBBB204C30BE009774B6 /* ViewSaisonListe.swift in Sources */,
 				62AC50A0200E58A200A8C841 /* SaisonFiche.swift in Sources */,
 				62DD87701FB766C600A9B9EE /* AppDelegate.swift in Sources */,
 			);
