@@ -43,7 +43,7 @@ class TheMoviedb : NSObject
                                 {
                                     let cetEpisode: Int = ((unEpisode as AnyObject).object(forKey: "episode_number")! as! Int)-1
 
-                                    if (cetEpisode < saison.episodes.count)
+                                    if ( (cetEpisode < saison.episodes.count) && (cetEpisode > 0) )
                                     {
                                         if (saison.episodes[cetEpisode].date.compare(today) == .orderedAscending)
                                         {
@@ -57,9 +57,9 @@ class TheMoviedb : NSObject
                         }
                         else
                         {
-                            print("TheMoviedb::getSerieInfos failed with error code : \(response.statusCode)")
+                            print("TheMoviedb::getSerieInfos failed for \(uneSerie.serie) saison \(saison.saison) with error code : \(response.statusCode)")
                         }
-                    } catch let error as NSError { print("TheMoviedb::getSerieInfos failed: \(error.localizedDescription)") }
+                    } catch let error as NSError { print("TheMoviedb::getSerieInfos failed for \(uneSerie.serie) saison \(saison.saison) : \(error.localizedDescription)") }
                 } else { print(error as Any) }
             })
             task.resume()

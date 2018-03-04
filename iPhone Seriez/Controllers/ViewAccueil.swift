@@ -15,6 +15,7 @@ class ViewAccueil: UIViewController  {
     var theTVdb : TheTVdb = TheTVdb.init()
     var betaSeries : BetaSeries = BetaSeries.init()
     var theMoviedb : TheMoviedb = TheMoviedb.init()
+    var imdb : IMdb = IMdb.init()
 
     var allSeries: [Serie] = [Serie]()
     var imagesCache : NSCache = NSCache<NSString, UIImage>()
@@ -62,10 +63,19 @@ class ViewAccueil: UIViewController  {
         theTVdb.initializeToken()
         
         // Chargement de la dernière sauvegarde
-        
         loadDB()
         allSeries = allSeries.sorted(by:  { $0.serie < $1.serie })
         updateCompteurs()
+        
+        
+        for uneSerie in allSeries
+        {
+            print("Loading \(uneSerie.serie)")
+            self.theTVdb.getEpisodesRatings(uneSerie)
+            self.imdb.getEpisodesRatings(uneSerie)
+        }
+        
+        saveDB()
     }
 
     func makeJolisCompteurs(compteur: UITextField)
@@ -153,7 +163,7 @@ class ViewAccueil: UIViewController  {
         self.trakt.getEpisodesRatings(serie)
         self.betaSeries.getEpisodesRatings(serie)
         self.theMoviedb.getEpisodesRatings(serie)
-        self.saveDB()
+        self.imdb.getEpisodesRatings(serie)
     }
     
     func saveDB ()

@@ -12,7 +12,24 @@ import UIKit
 let correctionTVdb          : Int = 77
 let correctionBetaSeries    : Int = 86
 let correctionTrakt         : Int = 79
-let correctionMoviedb       : Int = 80
+let correctionMoviedb       : Int = 75
+let correctionIMdb          : Int = 80
+
+// Couleurs de remplissage des sources
+let fillColorTrakt          : UIColor = UIColor.red
+let fillColorTVdb           : UIColor = UIColor.black
+let fillColorBetaSeries     : UIColor = UIColor.blue
+let fillColorIMDB           : UIColor = UIColor.yellow
+let fillColorRottenTomatoes : UIColor = UIColor.red
+let fillColorMoviedb        : UIColor = UIColor.black
+
+// Couleurs de détourage des sources
+let borderColorTrakt          : UIColor = UIColor.white
+let borderColorTVdb           : UIColor = UIColor.white
+let borderColorBetaSeries     : UIColor = UIColor.white
+let borderColorIMDB           : UIColor = UIColor.black
+let borderColorRottenTomatoes : UIColor = UIColor.green
+let borderColorMoviedb        : UIColor = UIColor.green
 
 // Couleurs des sources
 let colorTrakt          : UIColor = UIColor.red

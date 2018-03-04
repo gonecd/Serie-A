@@ -114,9 +114,10 @@ class Graph: UIView {
             let offset : CGFloat = (largeur * (CGFloat(i)+0.5) / CGFloat(nbSaisons))
             
             traceUnPoint(theSerie.saisons[i].getFairRatingTVdb(), uneCouleur: colorTVdb, offsetSaison: offset, offsetSource: 0)
-            traceUnPoint(theSerie.saisons[i].getFairRatingTrakt(), uneCouleur: colorTrakt, offsetSaison: offset, offsetSource: 3)
-            traceUnPoint(theSerie.saisons[i].getFairRatingBetaSeries(), uneCouleur: colorBetaSeries, offsetSaison: offset, offsetSource: 6)
-            traceUnPoint(theSerie.saisons[i].getFairRatingMoviedb(), uneCouleur: colorMoviedb, offsetSaison: offset, offsetSource: 9)
+            traceUnPoint(theSerie.saisons[i].getFairRatingTrakt(), uneCouleur: colorTrakt, offsetSaison: offset, offsetSource: 2)
+            traceUnPoint(theSerie.saisons[i].getFairRatingBetaSeries(), uneCouleur: colorBetaSeries, offsetSaison: offset, offsetSource: 4)
+            traceUnPoint(theSerie.saisons[i].getFairRatingMoviedb(), uneCouleur: colorMoviedb, offsetSaison: offset, offsetSource: 8)
+            traceUnPoint(theSerie.saisons[i].getFairRatingIMdb(), uneCouleur: colorIMDB, offsetSaison: offset, offsetSource: 10)
         }
     }
 
@@ -155,6 +156,7 @@ class Graph: UIView {
             var locNotesTrakt: [Int] = [Int]()
             var locNotesBetaSeries: [Int] = [Int]()
             var locNotesMoviedb: [Int] = [Int]()
+            var locNotesIMdb: [Int] = [Int]()
 
             for i:Int in 0 ..< nbEps
             {
@@ -162,12 +164,14 @@ class Graph: UIView {
                 locNotesTrakt.append(uneSaison.episodes[i].getFairRatingTrakt())
                 locNotesBetaSeries.append(uneSaison.episodes[i].getFairRatingBetaSeries())
                 locNotesMoviedb.append(uneSaison.episodes[i].getFairRatingMoviedb())
+                locNotesIMdb.append(uneSaison.episodes[i].getFairRatingIMdb())
             }
 
             traceLigne(locNotesTVdb, nbEpisodes: nbEps, uneCouleur: colorTVdb, offsetSaison: uneSaison.saison, largeur: uneCase)
             traceLigne(locNotesTrakt, nbEpisodes: nbEps, uneCouleur: colorTrakt, offsetSaison: uneSaison.saison, largeur: uneCase)
             traceLigne(locNotesBetaSeries, nbEpisodes: nbEps, uneCouleur: colorBetaSeries, offsetSaison: uneSaison.saison, largeur: uneCase)
             traceLigne(locNotesMoviedb, nbEpisodes: nbEps, uneCouleur: colorMoviedb, offsetSaison: uneSaison.saison, largeur: uneCase)
+            traceLigne(locNotesIMdb, nbEpisodes: nbEps, uneCouleur: colorIMDB, offsetSaison: uneSaison.saison, largeur: uneCase)
         }
     }
 

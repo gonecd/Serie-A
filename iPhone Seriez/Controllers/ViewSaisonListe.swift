@@ -75,6 +75,7 @@ class ViewSaisonListe: UITableViewController {
         var totTraktMoy : Int = 0
         var totTVdbMoy : Int = 0
         var totMoviedbMoy : Int = 0
+        var totIMdbMoy : Int = 0
         var nbEpsMoy = 0
         
         for loopSaison in viewList[indexPath.row].saisons
@@ -85,6 +86,7 @@ class ViewSaisonListe: UITableViewController {
                 totTraktMoy = totTraktMoy + loopSaison.getFairRatingTrakt()
                 totTVdbMoy = totTVdbMoy + loopSaison.getFairRatingTVdb()
                 totMoviedbMoy = totMoviedbMoy + loopSaison.getFairRatingMoviedb()
+                totIMdbMoy = totIMdbMoy + loopSaison.getFairRatingIMdb()
                 nbEpsMoy = nbEpsMoy + 1
             }
         }
@@ -113,10 +115,12 @@ class ViewSaisonListe: UITableViewController {
                                   rateTVdb: uneSaison.getFairRatingTVdb(),
                                   rateBetaSeries: uneSaison.getFairRatingBetaSeries(),
                                   rateMoviedb: uneSaison.getFairRatingMoviedb(),
+                                  rateIMdb: uneSaison.getFairRatingIMdb(),
                                   seasonsAverageTrakt: Double(totTraktMoy)/Double(nbEpsMoy),
                                   seasonsAverageTVdb: Double(totTVdbMoy)/Double(nbEpsMoy),
                                   seasonsAverageBetaSeries: Double(totBetaSeriesMoy)/Double(nbEpsMoy),
-                                  seasonsAverageMoviedb: Double(totMoviedbMoy)/Double(nbEpsMoy))
+                                  seasonsAverageMoviedb: Double(totMoviedbMoy)/Double(nbEpsMoy),
+                                  seasonsAverageIMdb: Double(totIMdbMoy)/Double(nbEpsMoy))
         cell.miniGraphe.setNeedsDisplay()
         
         return cell
@@ -138,6 +142,7 @@ class ViewSaisonListe: UITableViewController {
     override func tableView(_ tableView: UITableView, editActionsForRowAt: IndexPath) -> [UITableViewRowAction]? {
         let reload = UITableViewRowAction(style: .normal, title: "Reload") { action, index in
             self.accueil.downloadSerieDetails(serie: self.viewList[index.row])
+            self.accueil.saveDB()
             self.liste.reloadData()
             self.view.setNeedsDisplay()
         }

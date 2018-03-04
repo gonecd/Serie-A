@@ -21,6 +21,7 @@ class Episode : NSObject, NSCoding
     var ratingTVdb : Int = 0
     var ratersTVdb : Int = 0
     var idTVdb : Int = 0
+    var idIMdb : String = ""
     var date : Date = Date.init(timeIntervalSince1970: 0)
     var titre : String = String()
     var resume : String = String()
@@ -55,6 +56,7 @@ class Episode : NSObject, NSCoding
         self.watched = decoder.decodeBool(forKey: "watched")
         self.ratingTVdb = decoder.decodeInteger(forKey: "ratingTVdb")
         self.idTVdb = decoder.decodeInteger(forKey: "idTVdb")
+        self.idIMdb = decoder.decodeObject(forKey: "idIMdb") as? String ?? ""
         self.date = (decoder.decodeObject(forKey: "date") ?? Date.init(timeIntervalSince1970: 0)) as! Date
         self.titre = decoder.decodeObject(forKey: "titre") as? String ?? ""
         self.resume = decoder.decodeObject(forKey: "resume") as? String ?? ""
@@ -76,6 +78,7 @@ class Episode : NSObject, NSCoding
         coder.encode(self.watched, forKey: "watched")
         coder.encode(self.ratingTVdb, forKey: "ratingTVdb")
         coder.encodeCInt(Int32(self.idTVdb), forKey: "idTVdb")
+        coder.encode(self.idIMdb, forKey: "idIMdb")
         coder.encode(self.date, forKey: "date")
         coder.encode(self.titre, forKey: "titre")
         coder.encode(self.resume, forKey: "resume")
@@ -158,6 +161,19 @@ class Episode : NSObject, NSCoding
         }
     }
     
+    func getFairRatingIMdb() -> Int
+    {
+        if (date.compare(Date()) == .orderedAscending)
+        {
+            return Int(80.0 * Double(ratingIMdb) / Double(correctionIMdb))
+        }
+        else
+        {
+            return 0
+        }
+    }
+    
+
     func merge(_ unEpisode : Episode)
     {
         if (unEpisode.serie != "")             { self.serie = unEpisode.serie }
@@ -167,6 +183,7 @@ class Episode : NSObject, NSCoding
         if (unEpisode.ratingTVdb != 0)         { self.ratingTVdb = unEpisode.ratingTVdb }
         if (unEpisode.ratersTVdb != 0)         { self.ratersTVdb = unEpisode.ratersTVdb }
         if (unEpisode.idTVdb != 0)             { self.idTVdb = unEpisode.idTVdb }
+        if (unEpisode.idIMdb != "")            { self.idIMdb = unEpisode.idIMdb }
         if (unEpisode.date != Date.init(timeIntervalSince1970: 0))       { self.date = unEpisode.date }
         if (unEpisode.titre != "")             { self.serie = unEpisode.titre }
         if (unEpisode.resume != "")            { self.serie = unEpisode.resume }

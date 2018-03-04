@@ -82,15 +82,15 @@ class GraphEpisode: UIView {
     
     func traceBarres()
     {
-        traceUneBarre(theEpisode.getFairRatingTVdb(),       uneCouleur: colorTVdb,              offset: 6)
-        traceUneBarre(theEpisode.getFairRatingTrakt(),      uneCouleur: colorTrakt,             offset: 5)
-        traceUneBarre(theEpisode.getFairRatingBetaSeries(), uneCouleur: colorBetaSeries,        offset: 4)
-        traceUneBarre(61,                                   uneCouleur: colorIMDB,              offset: 3)
-        traceUneBarre(61,                                   uneCouleur: colorRottenTomatoes,    offset: 2)
-        traceUneBarre(theEpisode.getFairRatingMoviedb(),    uneCouleur: colorMoviedb,           offset: 1)
+        traceUneBarre(theEpisode.getFairRatingTVdb(),       fillColor: fillColorTVdb,              borderColor: borderColorTVdb,            offset: 6)
+        traceUneBarre(theEpisode.getFairRatingTrakt(),      fillColor: fillColorTrakt,             borderColor: borderColorTrakt,           offset: 5)
+        traceUneBarre(theEpisode.getFairRatingBetaSeries(), fillColor: fillColorBetaSeries,        borderColor: borderColorBetaSeries,      offset: 4)
+        traceUneBarre(theEpisode.getFairRatingIMdb(),       fillColor: fillColorIMDB,              borderColor: borderColorIMDB,            offset: 3)
+        traceUneBarre(61,                                   fillColor: fillColorRottenTomatoes,    borderColor: borderColorRottenTomatoes,  offset: 2)
+        traceUneBarre(theEpisode.getFairRatingMoviedb(),    fillColor: fillColorMoviedb,           borderColor: borderColorMoviedb,         offset: 1)
     }
     
-    func traceUneBarre(_ noteX: Int, uneCouleur: UIColor, offset: Int)
+    func traceUneBarre(_ noteX: Int, fillColor: UIColor, borderColor: UIColor, offset: Int)
     {
         var value = noteX
         let col : CGFloat = hauteur / 24
@@ -99,8 +99,8 @@ class GraphEpisode: UIView {
         if ( noteX < 60 ) { value = 60 }
         if ( noteX > 100 ) { value = 100 }
         
-        uneCouleur.setStroke()
-        uneCouleur.withAlphaComponent(0.5).setFill()
+        borderColor.setStroke()
+        fillColor.withAlphaComponent(0.5).setFill()
         
         let path : UIBezierPath = UIBezierPath()
         

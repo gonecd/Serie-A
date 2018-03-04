@@ -106,6 +106,7 @@ class GraphSaison: UIView {
             traceUnPoint(theSaison.episodes[i].getFairRatingTrakt(), uneCouleur: colorTrakt, offsetEpisode: offset, offsetSource: 4)
             traceUnPoint(theSaison.episodes[i].getFairRatingBetaSeries(), uneCouleur: colorBetaSeries, offsetEpisode: offset, offsetSource: 6)
             traceUnPoint(theSaison.episodes[i].getFairRatingMoviedb(), uneCouleur: colorMoviedb, offsetEpisode: offset, offsetSource: 8)
+            traceUnPoint(theSaison.episodes[i].getFairRatingIMdb(), uneCouleur: colorIMDB, offsetEpisode: offset, offsetSource: 10)
         }
     }
 

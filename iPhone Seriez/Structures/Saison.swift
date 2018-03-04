@@ -84,6 +84,24 @@ class Saison : NSObject, NSCoding
         return 0
     }
     
+    func getFairRatingIMdb() -> Int
+    {
+        var total : Int = 0
+        var nb : Int = 0
+        
+        for episode in self.episodes {
+            if (episode.getFairRatingIMdb() != 0)
+            {
+                total = total + episode.getFairRatingIMdb()
+                nb = nb + 1
+            }
+        }
+        
+        if (nb != 0) { return Int(Double(total) / Double(nb)) }
+        return 0
+    }
+    
+
     
     func getFairRatingMoviedb() -> Int
     {

@@ -39,12 +39,12 @@ class GraphMiniSerie: UIView {
     }
     
     
-    func sendNotes(_ rateTrakt : Int, rateTVdb : Int, rateBetaSeries : Int, rateMoviedb : Int)
+    func sendNotes(_ rateTrakt : Int, rateTVdb : Int, rateBetaSeries : Int, rateMoviedb : Int, rateIMdb : Int)
     {
         noteTrakt = rateTrakt
         noteTVdb = rateTVdb
         noteBetaSeries = rateBetaSeries
-        noteIMDB = 71
+        noteIMDB = rateIMdb
         noteRottenTomatoes = 71
         noteMoviedb = rateMoviedb
     }
@@ -76,16 +76,16 @@ class GraphMiniSerie: UIView {
     
     func traceGrapheBarre()
     {
-        traceUneBarre(noteTVdb,             uneCouleur: colorTVdb,              offset: 1)
-        traceUneBarre(noteTrakt,            uneCouleur: colorTrakt,             offset: 2)
-        traceUneBarre(noteBetaSeries,       uneCouleur: colorBetaSeries,        offset: 3)
-        traceUneBarre(noteIMDB,             uneCouleur: colorIMDB,              offset: 4)
-        traceUneBarre(noteRottenTomatoes,   uneCouleur: colorRottenTomatoes,    offset: 5)
-        traceUneBarre(noteMoviedb,          uneCouleur: colorMoviedb,           offset: 6)
+        traceUneBarre(noteTVdb,             fillColor: fillColorTVdb,              borderColor: borderColorTVdb,              offset: 1)
+        traceUneBarre(noteTrakt,            fillColor: fillColorTrakt,             borderColor: borderColorTrakt,             offset: 2)
+        traceUneBarre(noteBetaSeries,       fillColor: fillColorBetaSeries,        borderColor: borderColorBetaSeries,        offset: 3)
+        traceUneBarre(noteIMDB,             fillColor: fillColorIMDB,              borderColor: borderColorIMDB,              offset: 4)
+        traceUneBarre(noteRottenTomatoes,   fillColor: fillColorRottenTomatoes,    borderColor: borderColorRottenTomatoes,    offset: 5)
+        traceUneBarre(noteMoviedb,          fillColor: fillColorMoviedb,           borderColor: borderColorMoviedb,           offset: 6)
     }
     
     
-    func traceUneBarre(_ noteX: Int, uneCouleur: UIColor, offset: Int)
+    func traceUneBarre(_ noteX: Int, fillColor: UIColor, borderColor: UIColor, offset: Int)
     {
         var value = noteX
         let col : CGFloat = largeur / 24
@@ -94,8 +94,8 @@ class GraphMiniSerie: UIView {
         if ( noteX < 70 ) { value = 70 }
         if ( noteX > 90 ) { value = 90 }
         
-        uneCouleur.setStroke()
-        uneCouleur.withAlphaComponent(0.5).setFill()
+        borderColor.setStroke()
+        fillColor.withAlphaComponent(0.5).setFill()
         
         let path : UIBezierPath = UIBezierPath()
         

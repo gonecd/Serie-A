@@ -153,6 +153,12 @@ class Serie : NSObject, NSCoding
             nb = nb + 1
         }
         
+        if (getFairRatingIMdb() != 0)
+        {
+            total = total + getFairRatingIMdb()
+            nb = nb + 1
+        }
+        
         if (nb > 0)
         {
             return Int(Double(total) / Double(nb))
@@ -231,5 +237,23 @@ class Serie : NSObject, NSCoding
         return 0
     }
     
+    func getFairRatingIMdb() -> Int
+    {
+        var total : Int = 0
+        var nb : Int = 0
+        
+        for saison in self.saisons {
+            if (saison.getFairRatingIMdb() != 0)
+            {
+                total = total + saison.getFairRatingIMdb()
+                nb = nb + 1
+            }
+        }
+        
+        if (nb != 0) { return Int(Double(total) / Double(nb)) }
+        return 0
+    }
+    
+
 }
 

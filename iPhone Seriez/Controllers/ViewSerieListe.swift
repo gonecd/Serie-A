@@ -88,7 +88,8 @@ class ViewSerieListe: UITableViewController {
         cell.miniGraphe.sendNotes(viewList[indexPath.row].getFairRatingTrakt(),
                                   rateTVdb: viewList[indexPath.row].getFairRatingTVdb(),
                                   rateBetaSeries: viewList[indexPath.row].getFairRatingBetaSeries(),
-                                  rateMoviedb: viewList[indexPath.row].getFairRatingMoviedb())
+                                  rateMoviedb: viewList[indexPath.row].getFairRatingMoviedb(),
+                                  rateIMdb: viewList[indexPath.row].getFairRatingIMdb())
         cell.miniGraphe.setNeedsDisplay()
         
         return cell
@@ -148,6 +149,7 @@ class ViewSerieListe: UITableViewController {
     override func tableView(_ tableView: UITableView, editActionsForRowAt: IndexPath) -> [UITableViewRowAction]? {
         let reload = UITableViewRowAction(style: .normal, title: "Reload") { action, index in
             self.accueil.downloadSerieDetails(serie: self.viewList[index.row])
+            self.accueil.saveDB()
             self.liste.reloadData()
             self.view.setNeedsDisplay()
         }
