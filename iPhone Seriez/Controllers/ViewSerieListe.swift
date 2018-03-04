@@ -17,6 +17,7 @@ class CellSerieListe: UITableViewCell {
     @IBOutlet weak var miniGraphe: GraphMiniSerie!
     @IBOutlet weak var genres: UITextView!
     @IBOutlet weak var globalRating: UITextField!
+    @IBOutlet weak var status: UITextField!
     
     var index: Int = 0
 }
@@ -29,11 +30,8 @@ class ViewSerieListe: UITableViewController {
     let dateFormatter = DateFormatter()
     var accueil : ViewAccueil = ViewAccueil()
     
-    // Correctiond es notes pour homogénéisation
-    var correctionTVdb : Double = 1.0
-    var correctionBetaSeries : Double = 1.0
-    var correctionTrakt : Double = 1.0
-    
+    @IBOutlet var liste: UITableView!
+    var isWatchlist : Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,6 +39,16 @@ class ViewSerieListe: UITableViewController {
         dateFormatter.locale = Locale.current
         dateFormatter.dateFormat = "dd MMM yyyy"
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated);
+        if (!isWatchlist)
+        {
+            print("Hidding TabBar ...")
+            self.tabBarController?.tabBar.isHidden = true
+        }
+
     }
     
     override func didReceiveMemoryWarning() {
@@ -72,6 +80,21 @@ class ViewSerieListe: UITableViewController {
         }
         cell.genres.text = allGenres
         
+        // Affichage du status
+        cell.status.layer.cornerRadius = 8
+        cell.status.layer.masksToBounds = true
+        if (viewList[indexPath.row].status == "Ended")
+        {
+            cell.status.text = "FINIE"
+            cell.status.textColor = UIColor.black
+        }
+        else
+        {
+            cell.status.text = "EN COURS"
+            cell.status.textColor = UIColor.blue
+        }
+
+        
         // Affichage du mini graphe
         cell.miniGraphe.sendNotes(viewList[indexPath.row].getFairRatingTrakt(), rateTVdb: viewList[indexPath.row].getFairRatingTVdb(), rateBetaSeries: viewList[indexPath.row].getFairRatingBetaSeries())
         cell.miniGraphe.setNeedsDisplay()
@@ -90,16 +113,71 @@ class ViewSerieListe: UITableViewController {
         viewController.image = accueil.getImage(viewList[tableCell.index].banner)
     }
     
-    @IBAction func refreshData(_ sender: Any) {
-        
-        for uneSerie in viewList
-        {
-            accueil.downloadSerieDetails(serie: uneSerie)
-        }
-        
-        self.view.setNeedsDisplay()
+    @IBAction func addSerie(_ sender: Any) {
+        let alert = UIAlertController(title: "Série à rechercher", message: "", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addTextField(configurationHandler: configurationTextField)
+        alert.addAction(UIAlertAction(title: "Annuler", style: UIAlertActionStyle.default, handler:doNothing))
+        alert.addAction(UIAlertAction(title: "Valider", style: UIAlertActionStyle.default, handler:searchSerie))
+        self.present(alert, animated: true, completion: { })
     }
     
+    func configurationTextField(textField: UITextField!){
+        textField.placeholder = "Nom de la série"
+        popupTextField = textField
+    }
+    
+    var popupTextField : UITextField = UITextField()
+    func doNothing(alertView: UIAlertAction!) {}
+    
+    func searchSerie(alertView: UIAlertAction!)
+    {
+        let seriesTrouvees : [Serie] = accueil.chercherUneSerieSurTrakt(nomSerie: self.popupTextField.text!)
+        let actionSheetController: UIAlertController = UIAlertController(title: "Ajouter à ma watchlist", message: nil, preferredStyle: .actionSheet)
+        
+        for uneSerie in seriesTrouvees
+        {
+            let uneAction: UIAlertAction = UIAlertAction(title: uneSerie.serie+" ("+String(uneSerie.year)+")", style: UIAlertActionStyle.default) { action -> Void in
+                if (self.accueil.ajouterUneSerieDansLaWatchlistTrakt(uneSerie: uneSerie))
+                {
+                    self.viewList.append(uneSerie)
+                    self.liste.reloadData()
+                    self.view.setNeedsDisplay()
+                }
+            }
+            actionSheetController.addAction(uneAction)
+        }
+        
+        let cancelAction: UIAlertAction = UIAlertAction(title: "Annuler", style: UIAlertActionStyle.cancel, handler: doNothing)
+        actionSheetController.addAction(cancelAction)
+        
+        present(actionSheetController, animated: true, completion: nil)
+    }
+    
+    override func tableView(_ tableView: UITableView, editActionsForRowAt: IndexPath) -> [UITableViewRowAction]? {
+        let reload = UITableViewRowAction(style: .normal, title: "Reload") { action, index in
+            self.accueil.downloadSerieDetails(serie: self.viewList[index.row])
+            self.liste.reloadData()
+            self.view.setNeedsDisplay()
+        }
+        reload.backgroundColor = .green
+        
+        let remove = UITableViewRowAction(style: .destructive, title: "Remove") { action, index in
+            if (self.accueil.supprimerUneSerieDansLaWatchlistTrakt(uneSerie: self.viewList[index.row]))
+            {
+                self.viewList.remove(at: index.row)
+                self.liste.reloadData()
+                self.view.setNeedsDisplay()
+            }
+        }
+        remove.backgroundColor = .red
+        
+        if (self.isWatchlist) { return [reload, remove] }
+        else { return [reload] }
+    }
+    
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
 }
 
 

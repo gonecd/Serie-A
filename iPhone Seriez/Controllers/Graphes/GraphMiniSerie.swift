@@ -65,10 +65,12 @@ class GraphMiniSerie: UIView {
         path.stroke()
         
         // Quadrillage
-        path.setLineDash([5.0,5.0], count: 2, phase: 5.0)
-        path.move(to: CGPoint(x: origineX, y: origineY - (hauteur / 2)))
-        path.addLine(to: CGPoint(x: origineX + largeur, y: origineY - (hauteur / 2)))
-        path.stroke()
+        let path2 : UIBezierPath = UIBezierPath()
+        path2.lineWidth = 0.5
+        path2.setLineDash([5.0,5.0], count: 2, phase: 5.0)
+        path2.move(to: CGPoint(x: origineX, y: origineY - (hauteur / 2)))
+        path2.addLine(to: CGPoint(x: origineX + largeur, y: origineY - (hauteur / 2)))
+        path2.stroke()
     }
     
     

@@ -129,9 +129,9 @@ class TheTVdb : NSObject
                     }
                     else
                     {
-                        print ("TheTVdb::getSerieInfos failed: code erreur \(response.statusCode)")
+                        print ("TheTVdb::getSerieInfos failed (general infos de \(uneSerie.serie)): code erreur \(response.statusCode)")
                     }
-                } catch let error as NSError { print("TheTVdb::getSerieInfos failed: \(error.localizedDescription)") }
+                } catch let error as NSError { print("TheTVdb::getSerieInfos failed (general infos de \(uneSerie.serie)) : \(error.localizedDescription)") }
             } else { print(error as Any) }
         })
         
@@ -184,9 +184,9 @@ class TheTVdb : NSObject
                     }
                     else
                     {
-                        print ("TheTVdb::getSerieInfos failed: code erreur \(response.statusCode)")
+                        print ("TheTVdb::getSerieInfos failed (poster de \(uneSerie.serie)): code erreur \(response.statusCode)")
                     }
-                } catch let error as NSError { print("TheTVdb::getSerieInfos failed: \(error.localizedDescription)") }
+                } catch let error as NSError { print("TheTVdb::getSerieInfos failed (poster de \(uneSerie.serie)): \(error.localizedDescription)") }
             } else { print(error as Any) }
         })
         
@@ -266,21 +266,18 @@ class TheTVdb : NSObject
                                         print ("TheTVdb::getSerieInfos failed on episode = 0 \(uneSerie.serie) saison \(laSaison)")
                                     }
                                 }
-                                else
-                                {
-                                    print ("TheTVdb::getSerieInfos failed on saison = 0 \(uneSerie.serie)")
-                                }
                             }
                         }
                         else if response.statusCode == 404
                         {
+                            print ("TheTVdb::getSerieInfos failed (episodes de \(uneSerie.serie)) : code erreur \(response.statusCode)")
                             continuer = false
                         }
                         else
                         {
-                            print ("TheTVdb::getSerieInfos failed: code erreur \(response.statusCode)")
+                            print ("TheTVdb::getSerieInfos failed (episodes de \(uneSerie.serie)) : code erreur \(response.statusCode)")
                         }
-                    } catch let error as NSError { print("TheTVdb::getSerieInfos failed: \(error.localizedDescription)") }
+                    } catch let error as NSError { print("TheTVdb::getSerieInfos failed (episodes de \(uneSerie.serie)) : \(error.localizedDescription)") }
                 } else { print(error as Any) }
             })
             

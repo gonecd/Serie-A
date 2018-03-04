@@ -61,6 +61,7 @@ class ViewAccueil: UIViewController  {
         theTVdb.initializeToken()
         
         // Chargement de la dernière sauvegarde
+        
         loadDB()
         allSeries = allSeries.sorted(by:  { $0.serie < $1.serie })
         updateCompteurs()
@@ -75,7 +76,8 @@ class ViewAccueil: UIViewController  {
     func makeRedGradiant(carre : UIView)
     {
         let redGradient : CAGradientLayer = CAGradientLayer()
-        redGradient.colors = [UIColor.red.cgColor, UIColor.white.cgColor]
+        //redGradient.colors = [UIColor.red.cgColor, UIColor.red.withAlphaComponent(0.1).cgColor]
+        redGradient.colors = [UIColor.red.cgColor, UIColor.orange.cgColor]
         redGradient.startPoint = CGPoint(x: 0, y: 0)
         redGradient.endPoint = CGPoint(x: 1, y: 1)
         redGradient.frame = carre.bounds
@@ -88,9 +90,9 @@ class ViewAccueil: UIViewController  {
     func makeBlueGradiant(carre : UIView)
     {
         let blueGradient : CAGradientLayer = CAGradientLayer()
-        blueGradient.colors = [UIColor.blue.cgColor, UIColor.white.cgColor]
-        blueGradient.startPoint = CGPoint(x: 0, y: 0)
-        blueGradient.endPoint = CGPoint(x: 1, y: 1)
+        blueGradient.colors = [UIColor.blue.withAlphaComponent(0.8).cgColor, UIColor.blue.withAlphaComponent(0.2).cgColor]
+        blueGradient.startPoint = CGPoint(x: 0, y: 1)
+        blueGradient.endPoint = CGPoint(x: 1, y: 0)
         blueGradient.frame = carre.bounds
         
         carre.layer.cornerRadius = 10;
@@ -203,17 +205,18 @@ class ViewAccueil: UIViewController  {
         dateFormatter.dateFormat = "dd MMM yy"
         
         switch (bouton.titleLabel?.text ?? "") {
-        case "Watchlist":
+        case "  Watchlist":
             let viewController = segue.destination as! ViewSerieListe
             viewController.title = "Séries à découvrir"
             viewController.accueil = self
+            viewController.isWatchlist = true
             for uneSerie in allSeries
             {
                 if (uneSerie.watchlist) { buildList.append(uneSerie) }
             }
             viewController.viewList = buildList
             
-        case "Abandonnées":
+        case "  Abandonnées":
             let viewController = segue.destination as! ViewSerieListe
             viewController.title = "Séries abandonnées"
             viewController.accueil = self
@@ -223,7 +226,7 @@ class ViewAccueil: UIViewController  {
             }
             viewController.viewList = buildList
             
-        case "Finies":
+        case "  Finies":
             let viewController = segue.destination as! ViewSerieListe
             viewController.title = "Séries anciennes et finies"
             viewController.accueil = self
@@ -236,7 +239,7 @@ class ViewAccueil: UIViewController  {
             }
             viewController.viewList = buildList
             
-        case "En cours":
+        case "  En cours":
             let viewController = segue.destination as! ViewSerieListe
             viewController.title = "Séries en cours"
             viewController.accueil = self
@@ -250,7 +253,7 @@ class ViewAccueil: UIViewController  {
             }
             viewController.viewList = buildList
             
-        case "On the air":
+        case "  On the air":
             let viewController = segue.destination as! ViewAdecouvrir
             viewController.title = "Saisons en diffusion"
             viewController.accueil = self
@@ -272,7 +275,7 @@ class ViewAccueil: UIViewController  {
             viewController.viewList = buildList
             viewController.allSaisons = buildListSaisons
             
-        case "Diffusées":
+        case "  Diffusées":
             let viewController = segue.destination as! ViewAdecouvrir
             viewController.title = "Saisons prêtes à voir"
             viewController.accueil = self
@@ -293,7 +296,7 @@ class ViewAccueil: UIViewController  {
             viewController.viewList = buildList
             viewController.allSaisons = buildListSaisons
             
-        case "Annoncées":
+        case "  Annoncées":
             let viewController = segue.destination as! ViewAdecouvrir
             viewController.title = "Nouvelles saisons annoncées"
             viewController.accueil = self
@@ -420,7 +423,8 @@ class ViewAccueil: UIViewController  {
             self.betaSeries.getEpisodesRatings(uneSerie)
             self.allSeries.append(uneSerie)
             self.saveDB()
-            
+            updateCompteurs()
+
             return true
         }
         return false
@@ -432,7 +436,8 @@ class ViewAccueil: UIViewController  {
         {
             self.allSeries.remove(at: self.allSeries.index(of: uneSerie)!)
             self.saveDB()
-            
+            updateCompteurs()
+
             return true
         }
         return false

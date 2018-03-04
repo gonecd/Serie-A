@@ -18,6 +18,7 @@ class CellAdecouvrir: UITableViewCell {
     @IBOutlet weak var fin: UILabel!
     @IBOutlet weak var miniGraphe: GraphMiniSaison!
     @IBOutlet weak var globalRating: UITextField!
+    @IBOutlet weak var status: UITextField!
     
     var index: Int = 0
 }
@@ -30,7 +31,8 @@ class ViewAdecouvrir: UITableViewController {
     let dateFormatter = DateFormatter()
     var accueil : ViewAccueil = ViewAccueil()
     
-
+    @IBOutlet var liste: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -90,6 +92,20 @@ class ViewAdecouvrir: UITableViewController {
         cell.fin.text = dateFormatter.string(from: uneSaison.episodes[uneSaison.episodes.count - 1].date)
         cell.globalRating.text = String(viewList[indexPath.row].getGlobalRating())
         
+        // Affichage du status
+        cell.status.layer.cornerRadius = 8
+        cell.status.layer.masksToBounds = true
+        if ( (viewList[indexPath.row].status == "Ended") && (allSaisons[indexPath.row] == viewList[indexPath.row].saisons.count) )
+        {
+            cell.status.text = "FINAL"
+            cell.status.isHidden = false
+        }
+        else
+        {
+            cell.status.isHidden = true
+        }
+
+        
         cell.miniGraphe.theSaison = uneSaison
         cell.miniGraphe.sendNotes(uneSaison.getFairRatingTrakt(), 
                                   rateTVdb: uneSaison.getFairRatingTVdb(),
@@ -115,13 +131,19 @@ class ViewAdecouvrir: UITableViewController {
         viewController.accueil = accueil
     }
     
-    @IBAction func refreshData(_ sender: Any) {
-        
-        for uneSerie in viewList
-        {
-            accueil.downloadSerieDetails(serie: uneSerie)
+    override func tableView(_ tableView: UITableView, editActionsForRowAt: IndexPath) -> [UITableViewRowAction]? {
+        let reload = UITableViewRowAction(style: .normal, title: "Reload") { action, index in
+            self.accueil.downloadSerieDetails(serie: self.viewList[index.row])
+            self.liste.reloadData()
+            self.view.setNeedsDisplay()
         }
-        self.view.setNeedsDisplay()
+        reload.backgroundColor = .green
+        
+        return [reload]
+    }
+    
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
     }
 
 }
