@@ -9,10 +9,6 @@ import UIKit
 
 class GraphSaison: UIView {
 
-    var selectTrakt: Int = 1
-    var selectTVdb:  Int = 1
-    var selectBetaSeries: Int = 1
-
     var theSaison : Saison = Saison(serie:"", saison:0)
 
     override func draw(_ dirtyRect: CGRect) {
@@ -106,9 +102,10 @@ class GraphSaison: UIView {
         {
             let offset : CGFloat = (largeur * (CGFloat(i)+0.5) / CGFloat(nbEpisodes))
 
-            if (selectTVdb == 1) { traceUnPoint(theSaison.episodes[i].getFairRatingTVdb(), uneCouleur: colorTVdb, offsetEpisode: offset, offsetSource: 2) }
-            if (selectTrakt == 1) { traceUnPoint(theSaison.episodes[i].getFairRatingTrakt(), uneCouleur: colorTrakt, offsetEpisode: offset, offsetSource: 5) }
-            if (selectBetaSeries == 1) { traceUnPoint(theSaison.episodes[i].getFairRatingBetaSeries(), uneCouleur: colorBetaSeries, offsetEpisode: offset, offsetSource: 8) }
+            traceUnPoint(theSaison.episodes[i].getFairRatingTVdb(), uneCouleur: colorTVdb, offsetEpisode: offset, offsetSource: 2)
+            traceUnPoint(theSaison.episodes[i].getFairRatingTrakt(), uneCouleur: colorTrakt, offsetEpisode: offset, offsetSource: 4)
+            traceUnPoint(theSaison.episodes[i].getFairRatingBetaSeries(), uneCouleur: colorBetaSeries, offsetEpisode: offset, offsetSource: 6)
+            traceUnPoint(theSaison.episodes[i].getFairRatingMoviedb(), uneCouleur: colorMoviedb, offsetEpisode: offset, offsetSource: 8)
         }
     }
 

@@ -85,6 +85,24 @@ class Saison : NSObject, NSCoding
     }
     
     
+    func getFairRatingMoviedb() -> Int
+    {
+        var total : Int = 0
+        var nb : Int = 0
+        
+        for episode in self.episodes {
+            if (episode.getFairRatingMoviedb() != 0)
+            {
+                total = total + episode.getFairRatingMoviedb()
+                nb = nb + 1
+            }
+        }
+        
+        if (nb != 0) { return Int(Double(total) / Double(nb)) }
+        return 0
+    }
+    
+    
     func merge(_ uneSaison : Saison)
     {
         if (uneSaison.serie != "")         { self.serie = uneSaison.serie }

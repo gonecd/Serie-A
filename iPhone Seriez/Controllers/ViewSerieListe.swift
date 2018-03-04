@@ -38,19 +38,8 @@ class ViewSerieListe: UITableViewController {
         
         dateFormatter.locale = Locale.current
         dateFormatter.dateFormat = "dd MMM yyyy"
-        
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated);
-        if (!isWatchlist)
-        {
-            print("Hidding TabBar ...")
-            self.tabBarController?.tabBar.isHidden = true
-        }
 
-    }
-    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -96,7 +85,10 @@ class ViewSerieListe: UITableViewController {
 
         
         // Affichage du mini graphe
-        cell.miniGraphe.sendNotes(viewList[indexPath.row].getFairRatingTrakt(), rateTVdb: viewList[indexPath.row].getFairRatingTVdb(), rateBetaSeries: viewList[indexPath.row].getFairRatingBetaSeries())
+        cell.miniGraphe.sendNotes(viewList[indexPath.row].getFairRatingTrakt(),
+                                  rateTVdb: viewList[indexPath.row].getFairRatingTVdb(),
+                                  rateBetaSeries: viewList[indexPath.row].getFairRatingBetaSeries(),
+                                  rateMoviedb: viewList[indexPath.row].getFairRatingMoviedb())
         cell.miniGraphe.setNeedsDisplay()
         
         return cell

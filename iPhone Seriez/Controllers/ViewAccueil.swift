@@ -14,7 +14,8 @@ class ViewAccueil: UIViewController  {
     var trakt : Trakt = Trakt.init()
     var theTVdb : TheTVdb = TheTVdb.init()
     var betaSeries : BetaSeries = BetaSeries.init()
-    
+    var theMoviedb : TheMoviedb = TheMoviedb.init()
+
     var allSeries: [Serie] = [Serie]()
     var imagesCache : NSCache = NSCache<NSString, UIImage>()
     
@@ -151,6 +152,8 @@ class ViewAccueil: UIViewController  {
         self.theTVdb.getEpisodesRatings(serie)
         self.trakt.getEpisodesRatings(serie)
         self.betaSeries.getEpisodesRatings(serie)
+        self.theMoviedb.getEpisodesRatings(serie)
+        self.saveDB()
     }
     
     func saveDB ()
@@ -421,6 +424,7 @@ class ViewAccueil: UIViewController  {
             self.theTVdb.getSerieInfos(uneSerie)
             self.trakt.getEpisodesRatings(uneSerie)
             self.betaSeries.getEpisodesRatings(uneSerie)
+            self.theMoviedb.getEpisodesRatings(uneSerie)
             self.allSeries.append(uneSerie)
             self.saveDB()
             updateCompteurs()

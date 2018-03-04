@@ -9,10 +9,6 @@ import UIKit
 
 class Graph: UIView {
     
-    var selectTrakt: Int = 1
-    var selectTVdb:  Int = 1
-    var selectBetaSeries: Int = 1
-    
     var grapheType : Int = 0
     var theSerie : Serie = Serie(serie: "")
     
@@ -116,10 +112,11 @@ class Graph: UIView {
         for i:Int in 0 ..< nbSaisons
         {
             let offset : CGFloat = (largeur * (CGFloat(i)+0.5) / CGFloat(nbSaisons))
-
-            if (selectTVdb == 1) { traceUnPoint(theSerie.saisons[i].getFairRatingTVdb(), uneCouleur: colorTVdb, offsetSaison: offset, offsetSource: 0) }
-            if (selectTrakt == 1) { traceUnPoint(theSerie.saisons[i].getFairRatingTrakt(), uneCouleur: colorTrakt, offsetSaison: offset, offsetSource: 5) }
-            if (selectBetaSeries == 1) { traceUnPoint(theSerie.saisons[i].getFairRatingBetaSeries(), uneCouleur: colorBetaSeries, offsetSaison: offset, offsetSource: 10) }
+            
+            traceUnPoint(theSerie.saisons[i].getFairRatingTVdb(), uneCouleur: colorTVdb, offsetSaison: offset, offsetSource: 0)
+            traceUnPoint(theSerie.saisons[i].getFairRatingTrakt(), uneCouleur: colorTrakt, offsetSaison: offset, offsetSource: 3)
+            traceUnPoint(theSerie.saisons[i].getFairRatingBetaSeries(), uneCouleur: colorBetaSeries, offsetSaison: offset, offsetSource: 6)
+            traceUnPoint(theSerie.saisons[i].getFairRatingMoviedb(), uneCouleur: colorMoviedb, offsetSaison: offset, offsetSource: 9)
         }
     }
 
@@ -157,17 +154,20 @@ class Graph: UIView {
             var locNotesTVdb: [Int] = [Int]()
             var locNotesTrakt: [Int] = [Int]()
             var locNotesBetaSeries: [Int] = [Int]()
+            var locNotesMoviedb: [Int] = [Int]()
 
             for i:Int in 0 ..< nbEps
             {
                 locNotesTVdb.append(uneSaison.episodes[i].getFairRatingTVdb())
                 locNotesTrakt.append(uneSaison.episodes[i].getFairRatingTrakt())
                 locNotesBetaSeries.append(uneSaison.episodes[i].getFairRatingBetaSeries())
+                locNotesMoviedb.append(uneSaison.episodes[i].getFairRatingMoviedb())
             }
 
-            if (selectTVdb == 1) { traceLigne(locNotesTVdb, nbEpisodes: nbEps, uneCouleur: colorTVdb, offsetSaison: uneSaison.saison, largeur: uneCase) }
-            if (selectTrakt == 1) { traceLigne(locNotesTrakt, nbEpisodes: nbEps, uneCouleur: colorTrakt, offsetSaison: uneSaison.saison, largeur: uneCase) }
-            if (selectBetaSeries == 1) { traceLigne(locNotesBetaSeries, nbEpisodes: nbEps, uneCouleur: colorBetaSeries, offsetSaison: uneSaison.saison, largeur: uneCase) }
+            traceLigne(locNotesTVdb, nbEpisodes: nbEps, uneCouleur: colorTVdb, offsetSaison: uneSaison.saison, largeur: uneCase)
+            traceLigne(locNotesTrakt, nbEpisodes: nbEps, uneCouleur: colorTrakt, offsetSaison: uneSaison.saison, largeur: uneCase)
+            traceLigne(locNotesBetaSeries, nbEpisodes: nbEps, uneCouleur: colorBetaSeries, offsetSaison: uneSaison.saison, largeur: uneCase)
+            traceLigne(locNotesMoviedb, nbEpisodes: nbEps, uneCouleur: colorMoviedb, offsetSaison: uneSaison.saison, largeur: uneCase)
         }
     }
 

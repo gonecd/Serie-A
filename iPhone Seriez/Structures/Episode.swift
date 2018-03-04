@@ -37,6 +37,10 @@ class Episode : NSObject, NSCoding
     var ratingIMdb : Int = 0
     var ratersIMdb : Int = 0
     
+    // Source TheMoviedb
+    var ratingMoviedb : Int = 0
+    var ratersMoviedb : Int = 0
+    
     required init(serie:String, fichier:String, saison:Int, episode:Int)
     {
         self.serie = serie
@@ -61,6 +65,8 @@ class Episode : NSObject, NSCoding
         self.ratersBetaSeries = decoder.decodeInteger(forKey: "ratersBetaSeries")
         self.ratingIMdb = decoder.decodeInteger(forKey: "ratingIMdb")
         self.ratersIMdb = decoder.decodeInteger(forKey: "ratersIMdb")
+        self.ratingMoviedb = decoder.decodeInteger(forKey: "ratingMoviedb")
+        self.ratersMoviedb = decoder.decodeInteger(forKey: "ratersMoviedb")
    }
     
     func encode(with coder: NSCoder) {
@@ -80,6 +86,8 @@ class Episode : NSObject, NSCoding
         coder.encodeCInt(Int32(self.ratersBetaSeries), forKey: "ratersBetaSeries")
         coder.encode(self.ratingIMdb, forKey: "ratingIMdb")
         coder.encodeCInt(Int32(self.ratersIMdb), forKey: "ratersIMdb")
+        coder.encode(self.ratingMoviedb, forKey: "ratingMoviedb")
+        coder.encodeCInt(Int32(self.ratersMoviedb), forKey: "ratersMoviedb")
    }
 
     init(fichier:String)
@@ -138,6 +146,18 @@ class Episode : NSObject, NSCoding
         }
     }
     
+    func getFairRatingMoviedb() -> Int
+    {
+        if (date.compare(Date()) == .orderedAscending)
+        {
+            return Int(80.0 * Double(ratingMoviedb) / Double(correctionMoviedb))
+        }
+        else
+        {
+            return 0
+        }
+    }
+    
     func merge(_ unEpisode : Episode)
     {
         if (unEpisode.serie != "")             { self.serie = unEpisode.serie }
@@ -156,6 +176,8 @@ class Episode : NSObject, NSCoding
         if (unEpisode.ratersBetaSeries != 0)   { self.ratersBetaSeries = unEpisode.ratersBetaSeries }
         if (unEpisode.ratingIMdb != 0)         { self.ratingIMdb = unEpisode.ratingIMdb }
         if (unEpisode.ratersIMdb != 0)         { self.ratersIMdb = unEpisode.ratersIMdb }
+        if (unEpisode.ratingMoviedb != 0)      { self.ratingMoviedb = unEpisode.ratingMoviedb }
+        if (unEpisode.ratersMoviedb != 0)      { self.ratersMoviedb = unEpisode.ratersMoviedb }
     }
 
 

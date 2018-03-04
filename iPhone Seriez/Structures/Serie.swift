@@ -18,7 +18,8 @@ class Serie : NSObject, NSCoding
     var idIMdb : String = String()
     var idTrakt : String = String()
     var idTVdb : String = String()
-    
+    var idMoviedb : String = String()
+
     var unfollowed : Bool = false
     var watchlist : Bool = false
     
@@ -43,7 +44,8 @@ class Serie : NSObject, NSCoding
         self.idIMdb = decoder.decodeObject(forKey: "idIMdb") as? String ?? ""
         self.idTrakt = decoder.decodeObject(forKey: "idTrakt") as? String ?? ""
         self.idTVdb = decoder.decodeObject(forKey: "idTVdb") as? String ?? ""
-        
+        self.idMoviedb = decoder.decodeObject(forKey: "idMoviedb") as? String ?? ""
+
         self.unfollowed = decoder.decodeBool(forKey: "unfollowed")
         self.watchlist = decoder.decodeBool(forKey: "watchlist")
         
@@ -63,7 +65,8 @@ class Serie : NSObject, NSCoding
         coder.encode(self.idIMdb, forKey: "idIMdb")
         coder.encode(self.idTrakt, forKey: "idTrakt")
         coder.encode(self.idTVdb, forKey: "idTVdb")
-        
+        coder.encode(self.idMoviedb, forKey: "idMoviedb")
+
         coder.encode(self.unfollowed, forKey: "unfollowed")
         coder.encode(self.watchlist, forKey: "watchlist")
         
@@ -88,6 +91,7 @@ class Serie : NSObject, NSCoding
         if (uneSerie.idIMdb != "")          { self.idIMdb = uneSerie.idIMdb }
         if (uneSerie.idTrakt != "")         { self.idTrakt = uneSerie.idTrakt }
         if (uneSerie.idTVdb != "")          { self.idTVdb = uneSerie.idTVdb }
+        if (uneSerie.idMoviedb != "")       { self.idMoviedb = uneSerie.idMoviedb }
         if (uneSerie.unfollowed != false)   { self.unfollowed = uneSerie.unfollowed }
         if (uneSerie.watchlist != false)    { self.watchlist = uneSerie.watchlist }
         
@@ -140,6 +144,12 @@ class Serie : NSObject, NSCoding
         if (getFairRatingBetaSeries() != 0)
         {
             total = total + getFairRatingBetaSeries()
+            nb = nb + 1
+        }
+        
+        if (getFairRatingMoviedb() != 0)
+        {
+            total = total + getFairRatingMoviedb()
             nb = nb + 1
         }
         
@@ -196,6 +206,23 @@ class Serie : NSObject, NSCoding
             if (saison.getFairRatingBetaSeries() != 0)
             {
                 total = total + saison.getFairRatingBetaSeries()
+                nb = nb + 1
+            }
+        }
+        
+        if (nb != 0) { return Int(Double(total) / Double(nb)) }
+        return 0
+    }
+    
+    func getFairRatingMoviedb() -> Int
+    {
+        var total : Int = 0
+        var nb : Int = 0
+        
+        for saison in self.saisons {
+            if (saison.getFairRatingMoviedb() != 0)
+            {
+                total = total + saison.getFairRatingMoviedb()
                 nb = nb + 1
             }
         }

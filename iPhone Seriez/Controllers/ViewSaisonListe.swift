@@ -74,6 +74,7 @@ class ViewSaisonListe: UITableViewController {
         var totBetaSeriesMoy : Int = 0
         var totTraktMoy : Int = 0
         var totTVdbMoy : Int = 0
+        var totMoviedbMoy : Int = 0
         var nbEpsMoy = 0
         
         for loopSaison in viewList[indexPath.row].saisons
@@ -83,6 +84,7 @@ class ViewSaisonListe: UITableViewController {
                 totBetaSeriesMoy = totBetaSeriesMoy + loopSaison.getFairRatingBetaSeries()
                 totTraktMoy = totTraktMoy + loopSaison.getFairRatingTrakt()
                 totTVdbMoy = totTVdbMoy + loopSaison.getFairRatingTVdb()
+                totMoviedbMoy = totMoviedbMoy + loopSaison.getFairRatingMoviedb()
                 nbEpsMoy = nbEpsMoy + 1
             }
         }
@@ -110,9 +112,11 @@ class ViewSaisonListe: UITableViewController {
         cell.miniGraphe.sendNotes(uneSaison.getFairRatingTrakt(),
                                   rateTVdb: uneSaison.getFairRatingTVdb(),
                                   rateBetaSeries: uneSaison.getFairRatingBetaSeries(),
+                                  rateMoviedb: uneSaison.getFairRatingMoviedb(),
                                   seasonsAverageTrakt: Double(totTraktMoy)/Double(nbEpsMoy),
                                   seasonsAverageTVdb: Double(totTVdbMoy)/Double(nbEpsMoy),
-                                  seasonsAverageBetaSeries: Double(totBetaSeriesMoy)/Double(nbEpsMoy))
+                                  seasonsAverageBetaSeries: Double(totBetaSeriesMoy)/Double(nbEpsMoy),
+                                  seasonsAverageMoviedb: Double(totMoviedbMoy)/Double(nbEpsMoy))
         cell.miniGraphe.setNeedsDisplay()
         
         return cell

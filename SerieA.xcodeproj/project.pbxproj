@@ -43,6 +43,7 @@
 		62AC50A0200E58A200A8C841 /* SaisonFiche.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62AC509F200E58A200A8C841 /* SaisonFiche.swift */; };
 		62CD57C32038B87D00DE28A1 /* GraphMiniSaison.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62CD57C22038B87D00DE28A1 /* GraphMiniSaison.swift */; };
 		62D0EBBB204C30BE009774B6 /* ViewSaisonListe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D0EBBA204C30BE009774B6 /* ViewSaisonListe.swift */; };
+		62D0EBBD204C374B009774B6 /* TheMoviedb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D0EBBC204C374B009774B6 /* TheMoviedb.swift */; };
 		62DD87701FB766C600A9B9EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD876F1FB766C600A9B9EE /* AppDelegate.swift */; };
 		62DD87751FB766C600A9B9EE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 62DD87731FB766C600A9B9EE /* Main.storyboard */; };
 		62DD87771FB766C600A9B9EE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 62DD87761FB766C600A9B9EE /* Assets.xcassets */; };
@@ -127,6 +128,7 @@
 		62AC509F200E58A200A8C841 /* SaisonFiche.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaisonFiche.swift; sourceTree = "<group>"; };
 		62CD57C22038B87D00DE28A1 /* GraphMiniSaison.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphMiniSaison.swift; sourceTree = "<group>"; };
 		62D0EBBA204C30BE009774B6 /* ViewSaisonListe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewSaisonListe.swift; sourceTree = "<group>"; };
+		62D0EBBC204C374B009774B6 /* TheMoviedb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TheMoviedb.swift; sourceTree = "<group>"; };
 		62DD876C1FB766C600A9B9EE /* SerieA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SerieA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		62DD876F1FB766C600A9B9EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		62DD87741FB766C600A9B9EE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -194,6 +196,7 @@
 				62DD87A31FB76F5D00A9B9EE /* Trakt.swift */,
 				62DD879F1FB76F5D00A9B9EE /* TheTVdb.swift */,
 				62DD87B91FB8C15500A9B9EE /* BetaSeries.swift */,
+				62D0EBBC204C374B009774B6 /* TheMoviedb.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -545,6 +548,7 @@
 			files = (
 				62DD87AA1FB7838400A9B9EE /* SerieFiche.swift in Sources */,
 				62DD87AF1FB89E7D00A9B9EE /* Episode.swift in Sources */,
+				62D0EBBD204C374B009774B6 /* TheMoviedb.swift in Sources */,
 				62DD87AE1FB89E7D00A9B9EE /* Saison.swift in Sources */,
 				6224A5E52042207800450812 /* Constantes.swift in Sources */,
 				62F8ECF42013775800A41EF7 /* EpisodeFiche.swift in Sources */,

@@ -12,6 +12,7 @@ import UIKit
 let correctionTVdb          : Int = 77
 let correctionBetaSeries    : Int = 86
 let correctionTrakt         : Int = 79
+let correctionMoviedb       : Int = 80
 
 // Couleurs des sources
 let colorTrakt          : UIColor = UIColor.red

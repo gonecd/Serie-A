@@ -9,10 +9,6 @@ import UIKit
 
 class GraphEpisode: UIView {
     
-    var selectTrakt         : Int = 1
-    var selectTVdb          : Int = 1
-    var selectBetaSeries    : Int = 1
-    
     var theEpisode : Episode = Episode(serie: "", fichier: "", saison: 0, episode: 0)
     
     var origineX : CGFloat = 0.0
@@ -91,7 +87,7 @@ class GraphEpisode: UIView {
         traceUneBarre(theEpisode.getFairRatingBetaSeries(), uneCouleur: colorBetaSeries,        offset: 4)
         traceUneBarre(61,                                   uneCouleur: colorIMDB,              offset: 3)
         traceUneBarre(61,                                   uneCouleur: colorRottenTomatoes,    offset: 2)
-        traceUneBarre(61,                                   uneCouleur: colorMoviedb,           offset: 1)
+        traceUneBarre(theEpisode.getFairRatingMoviedb(),    uneCouleur: colorMoviedb,           offset: 1)
     }
     
     func traceUneBarre(_ noteX: Int, uneCouleur: UIColor, offset: Int)

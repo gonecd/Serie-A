@@ -39,14 +39,14 @@ class GraphMiniSerie: UIView {
     }
     
     
-    func sendNotes(_ rateTrakt : Int, rateTVdb : Int, rateBetaSeries : Int)
+    func sendNotes(_ rateTrakt : Int, rateTVdb : Int, rateBetaSeries : Int, rateMoviedb : Int)
     {
         noteTrakt = rateTrakt
         noteTVdb = rateTVdb
         noteBetaSeries = rateBetaSeries
         noteIMDB = 71
         noteRottenTomatoes = 71
-        noteMoviedb = 71
+        noteMoviedb = rateMoviedb
     }
     
     func background()

@@ -13,11 +13,13 @@ class GraphMiniSaison: UIView {
     var noteTrakt : Int = 0
     var noteTVdb : Int = 0
     var noteBetaSeries : Int = 0
-    
+    var noteMoviedb : Int = 0
+
     var moyTrakt : Double = 0.0
     var moyTVdb : Double = 0.0
     var moyBetaSeries : Double = 0.0
-    
+    var moyMoviedb : Double = 0.0
+
     var origineX : CGFloat = 0.0
     var origineY :CGFloat = 0.0
     var hauteur : CGFloat = 0.0
@@ -41,16 +43,18 @@ class GraphMiniSaison: UIView {
     }
     
     
-    func sendNotes(_ rateTrakt : Int, rateTVdb : Int, rateBetaSeries : Int,
-                   seasonsAverageTrakt : Double, seasonsAverageTVdb : Double, seasonsAverageBetaSeries : Double)
+    func sendNotes(_ rateTrakt : Int, rateTVdb : Int, rateBetaSeries : Int, rateMoviedb : Int,
+                   seasonsAverageTrakt : Double, seasonsAverageTVdb : Double, seasonsAverageBetaSeries : Double, seasonsAverageMoviedb : Double)
     {
         noteTrakt = rateTrakt
         noteTVdb = rateTVdb
         noteBetaSeries = rateBetaSeries
-        
+        noteMoviedb = rateMoviedb
+
         moyTrakt = seasonsAverageTrakt
         moyTVdb = seasonsAverageTVdb
         moyBetaSeries = seasonsAverageBetaSeries
+        moyMoviedb = seasonsAverageMoviedb
     }
     
     func background()
@@ -86,9 +90,10 @@ class GraphMiniSaison: UIView {
     
     func traceGraphePoints()
     {
-        traceUnPoint(noteTVdb, noteY: Int(Double(noteTVdb * 80) / moyTVdb), uneCouleur: colorTVdb)
-        traceUnPoint(noteTrakt, noteY: Int(Double(noteTrakt * 80) / moyTrakt), uneCouleur: colorTrakt)
-        traceUnPoint(noteBetaSeries, noteY: Int(Double(noteBetaSeries * 80) / moyBetaSeries), uneCouleur: colorBetaSeries)
+        if (moyTVdb != 0.0) { traceUnPoint(noteTVdb, noteY: Int(Double(noteTVdb * 80) / moyTVdb), uneCouleur: colorTVdb) }
+        if (moyTrakt != 0.0) { traceUnPoint(noteTrakt, noteY: Int(Double(noteTrakt * 80) / moyTrakt), uneCouleur: colorTrakt) }
+        if (moyBetaSeries != 0.0) { traceUnPoint(noteBetaSeries, noteY: Int(Double(noteBetaSeries * 80) / moyBetaSeries), uneCouleur: colorBetaSeries) }
+        if (moyMoviedb != 0.0) { traceUnPoint(noteMoviedb, noteY: Int(Double(noteMoviedb * 80) / moyMoviedb), uneCouleur: colorMoviedb) }
     }
     
     
