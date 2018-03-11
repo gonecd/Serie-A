@@ -13,11 +13,16 @@ import Foundation
 
 class IMdb : NSObject
 {
-    var IMDBrates : [[String]] = []
+    var IMDBrates : NSMutableDictionary = NSMutableDictionary()
     
     override init()
     {
         super.init()
+    }
+    
+    func loadDB()
+    {
+        print("IMdb::Loading Ref")
         
         if let filepath = Bundle.main.path(forResource: "data", ofType: "tsv") {
             do {
@@ -25,10 +30,10 @@ class IMdb : NSObject
                 let rows = contents.components(separatedBy: "\n")
                 for row in rows {
                     let columns = row.components(separatedBy: "\t")
-                    IMDBrates.append(columns)
+                    IMDBrates.setValue(row, forKey: columns[0])
                 }
             } catch {
-                print("IMdb::initialization failed")
+                print("IMdb::Loading Ref failed")
             }
         }
     }
@@ -42,13 +47,16 @@ class IMdb : NSObject
             {
                 if (unEpisode.idIMdb != "")
                 {
-                    for uneLigne in IMDBrates
+                    if (IMDBrates[unEpisode.idIMdb] != nil)
                     {
-                        if (uneLigne[0] == unEpisode.idIMdb)
-                        {
-                            unEpisode.ratersIMdb = Int(uneLigne[2])!
-                            unEpisode.ratingIMdb = Int(10 * Double(uneLigne[1])!)
-                        }
+                        let columns = (IMDBrates[unEpisode.idIMdb] as! String).components(separatedBy: "\t")
+
+                        unEpisode.ratersIMdb = Int(columns[2])!
+                        unEpisode.ratingIMdb = Int(10 * Double(columns[1])!)
+                    }
+                    else
+                    {
+                        print("IMdb.getEpisodesRatings::Not found for \(unEpisode.serie) S\(unEpisode.saison)E\(unEpisode.episode)")
                     }
                 }
             }

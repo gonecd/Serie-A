@@ -13,7 +13,7 @@ let correctionTVdb          : Int = 77
 let correctionBetaSeries    : Int = 86
 let correctionTrakt         : Int = 79
 let correctionMoviedb       : Int = 75
-let correctionIMdb          : Int = 80
+let correctionIMdb          : Int = 86
 
 // Couleurs de remplissage des sources
 let fillColorTrakt          : UIColor = UIColor.red

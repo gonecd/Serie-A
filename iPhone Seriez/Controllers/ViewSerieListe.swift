@@ -30,6 +30,7 @@ class ViewSerieListe: UITableViewController {
     let dateFormatter = DateFormatter()
     var accueil : ViewAccueil = ViewAccueil()
     
+    
     @IBOutlet var liste: UITableView!
     var isWatchlist : Bool = false
     

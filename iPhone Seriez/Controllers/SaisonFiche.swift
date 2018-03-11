@@ -28,7 +28,6 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
     var serie : Serie = Serie(serie: "")
     var image : UIImage = UIImage()
     var saison : Int = 0
-    var accueil : ViewAccueil = ViewAccueil()
 
     @IBOutlet weak var banniere: UIImageView!
     @IBOutlet weak var graphe: GraphSaison!

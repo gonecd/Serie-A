@@ -61,21 +61,41 @@ class ViewAccueil: UIViewController  {
         // Connexion aux sources de données
         trakt.start()
         theTVdb.initializeToken()
+        imdb.loadDB()
         
         // Chargement de la dernière sauvegarde
         loadDB()
         allSeries = allSeries.sorted(by:  { $0.serie < $1.serie })
         updateCompteurs()
+
+//        var total : Int = 0
+//        var nb : Int = 0
+//
+//        for uneSerie in allSeries
+//        {
+//            for uneSaison in uneSerie.saisons
+//            {
+//                for unEpisode in uneSaison.episodes
+//                {
+//                    if (unEpisode.ratingIMdb > 0)
+//                    {
+//                        total = total + (unEpisode.ratingIMdb * unEpisode.ratersIMdb)
+//                        nb = nb + unEpisode.ratersIMdb
+//                    }
+//                }
+//            }
+//        }
+//        print("Correction = \(Int(total / nb))")
         
         
-        for uneSerie in allSeries
-        {
-            print("Loading \(uneSerie.serie)")
-            self.theTVdb.getEpisodesRatings(uneSerie)
-            self.imdb.getEpisodesRatings(uneSerie)
-        }
-        
-        saveDB()
+//        for uneSerie in allSeries
+//        {
+//            print("Loading \(uneSerie.serie)")
+//            self.theTVdb.getEpisodesRatings(uneSerie)
+//            self.imdb.getEpisodesRatings(uneSerie)
+//        }
+//
+//        saveDB()
     }
 
     func makeJolisCompteurs(compteur: UITextField)
@@ -95,6 +115,7 @@ class ViewAccueil: UIViewController  {
         
         carre.layer.cornerRadius = 10;
         carre.layer.masksToBounds = true
+
         carre.layer.insertSublayer(redGradient, at: 0)
     }
     

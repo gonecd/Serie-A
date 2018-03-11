@@ -136,7 +136,6 @@ class ViewSaisonListe: UITableViewController {
         viewController.serie = viewList[tableCell.index]
         viewController.saison = allSaisons[tableCell.index]
         viewController.image = accueil.getImage(viewList[tableCell.index].banner)
-        viewController.accueil = accueil
     }
     
     override func tableView(_ tableView: UITableView, editActionsForRowAt: IndexPath) -> [UITableViewRowAction]? {
