@@ -67,35 +67,7 @@ class ViewAccueil: UIViewController  {
         loadDB()
         allSeries = allSeries.sorted(by:  { $0.serie < $1.serie })
         updateCompteurs()
-
-//        var total : Int = 0
-//        var nb : Int = 0
-//
-//        for uneSerie in allSeries
-//        {
-//            for uneSaison in uneSerie.saisons
-//            {
-//                for unEpisode in uneSaison.episodes
-//                {
-//                    if (unEpisode.ratingIMdb > 0)
-//                    {
-//                        total = total + (unEpisode.ratingIMdb * unEpisode.ratersIMdb)
-//                        nb = nb + unEpisode.ratersIMdb
-//                    }
-//                }
-//            }
-//        }
-//        print("Correction = \(Int(total / nb))")
-        
-        
-//        for uneSerie in allSeries
-//        {
-//            print("Loading \(uneSerie.serie)")
-//            self.theTVdb.getEpisodesRatings(uneSerie)
-//            self.imdb.getEpisodesRatings(uneSerie)
-//        }
-//
-//        saveDB()
+        updateStatistics()
     }
 
     func makeJolisCompteurs(compteur: UITextField)
@@ -180,10 +152,10 @@ class ViewAccueil: UIViewController  {
     func downloadSerieDetails(serie : Serie)
     {
         self.theTVdb.getSerieInfos(serie)
-        self.theTVdb.getEpisodesRatings(serie)
-        self.trakt.getEpisodesRatings(serie)
-        self.betaSeries.getEpisodesRatings(serie)
-        self.theMoviedb.getEpisodesRatings(serie)
+        if (serie.idTVdb != "") { self.theTVdb.getEpisodesRatings(serie) }
+        if (serie.idTrakt != "") { self.trakt.getEpisodesRatings(serie) }
+        if (serie.idTVdb != "") { self.betaSeries.getEpisodesRatings(serie) }
+        if (serie.idMoviedb != "") { self.theMoviedb.getEpisodesRatings(serie) }
         self.imdb.getEpisodesRatings(serie)
     }
     
@@ -241,7 +213,7 @@ class ViewAccueil: UIViewController  {
         switch (bouton.titleLabel?.text ?? "") {
         case "  Watchlist":
             let viewController = segue.destination as! ViewSerieListe
-            viewController.title = "Séries à découvrir"
+            viewController.title = "Watchlist"
             viewController.accueil = self
             viewController.isWatchlist = true
             for uneSerie in allSeries
@@ -478,4 +450,89 @@ class ViewAccueil: UIViewController  {
         return false
     }
     
+    
+    func updateStatistics()
+    {
+        let minRaters : Int = 3
+        
+        var totalIMDB : Int = 0
+        var nbIMDB : Int = 0
+        var varianceIMDB : Int = 0
+        
+        var totalTVdb : Int = 0
+        var nbTVdb : Int = 0
+        var varianceTVdb : Int = 0
+        
+        var totalTrakt : Int = 0
+        var nbTrakt : Int = 0
+        var varianceTrakt : Int = 0
+        
+        var totalMovieDB : Int = 0
+        var nbMovieDB : Int = 0
+        var varianceMovieDB : Int = 0
+        
+        var totalBetaSeries : Int = 0
+        var nbBetaSeries : Int = 0
+        var varianceBetaSeries : Int = 0
+        
+        for uneSerie in allSeries
+        {
+            for uneSaison in uneSerie.saisons
+            {
+                for unEpisode in uneSaison.episodes
+                {
+                    // Source IMDB
+                    if (unEpisode.ratersIMdb > minRaters)
+                    {
+                        totalIMDB = totalIMDB + (unEpisode.ratingIMdb*unEpisode.ratersIMdb)
+                        nbIMDB = nbIMDB + unEpisode.ratersIMdb
+                        varianceIMDB = varianceIMDB + (unEpisode.ratingIMdb*unEpisode.ratingIMdb*unEpisode.ratersIMdb)
+                    }
+                    
+                    // Source TVdb
+                    if (unEpisode.ratersTVdb > minRaters)
+                    {
+                        totalTVdb = totalTVdb + (unEpisode.ratingTVdb*unEpisode.ratersTVdb)
+                        nbTVdb = nbTVdb + unEpisode.ratersTVdb
+                        varianceTVdb = varianceTVdb + (unEpisode.ratingTVdb*unEpisode.ratingTVdb*unEpisode.ratersTVdb)
+                    }
+                    
+                    // Source Trakt
+                    if (unEpisode.ratersTrakt > minRaters)
+                    {
+                        totalTrakt = totalTrakt + (unEpisode.ratingTrakt*unEpisode.ratersTrakt)
+                        nbTrakt = nbTrakt + unEpisode.ratersTrakt
+                        varianceTrakt = varianceTrakt + (unEpisode.ratingTrakt*unEpisode.ratingTrakt*unEpisode.ratersTrakt)
+                    }
+                    
+                    // Source MovieDB
+                    if (unEpisode.ratersMoviedb > minRaters)
+                    {
+                        totalMovieDB = totalMovieDB + (unEpisode.ratingMoviedb*unEpisode.ratersMoviedb)
+                        nbMovieDB = nbMovieDB + unEpisode.ratersMoviedb
+                        varianceMovieDB = varianceMovieDB + (unEpisode.ratingMoviedb*unEpisode.ratingMoviedb*unEpisode.ratersMoviedb)
+                    }
+                    
+                    // Source BetaSeries
+                    if (unEpisode.ratersBetaSeries > minRaters)
+                    {
+                        totalBetaSeries = totalBetaSeries + (unEpisode.ratingBetaSeries*unEpisode.ratersBetaSeries)
+                        nbBetaSeries = nbBetaSeries + unEpisode.ratersBetaSeries
+                        varianceBetaSeries = varianceBetaSeries + (unEpisode.ratingBetaSeries*unEpisode.ratingBetaSeries*unEpisode.ratersBetaSeries)
+                    }
+                }
+            }
+        }
+        
+        moyenneIMDB = Int(totalIMDB / nbIMDB)
+        ecartTypeIMDB = sqrt((Double(varianceIMDB)/Double(nbIMDB)) - Double(moyenneIMDB*moyenneIMDB))
+        moyenneTVdb = Int(totalTVdb / nbTVdb)
+        ecartTypeTVdb = sqrt((Double(varianceTVdb)/Double(nbTVdb)) - Double(moyenneTVdb*moyenneTVdb))
+        moyenneTrakt = Int(totalTrakt / nbTrakt)
+        ecartTypeTrakt = sqrt((Double(varianceTrakt)/Double(nbTrakt)) - Double(moyenneTrakt*moyenneTrakt))
+        moyenneMovieDB = Int(totalMovieDB / nbMovieDB)
+        ecartTypeMovieDB = sqrt((Double(varianceMovieDB)/Double(nbMovieDB)) - Double(moyenneMovieDB*moyenneMovieDB))
+        moyenneBetaSeries = Int(totalBetaSeries / nbBetaSeries)
+        ecartTypeBetaSeries = sqrt((Double(varianceBetaSeries)/Double(nbBetaSeries)) - Double(moyenneBetaSeries*moyenneBetaSeries))
+    }
 }

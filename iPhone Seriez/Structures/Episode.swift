@@ -16,7 +16,7 @@ class Episode : NSObject, NSCoding
     var episode : Int = 0
     
     var watched : Bool = false
-
+    
     // Source TheTVdb
     var ratingTVdb : Int = 0
     var ratersTVdb : Int = 0
@@ -25,11 +25,11 @@ class Episode : NSObject, NSCoding
     var date : Date = Date.init(timeIntervalSince1970: 0)
     var titre : String = String()
     var resume : String = String()
-
+    
     // Source Trakt
     var ratingTrakt : Int = 0
     var ratersTrakt : Int = 0
-
+    
     // Source BetaSeries
     var ratingBetaSeries : Int = 0
     var ratersBetaSeries : Int = 0
@@ -69,7 +69,7 @@ class Episode : NSObject, NSCoding
         self.ratersIMdb = decoder.decodeInteger(forKey: "ratersIMdb")
         self.ratingMoviedb = decoder.decodeInteger(forKey: "ratingMoviedb")
         self.ratersMoviedb = decoder.decodeInteger(forKey: "ratersMoviedb")
-   }
+    }
     
     func encode(with coder: NSCoder) {
         coder.encode(self.serie, forKey: "serie")
@@ -91,8 +91,8 @@ class Episode : NSObject, NSCoding
         coder.encodeCInt(Int32(self.ratersIMdb), forKey: "ratersIMdb")
         coder.encode(self.ratingMoviedb, forKey: "ratingMoviedb")
         coder.encodeCInt(Int32(self.ratersMoviedb), forKey: "ratersMoviedb")
-   }
-
+    }
+    
     init(fichier:String)
     {
         self.serie = "Error"
@@ -115,65 +115,45 @@ class Episode : NSObject, NSCoding
     
     func getFairRatingTrakt() -> Int
     {
-        if (date.compare(Date()) == .orderedAscending)
-        {
-            return Int(80.0 * Double(ratingTrakt) / Double(correctionTrakt))
-        }
-        else
-        {
-            return 0
-        }
+        if (ratersTrakt == 0) { return 0 }
+        if (date.compare(Date()) == .orderedDescending) { return 0 }
+        
+        return Int( 80.0 + (10.0 * Double(ratingTrakt - moyenneTrakt) / ecartTypeTrakt))
     }
     
     func getFairRatingTVdb() -> Int
     {
-        if (date.compare(Date()) == .orderedAscending)
-        {
-            return Int(80.0 * Double(ratingTVdb) / Double(correctionTVdb))
-        }
-        else
-        {
-            return 0
-        }
+        if (ratersTVdb == 0) { return 0 }
+        if (date.compare(Date()) == .orderedDescending) { return 0 }
+        
+        return Int( 80.0 + (10.0 * Double(ratingTVdb - moyenneTVdb) / ecartTypeTVdb))
     }
     
     func getFairRatingBetaSeries() -> Int
     {
-        if (date.compare(Date()) == .orderedAscending)
-        {
-            return Int(80.0 * Double(ratingBetaSeries) / Double(correctionBetaSeries))
-        }
-        else
-        {
-            return 0
-        }
+        if (ratersBetaSeries == 0) { return 0 }
+        if (date.compare(Date()) == .orderedDescending) { return 0 }
+        
+        return Int( 80.0 + (10.0 * Double(ratingBetaSeries - moyenneBetaSeries) / ecartTypeBetaSeries))
     }
     
     func getFairRatingMoviedb() -> Int
     {
-        if (date.compare(Date()) == .orderedAscending)
-        {
-            return Int(80.0 * Double(ratingMoviedb) / Double(correctionMoviedb))
-        }
-        else
-        {
-            return 0
-        }
+        if (ratersMoviedb == 0) { return 0 }
+        if (date.compare(Date()) == .orderedDescending) { return 0 }
+        
+        return Int( 80.0 + (10.0 * Double(ratingMoviedb - moyenneMovieDB) / ecartTypeMovieDB))
     }
     
     func getFairRatingIMdb() -> Int
     {
-        if (date.compare(Date()) == .orderedAscending)
-        {
-            return Int(80.0 * Double(ratingIMdb) / Double(correctionIMdb))
-        }
-        else
-        {
-            return 0
-        }
+        if (ratersIMdb == 0) { return 0 }
+        if (date.compare(Date()) == .orderedDescending) { return 0 }
+        
+        return Int( 80.0 + (10.0 * Double(ratingIMdb - moyenneIMDB) / ecartTypeIMDB))
     }
     
-
+    
     func merge(_ unEpisode : Episode)
     {
         if (unEpisode.serie != "")             { self.serie = unEpisode.serie }
@@ -196,11 +176,11 @@ class Episode : NSObject, NSCoding
         if (unEpisode.ratingMoviedb != 0)      { self.ratingMoviedb = unEpisode.ratingMoviedb }
         if (unEpisode.ratersMoviedb != 0)      { self.ratersMoviedb = unEpisode.ratersMoviedb }
     }
-
-
+    
+    
     func mergeStatuses(_ unEpisode : Episode)
     {
         if (unEpisode.watched != false)        { self.watched = unEpisode.watched }
     }
-
+    
 }

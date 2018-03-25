@@ -40,7 +40,7 @@ class ViewSerieListe: UITableViewController {
         dateFormatter.locale = Locale.current
         dateFormatter.dateFormat = "dd MMM yyyy"
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -61,7 +61,7 @@ class ViewSerieListe: UITableViewController {
         cell.titre.text = viewList[indexPath.row].serie
         cell.saison.text =  String(viewList[indexPath.row].saisons.count) + " Saison(s)"
         cell.globalRating.text = String(viewList[indexPath.row].getGlobalRating())
-
+        
         // Affichage des genres
         var allGenres : String = ""
         for unGenre in viewList[indexPath.row].genres
@@ -83,7 +83,7 @@ class ViewSerieListe: UITableViewController {
             cell.status.text = "EN COURS"
             cell.status.textColor = UIColor.blue
         }
-
+        
         
         // Affichage du mini graphe
         cell.miniGraphe.sendNotes(viewList[indexPath.row].getFairRatingTrakt(),
@@ -98,13 +98,22 @@ class ViewSerieListe: UITableViewController {
     
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let viewController = segue.destination as! SerieFiche
-        let tableCell : CellSerieListe = sender as! CellSerieListe
-        viewController.serie = viewList[tableCell.index]
-        viewController.image = accueil.getImage(viewList[tableCell.index].banner)
+        if (segue.identifier == "showSerie")
+        {
+            let viewController = segue.destination as! SerieFiche
+            let tableCell : CellSerieListe = sender as! CellSerieListe
+            viewController.serie = viewList[tableCell.index]
+            viewController.image = accueil.getImage(viewList[tableCell.index].banner)
+        }
+        else if (segue.identifier == "showChercher")
+        {
+            let viewController = segue.destination as! Chercher
+            viewController.accueil = accueil
+        }
     }
     
     @IBAction func addSerie(_ sender: Any) {

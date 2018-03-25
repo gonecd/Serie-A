@@ -83,6 +83,7 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         cell.noteTVdb.text = String(serie.saisons[saison - 1].episodes[indexPath.row].getFairRatingTVdb())
         cell.noteBetaSeries.text = String(serie.saisons[saison - 1].episodes[indexPath.row].getFairRatingBetaSeries())
         cell.noteMoviedb.text = String(serie.saisons[saison - 1].episodes[indexPath.row].getFairRatingMoviedb())
+        cell.noteIMdb.text = String(serie.saisons[saison - 1].episodes[indexPath.row].getFairRatingIMdb())
 
         return cell
     }
