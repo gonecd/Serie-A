@@ -171,5 +171,54 @@ class TheMoviedb : NSObject
 
     }
     
+    func getSerieGlobalInfos(idMovieDB : String) -> Serie
+    {
+        let uneSerie : Serie = Serie(serie: "")
+
+        var request : URLRequest = URLRequest(url: NSURL(string: "https://api.themoviedb.org/3/tv/\(idMovieDB)?api_key=e12674d4eadc7acafcbf7821bc32403b&language=en-US&external_ids")! as URL)
+        request.httpMethod = "GET"
+        
+        let task : URLSessionDataTask = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
+            if let data = data, let response = response as? HTTPURLResponse {
+                do {
+                    if response.statusCode == 200
+                    {
+                        let jsonResponse : NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
+                        
+                        uneSerie.serie = jsonResponse.object(forKey: "name") as? String ?? ""
+                        uneSerie.idIMdb = (jsonResponse.object(forKey: "external_ids")! as AnyObject).object(forKey: "imdb_id") as? String ?? ""
+                        uneSerie.idTVdb = String((jsonResponse.object(forKey: "external_ids")! as AnyObject).object(forKey: "tvdb_id") as? Int ?? 0)
+                        uneSerie.idMoviedb = String(jsonResponse.object(forKey: "id") as? Int ?? 0)
+                        uneSerie.network =  (jsonResponse.object(forKey: "networks")! as AnyObject).object(forKey: "name") as? String ?? ""
+                        uneSerie.poster = jsonResponse.object(forKey: "poster_path") as? String ?? ""
+                        uneSerie.status = jsonResponse.object(forKey: "status") as? String ?? ""
+                        uneSerie.resume = jsonResponse.object(forKey: "overview") as? String ?? ""
+                        uneSerie.ratingMovieDB = 10 * (jsonResponse.object(forKey: "vote_average") as? Int ?? 0)
+                        uneSerie.ratersMovieDB = jsonResponse.object(forKey: "vote_count") as? Int ?? 0
+                        uneSerie.country = ((jsonResponse.object(forKey: "origin_country") as! NSArray).object(at: 0) as! NSDictionary).object(forKey: "name") as? String ?? ""
+                        uneSerie.language = jsonResponse.object(forKey: "original_language") as? String ?? ""
+                        uneSerie.runtime = (jsonResponse.object(forKey: "episode_run_time") as! NSArray).object(at: 0) as? Int ?? 0
+                        uneSerie.homepage = jsonResponse.object(forKey: "homepage") as? String ?? ""
+                        uneSerie.nbSaisons = jsonResponse.object(forKey: "number_of_seasons") as? Int ?? 0
+                        uneSerie.nbEpisodes = jsonResponse.object(forKey: "number_of_episodes") as? Int ?? 0
+                        
+                        for unGenre in (jsonResponse.object(forKey: "genres") as? NSArray ?? [])
+                        {
+                            uneSerie.genres.append((unGenre as! NSDictionary).object(forKey: "name") as? String ?? "")
+                        }
+                    }
+                    else
+                    {
+                        print("TheMoviedb::getSerieGlobalInfos failed for \(idMovieDB)")
+                    }
+                } catch let error as NSError { print("TheMoviedb::getSerieGlobalInfos failed for \(idMovieDB) : \(error.localizedDescription)") }
+            } else { print(error as Any) }
+        })
+        task.resume()
+        while (task.state != URLSessionTask.State.completed) { usleep(1000) }
+        
+        return uneSerie
+    }
     
 }
+

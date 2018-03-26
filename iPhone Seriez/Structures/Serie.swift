@@ -32,6 +32,26 @@ class Serie : NSObject, NSCoding
     var genres : [String] = []
     var year : Int = 0
     
+    // General infos
+    var ratingIMDB : Int = 0
+    var ratersIMDB : Int = 0
+    var ratingTVDB : Int = 0
+    var ratersTVDB : Int = 0
+    var ratingTrakt : Int = 0
+    var ratersTrakt: Int = 0
+    var ratingBetaSeries : Int = 0
+    var ratersBetaSeries : Int = 0
+    var ratingMovieDB : Int = 0
+    var ratersMovieDB : Int = 0
+    var country : String = ""
+    var language : String = ""
+    var runtime : Int = 0
+    var homepage : String = ""
+    var nbSaisons : Int = 0
+    var nbEpisodes : Int = 0
+    var certification : String = ""
+    
+    
     init(serie:String)
     {
         self.serie = serie

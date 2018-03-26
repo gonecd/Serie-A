@@ -140,118 +140,8 @@ class TheTVdb : NSObject
         while (task.state != URLSessionTask.State.completed) { usleep(1000) }
         
         // Récupération d'un poster
-        url = URL(string: "https://api.thetvdb.com/series/\(uneSerie.idTVdb)/images/query?keyType=poster")!
-        request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.addValue("application/json", forHTTPHeaderField: "Accept")
-        request.addValue("en", forHTTPHeaderField: "Accept-Language")
-        request.addValue("Bearer \(self.Token)", forHTTPHeaderField: "Authorization")
-        
-        session = URLSession.shared
-        task = session.dataTask(with: request, completionHandler: { data, response, error in
-            if let data = data, let response = response as? HTTPURLResponse {
-                do {
-                    if response.statusCode == 200 {
-                        
-                        let jsonResponse : NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
-                        
-                        var bestVotedRating = 0.0
-                        var selectedVotedPoster = ""
-                        var bestRating = 0.0
-                        var selectedPoster = ""
-                        
-                        for fiche in jsonResponse.object(forKey: "data")! as! NSArray
-                        {
-                            //let fichier = (fiche as AnyObject).object(forKey: "fileName") as? String ?? ""
-                            let thumb = (fiche as AnyObject).object(forKey: "thumbnail") as? String ?? ""
-                            let rating = ((fiche as AnyObject).object(forKey: "ratingsInfo")  as AnyObject).object(forKey: "average") as? Double ?? 0.0
-                            let raters = ((fiche as AnyObject).object(forKey: "ratingsInfo")  as AnyObject).object(forKey: "count") as? Int ?? 0
-                            
-                            if (raters > 5) {
-                                if (rating > bestVotedRating) {
-                                    bestVotedRating = rating
-                                    selectedVotedPoster = thumb
-                                }
-                            }
-                            
-                            if (rating > bestRating) {
-                                bestRating = rating
-                                selectedPoster = thumb
-                            }
-                        }
-                        
-                        if (selectedVotedPoster == "") { uneSerie.poster = selectedPoster }
-                        else { uneSerie.poster = selectedVotedPoster }
-                    }
-                    else
-                    {
-                        print ("TheTVdb::getSerieInfos failed (poster de \(uneSerie.serie)): code erreur \(response.statusCode)")
-                    }
-                } catch let error as NSError { print("TheTVdb::getSerieInfos failed (poster de \(uneSerie.serie)): \(error.localizedDescription)") }
-            } else { print(error as Any) }
-        })
-        
-        task.resume()
-        while (task.state != URLSessionTask.State.completed) { usleep(10000) }
-        
-        if (uneSerie.poster == "")
-        {
-            // Récupération d'un poster
-            url = URL(string: "https://api.thetvdb.com/series/\(uneSerie.idTVdb)/images/query?keyType=poster")!
-            request = URLRequest(url: url)
-            request.httpMethod = "GET"
-            request.addValue("application/json", forHTTPHeaderField: "Accept")
-            request.addValue("fr", forHTTPHeaderField: "Accept-Language")
-            request.addValue("Bearer \(self.Token)", forHTTPHeaderField: "Authorization")
-            
-            session = URLSession.shared
-            task = session.dataTask(with: request, completionHandler: { data, response, error in
-                if let data = data, let response = response as? HTTPURLResponse {
-                    do {
-                        if response.statusCode == 200 {
-                            
-                            let jsonResponse : NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
-                            
-                            var bestVotedRating = 0.0
-                            var selectedVotedPoster = ""
-                            var bestRating = 0.0
-                            var selectedPoster = ""
-                            
-                            for fiche in jsonResponse.object(forKey: "data")! as! NSArray
-                            {
-                                //let fichier = (fiche as AnyObject).object(forKey: "fileName") as? String ?? ""
-                                let thumb = (fiche as AnyObject).object(forKey: "thumbnail") as? String ?? ""
-                                let rating = ((fiche as AnyObject).object(forKey: "ratingsInfo")  as AnyObject).object(forKey: "average") as? Double ?? 0.0
-                                let raters = ((fiche as AnyObject).object(forKey: "ratingsInfo")  as AnyObject).object(forKey: "count") as? Int ?? 0
-                                
-                                if (raters > 5) {
-                                    if (rating > bestVotedRating) {
-                                        bestVotedRating = rating
-                                        selectedVotedPoster = thumb
-                                    }
-                                }
-                                
-                                if (rating > bestRating) {
-                                    bestRating = rating
-                                    selectedPoster = thumb
-                                }
-                            }
-                            
-                            if (selectedVotedPoster == "") { uneSerie.poster = selectedPoster }
-                            else { uneSerie.poster = selectedVotedPoster }
-                        }
-                        else
-                        {
-                            print ("TheTVdb::getSerieInfos failed (poster de \(uneSerie.serie)): code erreur \(response.statusCode)")
-                        }
-                    } catch let error as NSError { print("TheTVdb::getSerieInfos failed (poster de \(uneSerie.serie)): \(error.localizedDescription)") }
-                } else { print(error as Any) }
-            })
-            
-            task.resume()
-            while (task.state != URLSessionTask.State.completed) { usleep(10000) }
-        }
-        
+        uneSerie.poster = getPoster(idTVdb: uneSerie.idTVdb, langue: "en")
+        if (uneSerie.poster == "") { uneSerie.poster = getPoster(idTVdb: uneSerie.idTVdb, langue: "fr") }
         
         while ( continuer )
         {
@@ -347,9 +237,114 @@ class TheTVdb : NSObject
             pageToLoad = pageToLoad + 1
         }
     }
+    
+    
+    func getSerieGlobalInfos(idTVdb : String) -> Serie
+    {
+        let uneSerie : Serie = Serie(serie: "")
+        
+        let url = URL(string: "https://api.thetvdb.com/series/\(idTVdb)")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue("en", forHTTPHeaderField: "Accept-Language")
+        request.addValue("Bearer \(self.Token)", forHTTPHeaderField: "Authorization")
+        
+        let task = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
+            if let data = data, let response = response as? HTTPURLResponse  {
+                do {
+                    if response.statusCode == 200 {
+                        
+                        let jsonResponse : NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
+                        
+                        uneSerie.banner = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "seriesName") as? String ?? ""
+                        uneSerie.status = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "status") as? String ?? ""
+                        uneSerie.network = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "network") as? String ?? ""
+                        uneSerie.resume = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "overview") as? String ?? ""
+                        uneSerie.genres = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "genre") as? [String] ?? []
+                        
+                        uneSerie.serie = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "banner") as? String ?? ""
+                        uneSerie.ratingTVDB = 10 * Int((jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "siteRating") as? Double ?? 0.0)
+                        uneSerie.ratersTVDB = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "siteRatingCount") as? Int ?? 0
+                        uneSerie.idTVdb = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "id") as? String ?? ""
+                        uneSerie.idIMdb = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "imdbid") as? String ?? ""
+                        uneSerie.runtime = Int((jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "runtime") as? String ?? "0")!
+                        uneSerie.certification = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "rating") as? String ?? ""
+                    }
+                    else
+                    {
+                        print ("TheTVdb::getSerieInfos failed (general infos de \(uneSerie.serie)): code erreur \(response.statusCode)")
+                    }
+                } catch let error as NSError { print("TheTVdb::getSerieInfos failed (general infos de \(uneSerie.serie)) : \(error.localizedDescription)") }
+            } else { print(error as Any) }
+        })
+        
+        task.resume()
+        while (task.state != URLSessionTask.State.completed) { usleep(1000) }
+        
+        return uneSerie
+    }
+    
+    
+    func getPoster(idTVdb : String, langue : String) -> String
+    {
+    // Note langue = "en", "fr", ...
+        var poster : String = ""
+        
+        let url = URL(string: "https://api.thetvdb.com/series/\(idTVdb)/images/query?keyType=poster")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(langue, forHTTPHeaderField: "Accept-Language")
+        request.addValue("Bearer \(self.Token)", forHTTPHeaderField: "Authorization")
+        
+        let session = URLSession.shared
+        let task = session.dataTask(with: request, completionHandler: { data, response, error in
+            if let data = data, let response = response as? HTTPURLResponse {
+                do {
+                    if response.statusCode == 200 {
+                        
+                        let jsonResponse : NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
+                        
+                        var bestVotedRating = 0.0
+                        var selectedVotedPoster = ""
+                        var bestRating = 0.0
+                        var selectedPoster = ""
+                        
+                        for fiche in jsonResponse.object(forKey: "data")! as! NSArray
+                        {
+                            //let fichier = (fiche as AnyObject).object(forKey: "fileName") as? String ?? ""
+                            let thumb = (fiche as AnyObject).object(forKey: "thumbnail") as? String ?? ""
+                            let rating = ((fiche as AnyObject).object(forKey: "ratingsInfo")  as AnyObject).object(forKey: "average") as? Double ?? 0.0
+                            let raters = ((fiche as AnyObject).object(forKey: "ratingsInfo")  as AnyObject).object(forKey: "count") as? Int ?? 0
+                            
+                            if (raters > 5) {
+                                if (rating > bestVotedRating) {
+                                    bestVotedRating = rating
+                                    selectedVotedPoster = thumb
+                                }
+                            }
+                            
+                            if (rating > bestRating) {
+                                bestRating = rating
+                                selectedPoster = thumb
+                            }
+                        }
+                        
+                        if (selectedVotedPoster == "") { poster = selectedPoster }
+                        else { poster = selectedVotedPoster }
+                    }
+                    else
+                    {
+                        print ("TheTVdb::getPoster failed (id: \(idTVdb), langue: \(langue)) : code erreur \(response.statusCode)")
+                    }
+                } catch let error as NSError { print("TheTVdb::getPoster failed (id: \(idTVdb), langue: \(langue)) : \(error.localizedDescription)") }
+            } else { print(error as Any) }
+        })
+        
+        task.resume()
+        while (task.state != URLSessionTask.State.completed) { usleep(10000) }
+        
+        return poster
+    }
 }
-
-
-
-
-

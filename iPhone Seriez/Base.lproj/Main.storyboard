@@ -1175,6 +1175,7 @@
         <image name="trakt.ico" width="64" height="64"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="gSu-uA-rEk"/>
         <segue reference="IVy-g4-Ysa"/>
         <segue reference="Gjc-Uw-9eJ"/>
         <segue reference="QYO-Gb-S4a"/>

@@ -400,7 +400,6 @@ class Trakt : NSObject
         var serie: Serie = Serie(serie: "")
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            //        let task = session.dataTask(with: request, completionHandler: { data, response, error in
             if let data = data {
                 do {
                     let jsonResponse : NSArray = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSArray
@@ -440,6 +439,54 @@ class Trakt : NSObject
         task.resume()
         while (task.state != URLSessionTask.State.completed) { sleep(1) }
         return returnSeries
+    }
+
+    
+    func getSerieGlobalInfos(idTraktOrIMDB : String) -> Serie
+    {
+        let uneSerie : Serie = Serie(serie: "")
+        
+        var request = URLRequest(url: URL(string: "https://api.trakt.tv/shows/\(idTraktOrIMDB)?extended=full")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("Bearer \(self.Token)", forHTTPHeaderField: "Authorization")
+        request.addValue("2", forHTTPHeaderField: "trakt-api-version")
+        request.addValue("\(self.TraktClientID)", forHTTPHeaderField: "trakt-api-key")
+        
+        let task = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
+            if let data = data, let response = response as? HTTPURLResponse {
+                do {
+                    
+                    if (response.statusCode != 200) { print("Trakt::getSerieGlobalInfos error \(response.statusCode) received "); return; }
+                    
+                    let jsonResponse : NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
+                    
+                    uneSerie.serie = jsonResponse.object(forKey: "title") as? String ?? ""
+                    uneSerie.idIMdb = (jsonResponse.object(forKey: "ids")! as AnyObject).object(forKey: "imdb") as? String ?? ""
+                    uneSerie.idTVdb = String((jsonResponse.object(forKey: "ids")! as AnyObject).object(forKey: "tvdb") as? Int ?? 0)
+                    uneSerie.idTrakt = String((jsonResponse.object(forKey: "ids")! as AnyObject).object(forKey: "trakt") as? Int ?? 0)
+                    uneSerie.idMoviedb = String((jsonResponse.object(forKey: "ids")! as AnyObject).object(forKey: "tmdb") as? Int ?? 0)
+                    uneSerie.network = jsonResponse.object(forKey: "network") as? String ?? ""
+                    uneSerie.status = jsonResponse.object(forKey: "status") as? String ?? ""
+                    uneSerie.resume = jsonResponse.object(forKey: "overview") as? String ?? ""
+                    uneSerie.genres = jsonResponse.object(forKey: "genres") as? [String] ?? []
+                    uneSerie.year = jsonResponse.object(forKey: "year") as? Int ?? 0
+                    uneSerie.ratingTrakt = 10 * (jsonResponse.object(forKey: "rating") as? Int ?? 0)
+                    uneSerie.ratersTrakt = jsonResponse.object(forKey: "votes") as? Int ?? 0
+                    uneSerie.country = jsonResponse.object(forKey: "country") as? String ?? ""
+                    uneSerie.language = jsonResponse.object(forKey: "language") as? String ?? ""
+                    uneSerie.runtime = jsonResponse.object(forKey: "runtime") as? Int ?? 0
+                    uneSerie.homepage = jsonResponse.object(forKey: "homepage") as? String ?? ""
+                    uneSerie.nbEpisodes = jsonResponse.object(forKey: "aired_episodes") as? Int ?? 0
+                    uneSerie.certification = jsonResponse.object(forKey: "certification") as? String ?? ""
+                    
+                } catch let error as NSError { print("Trakt::getSerieGlobalInfos failed: \(error.localizedDescription)") }
+            } else { print(error as Any) }
+        })
+        
+        task.resume()
+        while (task.state != URLSessionTask.State.completed) { sleep(1) }
+        
+        return uneSerie
     }
 
 }

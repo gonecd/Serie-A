@@ -29,8 +29,6 @@
 		62DD87751FB766C600A9B9EE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 62DD87731FB766C600A9B9EE /* Main.storyboard */; };
 		62DD87771FB766C600A9B9EE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 62DD87761FB766C600A9B9EE /* Assets.xcassets */; };
 		62DD877A1FB766C600A9B9EE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 62DD87781FB766C600A9B9EE /* LaunchScreen.storyboard */; };
-		62DD87851FB766C700A9B9EE /* iPhone_SeriezTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD87841FB766C700A9B9EE /* iPhone_SeriezTests.swift */; };
-		62DD87901FB766C700A9B9EE /* iPhone_SeriezUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD878F1FB766C700A9B9EE /* iPhone_SeriezUITests.swift */; };
 		62DD87A41FB76F5D00A9B9EE /* TheTVdb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD879F1FB76F5D00A9B9EE /* TheTVdb.swift */; };
 		62DD87A81FB76F5D00A9B9EE /* Trakt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD87A31FB76F5D00A9B9EE /* Trakt.swift */; };
 		62DD87AA1FB7838400A9B9EE /* SerieFiche.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD87A91FB7838400A9B9EE /* SerieFiche.swift */; };
@@ -54,23 +52,6 @@
 		62FF97D92039076D007B658E /* Air-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97D62039076D007B658E /* Air-icon.png */; };
 		62FF97DB2039AAFC007B658E /* Trash-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97DA2039AAFC007B658E /* Trash-icon.png */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		62DD87811FB766C700A9B9EE /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 62DD87641FB766C600A9B9EE /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 62DD876B1FB766C600A9B9EE;
-			remoteInfo = "iPhone Seriez";
-		};
-		62DD878C1FB766C700A9B9EE /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 62DD87641FB766C600A9B9EE /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 62DD876B1FB766C600A9B9EE;
-			remoteInfo = "iPhone Seriez";
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		6224A5E22041F30200450812 /* ViewSerieListe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewSerieListe.swift; sourceTree = "<group>"; };
@@ -97,12 +78,6 @@
 		62DD87761FB766C600A9B9EE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		62DD87791FB766C600A9B9EE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		62DD877B1FB766C600A9B9EE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		62DD87801FB766C700A9B9EE /* SerieATests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SerieATests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		62DD87841FB766C700A9B9EE /* iPhone_SeriezTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iPhone_SeriezTests.swift; sourceTree = "<group>"; };
-		62DD87861FB766C700A9B9EE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		62DD878B1FB766C700A9B9EE /* SerieAUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SerieAUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		62DD878F1FB766C700A9B9EE /* iPhone_SeriezUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iPhone_SeriezUITests.swift; sourceTree = "<group>"; };
-		62DD87911FB766C700A9B9EE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		62DD879F1FB76F5D00A9B9EE /* TheTVdb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TheTVdb.swift; sourceTree = "<group>"; };
 		62DD87A31FB76F5D00A9B9EE /* Trakt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Trakt.swift; sourceTree = "<group>"; };
 		62DD87A91FB7838400A9B9EE /* SerieFiche.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerieFiche.swift; sourceTree = "<group>"; };
@@ -129,20 +104,6 @@
 
 /* Begin PBXFrameworksBuildPhase section */
 		62DD87691FB766C600A9B9EE /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		62DD877D1FB766C700A9B9EE /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		62DD87881FB766C700A9B9EE /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -239,8 +200,6 @@
 			isa = PBXGroup;
 			children = (
 				62DD876E1FB766C600A9B9EE /* iPhone Seriez */,
-				62DD87831FB766C700A9B9EE /* iPhone SeriezTests */,
-				62DD878E1FB766C700A9B9EE /* iPhone SeriezUITests */,
 				62DD876D1FB766C600A9B9EE /* Products */,
 			);
 			sourceTree = "<group>";
@@ -249,8 +208,6 @@
 			isa = PBXGroup;
 			children = (
 				62DD876C1FB766C600A9B9EE /* SerieA.app */,
-				62DD87801FB766C700A9B9EE /* SerieATests.xctest */,
-				62DD878B1FB766C700A9B9EE /* SerieAUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -270,25 +227,6 @@
 				62DD877B1FB766C600A9B9EE /* Info.plist */,
 			);
 			path = "iPhone Seriez";
-			sourceTree = "<group>";
-		};
-		62DD87831FB766C700A9B9EE /* iPhone SeriezTests */ = {
-			isa = PBXGroup;
-			children = (
-				62DD87841FB766C700A9B9EE /* iPhone_SeriezTests.swift */,
-				62DD87861FB766C700A9B9EE /* Info.plist */,
-			);
-			name = "iPhone SeriezTests";
-			path = SerieATests;
-			sourceTree = "<group>";
-		};
-		62DD878E1FB766C700A9B9EE /* iPhone SeriezUITests */ = {
-			isa = PBXGroup;
-			children = (
-				62DD878F1FB766C700A9B9EE /* iPhone_SeriezUITests.swift */,
-				62DD87911FB766C700A9B9EE /* Info.plist */,
-			);
-			path = "iPhone SeriezUITests";
 			sourceTree = "<group>";
 		};
 		62FF97C12038FA0A007B658E /* Icones accueil */ = {
@@ -327,42 +265,6 @@
 			productReference = 62DD876C1FB766C600A9B9EE /* SerieA.app */;
 			productType = "com.apple.product-type.application";
 		};
-		62DD877F1FB766C700A9B9EE /* SerieATests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 62DD87971FB766C700A9B9EE /* Build configuration list for PBXNativeTarget "SerieATests" */;
-			buildPhases = (
-				62DD877C1FB766C700A9B9EE /* Sources */,
-				62DD877D1FB766C700A9B9EE /* Frameworks */,
-				62DD877E1FB766C700A9B9EE /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				62DD87821FB766C700A9B9EE /* PBXTargetDependency */,
-			);
-			name = SerieATests;
-			productName = "iPhone SeriezTests";
-			productReference = 62DD87801FB766C700A9B9EE /* SerieATests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		62DD878A1FB766C700A9B9EE /* SerieAUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 62DD879A1FB766C700A9B9EE /* Build configuration list for PBXNativeTarget "SerieAUITests" */;
-			buildPhases = (
-				62DD87871FB766C700A9B9EE /* Sources */,
-				62DD87881FB766C700A9B9EE /* Frameworks */,
-				62DD87891FB766C700A9B9EE /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				62DD878D1FB766C700A9B9EE /* PBXTargetDependency */,
-			);
-			name = SerieAUITests;
-			productName = "iPhone SeriezUITests";
-			productReference = 62DD878B1FB766C700A9B9EE /* SerieAUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -376,16 +278,6 @@
 					62DD876B1FB766C600A9B9EE = {
 						CreatedOnToolsVersion = 9.1;
 						ProvisioningStyle = Automatic;
-					};
-					62DD877F1FB766C700A9B9EE = {
-						CreatedOnToolsVersion = 9.1;
-						ProvisioningStyle = Automatic;
-						TestTargetID = 62DD876B1FB766C600A9B9EE;
-					};
-					62DD878A1FB766C700A9B9EE = {
-						CreatedOnToolsVersion = 9.1;
-						ProvisioningStyle = Automatic;
-						TestTargetID = 62DD876B1FB766C600A9B9EE;
 					};
 				};
 			};
@@ -403,8 +295,6 @@
 			projectRoot = "";
 			targets = (
 				62DD876B1FB766C600A9B9EE /* SerieA */,
-				62DD877F1FB766C700A9B9EE /* SerieATests */,
-				62DD878A1FB766C700A9B9EE /* SerieAUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -435,20 +325,6 @@
 				62FF97D72039076D007B658E /* Calendar-icon.png in Resources */,
 				62A581E71FBC5BCB002D8FD3 /* imdb.ico in Resources */,
 				62FF97D92039076D007B658E /* Air-icon.png in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		62DD877E1FB766C700A9B9EE /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		62DD87891FB766C700A9B9EE /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -485,36 +361,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		62DD877C1FB766C700A9B9EE /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				62DD87851FB766C700A9B9EE /* iPhone_SeriezTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		62DD87871FB766C700A9B9EE /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				62DD87901FB766C700A9B9EE /* iPhone_SeriezUITests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		62DD87821FB766C700A9B9EE /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 62DD876B1FB766C600A9B9EE /* SerieA */;
-			targetProxy = 62DD87811FB766C700A9B9EE /* PBXContainerItemProxy */;
-		};
-		62DD878D1FB766C700A9B9EE /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 62DD876B1FB766C600A9B9EE /* SerieA */;
-			targetProxy = 62DD878C1FB766C700A9B9EE /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		62DD87731FB766C600A9B9EE /* Main.storyboard */ = {
@@ -677,68 +524,6 @@
 			};
 			name = Release;
 		};
-		62DD87981FB766C700A9B9EE /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = "iPhone SeriezTests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "Home.iPhone-SeriezTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SerieA.app/SerieA";
-			};
-			name = Debug;
-		};
-		62DD87991FB766C700A9B9EE /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = "iPhone SeriezTests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "Home.iPhone-SeriezTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SerieA.app/SerieA";
-			};
-			name = Release;
-		};
-		62DD879B1FB766C700A9B9EE /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = "iPhone SeriezUITests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "Home.iPhone-SeriezUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = "iPhone Seriez";
-			};
-			name = Debug;
-		};
-		62DD879C1FB766C700A9B9EE /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = "iPhone SeriezUITests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "Home.iPhone-SeriezUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = "iPhone Seriez";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -756,24 +541,6 @@
 			buildConfigurations = (
 				62DD87951FB766C700A9B9EE /* Debug */,
 				62DD87961FB766C700A9B9EE /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		62DD87971FB766C700A9B9EE /* Build configuration list for PBXNativeTarget "SerieATests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				62DD87981FB766C700A9B9EE /* Debug */,
-				62DD87991FB766C700A9B9EE /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		62DD879A1FB766C700A9B9EE /* Build configuration list for PBXNativeTarget "SerieAUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				62DD879B1FB766C700A9B9EE /* Debug */,
-				62DD879C1FB766C700A9B9EE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
