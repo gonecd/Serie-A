@@ -168,7 +168,6 @@ class TheMoviedb : NSObject
         })
         task.resume()
         while (task.state != URLSessionTask.State.completed) { usleep(1000) }
-
     }
     
     func getSerieGlobalInfos(idMovieDB : String) -> Serie
