@@ -43,7 +43,7 @@ class Trakt : NSObject
         }
         else
         {
-            self.downloadToken(key: "78C58EAD")
+            self.downloadToken(key: "61B43659")
             return false
         }
     }
@@ -66,10 +66,10 @@ class Trakt : NSObject
                 do {
                     let jsonToken : NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
                     
-                    self.Token = jsonToken.object(forKey: "access_token") as! String!
+                    self.Token = jsonToken.object(forKey: "access_token") as? String ?? ""
                     defaults.set(self.Token, forKey: "TraktToken")
                     
-                    self.RefreshToken = jsonToken.object(forKey: "refresh_token") as! String!
+                    self.RefreshToken = jsonToken.object(forKey: "refresh_token") as? String ?? ""
                     defaults.set(self.RefreshToken, forKey: "TraktRefreshToken")
                     
                     let create: Double = jsonToken.object(forKey: "created_at") as! Double
@@ -106,10 +106,10 @@ class Trakt : NSObject
                 do {
                     let jsonToken : NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
                     
-                    self.Token = jsonToken.object(forKey: "access_token") as! String!
+                    self.Token = jsonToken.object(forKey: "access_token") as? String ?? ""
                     defaults.set(self.Token, forKey: "TraktToken")
                     
-                    self.RefreshToken = jsonToken.object(forKey: "refresh_token") as! String!
+                    self.RefreshToken = jsonToken.object(forKey: "refresh_token") as? String ?? ""
                     defaults.set(self.RefreshToken, forKey: "TraktRefreshToken")
                     
                     let create: Double = jsonToken.object(forKey: "created_at") as! Double
@@ -445,8 +445,11 @@ class Trakt : NSObject
     func getSerieGlobalInfos(idTraktOrIMDB : String) -> Serie
     {
         let uneSerie : Serie = Serie(serie: "")
+        var request : URLRequest
         
-        var request = URLRequest(url: URL(string: "https://api.trakt.tv/shows/\(idTraktOrIMDB)?extended=full")!)
+        if (idTraktOrIMDB != "")  { request = URLRequest(url: URL(string: "https://api.trakt.tv/shows/\(idTraktOrIMDB)?extended=full")!) }
+        else                      { return uneSerie }
+        
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("Bearer \(self.Token)", forHTTPHeaderField: "Authorization")
         request.addValue("2", forHTTPHeaderField: "trakt-api-version")
@@ -470,9 +473,9 @@ class Trakt : NSObject
                     uneSerie.resume = jsonResponse.object(forKey: "overview") as? String ?? ""
                     uneSerie.genres = jsonResponse.object(forKey: "genres") as? [String] ?? []
                     uneSerie.year = jsonResponse.object(forKey: "year") as? Int ?? 0
-                    uneSerie.ratingTrakt = 10 * (jsonResponse.object(forKey: "rating") as? Int ?? 0)
+                    uneSerie.ratingTrakt = Int(10 * (jsonResponse.object(forKey: "rating") as? Double ?? 0.0))
                     uneSerie.ratersTrakt = jsonResponse.object(forKey: "votes") as? Int ?? 0
-                    uneSerie.country = jsonResponse.object(forKey: "country") as? String ?? ""
+                    uneSerie.country = (jsonResponse.object(forKey: "country") as? String ?? "").uppercased()
                     uneSerie.language = jsonResponse.object(forKey: "language") as? String ?? ""
                     uneSerie.runtime = jsonResponse.object(forKey: "runtime") as? Int ?? 0
                     uneSerie.homepage = jsonResponse.object(forKey: "homepage") as? String ?? ""
@@ -484,7 +487,7 @@ class Trakt : NSObject
         })
         
         task.resume()
-        while (task.state != URLSessionTask.State.completed) { sleep(1) }
+        while (task.state != URLSessionTask.State.completed) { usleep(1000) }
         
         return uneSerie
     }

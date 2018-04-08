@@ -77,6 +77,25 @@ class Serie : NSObject, NSCoding
         self.genres = decoder.decodeObject(forKey: "genres") as? [String] ?? []
         
         self.year = decoder.decodeInteger(forKey: "year")
+        
+        self.ratingIMDB = decoder.decodeInteger(forKey: "ratingIMDB")
+        self.ratersIMDB = decoder.decodeInteger(forKey: "ratersIMDB")
+        self.ratingTVDB = decoder.decodeInteger(forKey: "ratingTVDB")
+        self.ratersTVDB = decoder.decodeInteger(forKey: "ratersTVDB")
+        self.ratingTrakt = decoder.decodeInteger(forKey: "ratingTrakt")
+        self.ratersTrakt = decoder.decodeInteger(forKey: "ratersTrakt")
+        self.ratingBetaSeries = decoder.decodeInteger(forKey: "ratingBetaSeries")
+        self.ratersBetaSeries = decoder.decodeInteger(forKey: "ratersBetaSeries")
+        self.ratingMovieDB = decoder.decodeInteger(forKey: "ratingMovieDB")
+        self.ratersMovieDB = decoder.decodeInteger(forKey: "ratersMovieDB")
+        
+        self.country = decoder.decodeObject(forKey: "country") as? String ?? ""
+        self.language = decoder.decodeObject(forKey: "language") as? String ?? ""
+        self.runtime = decoder.decodeInteger(forKey: "runtime")
+        self.homepage = decoder.decodeObject(forKey: "homepage") as? String ?? ""
+        self.nbSaisons = decoder.decodeInteger(forKey: "nbSaisons")
+        self.nbEpisodes = decoder.decodeInteger(forKey: "nbEpisodes")
+        self.certification = decoder.decodeObject(forKey: "certification") as? String ?? ""
     }
     
     func encode(with coder: NSCoder) {
@@ -98,6 +117,26 @@ class Serie : NSObject, NSCoding
         coder.encode(self.genres, forKey: "genres")
         
         coder.encodeCInt(Int32(self.year), forKey: "year")
+        
+        coder.encodeCInt(Int32(self.ratingIMDB), forKey: "ratingIMDB")
+        coder.encodeCInt(Int32(self.ratersIMDB), forKey: "ratersIMDB")
+        coder.encodeCInt(Int32(self.ratingTVDB), forKey: "ratingTVDB")
+        coder.encodeCInt(Int32(self.ratersTVDB), forKey: "ratersTVDB")
+        coder.encodeCInt(Int32(self.ratingTrakt), forKey: "ratingTrakt")
+        coder.encodeCInt(Int32(self.ratersTrakt), forKey: "ratersTrakt")
+        coder.encodeCInt(Int32(self.ratingBetaSeries), forKey: "ratingBetaSeries")
+        coder.encodeCInt(Int32(self.ratersBetaSeries), forKey: "ratersBetaSeries")
+        coder.encodeCInt(Int32(self.ratingMovieDB), forKey: "ratingMovieDB")
+        coder.encodeCInt(Int32(self.ratersMovieDB), forKey: "ratersMovieDB")
+
+        coder.encode(self.country, forKey: "country")
+        coder.encode(self.language, forKey: "language")
+        coder.encodeCInt(Int32(self.runtime), forKey: "runtime")
+        coder.encode(self.homepage, forKey: "homepage")
+        coder.encodeCInt(Int32(self.nbSaisons), forKey: "nbSaisons")
+        coder.encodeCInt(Int32(self.nbEpisodes), forKey: "nbEpisodes")
+        coder.encode(self.certification, forKey: "certification")
+
     }
     
     func merge(_ uneSerie : Serie)
@@ -117,6 +156,25 @@ class Serie : NSObject, NSCoding
         
         if (uneSerie.year != 0)             { self.year = uneSerie.year }
         
+        if (uneSerie.ratingIMDB != 0)       { self.ratingIMDB = uneSerie.ratingIMDB }
+        if (uneSerie.ratersIMDB != 0)       { self.ratersIMDB = uneSerie.ratersIMDB }
+        if (uneSerie.ratingTVDB != 0)       { self.ratingTVDB = uneSerie.ratingTVDB }
+        if (uneSerie.ratersTVDB != 0)       { self.ratersTVDB = uneSerie.ratersTVDB }
+        if (uneSerie.ratingTrakt != 0)      { self.ratingTrakt = uneSerie.ratingTrakt }
+        if (uneSerie.ratersTrakt != 0)      { self.ratersTrakt = uneSerie.ratersTrakt }
+        if (uneSerie.ratingBetaSeries != 0) { self.ratingBetaSeries = uneSerie.ratingBetaSeries }
+        if (uneSerie.ratersBetaSeries != 0) { self.ratersBetaSeries = uneSerie.ratersBetaSeries }
+        if (uneSerie.ratingMovieDB != 0)    { self.ratingMovieDB = uneSerie.ratingMovieDB }
+        if (uneSerie.ratersMovieDB != 0)    { self.ratersMovieDB = uneSerie.ratersMovieDB }
+
+        if (uneSerie.country != "")         { self.country = uneSerie.country }
+        if (uneSerie.language != "")        { self.language = uneSerie.language }
+        if (uneSerie.runtime != 0)          { self.runtime = uneSerie.runtime }
+        if (uneSerie.homepage != "")        { self.homepage = uneSerie.homepage }
+        if (uneSerie.nbSaisons != 0)        { self.nbSaisons = uneSerie.nbSaisons }
+        if (uneSerie.nbEpisodes != 0)       { self.nbEpisodes = uneSerie.nbEpisodes }
+        if (uneSerie.certification != "")   { self.certification = uneSerie.certification }
+
         for uneSaison in uneSerie.saisons
         {
             if (uneSaison.saison <= self.saisons.count)
@@ -274,6 +332,95 @@ class Serie : NSObject, NSCoding
         return 0
     }
     
+    func cleverMerge(TVdb : Serie, Moviedb : Serie, Trakt : Serie, BetaSeries : Serie, IMDB : Serie)
+    {
+        if (Trakt.serie != "") { self.serie = Trakt.serie }
+        else if (Moviedb.serie != "") { self.serie = Moviedb.serie }
+        else if (BetaSeries.serie != "") { self.serie = BetaSeries.serie }
+        else { self.serie = TVdb.serie }
+        
+        if (Trakt.idIMdb != "") { self.idIMdb = Trakt.idIMdb }
+        else if (Moviedb.idIMdb != "") { self.idIMdb = Moviedb.idIMdb }
+        else if (BetaSeries.idIMdb != "") { self.idIMdb = BetaSeries.idIMdb }
+        else { self.idIMdb = TVdb.idIMdb }
+        
+        if (Trakt.idTrakt != "") { self.idTrakt = Trakt.idTrakt }
+        
+        if (Trakt.idTVdb != "") { self.idTVdb = Trakt.idTVdb }
+        else if (TVdb.idTVdb != "") { self.idTVdb = TVdb.idTVdb }
+        else if (Moviedb.idTVdb != "") { self.idTVdb = Moviedb.idTVdb }
+        else { self.idTVdb = BetaSeries.idTVdb }
+        
+        if (Moviedb.idMoviedb != "") { self.idMoviedb = Moviedb.idMoviedb }
+        else { self.idMoviedb = Trakt.idMoviedb }
+        
+        self.ratingTrakt = Trakt.ratingTrakt
+        self.ratingTVDB = TVdb.ratingTVDB
+        self.ratingBetaSeries = BetaSeries.ratingBetaSeries
+        self.ratingMovieDB = Moviedb.ratingMovieDB
+        self.ratingIMDB = IMDB.ratingIMDB
 
+        self.ratersTrakt = Trakt.ratersTrakt
+        self.ratersTVDB = TVdb.ratersTVDB
+        self.ratersBetaSeries = BetaSeries.ratersBetaSeries
+        self.ratersMovieDB = Moviedb.ratersMovieDB
+        self.ratersIMDB = IMDB.ratersIMDB
+
+        if (Trakt.country != "") { self.country = Trakt.country }
+        else { self.country = Moviedb.country }
+        
+        if (TVdb.banner != "") { self.banner = TVdb.banner }
+        else { self.banner = BetaSeries.banner }
+        
+        if (Moviedb.poster != "") { self.poster = Moviedb.poster }
+        else { self.poster = BetaSeries.poster }
+        
+        if (Trakt.year != 0) { self.year = Trakt.year }
+        else { self.year = BetaSeries.year }
+        
+        if (Trakt.homepage != "") { self.homepage = Trakt.homepage }
+        else { self.homepage = Moviedb.homepage }
+        
+        if (Trakt.language != "") { self.language = Trakt.language }
+        else if (BetaSeries.language != "") { self.language = BetaSeries.language }
+        else { self.language = Moviedb.language }
+        
+        if (Moviedb.nbSaisons != 0) { self.nbSaisons = Moviedb.nbSaisons }
+        else { self.nbSaisons = BetaSeries.nbSaisons }
+        
+        if (Trakt.nbEpisodes != 0) { self.nbEpisodes = Trakt.nbEpisodes }
+        else if (Moviedb.nbEpisodes != 0) { self.nbEpisodes = Moviedb.nbEpisodes }
+        else { self.nbEpisodes = BetaSeries.nbEpisodes }
+        
+        if (Trakt.runtime != 0) { self.runtime = Trakt.runtime }
+        else if (TVdb.runtime != 0) { self.runtime = TVdb.runtime }
+        else if (BetaSeries.runtime != 0) { self.runtime = BetaSeries.runtime }
+        else { self.runtime = Moviedb.runtime }
+        
+        if (Trakt.network != "") { self.network = Trakt.network }
+        else if (Moviedb.network != "") { self.network = Moviedb.network }
+        else if (BetaSeries.network != "") { self.network = BetaSeries.network }
+        else { self.network = TVdb.network }
+        
+        if (Trakt.certification != "") { self.certification = Trakt.certification }
+        else if (BetaSeries.certification != "") { self.certification = BetaSeries.certification }
+        else { self.certification = TVdb.certification }
+        
+        if (Trakt.resume != "") { self.resume = Trakt.resume }
+        else if (Moviedb.resume != "") { self.resume = Moviedb.resume }
+        else if (BetaSeries.resume != "") { self.resume = BetaSeries.resume }
+        else { self.resume = TVdb.resume }
+        
+        if (TVdb.genres != []) { self.genres = TVdb.genres }
+        else if (BetaSeries.genres != []) { self.genres = BetaSeries.genres }
+        else { self.genres = Trakt.genres }
+
+        if (TVdb.status != "") { self.status = TVdb.status }
+        else if (BetaSeries.status != "") { self.status = BetaSeries.status }
+        else if (Trakt.status != "") { self.status = Trakt.status }
+        else { self.status = Moviedb.status }
+        
+    }
+    
 }
 

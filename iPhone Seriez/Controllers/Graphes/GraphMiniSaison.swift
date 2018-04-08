@@ -21,7 +21,7 @@ class GraphMiniSaison: UIView {
     var moyBetaSeries : Double = 0.0
     var moyMoviedb : Double = 0.0
     var moyIMdb : Double = 0.0
-
+    
     var origineX : CGFloat = 0.0
     var origineY :CGFloat = 0.0
     var hauteur : CGFloat = 0.0
@@ -53,12 +53,21 @@ class GraphMiniSaison: UIView {
         noteBetaSeries = rateBetaSeries
         noteMoviedb = rateMoviedb
         noteIMdb = rateIMdb
-
-        moyTrakt = seasonsAverageTrakt
-        moyTVdb = seasonsAverageTVdb
-        moyBetaSeries = seasonsAverageBetaSeries
-        moyMoviedb = seasonsAverageMoviedb
-        moyIMdb = seasonsAverageIMdb
+        
+        if (seasonsAverageTrakt.isNaN) { moyTrakt = 80.0 }
+        else { moyTrakt = seasonsAverageTrakt }
+        
+        if (seasonsAverageTVdb.isNaN) { moyTVdb = 80.0 }
+        else { moyTVdb = seasonsAverageTVdb }
+        
+        if (seasonsAverageBetaSeries.isNaN) { moyBetaSeries = 80.0 }
+        else { moyBetaSeries = seasonsAverageBetaSeries }
+        
+        if (seasonsAverageMoviedb.isNaN) { moyMoviedb = 80.0 }
+        else { moyMoviedb = seasonsAverageMoviedb }
+        
+        if (seasonsAverageIMdb.isNaN) { moyIMdb = 80.0 }
+        else { moyIMdb = seasonsAverageIMdb }
     }
     
     func background()
@@ -69,7 +78,7 @@ class GraphMiniSaison: UIView {
         // Couleur des lignes
         UIColor.white.setStroke()
         path.lineWidth = 0.5
-
+        
         // Lignes horizontales
         path.move(to: CGPoint(x: origineX, y: origineY - (hauteur / 2)))
         path.addLine(to: CGPoint(x: origineX + largeur, y: origineY - (hauteur / 2)))
@@ -79,7 +88,7 @@ class GraphMiniSaison: UIView {
         path.addLine(to: CGPoint(x: origineX + largeur, y: origineY - (hauteur / 2)))
         path.addLine(to: CGPoint(x: origineX + largeur - longueurFleche, y: origineY - (hauteur / 2) + longueurFleche))
         path.stroke()
-
+        
         // Lignes verticales
         path.move(to: CGPoint(x: origineX + (largeur / 2), y: origineY))
         path.addLine(to: CGPoint(x: origineX + (largeur / 2), y: origineY - hauteur))
@@ -94,15 +103,15 @@ class GraphMiniSaison: UIView {
     
     func traceGraphePoints()
     {
-        if (moyTVdb != 0.0) { traceUnPoint(noteTVdb, noteY: Int(Double(noteTVdb * 80) / moyTVdb), fillColor: fillColorTVdb, borderColor: borderColorTVdb) }
-        if (moyTrakt != 0.0) { traceUnPoint(noteTrakt, noteY: Int(Double(noteTrakt * 80) / moyTrakt), fillColor: fillColorTrakt, borderColor: borderColorTrakt) }
-        if (moyBetaSeries != 0.0) { traceUnPoint(noteBetaSeries, noteY: Int(Double(noteBetaSeries * 80) / moyBetaSeries), fillColor: fillColorBetaSeries, borderColor: borderColorBetaSeries) }
-        if (moyMoviedb != 0.0) { traceUnPoint(noteMoviedb, noteY: Int(Double(noteMoviedb * 80) / moyMoviedb), fillColor: fillColorMoviedb, borderColor: borderColorMoviedb) }
-        if (moyIMdb != 0.0) { traceUnPoint(noteIMdb, noteY: Int(Double(noteIMdb * 80) / moyIMdb), fillColor: fillColorIMDB, borderColor: borderColorIMDB) }
+        if (moyTVdb != 0.0)       { traceUnPoint(noteTVdb,       noteY: Int(Double(noteTVdb * 80) / moyTVdb),             color: colorTVdb) }
+        if (moyTrakt != 0.0)      { traceUnPoint(noteTrakt,      noteY: Int(Double(noteTrakt * 80) / moyTrakt),           color: colorTrakt) }
+        if (moyBetaSeries != 0.0) { traceUnPoint(noteBetaSeries, noteY: Int(Double(noteBetaSeries * 80) / moyBetaSeries), color: colorBetaSeries) }
+        if (moyMoviedb != 0.0)    { traceUnPoint(noteMoviedb,    noteY: Int(Double(noteMoviedb * 80) / moyMoviedb),       color: colorMoviedb) }
+        if (moyIMdb != 0.0)       { traceUnPoint(noteIMdb,       noteY: Int(Double(noteIMdb * 80) / moyIMdb),             color: colorIMDB) }
     }
     
     
-    func traceUnPoint(_ noteX: Int, noteY: Int, fillColor: UIColor, borderColor: UIColor)
+    func traceUnPoint(_ noteX: Int, noteY: Int, color: UIColor)
     {
         let diametre : CGFloat = 8.0
         var xvalue = noteX
@@ -116,9 +125,9 @@ class GraphMiniSaison: UIView {
         if ( noteX > 90 ) { xvalue = 90 }
         if ( noteY > 90 ) { yvalue = 90 }
         
-        borderColor.setStroke()
-        fillColor.withAlphaComponent(0.5).setFill()
-
+        color.setStroke()
+        color.withAlphaComponent(0.5).setFill()
+        
         let path : UIBezierPath = UIBezierPath()
         path.addArc(withCenter: CGPoint(x: origineX + (largeur * CGFloat(xvalue - 70))/20,
                                         y: origineY - (hauteur * CGFloat(yvalue - 70))/20),

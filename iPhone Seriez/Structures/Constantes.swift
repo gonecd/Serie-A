@@ -27,28 +27,11 @@ var moyenneBetaSeries : Int = 0
 var ecartTypeBetaSeries : Double = 0.0
 
 // Couleurs de remplissage des sources
-let fillColorTrakt          : UIColor = UIColor.red
-let fillColorTVdb           : UIColor = UIColor.black
-let fillColorBetaSeries     : UIColor = UIColor.blue
-let fillColorIMDB           : UIColor = UIColor.yellow
-let fillColorRottenTomatoes : UIColor = UIColor.red
-let fillColorMoviedb        : UIColor = UIColor.black
-
-// Couleurs de détourage des sources
-let borderColorTrakt          : UIColor = UIColor.white
-let borderColorTVdb           : UIColor = UIColor.white
-let borderColorBetaSeries     : UIColor = UIColor.white
-let borderColorIMDB           : UIColor = UIColor.black
-let borderColorRottenTomatoes : UIColor = UIColor.green
-let borderColorMoviedb        : UIColor = UIColor.green
-
-// Couleurs des sources
-let colorTrakt          : UIColor = UIColor.red
-let colorTVdb           : UIColor = UIColor.green
-let colorBetaSeries     : UIColor = UIColor.blue
-let colorIMDB           : UIColor = UIColor.yellow
-let colorRottenTomatoes : UIColor = UIColor.purple
-let colorMoviedb        : UIColor = UIColor.black
+let colorTrakt      : UIColor = UIColor.red
+let colorTVdb       : UIColor = UIColor.white
+let colorBetaSeries : UIColor = UIColor.blue
+let colorIMDB       : UIColor = UIColor.yellow
+let colorMoviedb    : UIColor = UIColor.green
 
 
 // Genres on MovieDB

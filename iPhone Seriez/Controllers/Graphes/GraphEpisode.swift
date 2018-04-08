@@ -29,8 +29,8 @@ class GraphEpisode: UIView {
         self.layer.masksToBounds = true
         
         // Drawing code here.
-        self.background()
         self.traceBarres()
+        self.background()
     }
     
     
@@ -71,53 +71,52 @@ class GraphEpisode: UIView {
         }
         
         // Positionnement des icones de sources
-        #imageLiteral(resourceName: "thetvdb.png").draw(in: CGRect(x: 10.0, y:  18.0, width: 15.0, height: 15.0))
-        #imageLiteral(resourceName: "trakt.ico").draw(in: CGRect(x: 10.0, y:  44.0, width: 15.0, height: 15.0))
-        #imageLiteral(resourceName: "betaseries.png").draw(in: CGRect(x: 10.0, y:  70.0, width: 15.0, height: 15.0))
-        #imageLiteral(resourceName: "imdb.ico").draw(in: CGRect(x: 10.0, y:  96.0, width: 15.0, height: 15.0))
-        #imageLiteral(resourceName: "rottentomatoes.ico").draw(in: CGRect(x: 10.0, y:  122.0, width: 15.0, height: 15.0))
-        #imageLiteral(resourceName: "themoviedb.ico").draw(in: CGRect(x: 10.0, y:  148.0, width: 15.0, height: 15.0))
+        #imageLiteral(resourceName: "thetvdb.png").draw(in: CGRect(x: 10.0, y:  16.0, width: 18.0, height: 18.0))
+        #imageLiteral(resourceName: "trakt.ico").draw(in: CGRect(x: 10.0, y:  46.0, width: 18.0, height: 18.0))
+        #imageLiteral(resourceName: "betaseries.png").draw(in: CGRect(x: 10.0, y:  76.0, width: 18.0, height: 18.0))
+        #imageLiteral(resourceName: "imdb.ico").draw(in: CGRect(x: 10.0, y:  106.0, width: 18.0, height: 18.0))
+        #imageLiteral(resourceName: "themoviedb.ico").draw(in: CGRect(x: 10.0, y:  136.0, width: 18.0, height: 18.0))
         
     }
     
     func traceBarres()
     {
-        traceUneBarre(theEpisode.getFairRatingTVdb(),       fillColor: fillColorTVdb,              borderColor: borderColorTVdb,            offset: 6)
-        traceUneBarre(theEpisode.getFairRatingTrakt(),      fillColor: fillColorTrakt,             borderColor: borderColorTrakt,           offset: 5)
-        traceUneBarre(theEpisode.getFairRatingBetaSeries(), fillColor: fillColorBetaSeries,        borderColor: borderColorBetaSeries,      offset: 4)
-        traceUneBarre(theEpisode.getFairRatingIMdb(),       fillColor: fillColorIMDB,              borderColor: borderColorIMDB,            offset: 3)
-        traceUneBarre(61,                                   fillColor: fillColorRottenTomatoes,    borderColor: borderColorRottenTomatoes,  offset: 2)
-        traceUneBarre(theEpisode.getFairRatingMoviedb(),    fillColor: fillColorMoviedb,           borderColor: borderColorMoviedb,         offset: 1)
+        traceUneBarre(theEpisode.getFairRatingTVdb(),       color: colorTVdb,       offset: 5)
+        traceUneBarre(theEpisode.getFairRatingTrakt(),      color: colorTrakt,      offset: 4)
+        traceUneBarre(theEpisode.getFairRatingBetaSeries(), color: colorBetaSeries, offset: 3)
+        traceUneBarre(theEpisode.getFairRatingIMdb(),       color: colorIMDB,       offset: 2)
+        traceUneBarre(theEpisode.getFairRatingMoviedb(),    color: colorMoviedb,    offset: 1)
     }
     
-    func traceUneBarre(_ noteX: Int, fillColor: UIColor, borderColor: UIColor, offset: Int)
+    func traceUneBarre(_ noteX: Int, color: UIColor, offset: Int)
     {
         var value = noteX
-        let col : CGFloat = hauteur / 24
+        let nbSource : CGFloat = 5.0
+        let col : CGFloat = hauteur / (4 * nbSource)
 
         if ( noteX == 0 ) { return }
         if ( noteX < 60 ) { value = 60 }
         if ( noteX > 100 ) { value = 100 }
         
-        borderColor.setStroke()
-        fillColor.withAlphaComponent(0.5).setFill()
+        color.setStroke()
+        color.withAlphaComponent(0.5).setFill()
         
         let path : UIBezierPath = UIBezierPath()
         
         path.move(to: CGPoint(x: origineX,
-                              y: origineY - (CGFloat(offset - 1) * hauteur / 6) - col))
+                              y: origineY - (CGFloat(offset - 1) * hauteur / nbSource) - col))
         
         path.addLine(to: CGPoint(x: origineX + ( largeur * CGFloat(value - 60) / 40),
-                                 y: origineY - (CGFloat(offset - 1) * hauteur / 6) - col))
+                                 y: origineY - (CGFloat(offset - 1) * hauteur / nbSource) - col))
         
         path.addLine(to: CGPoint(x: origineX + ( largeur * CGFloat(value - 60) / 40),
-                                 y: origineY - (CGFloat(offset - 1) * hauteur / 6) - col - (hauteur / 12)))
+                                 y: origineY - (CGFloat(offset - 1) * hauteur / nbSource) - (3 * col)))
         
         path.addLine(to: CGPoint(x: origineX,
-                                 y: origineY - (CGFloat(offset - 1) * hauteur / 6) - col - (hauteur / 12)))
+                                 y: origineY - (CGFloat(offset - 1) * hauteur / nbSource) - (3 * col)))
         
         path.addLine(to: CGPoint(x: origineX,
-                                 y: origineY - (CGFloat(offset - 1) * hauteur / 6) - col))
+                                 y: origineY - (CGFloat(offset - 1) * hauteur / nbSource) - col))
         
         path.stroke()
         path.fill()

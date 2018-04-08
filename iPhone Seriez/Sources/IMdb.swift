@@ -62,5 +62,25 @@ class IMdb : NSObject
             }
         }
     }
+    
+    func getSerieGlobalInfos(idIMDB : String) -> Serie
+    {
+        let uneSerie : Serie = Serie(serie: "")
+        
+        if (IMDBrates[idIMDB] != nil)
+        {
+            let columns = (IMDBrates[idIMDB] as! String).components(separatedBy: "\t")
+            
+            uneSerie.ratersIMDB = Int(columns[2])!
+            uneSerie.ratingIMDB = Int(10 * Double(columns[1])!)
+        }
+        else
+        {
+            print("getSerieGlobalInfos::Not found for idIMDB = \(idIMDB)")
+        }
+        
+        return uneSerie
+    }
+
 }
 

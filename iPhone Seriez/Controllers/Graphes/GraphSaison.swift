@@ -113,7 +113,7 @@ class GraphSaison: UIView {
 
     func traceUnPoint(_ uneNote: Int, uneCouleur: UIColor, offsetEpisode: CGFloat, offsetSource: CGFloat)
     {
-        let diametre : CGFloat = 4.0
+        let diametre : CGFloat = 5.0
         let origineX : CGFloat = 30.0
         let origineY :CGFloat = self.frame.height - 30.0
         let hauteur : CGFloat = (self.frame.height - 30.0 - 10.0)
@@ -136,37 +136,3 @@ class GraphSaison: UIView {
         path.fill()
     }
 }
-
-
-
-//    var myPath : UIBezierPath = UIBezierPath()
-//    var drawingLayer : CAShapeLayer = CAShapeLayer()
-//
-//    override func draw(_ dirtyRect: CGRect) {
-//        super.draw(dirtyRect)
-//
-//        let gradient : CAGradientLayer = CAGradientLayer()
-//        gradient.colors = [UIColor.darkGray.cgColor, UIColor.lightGray.cgColor]
-//        gradient.startPoint = CGPoint(x: 0, y: 0)
-//        gradient.endPoint = CGPoint(x: 1, y: 1)
-//        gradient.frame = self.bounds
-//
-//        self.layer.cornerRadius = 10;
-//        self.layer.masksToBounds = true
-//
-//        self.layer.insertSublayer(gradient, at: 0)
-//
-//        drawingLayer.frame = self.bounds
-//        drawingLayer.fillColor = UIColor.clear.cgColor
-//
-//        // Drawing code here.
-//        self.background()
-//        self.traceGraphePoints()
-//
-//        drawingLayer.path = myPath.cgPath
-//        self.layer.insertSublayer(drawingLayer, above: gradient)
-//    }
-
-
-
-

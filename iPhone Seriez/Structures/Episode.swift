@@ -117,7 +117,8 @@ class Episode : NSObject, NSCoding
     {
         if (ratersTrakt == 0) { return 0 }
         if (date.compare(Date()) == .orderedDescending) { return 0 }
-        
+        if (ecartTypeTrakt == 0) { return 0 }
+
         return Int( 80.0 + (10.0 * Double(ratingTrakt - moyenneTrakt) / ecartTypeTrakt))
     }
     
@@ -125,7 +126,8 @@ class Episode : NSObject, NSCoding
     {
         if (ratersTVdb == 0) { return 0 }
         if (date.compare(Date()) == .orderedDescending) { return 0 }
-        
+        if (ecartTypeTVdb == 0) { return 0 }
+
         return Int( 80.0 + (10.0 * Double(ratingTVdb - moyenneTVdb) / ecartTypeTVdb))
     }
     
@@ -133,7 +135,8 @@ class Episode : NSObject, NSCoding
     {
         if (ratersBetaSeries == 0) { return 0 }
         if (date.compare(Date()) == .orderedDescending) { return 0 }
-        
+        if (ecartTypeBetaSeries == 0) { return 0 }
+
         return Int( 80.0 + (10.0 * Double(ratingBetaSeries - moyenneBetaSeries) / ecartTypeBetaSeries))
     }
     
@@ -141,7 +144,8 @@ class Episode : NSObject, NSCoding
     {
         if (ratersMoviedb == 0) { return 0 }
         if (date.compare(Date()) == .orderedDescending) { return 0 }
-        
+        if (ecartTypeMovieDB == 0) { return 0 }
+
         return Int( 80.0 + (10.0 * Double(ratingMoviedb - moyenneMovieDB) / ecartTypeMovieDB))
     }
     
@@ -149,7 +153,8 @@ class Episode : NSObject, NSCoding
     {
         if (ratersIMdb == 0) { return 0 }
         if (date.compare(Date()) == .orderedDescending) { return 0 }
-        
+        if (ecartTypeIMDB == 0) { return 0 }
+
         return Int( 80.0 + (10.0 * Double(ratingIMdb - moyenneIMDB) / ecartTypeIMDB))
     }
     

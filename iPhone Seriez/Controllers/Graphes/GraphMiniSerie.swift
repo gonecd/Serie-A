@@ -34,8 +34,8 @@ class GraphMiniSerie: UIView {
         self.layer.masksToBounds = true
         
         // Drawing code here.
-        self.background()
         self.traceGrapheBarre()
+        self.background()
     }
     
     
@@ -76,43 +76,34 @@ class GraphMiniSerie: UIView {
     
     func traceGrapheBarre()
     {
-        traceUneBarre(noteTVdb,             fillColor: fillColorTVdb,              borderColor: borderColorTVdb,              offset: 1)
-        traceUneBarre(noteTrakt,            fillColor: fillColorTrakt,             borderColor: borderColorTrakt,             offset: 2)
-        traceUneBarre(noteBetaSeries,       fillColor: fillColorBetaSeries,        borderColor: borderColorBetaSeries,        offset: 3)
-        traceUneBarre(noteIMDB,             fillColor: fillColorIMDB,              borderColor: borderColorIMDB,              offset: 4)
-        traceUneBarre(noteRottenTomatoes,   fillColor: fillColorRottenTomatoes,    borderColor: borderColorRottenTomatoes,    offset: 5)
-        traceUneBarre(noteMoviedb,          fillColor: fillColorMoviedb,           borderColor: borderColorMoviedb,           offset: 6)
+        traceUneBarre(noteTVdb,       color: colorTVdb,       offset: 1)
+        traceUneBarre(noteTrakt,      color: colorTrakt,      offset: 2)
+        traceUneBarre(noteBetaSeries, color: colorBetaSeries, offset: 3)
+        traceUneBarre(noteIMDB,       color: colorIMDB,       offset: 4)
+        traceUneBarre(noteMoviedb,    color: colorMoviedb,    offset: 5)
     }
     
     
-    func traceUneBarre(_ noteX: Int, fillColor: UIColor, borderColor: UIColor, offset: Int)
+    func traceUneBarre(_ noteX: Int, color: UIColor, offset: Int)
     {
         var value = noteX
-        let col : CGFloat = largeur / 24
+        let nbSource : CGFloat = 5.0
+        let col : CGFloat = largeur / (4 * nbSource)
         
         if ( noteX == 0 ) { return }
         if ( noteX < 70 ) { value = 70 }
         if ( noteX > 90 ) { value = 90 }
         
-        borderColor.setStroke()
-        fillColor.withAlphaComponent(0.5).setFill()
+        color.setStroke()
+        color.withAlphaComponent(0.5).setFill()
         
         let path : UIBezierPath = UIBezierPath()
         
-        path.move(to: CGPoint(x: origineX + (CGFloat(offset - 1) * largeur / 6) + col,
-                              y: origineY))
-        
-        path.addLine(to: CGPoint(x: origineX + (CGFloat(offset - 1) * largeur / 6) + col,
-                                 y: origineY - ( hauteur * CGFloat(value - 70) / 20) ))
-        
-        path.addLine(to: CGPoint(x: origineX + (CGFloat(offset - 1) * largeur / 6) + col + (largeur / 12),
-                                 y: origineY - ( hauteur * CGFloat(value - 70) / 20) ))
-
-        path.addLine(to: CGPoint(x: origineX + (CGFloat(offset - 1) * largeur / 6) + col + (largeur / 12),
-                                 y: origineY))
-
-        path.addLine(to: CGPoint(x: origineX + (CGFloat(offset - 1) * largeur / 6) + col,
-                                 y: origineY))
+        path.move(to: CGPoint(x: origineX + (CGFloat(offset - 1) * largeur / nbSource) + col,          y: origineY))
+        path.addLine(to: CGPoint(x: origineX + (CGFloat(offset - 1) * largeur / nbSource) + col,       y: origineY - ( hauteur * CGFloat(value - 70) / 20) ))
+        path.addLine(to: CGPoint(x: origineX + (CGFloat(offset - 1) * largeur / nbSource) + (col * 3), y: origineY - ( hauteur * CGFloat(value - 70) / 20) ))
+        path.addLine(to: CGPoint(x: origineX + (CGFloat(offset - 1) * largeur / nbSource) + (col * 3), y: origineY))
+        path.addLine(to: CGPoint(x: origineX + (CGFloat(offset - 1) * largeur / nbSource) + col,       y: origineY))
         
         path.stroke()
         path.fill()

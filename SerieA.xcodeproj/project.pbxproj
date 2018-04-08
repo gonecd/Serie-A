@@ -15,13 +15,14 @@
 		624D27491FFBD4E100B49702 /* ViewAccueil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624D27481FFBD4E100B49702 /* ViewAccueil.swift */; };
 		626D4727204C624500B1A64D /* Notes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626D4726204C624500B1A64D /* Notes.swift */; };
 		626D4729204C6DE900B1A64D /* IMdb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626D4728204C6DE900B1A64D /* IMdb.swift */; };
-		626D472C204C6EDD00B1A64D /* data.tsv in Resources */ = {isa = PBXBuildFile; fileRef = 626D472B204C6EDD00B1A64D /* data.tsv */; };
 		627A0E2820139E8300FE1777 /* GraphSaison.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627A0E2720139E8300FE1777 /* GraphSaison.swift */; };
 		627A0E2A20139E9900FE1777 /* GraphEpisode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627A0E2920139E9900FE1777 /* GraphEpisode.swift */; };
 		62A2758D2056A136002749ED /* Chercher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62A2758C2056A136002749ED /* Chercher.swift */; };
 		62A581E71FBC5BCB002D8FD3 /* imdb.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62A581E51FBC5BCB002D8FD3 /* imdb.ico */; };
 		62A581E81FBC5BCB002D8FD3 /* rottentomatoes.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62A581E61FBC5BCB002D8FD3 /* rottentomatoes.ico */; };
 		62AC50A0200E58A200A8C841 /* SaisonFiche.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62AC509F200E58A200A8C841 /* SaisonFiche.swift */; };
+		62B087AE207A7938007703FF /* Magnifi-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087AC207A7937007703FF /* Magnifi-icon.png */; };
+		62B087AF207A7938007703FF /* Idea-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087AD207A7937007703FF /* Idea-icon.png */; };
 		62CD57C32038B87D00DE28A1 /* GraphMiniSaison.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62CD57C22038B87D00DE28A1 /* GraphMiniSaison.swift */; };
 		62D0EBBB204C30BE009774B6 /* ViewSaisonListe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D0EBBA204C30BE009774B6 /* ViewSaisonListe.swift */; };
 		62D0EBBD204C374B009774B6 /* TheMoviedb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D0EBBC204C374B009774B6 /* TheMoviedb.swift */; };
@@ -41,6 +42,7 @@
 		62DD87B81FB8BE4F00A9B9EE /* betaseries.png in Resources */ = {isa = PBXBuildFile; fileRef = 62DD87B51FB8BE4F00A9B9EE /* betaseries.png */; };
 		62DD87BA1FB8C15600A9B9EE /* BetaSeries.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD87B91FB8C15500A9B9EE /* BetaSeries.swift */; };
 		62F8ECF42013775800A41EF7 /* EpisodeFiche.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F8ECF32013775800A41EF7 /* EpisodeFiche.swift */; };
+		62FB3F8C2073C360009D1C74 /* data.tsv in Resources */ = {isa = PBXBuildFile; fileRef = 62FB3F8B2073C360009D1C74 /* data.tsv */; };
 		62FF97C02038C9A3007B658E /* themoviedb.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97BF2038C9A3007B658E /* themoviedb.ico */; };
 		62FF97CE2039016B007B658E /* Stop-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97CA2039016A007B658E /* Stop-icon.png */; };
 		62FF97CF2039016B007B658E /* Play-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97CB2039016B007B658E /* Play-icon.png */; };
@@ -62,13 +64,14 @@
 		624D27481FFBD4E100B49702 /* ViewAccueil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewAccueil.swift; sourceTree = "<group>"; };
 		626D4726204C624500B1A64D /* Notes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notes.swift; sourceTree = "<group>"; };
 		626D4728204C6DE900B1A64D /* IMdb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMdb.swift; sourceTree = "<group>"; };
-		626D472B204C6EDD00B1A64D /* data.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = data.tsv; sourceTree = "<group>"; };
 		627A0E2720139E8300FE1777 /* GraphSaison.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphSaison.swift; sourceTree = "<group>"; };
 		627A0E2920139E9900FE1777 /* GraphEpisode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphEpisode.swift; sourceTree = "<group>"; };
 		62A2758C2056A136002749ED /* Chercher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chercher.swift; sourceTree = "<group>"; };
 		62A581E51FBC5BCB002D8FD3 /* imdb.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = imdb.ico; sourceTree = "<group>"; };
 		62A581E61FBC5BCB002D8FD3 /* rottentomatoes.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = rottentomatoes.ico; sourceTree = "<group>"; };
 		62AC509F200E58A200A8C841 /* SaisonFiche.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaisonFiche.swift; sourceTree = "<group>"; };
+		62B087AC207A7937007703FF /* Magnifi-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Magnifi-icon.png"; sourceTree = "<group>"; };
+		62B087AD207A7937007703FF /* Idea-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Idea-icon.png"; sourceTree = "<group>"; };
 		62CD57C22038B87D00DE28A1 /* GraphMiniSaison.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphMiniSaison.swift; sourceTree = "<group>"; };
 		62D0EBBA204C30BE009774B6 /* ViewSaisonListe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewSaisonListe.swift; sourceTree = "<group>"; };
 		62D0EBBC204C374B009774B6 /* TheMoviedb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TheMoviedb.swift; sourceTree = "<group>"; };
@@ -90,6 +93,7 @@
 		62DD87B51FB8BE4F00A9B9EE /* betaseries.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = betaseries.png; sourceTree = "<group>"; };
 		62DD87B91FB8C15500A9B9EE /* BetaSeries.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BetaSeries.swift; sourceTree = "<group>"; };
 		62F8ECF32013775800A41EF7 /* EpisodeFiche.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeFiche.swift; sourceTree = "<group>"; };
+		62FB3F8B2073C360009D1C74 /* data.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = data.tsv; sourceTree = "<group>"; };
 		62FF97BF2038C9A3007B658E /* themoviedb.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = themoviedb.ico; sourceTree = "<group>"; };
 		62FF97CA2039016A007B658E /* Stop-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Stop-icon.png"; sourceTree = "<group>"; };
 		62FF97CB2039016B007B658E /* Play-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Play-icon.png"; sourceTree = "<group>"; };
@@ -190,8 +194,8 @@
 		626D472A204C6EB700B1A64D /* Data */ = {
 			isa = PBXGroup;
 			children = (
-				626D472B204C6EDD00B1A64D /* data.tsv */,
 				626D4726204C624500B1A64D /* Notes.swift */,
+				62FB3F8B2073C360009D1C74 /* data.tsv */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -238,6 +242,8 @@
 				62FF97D52039076C007B658E /* TV-icon.png */,
 				62FF97D220390305007B658E /* List-icon.png */,
 				62FF97CD2039016B007B658E /* Bio-Hazard-icon.png */,
+				62B087AD207A7937007703FF /* Idea-icon.png */,
+				62B087AC207A7937007703FF /* Magnifi-icon.png */,
 				62FF97CC2039016B007B658E /* Eye-icon.png */,
 				62FF97CB2039016B007B658E /* Play-icon.png */,
 				62FF97CA2039016A007B658E /* Stop-icon.png */,
@@ -272,7 +278,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0910;
-				LastUpgradeCheck = 0910;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = Home;
 				TargetAttributes = {
 					62DD876B1FB766C600A9B9EE = {
@@ -312,14 +318,16 @@
 				62A581E81FBC5BCB002D8FD3 /* rottentomatoes.ico in Resources */,
 				62DD87751FB766C600A9B9EE /* Main.storyboard in Resources */,
 				62FF97D12039016B007B658E /* Bio-Hazard-icon.png in Resources */,
+				62B087AE207A7938007703FF /* Magnifi-icon.png in Resources */,
 				62FF97D320390305007B658E /* List-icon.png in Resources */,
+				62FB3F8C2073C360009D1C74 /* data.tsv in Resources */,
 				62DD87B71FB8BE4F00A9B9EE /* trakt.ico in Resources */,
 				62FF97DB2039AAFC007B658E /* Trash-icon.png in Resources */,
 				623D28921FED45D0005488D5 /* A.jpg in Resources */,
 				62DD87B61FB8BE4F00A9B9EE /* thetvdb.png in Resources */,
 				62FF97D82039076D007B658E /* TV-icon.png in Resources */,
-				626D472C204C6EDD00B1A64D /* data.tsv in Resources */,
 				62FF97D02039016B007B658E /* Eye-icon.png in Resources */,
+				62B087AF207A7938007703FF /* Idea-icon.png in Resources */,
 				62FF97C02038C9A3007B658E /* themoviedb.ico in Resources */,
 				62FF97CF2039016B007B658E /* Play-icon.png in Resources */,
 				62FF97D72039076D007B658E /* Calendar-icon.png in Resources */,
@@ -397,6 +405,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -404,6 +413,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -431,7 +441,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -454,6 +464,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -461,6 +472,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -482,7 +494,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";

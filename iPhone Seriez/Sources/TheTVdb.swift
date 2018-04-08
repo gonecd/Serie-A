@@ -39,7 +39,7 @@ class TheTVdb : NSObject
                     
                     do {
                         let jsonToken : NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
-                        self.Token = jsonToken.object(forKey: "token") as! String!
+                        self.Token = jsonToken.object(forKey: "token") as? String ?? ""
                         print("Token = \(self.Token)")
                     } catch let error as NSError { print("TheTVdb::getToken failed: \(error.localizedDescription)") }
                 }
@@ -242,9 +242,11 @@ class TheTVdb : NSObject
     func getSerieGlobalInfos(idTVdb : String) -> Serie
     {
         let uneSerie : Serie = Serie(serie: "")
+        var request : URLRequest
         
-        let url = URL(string: "https://api.thetvdb.com/series/\(idTVdb)")!
-        var request = URLRequest(url: url)
+        if (idTVdb != "")  { request = URLRequest(url: URL(string: "https://api.thetvdb.com/series/\(idTVdb)")!) }
+        else               { return uneSerie }
+        
         request.httpMethod = "GET"
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("en", forHTTPHeaderField: "Accept-Language")
@@ -257,17 +259,19 @@ class TheTVdb : NSObject
                         
                         let jsonResponse : NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
                         
-                        uneSerie.banner = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "seriesName") as? String ?? ""
+                        uneSerie.serie = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "seriesName") as? String ?? ""
                         uneSerie.status = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "status") as? String ?? ""
                         uneSerie.network = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "network") as? String ?? ""
                         uneSerie.resume = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "overview") as? String ?? ""
                         uneSerie.genres = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "genre") as? [String] ?? []
                         
-                        uneSerie.serie = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "banner") as? String ?? ""
+                        uneSerie.banner = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "banner") as? String ?? ""
+                        if (uneSerie.banner != "") { uneSerie.banner = "https://www.thetvdb.com/banners/" + uneSerie.banner }
+                        
                         uneSerie.ratingTVDB = 10 * Int((jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "siteRating") as? Double ?? 0.0)
                         uneSerie.ratersTVDB = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "siteRatingCount") as? Int ?? 0
-                        uneSerie.idTVdb = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "id") as? String ?? ""
-                        uneSerie.idIMdb = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "imdbid") as? String ?? ""
+                        uneSerie.idTVdb = String((jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "id") as? Int ?? 0)
+                        uneSerie.idIMdb = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "imdbId") as? String ?? ""
                         uneSerie.runtime = Int((jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "runtime") as? String ?? "0")!
                         uneSerie.certification = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "rating") as? String ?? ""
                     }

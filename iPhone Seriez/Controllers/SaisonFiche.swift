@@ -13,12 +13,6 @@ class CellEpisode: UITableViewCell {
     @IBOutlet weak var numero: UILabel!
     @IBOutlet weak var titre: UILabel!
     @IBOutlet weak var date: UILabel!
-    @IBOutlet weak var noteTrakt: UILabel!
-    @IBOutlet weak var noteTVdb: UILabel!
-    @IBOutlet weak var noteBetaSeries: UILabel!
-    @IBOutlet weak var noteIMdb: UILabel!
-    @IBOutlet weak var noteRottentomatoes: UILabel!
-    @IBOutlet weak var noteMoviedb: UILabel!
 }
 
 
@@ -79,11 +73,6 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         cell.numero.text = String(indexPath.row + 1)
         cell.titre.text = serie.saisons[saison - 1].episodes[indexPath.row].titre
         cell.date.text = dateFormatter.string(from: serie.saisons[saison - 1].episodes[indexPath.row].date)
-        cell.noteTrakt.text = String(serie.saisons[saison - 1].episodes[indexPath.row].getFairRatingTrakt())
-        cell.noteTVdb.text = String(serie.saisons[saison - 1].episodes[indexPath.row].getFairRatingTVdb())
-        cell.noteBetaSeries.text = String(serie.saisons[saison - 1].episodes[indexPath.row].getFairRatingBetaSeries())
-        cell.noteMoviedb.text = String(serie.saisons[saison - 1].episodes[indexPath.row].getFairRatingMoviedb())
-        cell.noteIMdb.text = String(serie.saisons[saison - 1].episodes[indexPath.row].getFairRatingIMdb())
 
         return cell
     }
