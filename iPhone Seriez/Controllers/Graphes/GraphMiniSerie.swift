@@ -15,13 +15,19 @@ class GraphMiniSerie: UIView {
     var noteIMDB : Int = 0
     var noteRottenTomatoes : Int = 0
     var noteMoviedb : Int = 0
-
+    
     var origineX : CGFloat = 0.0
-    var origineY :CGFloat = 0.0
+    var origineY : CGFloat = 0.0
     var hauteur : CGFloat = 0.0
     var largeur : CGFloat = 0.0
     let bordure : CGFloat = 5.0
     
+    var centreX : CGFloat = 0.0
+    var centreY : CGFloat = 0.0
+    var rayon   : CGFloat = 0.0
+    
+    var grapheType : Int = 0
+
     override func draw(_ dirtyRect: CGRect) {
         super.draw(dirtyRect)
         
@@ -30,16 +36,33 @@ class GraphMiniSerie: UIView {
         hauteur  = (self.frame.height - bordure - bordure)
         largeur  = (self.frame.width - origineX - bordure)
         
-        self.layer.cornerRadius = 5;
+        centreX = self.frame.height / 2
+        centreY = self.frame.width / 2
+        rayon = min(centreX, centreY) - bordure
+        
+        self.layer.cornerRadius = 5
         self.layer.masksToBounds = true
         
         // Drawing code here.
-        self.traceGrapheBarre()
-        self.background()
+        if (grapheType == 0)
+        {
+            self.traceGrapheCercle()
+            self.backgroundCercles()
+        }
+        else
+        {
+            self.traceGrapheBarre()
+            self.backgroundBarres()
+        }
     }
     
     
-    func sendNotes(_ rateTrakt : Int, rateTVdb : Int, rateBetaSeries : Int, rateMoviedb : Int, rateIMdb : Int)
+    func setType(type : Int)
+    {
+        grapheType = type
+    }
+    
+    func sendNotes(rateTrakt : Int, rateTVdb : Int, rateBetaSeries : Int, rateMoviedb : Int, rateIMdb : Int)
     {
         noteTrakt = rateTrakt
         noteTVdb = rateTVdb
@@ -49,7 +72,43 @@ class GraphMiniSerie: UIView {
         noteMoviedb = rateMoviedb
     }
     
-    func background()
+    func backgroundCercles()
+    {
+        let nbSource : CGFloat = 5.0
+
+        // Couleur des lignes
+        UIColor.white.setStroke()
+        
+        // Cadre
+        let path : UIBezierPath = UIBezierPath()
+        path.lineWidth = 0.5
+        path.addArc(withCenter: CGPoint(x: centreX, y: centreY),
+                    radius: rayon,
+                    startAngle: 2 * .pi,
+                    endAngle: 0,
+                    clockwise: false)
+        path.stroke()
+        
+        
+        for i in 1...5 {
+            path.move(to: CGPoint(x: centreX + rayon*cos(2 * .pi * CGFloat(i) / nbSource), y:centreY + rayon*sin(2 * .pi * CGFloat(i) / nbSource)))
+            path.addLine(to: CGPoint(x: centreX, y: centreY))
+            path.stroke()
+        }
+
+        // Quadrillage
+        path.lineWidth = 0.5
+        path.setLineDash([5.0,5.0], count: 2, phase: 5.0)
+        path.addArc(withCenter: CGPoint(x: centreX, y: centreY),
+                     radius: rayon / 2,
+                     startAngle: 2 * .pi,
+                     endAngle: 0,
+                     clockwise: false)
+        path.stroke()
+    }
+    
+    
+    func backgroundBarres()
     {
         // Couleur des lignes
         UIColor.white.setStroke()
@@ -86,13 +145,8 @@ class GraphMiniSerie: UIView {
     
     func traceUneBarre(_ noteX: Int, color: UIColor, offset: Int)
     {
-        var value = noteX
         let nbSource : CGFloat = 5.0
         let col : CGFloat = largeur / (4 * nbSource)
-        
-        if ( noteX == 0 ) { return }
-        if ( noteX < 70 ) { value = 70 }
-        if ( noteX > 90 ) { value = 90 }
         
         color.setStroke()
         color.withAlphaComponent(0.5).setFill()
@@ -100,14 +154,52 @@ class GraphMiniSerie: UIView {
         let path : UIBezierPath = UIBezierPath()
         
         path.move(to: CGPoint(x: origineX + (CGFloat(offset - 1) * largeur / nbSource) + col,          y: origineY))
-        path.addLine(to: CGPoint(x: origineX + (CGFloat(offset - 1) * largeur / nbSource) + col,       y: origineY - ( hauteur * CGFloat(value - 70) / 20) ))
-        path.addLine(to: CGPoint(x: origineX + (CGFloat(offset - 1) * largeur / nbSource) + (col * 3), y: origineY - ( hauteur * CGFloat(value - 70) / 20) ))
+        path.addLine(to: CGPoint(x: origineX + (CGFloat(offset - 1) * largeur / nbSource) + col,       y: origineY - ( hauteur * CGFloat(noteX) / 100) ))
+        path.addLine(to: CGPoint(x: origineX + (CGFloat(offset - 1) * largeur / nbSource) + (col * 3), y: origineY - ( hauteur * CGFloat(noteX) / 100) ))
         path.addLine(to: CGPoint(x: origineX + (CGFloat(offset - 1) * largeur / nbSource) + (col * 3), y: origineY))
         path.addLine(to: CGPoint(x: origineX + (CGFloat(offset - 1) * largeur / nbSource) + col,       y: origineY))
         
         path.stroke()
         path.fill()
     }
+    
+    
+    func traceGrapheCercle()
+    {
+        traceUnCercle(noteTVdb,       color: colorTVdb,       offset: 1)
+        traceUnCercle(noteTrakt,      color: colorTrakt,      offset: 2)
+        traceUnCercle(noteBetaSeries, color: colorBetaSeries, offset: 3)
+        traceUnCercle(noteIMDB,       color: colorIMDB,       offset: 4)
+        traceUnCercle(noteMoviedb,    color: colorMoviedb,    offset: 5)
+    }
+    
+    
+    func traceUnCercle(_ noteX: Int, color: UIColor, offset: Int)
+    {
+        let nbSource : CGFloat = 5.0
+        let taille : CGFloat = rayon * CGFloat(noteX) / 100
+        
+        color.setStroke()
+        color.withAlphaComponent(0.5).setFill()
+        
+        let path : UIBezierPath = UIBezierPath()
+        path.lineWidth = 0.5
+        path.addArc(withCenter: CGPoint(x: centreX, y: centreY),
+                    radius: taille,
+                    startAngle: 2 * .pi * CGFloat(offset) / nbSource,
+                    endAngle: 2 * .pi * CGFloat(offset - 1) / nbSource,
+                    clockwise: false)
+        path.stroke()
+        
+        path.move(to: CGPoint(x: centreX + taille*cos(2 * .pi * CGFloat(offset) / nbSource), y:centreY + taille*sin(2 * .pi * CGFloat(offset) / nbSource)))
+        path.addLine(to: CGPoint(x: centreX, y: centreY))
+        path.addLine(to: CGPoint(x: centreX + taille*cos(2 * .pi * CGFloat(offset - 1) / nbSource), y:centreY + taille*sin(2 * .pi * CGFloat(offset - 1) / nbSource)))
+        path.stroke()
+        
+        path.fill()
+    }
+    
+
 }
 
 

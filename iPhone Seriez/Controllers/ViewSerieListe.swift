@@ -18,6 +18,7 @@ class CellSerieListe: UITableViewCell {
     @IBOutlet weak var genres: UITextView!
     @IBOutlet weak var globalRating: UITextField!
     @IBOutlet weak var status: UITextField!
+    @IBOutlet weak var drapeau: UIImageView!
     
     var index: Int = 0
 }
@@ -29,7 +30,7 @@ class ViewSerieListe: UITableViewController {
     var allSaisons: [Int] = [Int]()
     let dateFormatter = DateFormatter()
     var accueil : ViewAccueil = ViewAccueil()
-    
+    var grapheType : Int = 0
     
     @IBOutlet var liste: UITableView!
     var isWatchlist : Bool = false
@@ -59,7 +60,7 @@ class ViewSerieListe: UITableViewController {
         cell.banniereSerie?.image = accueil.getImage(viewList[indexPath.row].poster)
         cell.index = indexPath.row
         cell.titre.text = viewList[indexPath.row].serie
-        cell.saison.text =  String(viewList[indexPath.row].saisons.count) + " Saison(s)"
+        cell.saison.text =  String(viewList[indexPath.row].nbSaisons) + " Saisons - " + String(viewList[indexPath.row].nbEpisodes) + " Epiosdes - " + String(viewList[indexPath.row].runtime) + " min"
         cell.globalRating.text = String(viewList[indexPath.row].getGlobalRating())
         
         // Affichage des genres
@@ -84,13 +85,49 @@ class ViewSerieListe: UITableViewController {
             cell.status.textColor = UIColor.blue
         }
         
+        // Affichage du drapeau
+        switch viewList[indexPath.row].country {
+        case "US":
+            cell.drapeau.image = #imageLiteral(resourceName: "Flag_of_the_United_States.png")
+            
+        case "GB":
+            cell.drapeau.image = #imageLiteral(resourceName: "Flag_of_the_United_Kingdom.png")
+            
+        case "UK":
+            cell.drapeau.image = #imageLiteral(resourceName: "Flag_of_the_United_Kingdom.png")
+            
+        case "FR":
+            cell.drapeau.image = #imageLiteral(resourceName: "Flag_of_France.png")
+            
+        case "ES":
+            cell.drapeau.image = #imageLiteral(resourceName: "Flag_of_Spain.png")
+            
+        case "DE":
+            cell.drapeau.image = #imageLiteral(resourceName: "Flag_of_Germany.png")
+            
+        case "CA":
+            cell.drapeau.image = #imageLiteral(resourceName: "Flag_of_Canada.png")
+            
+        case "CZ":
+            cell.drapeau.image = #imageLiteral(resourceName: "Flag_of_the_Czech_Republic.png")
+            
+        case "NO":
+            cell.drapeau.image = #imageLiteral(resourceName: "Flag_of_Norway.png")
+            
+        case "SE":
+            cell.drapeau.image = #imageLiteral(resourceName: "Flag_of_Sweden.png")
+            
+        default:
+            print("Pays sans drapeau : \(viewList[indexPath.row].country) pour la serie \(viewList[indexPath.row].serie)")
+        }
         
         // Affichage du mini graphe
-        cell.miniGraphe.sendNotes(viewList[indexPath.row].getFairRatingTrakt(),
-                                  rateTVdb: viewList[indexPath.row].getFairRatingTVdb(),
-                                  rateBetaSeries: viewList[indexPath.row].getFairRatingBetaSeries(),
-                                  rateMoviedb: viewList[indexPath.row].getFairRatingMoviedb(),
-                                  rateIMdb: viewList[indexPath.row].getFairRatingIMdb())
+        cell.miniGraphe.sendNotes(rateTrakt: viewList[indexPath.row].getFairGlobalRatingTrakt(),
+                                  rateTVdb: viewList[indexPath.row].getFairGlobalRatingTVdb(),
+                                  rateBetaSeries: viewList[indexPath.row].getFairGlobalRatingBetaSeries(),
+                                  rateMoviedb: viewList[indexPath.row].getFairGlobalRatingMoviedb(),
+                                  rateIMdb: viewList[indexPath.row].getFairGlobalRatingIMdb())
+        cell.miniGraphe.setType(type: grapheType)
         cell.miniGraphe.setNeedsDisplay()
         
         return cell
@@ -182,6 +219,16 @@ class ViewSerieListe: UITableViewController {
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
+
+
+    @IBAction func changeGraphe(_ sender: Any) {
+        if (grapheType == 0) { grapheType = 1 }
+        else { grapheType = 0 }
+        
+        self.liste.reloadData()
+        self.view.setNeedsDisplay()
+    }
+    
 }
 
 

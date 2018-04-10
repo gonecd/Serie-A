@@ -201,39 +201,40 @@ class Serie : NSObject, NSCoding
             }
         }
     }
+
     
     func getGlobalRating() -> Int
     {
         var total : Int = 0
         var nb : Int = 0
         
-        if (getFairRatingTrakt() != 0)
+        if (getFairGlobalRatingTrakt() != 0)
         {
-            total = total + getFairRatingTrakt()
+            total = total + getFairGlobalRatingTrakt()
             nb = nb + 1
         }
         
-        if (getFairRatingTVdb() != 0)
+        if (getFairGlobalRatingTVdb() != 0)
         {
-            total = total + getFairRatingTVdb()
+            total = total + getFairGlobalRatingTVdb()
             nb = nb + 1
         }
         
-        if (getFairRatingBetaSeries() != 0)
+        if (getFairGlobalRatingBetaSeries() != 0)
         {
-            total = total + getFairRatingBetaSeries()
+            total = total + getFairGlobalRatingBetaSeries()
             nb = nb + 1
         }
         
-        if (getFairRatingMoviedb() != 0)
+        if (getFairGlobalRatingMoviedb() != 0)
         {
-            total = total + getFairRatingMoviedb()
+            total = total + getFairGlobalRatingMoviedb()
             nb = nb + 1
         }
         
-        if (getFairRatingIMdb() != 0)
+        if (getFairGlobalRatingIMdb() != 0)
         {
-            total = total + getFairRatingIMdb()
+            total = total + getFairGlobalRatingIMdb()
             nb = nb + 1
         }
         
@@ -246,6 +247,52 @@ class Serie : NSObject, NSCoding
             return 0
         }
     }
+    
+
+//    func getGlobalRating() -> Int
+//    {
+//        var total : Int = 0
+//        var nb : Int = 0
+//
+//        if (getFairRatingTrakt() != 0)
+//        {
+//            total = total + getFairRatingTrakt()
+//            nb = nb + 1
+//        }
+//
+//        if (getFairRatingTVdb() != 0)
+//        {
+//            total = total + getFairRatingTVdb()
+//            nb = nb + 1
+//        }
+//
+//        if (getFairRatingBetaSeries() != 0)
+//        {
+//            total = total + getFairRatingBetaSeries()
+//            nb = nb + 1
+//        }
+//
+//        if (getFairRatingMoviedb() != 0)
+//        {
+//            total = total + getFairRatingMoviedb()
+//            nb = nb + 1
+//        }
+//
+//        if (getFairRatingIMdb() != 0)
+//        {
+//            total = total + getFairRatingIMdb()
+//            nb = nb + 1
+//        }
+//
+//        if (nb > 0)
+//        {
+//            return Int(Double(total) / Double(nb))
+//        }
+//        else
+//        {
+//            return 0
+//        }
+//    }
     
     func getFairRatingTrakt() -> Int
     {
@@ -420,6 +467,56 @@ class Serie : NSObject, NSCoding
         else if (Trakt.status != "") { self.status = Trakt.status }
         else { self.status = Moviedb.status }
         
+    }
+    
+    func getFairGlobalRatingTrakt() -> Int
+    {
+        if (ratersTrakt == 0) { return 0 }
+        let val : Int = Int( notesMid + (notesRange * Double(ratingTrakt - moyenneTrakt) / ecartTypeTrakt))
+        
+        if (val < 0) { return 0}
+        else if (val > 100) { return 100 }
+        else { return val }
+    }
+    
+    func getFairGlobalRatingTVdb() -> Int
+    {
+        if (ratersTVDB == 0) { return 0 }
+        let val : Int =  Int( notesMid + (notesRange * Double(ratingTVDB - moyenneTVdb) / ecartTypeTVdb))
+        
+        if (val < 0) { return 0}
+        else if (val > 100) { return 100 }
+        else { return val }
+    }
+    
+    func getFairGlobalRatingMoviedb() -> Int
+    {
+        if (ratersMovieDB == 0) { return 0 }
+        let val : Int =  Int( notesMid + (notesRange * Double(ratingMovieDB - moyenneMovieDB) / ecartTypeMovieDB))
+        
+        if (val < 0) { return 0}
+        else if (val > 100) { return 100 }
+        else { return val }
+    }
+    
+    func getFairGlobalRatingBetaSeries() -> Int
+    {
+        if (ratersBetaSeries == 0) { return 0 }
+        let val : Int =  Int( notesMid + (notesRange * Double(ratingBetaSeries - moyenneBetaSeries) / ecartTypeBetaSeries))
+        
+        if (val < 0) { return 0}
+        else if (val > 100) { return 100 }
+        else { return val }
+    }
+    
+    func getFairGlobalRatingIMdb() -> Int
+    {
+        if (ratersIMDB == 0) { return 0 }
+        let val : Int =  Int( notesMid + (notesRange * Double(ratingIMDB - moyenneIMDB) / ecartTypeIMDB))
+        
+        if (val < 0) { return 0}
+        else if (val > 100) { return 100 }
+        else { return val }
     }
     
 }

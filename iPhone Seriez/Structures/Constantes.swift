@@ -15,16 +15,19 @@ let correctionTrakt         : Int = 79
 let correctionMoviedb       : Int = 75
 let correctionIMdb          : Int = 86
 
-var moyenneIMDB : Int = 0
-var ecartTypeIMDB : Double = 0.0
-var moyenneTVdb : Int = 0
-var ecartTypeTVdb : Double = 0.0
-var moyenneTrakt : Int = 0
-var ecartTypeTrakt : Double = 0.0
-var moyenneMovieDB : Int = 0
-var ecartTypeMovieDB : Double = 0.0
-var moyenneBetaSeries : Int = 0
-var ecartTypeBetaSeries : Double = 0.0
+var moyenneIMDB         : Int       = 85
+var ecartTypeIMDB       : Double    = 5.945
+var moyenneTVdb         : Int       = 84
+var ecartTypeTVdb       : Double    = 5.873
+var moyenneTrakt        : Int       = 84
+var ecartTypeTrakt      : Double    = 5.467
+var moyenneMovieDB      : Int       = 75
+var ecartTypeMovieDB    : Double    = 6.590
+var moyenneBetaSeries   : Int       = 88
+var ecartTypeBetaSeries : Double    = 6.199
+
+let notesMid    : Double = 50.0
+let notesRange  : Double = 20.0
 
 // Couleurs de remplissage des sources
 let colorTrakt      : UIColor = UIColor.red

@@ -23,6 +23,15 @@
 		62AC50A0200E58A200A8C841 /* SaisonFiche.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62AC509F200E58A200A8C841 /* SaisonFiche.swift */; };
 		62B087AE207A7938007703FF /* Magnifi-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087AC207A7937007703FF /* Magnifi-icon.png */; };
 		62B087AF207A7938007703FF /* Idea-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087AD207A7937007703FF /* Idea-icon.png */; };
+		62B087C0207BEBC6007703FF /* Flag_of_the_United_Kingdom.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087BB207BEBC5007703FF /* Flag_of_the_United_Kingdom.png */; };
+		62B087C1207BEBC6007703FF /* Flag_of_the_United_States.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087BC207BEBC5007703FF /* Flag_of_the_United_States.png */; };
+		62B087C2207BEBC6007703FF /* Flag_of_Germany.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087BD207BEBC5007703FF /* Flag_of_Germany.png */; };
+		62B087C3207BEBC6007703FF /* Flag_of_Spain.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087BE207BEBC5007703FF /* Flag_of_Spain.png */; };
+		62B087C4207BEBC6007703FF /* Flag_of_France.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087BF207BEBC5007703FF /* Flag_of_France.png */; };
+		62B087C6207BED6F007703FF /* Flag_of_Canada.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087C5207BED6F007703FF /* Flag_of_Canada.png */; };
+		62B087CA207BEE3A007703FF /* Flag_of_Norway.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087C7207BEE39007703FF /* Flag_of_Norway.png */; };
+		62B087CB207BEE3A007703FF /* Flag_of_the_Czech_Republic.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087C8207BEE39007703FF /* Flag_of_the_Czech_Republic.png */; };
+		62B087CC207BEE3A007703FF /* Flag_of_Sweden.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087C9207BEE3A007703FF /* Flag_of_Sweden.png */; };
 		62CD57C32038B87D00DE28A1 /* GraphMiniSaison.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62CD57C22038B87D00DE28A1 /* GraphMiniSaison.swift */; };
 		62D0EBBB204C30BE009774B6 /* ViewSaisonListe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D0EBBA204C30BE009774B6 /* ViewSaisonListe.swift */; };
 		62D0EBBD204C374B009774B6 /* TheMoviedb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D0EBBC204C374B009774B6 /* TheMoviedb.swift */; };
@@ -72,6 +81,15 @@
 		62AC509F200E58A200A8C841 /* SaisonFiche.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaisonFiche.swift; sourceTree = "<group>"; };
 		62B087AC207A7937007703FF /* Magnifi-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Magnifi-icon.png"; sourceTree = "<group>"; };
 		62B087AD207A7937007703FF /* Idea-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Idea-icon.png"; sourceTree = "<group>"; };
+		62B087BB207BEBC5007703FF /* Flag_of_the_United_Kingdom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_the_United_Kingdom.png; sourceTree = "<group>"; };
+		62B087BC207BEBC5007703FF /* Flag_of_the_United_States.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_the_United_States.png; sourceTree = "<group>"; };
+		62B087BD207BEBC5007703FF /* Flag_of_Germany.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_Germany.png; sourceTree = "<group>"; };
+		62B087BE207BEBC5007703FF /* Flag_of_Spain.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_Spain.png; sourceTree = "<group>"; };
+		62B087BF207BEBC5007703FF /* Flag_of_France.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_France.png; sourceTree = "<group>"; };
+		62B087C5207BED6F007703FF /* Flag_of_Canada.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_Canada.png; sourceTree = "<group>"; };
+		62B087C7207BEE39007703FF /* Flag_of_Norway.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_Norway.png; sourceTree = "<group>"; };
+		62B087C8207BEE39007703FF /* Flag_of_the_Czech_Republic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_the_Czech_Republic.png; sourceTree = "<group>"; };
+		62B087C9207BEE3A007703FF /* Flag_of_Sweden.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_Sweden.png; sourceTree = "<group>"; };
 		62CD57C22038B87D00DE28A1 /* GraphMiniSaison.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphMiniSaison.swift; sourceTree = "<group>"; };
 		62D0EBBA204C30BE009774B6 /* ViewSaisonListe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewSaisonListe.swift; sourceTree = "<group>"; };
 		62D0EBBC204C374B009774B6 /* TheMoviedb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TheMoviedb.swift; sourceTree = "<group>"; };
@@ -172,6 +190,7 @@
 			children = (
 				623D28911FED45D0005488D5 /* A-small.png */,
 				623D28901FED45D0005488D5 /* A.jpg */,
+				62B087B0207BEA8B007703FF /* Drapeaux */,
 				62FF97C12038FA0A007B658E /* Icones accueil */,
 				625480531FE6D7140099A3D2 /* Icones sources */,
 			);
@@ -198,6 +217,22 @@
 				62FB3F8B2073C360009D1C74 /* data.tsv */,
 			);
 			path = Data;
+			sourceTree = "<group>";
+		};
+		62B087B0207BEA8B007703FF /* Drapeaux */ = {
+			isa = PBXGroup;
+			children = (
+				62B087C7207BEE39007703FF /* Flag_of_Norway.png */,
+				62B087C9207BEE3A007703FF /* Flag_of_Sweden.png */,
+				62B087C8207BEE39007703FF /* Flag_of_the_Czech_Republic.png */,
+				62B087C5207BED6F007703FF /* Flag_of_Canada.png */,
+				62B087BF207BEBC5007703FF /* Flag_of_France.png */,
+				62B087BD207BEBC5007703FF /* Flag_of_Germany.png */,
+				62B087BE207BEBC5007703FF /* Flag_of_Spain.png */,
+				62B087BB207BEBC5007703FF /* Flag_of_the_United_Kingdom.png */,
+				62B087BC207BEBC5007703FF /* Flag_of_the_United_States.png */,
+			);
+			path = Drapeaux;
 			sourceTree = "<group>";
 		};
 		62DD87631FB766C600A9B9EE = {
@@ -311,28 +346,37 @@
 			buildActionMask = 2147483647;
 			files = (
 				623D28931FED45D0005488D5 /* A-small.png in Resources */,
+				62B087CB207BEE3A007703FF /* Flag_of_the_Czech_Republic.png in Resources */,
 				62DD87B81FB8BE4F00A9B9EE /* betaseries.png in Resources */,
 				62DD877A1FB766C600A9B9EE /* LaunchScreen.storyboard in Resources */,
 				62DD87771FB766C600A9B9EE /* Assets.xcassets in Resources */,
+				62B087C2207BEBC6007703FF /* Flag_of_Germany.png in Resources */,
 				62FF97CE2039016B007B658E /* Stop-icon.png in Resources */,
+				62B087CA207BEE3A007703FF /* Flag_of_Norway.png in Resources */,
+				62B087C6207BED6F007703FF /* Flag_of_Canada.png in Resources */,
 				62A581E81FBC5BCB002D8FD3 /* rottentomatoes.ico in Resources */,
 				62DD87751FB766C600A9B9EE /* Main.storyboard in Resources */,
 				62FF97D12039016B007B658E /* Bio-Hazard-icon.png in Resources */,
 				62B087AE207A7938007703FF /* Magnifi-icon.png in Resources */,
+				62B087C1207BEBC6007703FF /* Flag_of_the_United_States.png in Resources */,
 				62FF97D320390305007B658E /* List-icon.png in Resources */,
 				62FB3F8C2073C360009D1C74 /* data.tsv in Resources */,
 				62DD87B71FB8BE4F00A9B9EE /* trakt.ico in Resources */,
 				62FF97DB2039AAFC007B658E /* Trash-icon.png in Resources */,
 				623D28921FED45D0005488D5 /* A.jpg in Resources */,
 				62DD87B61FB8BE4F00A9B9EE /* thetvdb.png in Resources */,
+				62B087C4207BEBC6007703FF /* Flag_of_France.png in Resources */,
 				62FF97D82039076D007B658E /* TV-icon.png in Resources */,
+				62B087C3207BEBC6007703FF /* Flag_of_Spain.png in Resources */,
 				62FF97D02039016B007B658E /* Eye-icon.png in Resources */,
+				62B087CC207BEE3A007703FF /* Flag_of_Sweden.png in Resources */,
 				62B087AF207A7938007703FF /* Idea-icon.png in Resources */,
 				62FF97C02038C9A3007B658E /* themoviedb.ico in Resources */,
 				62FF97CF2039016B007B658E /* Play-icon.png in Resources */,
 				62FF97D72039076D007B658E /* Calendar-icon.png in Resources */,
 				62A581E71FBC5BCB002D8FD3 /* imdb.ico in Resources */,
 				62FF97D92039076D007B658E /* Air-icon.png in Resources */,
+				62B087C0207BEBC6007703FF /* Flag_of_the_United_Kingdom.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

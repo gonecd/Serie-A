@@ -96,7 +96,7 @@ class ViewAccueil: UIViewController  {
         carre.layer.masksToBounds = false
         
         carre.layer.shadowColor = UIColor.black.cgColor
-        carre.layer.shadowOpacity = 1
+        carre.layer.shadowOpacity = 0.5
         carre.layer.shadowOffset = CGSize(width: 10.0, height: 10.0)
         carre.layer.shadowRadius = 10
         
@@ -106,8 +106,10 @@ class ViewAccueil: UIViewController  {
     func makeGreenGradiant(carre : UIView)
     {
         let greenGradient : CAGradientLayer = CAGradientLayer()
-        greenGradient.colors = [UIColor(red: 0.0, green: 143.0/255.0, blue: 0.0, alpha: 1.0).cgColor,
-                                UIColor.green.cgColor]
+        greenGradient.colors = [UIColor(red: 0.0, green: 80.0/255.0, blue: 0.0, alpha: 1.0).cgColor,
+                                UIColor(red: 0.0, green: 143.0/255.0, blue: 0.0, alpha: 1.0).cgColor]
+//        greenGradient.colors = [UIColor(red: 0.0, green: 143.0/255.0, blue: 0.0, alpha: 1.0).cgColor,
+//                                UIColor.green.cgColor]
         greenGradient.startPoint = CGPoint(x: 0, y: 0)
         greenGradient.endPoint = CGPoint(x: 1, y: 1)
         greenGradient.frame = carre.bounds
@@ -116,7 +118,7 @@ class ViewAccueil: UIViewController  {
         carre.layer.masksToBounds = false
         
         carre.layer.shadowColor = UIColor.black.cgColor
-        carre.layer.shadowOpacity = 1
+        carre.layer.shadowOpacity = 0.5
         carre.layer.shadowOffset = CGSize(width: 10.0, height: 10.0)
         carre.layer.shadowRadius = 10
         
@@ -128,15 +130,15 @@ class ViewAccueil: UIViewController  {
         let blueGradient : CAGradientLayer = CAGradientLayer()
         blueGradient.colors = [UIColor(red: 1.0/255.0, green: 25.0/255.0, blue: 147.0/255.0, alpha: 1.0).cgColor,
                                UIColor.blue.cgColor]
-        blueGradient.startPoint = CGPoint(x: 0, y: 1)
-        blueGradient.endPoint = CGPoint(x: 1, y: 0)
+        blueGradient.startPoint = CGPoint(x: 0, y: 0)
+        blueGradient.endPoint = CGPoint(x: 1, y: 1)
         blueGradient.frame = carre.bounds
         
         carre.layer.cornerRadius = 10;
         carre.layer.masksToBounds = false
         
         carre.layer.shadowColor = UIColor.black.cgColor
-        carre.layer.shadowOpacity = 1
+        carre.layer.shadowOpacity = 0.5
         carre.layer.shadowOffset = CGSize(width: 10.0, height: 10.0)
         carre.layer.shadowRadius = 10
         
