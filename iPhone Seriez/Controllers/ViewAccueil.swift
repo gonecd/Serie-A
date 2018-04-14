@@ -79,12 +79,14 @@ class ViewAccueil: UIViewController  {
     
     func makeJolisCompteurs(compteur: UITextField)
     {
-        compteur.layer.cornerRadius = 15
+        compteur.layer.cornerRadius = 10
         compteur.layer.masksToBounds = true
     }
     
     func makeRedGradiant(carre : UIView)
     {
+        //TODO : https://stackoverflow.com/questions/4754392/uiview-with-rounded-corners-and-drop-shadow
+        
         let redGradient : CAGradientLayer = CAGradientLayer()
         redGradient.colors = [UIColor(red: 148.0/255.0, green: 17.0/255.0, blue: 0.0, alpha: 1.0).cgColor,
                               UIColor.red.cgColor]
@@ -93,12 +95,11 @@ class ViewAccueil: UIViewController  {
         redGradient.frame = carre.bounds
         
         carre.layer.cornerRadius = 10;
-        carre.layer.masksToBounds = false
         
         carre.layer.shadowColor = UIColor.black.cgColor
-        carre.layer.shadowOpacity = 0.5
+        carre.layer.shadowOpacity = 0.4
         carre.layer.shadowOffset = CGSize(width: 10.0, height: 10.0)
-        carre.layer.shadowRadius = 10
+        carre.layer.shadowRadius = 10.0
         
         carre.layer.insertSublayer(redGradient, at: 0)
     }
@@ -116,9 +117,9 @@ class ViewAccueil: UIViewController  {
         carre.layer.masksToBounds = false
         
         carre.layer.shadowColor = UIColor.black.cgColor
-        carre.layer.shadowOpacity = 0.5
+        carre.layer.shadowOpacity = 0.4
         carre.layer.shadowOffset = CGSize(width: 10.0, height: 10.0)
-        carre.layer.shadowRadius = 10
+        carre.layer.shadowRadius = 10.0
         
         carre.layer.insertSublayer(greenGradient, at: 0)
     }
@@ -136,9 +137,9 @@ class ViewAccueil: UIViewController  {
         carre.layer.masksToBounds = false
         
         carre.layer.shadowColor = UIColor.black.cgColor
-        carre.layer.shadowOpacity = 0.5
+        carre.layer.shadowOpacity = 0.4
         carre.layer.shadowOffset = CGSize(width: 10.0, height: 10.0)
-        carre.layer.shadowRadius = 10
+        carre.layer.shadowRadius = 10.0
         
         carre.layer.insertSublayer(blueGradient, at: 0)
     }
