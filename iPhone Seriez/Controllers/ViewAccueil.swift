@@ -108,8 +108,6 @@ class ViewAccueil: UIViewController  {
         let greenGradient : CAGradientLayer = CAGradientLayer()
         greenGradient.colors = [UIColor(red: 0.0, green: 80.0/255.0, blue: 0.0, alpha: 1.0).cgColor,
                                 UIColor(red: 0.0, green: 143.0/255.0, blue: 0.0, alpha: 1.0).cgColor]
-//        greenGradient.colors = [UIColor(red: 0.0, green: 143.0/255.0, blue: 0.0, alpha: 1.0).cgColor,
-//                                UIColor.green.cgColor]
         greenGradient.startPoint = CGPoint(x: 0, y: 0)
         greenGradient.endPoint = CGPoint(x: 1, y: 1)
         greenGradient.frame = carre.bounds
@@ -519,14 +517,10 @@ class ViewAccueil: UIViewController  {
     {
         if (self.trakt.addToWatchlist(theTVdbId: uneSerie.idTVdb))
         {
-            self.theTVdb.getSerieInfos(uneSerie)
-            self.trakt.getEpisodesRatings(uneSerie)
-            self.betaSeries.getEpisodesRatings(uneSerie)
-            self.theMoviedb.getEpisodesRatings(uneSerie)
+            self.downloadGlobalInfo(serie: uneSerie)
             self.allSeries.append(uneSerie)
             self.saveDB()
             updateCompteurs()
-            
             return true
         }
         return false

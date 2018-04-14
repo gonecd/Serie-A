@@ -61,8 +61,12 @@ class ViewSerieListe: UITableViewController {
         cell.index = indexPath.row
         cell.titre.text = viewList[indexPath.row].serie
         cell.saison.text =  String(viewList[indexPath.row].nbSaisons) + " Saisons - " + String(viewList[indexPath.row].nbEpisodes) + " Epiosdes - " + String(viewList[indexPath.row].runtime) + " min"
-        cell.globalRating.text = String(viewList[indexPath.row].getGlobalRating())
         
+        cell.globalRating.text = String(viewList[indexPath.row].getGlobalRating()) + " %"
+        cell.globalRating.layer.cornerRadius = 12
+        cell.globalRating.layer.masksToBounds = true
+        
+
         // Affichage des genres
         var allGenres : String = ""
         for unGenre in viewList[indexPath.row].genres
@@ -139,18 +143,10 @@ class ViewSerieListe: UITableViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if (segue.identifier == "showSerie")
-        {
             let viewController = segue.destination as! SerieFiche
             let tableCell : CellSerieListe = sender as! CellSerieListe
             viewController.serie = viewList[tableCell.index]
             viewController.image = accueil.getImage(viewList[tableCell.index].banner)
-        }
-        else if (segue.identifier == "showChercher")
-        {
-            let viewController = segue.destination as! Chercher
-            viewController.accueil = accueil
-        }
     }
     
     @IBAction func addSerie(_ sender: Any) {
@@ -195,7 +191,7 @@ class ViewSerieListe: UITableViewController {
     
     override func tableView(_ tableView: UITableView, editActionsForRowAt: IndexPath) -> [UITableViewRowAction]? {
         let reload = UITableViewRowAction(style: .normal, title: "Reload") { action, index in
-            self.accueil.downloadSerieDetails(serie: self.viewList[index.row])
+            self.accueil.downloadGlobalInfo(serie: self.viewList[index.row])
             self.accueil.saveDB()
             self.liste.reloadData()
             self.view.setNeedsDisplay()

@@ -192,7 +192,7 @@ class Trakt : NSObject
                 }
                 else
                 {
-                    print("Trakt::recherche error \(response.statusCode) received ")
+                    print("Trakt::addToWatchlist error \(response.statusCode) received ")
                     success =  false
                     return
                 }

@@ -174,7 +174,8 @@ class Chercher: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
         {
             print("Enrichissement de \(uneSerie.serie)")
             self.accueil.theMoviedb.getIDs(serie: uneSerie)
-            self.accueil.downloadSerieDetails(serie: uneSerie)
+            self.accueil.downloadGlobalInfo(serie: uneSerie)
+            //self.accueil.downloadSerieDetails(serie: uneSerie)
         }
         
         viewController.title = "Propositions de séries"

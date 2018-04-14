@@ -26,8 +26,8 @@ var ecartTypeMovieDB    : Double    = 6.590
 var moyenneBetaSeries   : Int       = 88
 var ecartTypeBetaSeries : Double    = 6.199
 
-let notesMid    : Double = 50.0
-let notesRange  : Double = 20.0
+let notesMid    : Double = 60.0
+let notesRange  : Double = 25.0
 
 // Couleurs de remplissage des sources
 let colorTrakt      : UIColor = UIColor.red
