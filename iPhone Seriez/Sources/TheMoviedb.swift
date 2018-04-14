@@ -206,11 +206,12 @@ class TheMoviedb : NSObject
                         uneSerie.nbSaisons = jsonResponse.object(forKey: "number_of_seasons") as? Int ?? 0
                         uneSerie.nbEpisodes = jsonResponse.object(forKey: "number_of_episodes") as? Int ?? 0
 
+                        for i in 0..<((jsonResponse.object(forKey: "genres") as? NSArray ?? []).count)
+                        {
+                            uneSerie.genres.append((((jsonResponse.object(forKey: "genres") as? NSArray ?? []).object(at: i) as! NSDictionary).object(forKey: "name")) as? String ?? "")
+                        }
                         
-//                        for unGenre in (jsonResponse.object(forKey: "genres") as? NSArray ?? [])
-//                        {
-//                            uneSerie.genres.append((unGenre as! NSDictionary).object(forKey: "name") as? String ?? "")
-//                        }
+                        print("Hola")
                     }
                     else
                     {
