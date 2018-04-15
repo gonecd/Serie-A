@@ -9,7 +9,6 @@ import UIKit
 
 class GraphMiniSaison: UIView {
     
-    var theSaison : Saison = Saison(serie:"", saison:0)
     var noteTrakt : Int = 0
     var noteTVdb : Int = 0
     var noteBetaSeries : Int = 0
@@ -45,7 +44,7 @@ class GraphMiniSaison: UIView {
     }
     
     
-    func sendNotes(_ rateTrakt : Int, rateTVdb : Int, rateBetaSeries : Int, rateMoviedb : Int, rateIMdb : Int,
+    func sendNotes(rateTrakt : Int, rateTVdb : Int, rateBetaSeries : Int, rateMoviedb : Int, rateIMdb : Int,
                    seasonsAverageTrakt : Double, seasonsAverageTVdb : Double, seasonsAverageBetaSeries : Double, seasonsAverageMoviedb : Double, seasonsAverageIMdb : Double)
     {
         noteTrakt = rateTrakt
@@ -103,34 +102,31 @@ class GraphMiniSaison: UIView {
     
     func traceGraphePoints()
     {
-        if (moyTVdb != 0.0)       { traceUnPoint(noteTVdb,       noteY: Int(Double(noteTVdb * 80) / moyTVdb),             color: colorTVdb) }
-        if (moyTrakt != 0.0)      { traceUnPoint(noteTrakt,      noteY: Int(Double(noteTrakt * 80) / moyTrakt),           color: colorTrakt) }
-        if (moyBetaSeries != 0.0) { traceUnPoint(noteBetaSeries, noteY: Int(Double(noteBetaSeries * 80) / moyBetaSeries), color: colorBetaSeries) }
-        if (moyMoviedb != 0.0)    { traceUnPoint(noteMoviedb,    noteY: Int(Double(noteMoviedb * 80) / moyMoviedb),       color: colorMoviedb) }
-        if (moyIMdb != 0.0)       { traceUnPoint(noteIMdb,       noteY: Int(Double(noteIMdb * 80) / moyIMdb),             color: colorIMDB) }
+        traceUnPoint(noteX: noteTVdb,           noteY: noteTVdb,        color: colorTVdb)
+        traceUnPoint(noteX: noteTrakt,          noteY: noteTrakt,       color: colorTrakt)
+        traceUnPoint(noteX: noteBetaSeries,     noteY: noteBetaSeries,  color: colorBetaSeries)
+        traceUnPoint(noteX: noteMoviedb,        noteY: noteMoviedb,     color: colorMoviedb)
+        traceUnPoint(noteX: noteIMdb,           noteY: noteIMdb,        color: colorIMDB)
+
+//        if (moyTVdb != 0.0)       { traceUnPoint(noteTVdb,       noteY: Int(Double(noteTVdb * 80) / moyTVdb),             color: colorTVdb) }
+//        if (moyTrakt != 0.0)      { traceUnPoint(noteTrakt,      noteY: Int(Double(noteTrakt * 80) / moyTrakt),           color: colorTrakt) }
+//        if (moyBetaSeries != 0.0) { traceUnPoint(noteBetaSeries, noteY: Int(Double(noteBetaSeries * 80) / moyBetaSeries), color: colorBetaSeries) }
+//        if (moyMoviedb != 0.0)    { traceUnPoint(noteMoviedb,    noteY: Int(Double(noteMoviedb * 80) / moyMoviedb),       color: colorMoviedb) }
+//        if (moyIMdb != 0.0)       { traceUnPoint(noteIMdb,       noteY: Int(Double(noteIMdb * 80) / moyIMdb),             color: colorIMDB) }
+
     }
     
     
-    func traceUnPoint(_ noteX: Int, noteY: Int, color: UIColor)
+    func traceUnPoint(noteX: Int, noteY: Int, color: UIColor)
     {
         let diametre : CGFloat = 8.0
-        var xvalue = noteX
-        var yvalue = noteY
-        
-        if ( noteX == 0 ) { return }
-        if ( noteY == 0 ) { return }
-        
-        if ( noteX < 70 ) { xvalue = 70 }
-        if ( noteY < 70 ) { yvalue = 70 }
-        if ( noteX > 90 ) { xvalue = 90 }
-        if ( noteY > 90 ) { yvalue = 90 }
-        
+
         color.setStroke()
         color.withAlphaComponent(0.5).setFill()
         
         let path : UIBezierPath = UIBezierPath()
-        path.addArc(withCenter: CGPoint(x: origineX + (largeur * CGFloat(xvalue - 70))/20,
-                                        y: origineY - (hauteur * CGFloat(yvalue - 70))/20),
+        path.addArc(withCenter: CGPoint(x: origineX + (largeur * CGFloat(noteX) / 100),
+                                        y: origineY - (hauteur * CGFloat(noteY) / 100)),
                     radius: diametre / 2,
                     startAngle: 2 * .pi,
                     endAngle: 0,

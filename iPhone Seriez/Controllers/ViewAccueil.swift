@@ -28,7 +28,6 @@ class ViewAccueil: UIViewController  {
     @IBOutlet weak var cptSaisonsAnnoncees: UITextField!
     @IBOutlet weak var cptWatchList: UITextField!
 
-    
     @IBOutlet weak var cadreSaisonAvenir: UIView!
     @IBOutlet weak var cadreSaisonAvoir: UIView!
     @IBOutlet weak var cadreSaisonEncours: UIView!
@@ -44,26 +43,24 @@ class ViewAccueil: UIViewController  {
         super.viewDidLoad()
         
         // Faire des jolis carrés dégradés à coins ronds
-        makeBlueGradiant(carre: cadreSerieAbandonnee)
-        makeBlueGradiant(carre: cadreSerieEncours)
-        makeBlueGradiant(carre: cadreSerieFinie)
-        
-        makeRedGradiant(carre: cadreSaisonAvoir)
-        makeRedGradiant(carre: cadreSaisonAvenir)
-        makeRedGradiant(carre: cadreSaisonEncours)
-        
-        makeGreenGradiant(carre: cadreSerieWatchlist)
-        makeGreenGradiant(carre: cadreRecherche)
-        makeGreenGradiant(carre: cadreConseil)
+        makeGradiant(carre: cadreSerieAbandonnee, couleur : "Bleu")
+        makeGradiant(carre: cadreSerieEncours, couleur : "Bleu")
+        makeGradiant(carre: cadreSerieFinie, couleur : "Bleu")
+        makeGradiant(carre: cadreSaisonAvoir, couleur : "Rouge")
+        makeGradiant(carre: cadreSaisonAvenir, couleur : "Rouge")
+        makeGradiant(carre: cadreSaisonEncours, couleur : "Rouge")
+        makeGradiant(carre: cadreSerieWatchlist, couleur : "Vert")
+        makeGradiant(carre: cadreRecherche, couleur : "Vert")
+        makeGradiant(carre: cadreConseil, couleur : "Vert")
 
         // Faire des jolis compteurs à coins ronds
-        makeJolisCompteurs(compteur: cptSeriesFinies)
-        makeJolisCompteurs(compteur: cptSeriesEnCours)
-        makeJolisCompteurs(compteur: cptSeriesAbandonnees)
-        makeJolisCompteurs(compteur: cptSaisonsOnTheAir)
-        makeJolisCompteurs(compteur: cptSaisonsDiffusees)
-        makeJolisCompteurs(compteur: cptSaisonsAnnoncees)
-        makeJolisCompteurs(compteur: cptWatchList)
+        arrondir(texte: cptSeriesFinies, radius : 10.0)
+        arrondir(texte: cptSeriesEnCours, radius : 10.0)
+        arrondir(texte: cptSeriesAbandonnees, radius : 10.0)
+        arrondir(texte: cptSaisonsOnTheAir, radius : 10.0)
+        arrondir(texte: cptSaisonsDiffusees, radius : 10.0)
+        arrondir(texte: cptSaisonsAnnoncees, radius : 10.0)
+        arrondir(texte: cptWatchList, radius : 10.0)
         
         // Connexion aux sources de données
         trakt.start()
@@ -74,77 +71,7 @@ class ViewAccueil: UIViewController  {
         loadDB()
         allSeries = allSeries.sorted(by:  { $0.serie < $1.serie })
         updateCompteurs()
-        //updateStatistics()
-        
     }
-    
-    func makeJolisCompteurs(compteur: UITextField)
-    {
-        compteur.layer.cornerRadius = 10
-        compteur.layer.masksToBounds = true
-    }
-    
-    func makeRedGradiant(carre : UIView)
-    {
-        //TODO : https://stackoverflow.com/questions/4754392/uiview-with-rounded-corners-and-drop-shadow
-        
-        let redGradient : CAGradientLayer = CAGradientLayer()
-        redGradient.colors = [UIColor(red: 148.0/255.0, green: 17.0/255.0, blue: 0.0, alpha: 1.0).cgColor,
-                              UIColor.red.cgColor]
-        redGradient.startPoint = CGPoint(x: 0, y: 0)
-        redGradient.endPoint = CGPoint(x: 1, y: 1)
-        redGradient.frame = carre.bounds
-        
-        carre.layer.cornerRadius = 10;
-        
-        carre.layer.shadowColor = UIColor.black.cgColor
-        carre.layer.shadowOpacity = 0.4
-        carre.layer.shadowOffset = CGSize(width: 10.0, height: 10.0)
-        carre.layer.shadowRadius = 10.0
-        
-        carre.layer.insertSublayer(redGradient, at: 0)
-    }
-    
-    func makeGreenGradiant(carre : UIView)
-    {
-        let greenGradient : CAGradientLayer = CAGradientLayer()
-        greenGradient.colors = [UIColor(red: 0.0, green: 80.0/255.0, blue: 0.0, alpha: 1.0).cgColor,
-                                UIColor(red: 0.0, green: 143.0/255.0, blue: 0.0, alpha: 1.0).cgColor]
-        greenGradient.startPoint = CGPoint(x: 0, y: 0)
-        greenGradient.endPoint = CGPoint(x: 1, y: 1)
-        greenGradient.frame = carre.bounds
-        
-        carre.layer.cornerRadius = 10;
-        carre.layer.masksToBounds = false
-        
-        carre.layer.shadowColor = UIColor.black.cgColor
-        carre.layer.shadowOpacity = 0.4
-        carre.layer.shadowOffset = CGSize(width: 10.0, height: 10.0)
-        carre.layer.shadowRadius = 10.0
-        
-        carre.layer.insertSublayer(greenGradient, at: 0)
-    }
-
-    func makeBlueGradiant(carre : UIView)
-    {
-        let blueGradient : CAGradientLayer = CAGradientLayer()
-        blueGradient.colors = [UIColor(red: 1.0/255.0, green: 25.0/255.0, blue: 147.0/255.0, alpha: 1.0).cgColor,
-                               UIColor.blue.cgColor]
-        blueGradient.startPoint = CGPoint(x: 0, y: 0)
-        blueGradient.endPoint = CGPoint(x: 1, y: 1)
-        blueGradient.frame = carre.bounds
-        
-        carre.layer.cornerRadius = 10;
-        carre.layer.masksToBounds = false
-        
-        carre.layer.shadowColor = UIColor.black.cgColor
-        carre.layer.shadowOpacity = 0.4
-        carre.layer.shadowOffset = CGSize(width: 10.0, height: 10.0)
-        carre.layer.shadowRadius = 10.0
-        
-        carre.layer.insertSublayer(blueGradient, at: 0)
-    }
-    
     
     @IBAction func downloadStatuses(_ sender: Any)
     {
@@ -158,36 +85,7 @@ class ViewAccueil: UIViewController  {
         self.updateCompteurs()
         self.view.setNeedsDisplay()
     }
-    
-    
-//    @IBAction func downloadAll(_ sender: Any) {
-//        allSeries = trakt.getWatched()
-//        allSeries = self.merge(allSeries, adds: trakt.getStopped())
-//        allSeries = self.merge(allSeries, adds: trakt.getWatchlist())
-//
-//        let infoWindow : UIAlertController = UIAlertController(title: "Loading ...", message: "", preferredStyle: UIAlertControllerStyle.alert)
-//        self.present(infoWindow, animated: true, completion: { })
-//
-//        DispatchQueue.global(qos: .utility).async {
-//
-//            let totalCompteur : Int = self.allSeries.count
-//            var compteur : Int = 0
-//
-//            for uneSerie in self.allSeries
-//            {
-//                compteur = compteur + 1
-//                DispatchQueue.main.async { infoWindow.message = "\(uneSerie.serie) (\(compteur)/\(totalCompteur))" }
-//                self.downloadSerieDetails(serie: uneSerie)
-//            }
-//
-//            infoWindow.dismiss(animated: true, completion: { })
-//
-//            DispatchQueue.main.async {
-//                self.saveDB()
-//                self.updateCompteurs()
-//            }
-//        }
-//    }
+   
     
     @IBAction func downloadAll(_ sender: Any) {
         allSeries = trakt.getWatched()
@@ -548,106 +446,7 @@ class ViewAccueil: UIViewController  {
         return false
     }
     
-    
-    func updateStatistics()
-    {
-        let minRaters : Int = 3
-        
-        var totalIMDB : Int = 0
-        var nbIMDB : Int = 0
-        var varianceIMDB : Int = 0
-        
-        var totalTVdb : Int = 0
-        var nbTVdb : Int = 0
-        var varianceTVdb : Int = 0
-        
-        var totalTrakt : Int = 0
-        var nbTrakt : Int = 0
-        var varianceTrakt : Int = 0
-        
-        var totalMovieDB : Int = 0
-        var nbMovieDB : Int = 0
-        var varianceMovieDB : Int = 0
-        
-        var totalBetaSeries : Int = 0
-        var nbBetaSeries : Int = 0
-        var varianceBetaSeries : Int = 0
-        
-        for uneSerie in allSeries
-        {
-            for uneSaison in uneSerie.saisons
-            {
-                for unEpisode in uneSaison.episodes
-                {
-                    // Source IMDB
-                    if (unEpisode.ratersIMdb > minRaters)
-                    {
-                        totalIMDB = totalIMDB + (unEpisode.ratingIMdb*unEpisode.ratersIMdb)
-                        nbIMDB = nbIMDB + unEpisode.ratersIMdb
-                        varianceIMDB = varianceIMDB + (unEpisode.ratingIMdb*unEpisode.ratingIMdb*unEpisode.ratersIMdb)
-                    }
-                    
-                    // Source TVdb
-                    if (unEpisode.ratersTVdb > minRaters)
-                    {
-                        totalTVdb = totalTVdb + (unEpisode.ratingTVdb*unEpisode.ratersTVdb)
-                        nbTVdb = nbTVdb + unEpisode.ratersTVdb
-                        varianceTVdb = varianceTVdb + (unEpisode.ratingTVdb*unEpisode.ratingTVdb*unEpisode.ratersTVdb)
-                    }
-                    
-                    // Source Trakt
-                    if (unEpisode.ratersTrakt > minRaters)
-                    {
-                        totalTrakt = totalTrakt + (unEpisode.ratingTrakt*unEpisode.ratersTrakt)
-                        nbTrakt = nbTrakt + unEpisode.ratersTrakt
-                        varianceTrakt = varianceTrakt + (unEpisode.ratingTrakt*unEpisode.ratingTrakt*unEpisode.ratersTrakt)
-                    }
-                    
-                    // Source MovieDB
-                    if (unEpisode.ratersMoviedb > minRaters)
-                    {
-                        totalMovieDB = totalMovieDB + (unEpisode.ratingMoviedb*unEpisode.ratersMoviedb)
-                        nbMovieDB = nbMovieDB + unEpisode.ratersMoviedb
-                        varianceMovieDB = varianceMovieDB + (unEpisode.ratingMoviedb*unEpisode.ratingMoviedb*unEpisode.ratersMoviedb)
-                    }
-                    
-                    // Source BetaSeries
-                    if (unEpisode.ratersBetaSeries > minRaters)
-                    {
-                        totalBetaSeries = totalBetaSeries + (unEpisode.ratingBetaSeries*unEpisode.ratersBetaSeries)
-                        nbBetaSeries = nbBetaSeries + unEpisode.ratersBetaSeries
-                        varianceBetaSeries = varianceBetaSeries + (unEpisode.ratingBetaSeries*unEpisode.ratingBetaSeries*unEpisode.ratersBetaSeries)
-                    }
-                }
-            }
-        }
-        
-        if (nbIMDB > 0) {
-            moyenneIMDB = Int(totalIMDB / nbIMDB)
-            ecartTypeIMDB = sqrt((Double(varianceIMDB)/Double(nbIMDB)) - Double(moyenneIMDB*moyenneIMDB))
-        }
-        
-        if (nbTVdb > 0) {
-            moyenneTVdb = Int(totalTVdb / nbTVdb)
-            ecartTypeTVdb = sqrt((Double(varianceTVdb)/Double(nbTVdb)) - Double(moyenneTVdb*moyenneTVdb))
-        }
-        
-        if (nbTrakt > 0) {
-            moyenneTrakt = Int(totalTrakt / nbTrakt)
-            ecartTypeTrakt = sqrt((Double(varianceTrakt)/Double(nbTrakt)) - Double(moyenneTrakt*moyenneTrakt))
-        }
-        
-        if (nbMovieDB > 0) {
-            moyenneMovieDB = Int(totalMovieDB / nbMovieDB)
-            ecartTypeMovieDB = sqrt((Double(varianceMovieDB)/Double(nbMovieDB)) - Double(moyenneMovieDB*moyenneMovieDB))
-        }
-        
-        if (nbBetaSeries > 0) {
-            moyenneBetaSeries = Int(totalBetaSeries / nbBetaSeries)
-            ecartTypeBetaSeries = sqrt((Double(varianceBetaSeries)/Double(nbBetaSeries)) - Double(moyenneBetaSeries*moyenneBetaSeries))
-        }
-    }
-    
+ 
     func printRatings()
     {
     print("serie;saison;episode;ratingTrakt;ratersTrakt;ratingTVdb;ratersTVdb;ratingMoviedb;ratersMoviedb;ratingBetaSeries;ratersBetaSeries;ratingIMdb;ratersIMdb")

@@ -73,6 +73,34 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </view>
+                                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Z1V-lp-HrR">
+                                            <rect key="frame" x="279" y="57" width="80" height="80"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OBf-Au-5Yo">
+                                                    <rect key="frame" x="8" y="39" width="64" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                                    <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2AK-Zu-69B">
+                                                    <rect key="frame" x="8" y="51" width="64" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                                    <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c8K-Iv-s5s">
+                                                    <rect key="frame" x="8" y="16" width="64" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" name="controlHighlightColor" catalog="System" colorSpace="catalog"/>
+                                        </view>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yOd-SF-MGr">
                                             <rect key="frame" x="16" y="11" width="88" height="126"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -100,15 +128,19 @@
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="avantapres" destination="OBf-Au-5Yo" id="dc5-0W-WdI"/>
                                     <outlet property="banniereSerie" destination="yOd-SF-MGr" id="sMZ-7J-Y3g"/>
                                     <outlet property="debut" destination="r5J-Ct-SkM" id="KhE-5n-9YW"/>
+                                    <outlet property="diffusion" destination="2AK-Zu-69B" id="tDf-6q-0ex"/>
                                     <outlet property="drapeau" destination="PtK-qt-JKJ" id="pZb-JV-l8i"/>
                                     <outlet property="fin" destination="LWu-SW-ODY" id="ppC-xv-ahd"/>
                                     <outlet property="globalRating" destination="iWY-yL-jll" id="r2i-8w-k67"/>
+                                    <outlet property="jours" destination="c8K-Iv-s5s" id="TPQ-Dv-GEa"/>
                                     <outlet property="miniGraphe" destination="J2f-m1-lk8" id="JN6-r5-xr5"/>
                                     <outlet property="saison" destination="FCF-68-6e5" id="OGT-tv-S5J"/>
                                     <outlet property="status" destination="e1C-B6-NXx" id="9HR-kN-eOD"/>
                                     <outlet property="titre" destination="slu-aV-s4i" id="hDT-8p-je7"/>
+                                    <outlet property="viewBgd" destination="Z1V-lp-HrR" id="sEL-Ys-1g1"/>
                                     <segue destination="20y-g9-JIP" kind="showDetail" id="ARf-YV-fBT"/>
                                 </connections>
                             </tableViewCell>

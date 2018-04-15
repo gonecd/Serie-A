@@ -63,9 +63,7 @@ class ViewSerieListe: UITableViewController {
         cell.saison.text =  String(viewList[indexPath.row].nbSaisons) + " Saisons - " + String(viewList[indexPath.row].nbEpisodes) + " Epiosdes - " + String(viewList[indexPath.row].runtime) + " min"
         
         cell.globalRating.text = String(viewList[indexPath.row].getGlobalRating()) + " %"
-        cell.globalRating.layer.cornerRadius = 12
-        cell.globalRating.layer.masksToBounds = true
-        
+        arrondir(texte: cell.globalRating, radius: 12.0)
 
         // Affichage des genres
         var allGenres : String = ""
@@ -76,8 +74,7 @@ class ViewSerieListe: UITableViewController {
         cell.genres.text = allGenres
         
         // Affichage du status
-        cell.status.layer.cornerRadius = 8
-        cell.status.layer.masksToBounds = true
+        arrondir(texte: cell.status, radius: 8.0)
         if (viewList[indexPath.row].status == "Ended")
         {
             cell.status.text = "FINIE"
@@ -90,40 +87,7 @@ class ViewSerieListe: UITableViewController {
         }
         
         // Affichage du drapeau
-        switch viewList[indexPath.row].country {
-        case "US":
-            cell.drapeau.image = #imageLiteral(resourceName: "Flag_of_the_United_States.png")
-            
-        case "GB":
-            cell.drapeau.image = #imageLiteral(resourceName: "Flag_of_the_United_Kingdom.png")
-            
-        case "UK":
-            cell.drapeau.image = #imageLiteral(resourceName: "Flag_of_the_United_Kingdom.png")
-            
-        case "FR":
-            cell.drapeau.image = #imageLiteral(resourceName: "Flag_of_France.png")
-            
-        case "ES":
-            cell.drapeau.image = #imageLiteral(resourceName: "Flag_of_Spain.png")
-            
-        case "DE":
-            cell.drapeau.image = #imageLiteral(resourceName: "Flag_of_Germany.png")
-            
-        case "CA":
-            cell.drapeau.image = #imageLiteral(resourceName: "Flag_of_Canada.png")
-            
-        case "CZ":
-            cell.drapeau.image = #imageLiteral(resourceName: "Flag_of_the_Czech_Republic.png")
-            
-        case "NO":
-            cell.drapeau.image = #imageLiteral(resourceName: "Flag_of_Norway.png")
-            
-        case "SE":
-            cell.drapeau.image = #imageLiteral(resourceName: "Flag_of_Sweden.png")
-            
-        default:
-            print("Pays sans drapeau : \(viewList[indexPath.row].country) pour la serie \(viewList[indexPath.row].serie)")
-        }
+        cell.drapeau.image = getDrapeau(country: viewList[indexPath.row].country)
         
         // Affichage du mini graphe
         cell.miniGraphe.sendNotes(rateTrakt: viewList[indexPath.row].getFairGlobalRatingTrakt(),
