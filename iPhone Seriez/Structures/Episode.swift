@@ -119,7 +119,7 @@ class Episode : NSObject, NSCoding
         if (date.compare(Date()) == .orderedDescending) { return 0 }
         if (ecartTypeTrakt == 0) { return 0 }
 
-        return Int( 80.0 + (10.0 * Double(ratingTrakt - moyenneTrakt) / ecartTypeTrakt))
+        return Int( notesMid + (notesRange * Double(ratingTrakt - moyenneTrakteps) / ecartTypeTrakteps))
     }
     
     func getFairRatingTVdb() -> Int
@@ -128,7 +128,7 @@ class Episode : NSObject, NSCoding
         if (date.compare(Date()) == .orderedDescending) { return 0 }
         if (ecartTypeTVdb == 0) { return 0 }
 
-        return Int( 80.0 + (10.0 * Double(ratingTVdb - moyenneTVdb) / ecartTypeTVdb))
+        return Int( notesMid + (notesRange * Double(ratingTVdb - moyenneTVdbeps) / ecartTypeTVdbeps))
     }
     
     func getFairRatingBetaSeries() -> Int
@@ -137,7 +137,7 @@ class Episode : NSObject, NSCoding
         if (date.compare(Date()) == .orderedDescending) { return 0 }
         if (ecartTypeBetaSeries == 0) { return 0 }
 
-        return Int( 80.0 + (10.0 * Double(ratingBetaSeries - moyenneBetaSeries) / ecartTypeBetaSeries))
+        return Int( notesMid + (notesRange * Double(ratingBetaSeries - moyenneBetaSerieseps) / ecartTypeBetaSerieseps))
     }
     
     func getFairRatingMoviedb() -> Int
@@ -146,7 +146,7 @@ class Episode : NSObject, NSCoding
         if (date.compare(Date()) == .orderedDescending) { return 0 }
         if (ecartTypeMovieDB == 0) { return 0 }
 
-        return Int( 80.0 + (10.0 * Double(ratingMoviedb - moyenneMovieDB) / ecartTypeMovieDB))
+        return Int( notesMid + (notesRange * Double(ratingMoviedb - moyenneMovieDBeps) / ecartTypeMovieDBeps))
     }
     
     func getFairRatingIMdb() -> Int
@@ -155,7 +155,7 @@ class Episode : NSObject, NSCoding
         if (date.compare(Date()) == .orderedDescending) { return 0 }
         if (ecartTypeIMDB == 0) { return 0 }
 
-        return Int( 80.0 + (10.0 * Double(ratingIMdb - moyenneIMDB) / ecartTypeIMDB))
+        return Int( notesMid + (notesRange * Double(ratingIMdb - moyenneIMDBeps) / ecartTypeIMDBeps))
     }
     
     

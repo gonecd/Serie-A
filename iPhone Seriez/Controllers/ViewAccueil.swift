@@ -141,7 +141,7 @@ class ViewAccueil: UIViewController  {
     
     func downloadSerieDetails(serie : Serie)
     {
-        self.theTVdb.getSerieInfos(serie)
+        self.theTVdb.getSerieInfosLight(uneSerie: serie)
         if (serie.idTVdb != "") { self.theTVdb.getEpisodesRatings(serie) }
         if (serie.idTrakt != "") { self.trakt.getEpisodesRatings(serie) }
         if (serie.idTVdb != "") { self.betaSeries.getEpisodesRatings(serie) }

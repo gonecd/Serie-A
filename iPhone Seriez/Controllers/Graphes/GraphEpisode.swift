@@ -64,7 +64,7 @@ class GraphEpisode: UIView {
             path.setLineDash([5.0,5.0], count: 2, phase: 5.0)
             path.stroke()
             
-            let episode : NSString = String(60 + (i*10) ) as NSString
+            let episode : NSString = String(i*25) as NSString
             episode.draw(in: CGRect(x: origineX + (largeur * CGFloat(i)/4) - 7.0,
                                     y: origineY + 5.0, width: 20, height: 10),
                          withAttributes: textAttributes)
@@ -90,14 +90,9 @@ class GraphEpisode: UIView {
     
     func traceUneBarre(_ noteX: Int, color: UIColor, offset: Int)
     {
-        var value = noteX
         let nbSource : CGFloat = 5.0
         let col : CGFloat = hauteur / (4 * nbSource)
 
-        if ( noteX == 0 ) { return }
-        if ( noteX < 60 ) { value = 60 }
-        if ( noteX > 100 ) { value = 100 }
-        
         color.setStroke()
         color.withAlphaComponent(0.5).setFill()
         
@@ -106,10 +101,10 @@ class GraphEpisode: UIView {
         path.move(to: CGPoint(x: origineX,
                               y: origineY - (CGFloat(offset - 1) * hauteur / nbSource) - col))
         
-        path.addLine(to: CGPoint(x: origineX + ( largeur * CGFloat(value - 60) / 40),
+        path.addLine(to: CGPoint(x: origineX + ( largeur * CGFloat(noteX) / 100),
                                  y: origineY - (CGFloat(offset - 1) * hauteur / nbSource) - col))
         
-        path.addLine(to: CGPoint(x: origineX + ( largeur * CGFloat(value - 60) / 40),
+        path.addLine(to: CGPoint(x: origineX + ( largeur * CGFloat(noteX) / 100),
                                  y: origineY - (CGFloat(offset - 1) * hauteur / nbSource) - (3 * col)))
         
         path.addLine(to: CGPoint(x: origineX,

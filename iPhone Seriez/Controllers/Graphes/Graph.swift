@@ -76,8 +76,8 @@ class Graph: UIView {
         // Légende en Y
         for i:Int in 0 ..< 5
         {
-            let episode : NSString = String(6+i) as NSString
-            episode.draw(in: CGRect(x: 10, y: origineY - (hauteur * CGFloat(i)/4), width: 20, height: 10), withAttributes: textAttributes)
+            let episode : NSString = String(i*25) as NSString
+            episode.draw(in: CGRect(x: 7, y: origineY - (hauteur * CGFloat(i)/4) - 7, width: 20, height: 10), withAttributes: textAttributes)
         }
 
         // Coches verticales
@@ -129,14 +129,12 @@ class Graph: UIView {
         let origineY :CGFloat = self.frame.height - 30.0
         let hauteur : CGFloat = (self.frame.height - 30.0 - 10.0)
 
-        if (uneNote < 60) { return }
-
         uneCouleur.setStroke()
         uneCouleur.setFill()
         
         let path : UIBezierPath = UIBezierPath()
         path.addArc(withCenter: CGPoint(x: origineX - 5 + offsetSaison + offsetSource,
-                                        y: origineY - (hauteur * CGFloat(uneNote - 60))/40),
+                                        y: origineY - (hauteur * CGFloat(uneNote) / 100)),
                     radius: diametre / 2,
                     startAngle: 2 * .pi,
                     endAngle: 0,
@@ -210,9 +208,9 @@ class Graph: UIView {
 
             let path : UIBezierPath = UIBezierPath()
             path.move(to: CGPoint(x: origineX + (largeur * 0.5 / CGFloat(nbEpisodes)),
-                                  y: (origineY - (hauteur * CGFloat(A + B - 60))/40)))
+                                  y: (origineY - (hauteur * CGFloat(A + B))/100)))
             path.addLine(to: CGPoint(x: origineX + (largeur * (CGFloat(nbEpisodes-1)+0.5) / CGFloat(nbEpisodes)),
-                                     y: (origineY - (hauteur * CGFloat(A + (B * Double(nbEpisodes)) - 60))/40)))
+                                     y: (origineY - (hauteur * CGFloat(A + (B * Double(nbEpisodes))))/100)))
             uneCouleur.setStroke()
             path.lineWidth = 2.0
 

@@ -64,7 +64,7 @@ class ViewSerieListe: UITableViewController {
         
         cell.globalRating.text = String(viewList[indexPath.row].getGlobalRating()) + " %"
         arrondir(texte: cell.globalRating, radius: 12.0)
-
+        
         // Affichage des genres
         var allGenres : String = ""
         for unGenre in viewList[indexPath.row].genres
@@ -107,10 +107,11 @@ class ViewSerieListe: UITableViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-            let viewController = segue.destination as! SerieFiche
-            let tableCell : CellSerieListe = sender as! CellSerieListe
-            viewController.serie = viewList[tableCell.index]
-            viewController.image = accueil.getImage(viewList[tableCell.index].banner)
+        let viewController = segue.destination as! SerieFiche
+        let tableCell : CellSerieListe = sender as! CellSerieListe
+        self.accueil.downloadSerieDetails(serie: self.viewList[tableCell.index])
+        viewController.serie = viewList[tableCell.index]
+        viewController.image = accueil.getImage(viewList[tableCell.index].banner)
     }
     
     @IBAction func addSerie(_ sender: Any) {
@@ -179,8 +180,8 @@ class ViewSerieListe: UITableViewController {
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
-
-
+    
+    
     @IBAction func changeGraphe(_ sender: Any) {
         if (grapheType == 0) { grapheType = 1 }
         else { grapheType = 0 }

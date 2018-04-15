@@ -63,8 +63,8 @@ class GraphSaison: UIView {
         // Légende en Y
         for i:Int in 0 ..< 5
         {
-            let episode : NSString = String(6+i) as NSString
-            episode.draw(in: CGRect(x: 10, y: origineY - (hauteur * CGFloat(i)/4), width: 20, height: 10), withAttributes: textAttributes)
+            let episode : NSString = String(i*25) as NSString
+            episode.draw(in: CGRect(x: 8, y: origineY - (hauteur * CGFloat(i)/4) - 7, width: 30, height: 10), withAttributes: textAttributes)
         }
 
         // Coches verticales
@@ -117,17 +117,13 @@ class GraphSaison: UIView {
         let origineX : CGFloat = 30.0
         let origineY :CGFloat = self.frame.height - 30.0
         let hauteur : CGFloat = (self.frame.height - 30.0 - 10.0)
-        var value = uneNote
-        
-        if (uneNote == 0) { return }
-        if (uneNote < 60) { value = 60 }
 
         uneCouleur.setStroke()
         uneCouleur.setFill()
 
         let path : UIBezierPath = UIBezierPath()
         path.addArc(withCenter: CGPoint(x: origineX - 5 + offsetEpisode + offsetSource,
-                                        y: origineY - (hauteur * CGFloat(value - 60))/40),
+                                        y: origineY - (hauteur * CGFloat(uneNote) / 100) ),
                     radius: diametre / 2,
                     startAngle: 2 * .pi,
                     endAngle: 0,

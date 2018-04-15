@@ -177,6 +177,7 @@ class ViewSaisonListe: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let viewController = segue.destination as! SaisonFiche
         let tableCell : CellSaisonListe = sender as! CellSaisonListe
+        self.accueil.downloadSerieDetails(serie: self.viewList[tableCell.index])
         viewController.serie = viewList[tableCell.index]
         viewController.saison = allSaisons[tableCell.index]
         viewController.image = accueil.getImage(viewList[tableCell.index].banner)
@@ -185,7 +186,6 @@ class ViewSaisonListe: UITableViewController {
     override func tableView(_ tableView: UITableView, editActionsForRowAt: IndexPath) -> [UITableViewRowAction]? {
         let reload = UITableViewRowAction(style: .normal, title: "Reload") { action, index in
             self.accueil.downloadGlobalInfo(serie: self.viewList[index.row])
-            //self.accueil.downloadSerieDetails(serie: self.viewList[index.row])
             self.accueil.saveDB()
             self.liste.reloadData()
             self.view.setNeedsDisplay()

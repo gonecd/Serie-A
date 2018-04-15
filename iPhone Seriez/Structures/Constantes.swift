@@ -17,6 +17,7 @@ let correctionTrakt         : Int = 79
 let correctionMoviedb       : Int = 75
 let correctionIMdb          : Int = 86
 
+// Corrections statistiques pour les séries
 var moyenneIMDB         : Int       = 85
 var ecartTypeIMDB       : Double    = 5.945
 var moyenneTVdb         : Int       = 84
@@ -27,6 +28,19 @@ var moyenneMovieDB      : Int       = 75
 var ecartTypeMovieDB    : Double    = 6.590
 var moyenneBetaSeries   : Int       = 88
 var ecartTypeBetaSeries : Double    = 6.199
+
+// Corrections statistiques pour les épisodes
+var moyenneIMDBeps         : Int       = 86
+var ecartTypeIMDBeps       : Double    = 9.151
+var moyenneTVdbeps         : Int       = 76
+var ecartTypeTVdbeps       : Double    = 11.775
+var moyenneTrakteps        : Int       = 78
+var ecartTypeTrakteps      : Double    = 11.034
+var moyenneMovieDBeps      : Int       = 76
+var ecartTypeMovieDBeps    : Double    = 10.513
+var moyenneBetaSerieseps   : Int       = 85
+var ecartTypeBetaSerieseps : Double    = 10.870
+
 
 let notesMid    : Double = 60.0
 let notesRange  : Double = 25.0
