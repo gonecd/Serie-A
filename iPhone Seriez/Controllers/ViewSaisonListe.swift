@@ -19,6 +19,7 @@ class CellSaisonListe: UITableViewCell {
     @IBOutlet weak var miniGraphe: GraphMiniSaison!
     @IBOutlet weak var globalRating: UITextField!
     @IBOutlet weak var status: UITextField!
+    @IBOutlet weak var drapeau: UIImageView!
     
     var index: Int = 0
 }
@@ -59,18 +60,44 @@ class ViewSaisonListe: UITableViewController {
         cell.index = indexPath.row
         cell.titre.text = viewList[indexPath.row].serie
         
-        let uneSaison = viewList[indexPath.row].saisons[allSaisons[indexPath.row] - 1]
-        var nbEps = 0
-        
-        for eps in uneSaison.episodes
-        {
-            let today = Date()
-            if (eps.date.compare(today) == .orderedAscending)
-            {
-                nbEps = nbEps + 1
-            }
+        // Affichage du drapeau
+        switch viewList[indexPath.row].country {
+        case "US":
+            cell.drapeau.image = #imageLiteral(resourceName: "Flag_of_the_United_States.png")
+            
+        case "GB":
+            cell.drapeau.image = #imageLiteral(resourceName: "Flag_of_the_United_Kingdom.png")
+            
+        case "UK":
+            cell.drapeau.image = #imageLiteral(resourceName: "Flag_of_the_United_Kingdom.png")
+            
+        case "FR":
+            cell.drapeau.image = #imageLiteral(resourceName: "Flag_of_France.png")
+            
+        case "ES":
+            cell.drapeau.image = #imageLiteral(resourceName: "Flag_of_Spain.png")
+            
+        case "DE":
+            cell.drapeau.image = #imageLiteral(resourceName: "Flag_of_Germany.png")
+            
+        case "CA":
+            cell.drapeau.image = #imageLiteral(resourceName: "Flag_of_Canada.png")
+            
+        case "CZ":
+            cell.drapeau.image = #imageLiteral(resourceName: "Flag_of_the_Czech_Republic.png")
+            
+        case "NO":
+            cell.drapeau.image = #imageLiteral(resourceName: "Flag_of_Norway.png")
+            
+        case "SE":
+            cell.drapeau.image = #imageLiteral(resourceName: "Flag_of_Sweden.png")
+            
+        default:
+            print("Pays sans drapeau : \(viewList[indexPath.row].country) pour la serie \(viewList[indexPath.row].serie)")
         }
         
+        let uneSaison = viewList[indexPath.row].saisons[allSaisons[indexPath.row] - 1]
+
         var totBetaSeriesMoy : Int = 0
         var totTraktMoy : Int = 0
         var totTVdbMoy : Int = 0
@@ -91,11 +118,19 @@ class ViewSaisonListe: UITableViewController {
             }
         }
         
-        cell.saison.text = "Saison " + String(allSaisons[indexPath.row]) + " - ( " + String(nbEps) + " / " + String(uneSaison.episodes.count) + " )"
-        cell.debut.text = dateFormatter.string(from: uneSaison.episodes[0].date)
-        cell.fin.text = dateFormatter.string(from: uneSaison.episodes[uneSaison.episodes.count - 1].date)
-        cell.globalRating.text = String(viewList[indexPath.row].getGlobalRating())
+        cell.saison.text = "Saison " + String(allSaisons[indexPath.row]) + " - ( ?? / " + String(uneSaison.nbEpisodes) + " )"
         
+        if (uneSaison.starts == ZeroDate) { cell.debut.text = "?" }
+        else { cell.debut.text = dateFormatter.string(from: uneSaison.starts) }
+        
+        if (uneSaison.ends == ZeroDate) { cell.fin.text = "?" }
+        else { cell.fin.text = dateFormatter.string(from: uneSaison.ends) }
+        
+        cell.globalRating.text = String(viewList[indexPath.row].getGlobalRating()) + " %"
+        cell.globalRating.layer.cornerRadius = 12
+        cell.globalRating.layer.masksToBounds = true
+        
+
         // Affichage du status
         cell.status.layer.cornerRadius = 8
         cell.status.layer.masksToBounds = true

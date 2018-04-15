@@ -15,6 +15,12 @@ class Saison : NSObject, NSCoding
     var saison : Int
     var episodes : [Episode] = [Episode]()
 
+    var nbEpisodes : Int = 0
+    var starts : Date = ZeroDate
+    var ends : Date = ZeroDate
+    
+    var watched : Bool = false
+    
     init(serie:String, saison:Int)
     {
         self.serie = serie
@@ -25,12 +31,24 @@ class Saison : NSObject, NSCoding
         self.serie = decoder.decodeObject(forKey: "serie") as? String ?? ""
         self.saison = decoder.decodeInteger(forKey: "saison")
         self.episodes = decoder.decodeObject(forKey: "episodes") as? [Episode] ?? []
+        
+        self.nbEpisodes = decoder.decodeInteger(forKey: "nbEpisodes")
+        self.starts = decoder.decodeObject(forKey: "starts") as? Date ?? ZeroDate
+        self.ends = decoder.decodeObject(forKey: "ends") as? Date ?? ZeroDate
+
+        self.watched = decoder.decodeBool(forKey: "watched")
   }
     
     func encode(with coder: NSCoder) {
         coder.encode(self.serie, forKey: "serie")
         coder.encodeCInt(Int32(self.saison), forKey: "saison")
         coder.encode(self.episodes, forKey: "episodes")
+        
+        coder.encodeCInt(Int32(self.nbEpisodes), forKey: "nbEpisodes")
+        coder.encode(self.starts, forKey: "starts")
+        coder.encode(self.ends, forKey: "ends")
+
+        coder.encode(self.watched, forKey: "watched")
     }
 
     func getFairRatingTrakt() -> Int

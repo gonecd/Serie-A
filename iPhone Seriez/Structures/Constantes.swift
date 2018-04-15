@@ -8,6 +8,8 @@
 
 import UIKit
 
+let ZeroDate : Date = Date.init(timeIntervalSince1970: 0)
+
 // Correction des notes pour homogénéisation
 let correctionTVdb          : Int = 77
 let correctionBetaSeries    : Int = 86

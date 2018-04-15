@@ -69,7 +69,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J2f-m1-lk8" customClass="GraphMiniSaison" customModule="SerieA" customModuleProvider="target">
-                                            <rect key="frame" x="299" y="79" width="60" height="60"/>
+                                            <rect key="frame" x="279" y="57" width="80" height="80"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </view>
@@ -77,16 +77,16 @@
                                             <rect key="frame" x="16" y="11" width="88" height="126"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </imageView>
-                                        <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="80" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="iWY-yL-jll">
-                                            <rect key="frame" x="299" y="35" width="60" height="30"/>
+                                        <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="80" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="iWY-yL-jll">
+                                            <rect key="frame" x="304" y="29" width="55" height="20"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <color key="backgroundColor" name="selectedControlColor" catalog="System" colorSpace="catalog"/>
-                                            <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="32"/>
+                                            <color key="backgroundColor" name="controlHighlightColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="textColor" red="0.016804177310000001" green="0.19835099580000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                             <textInputTraits key="textInputTraits"/>
                                         </textField>
                                         <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="EN COURS" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="e1C-B6-NXx">
-                                            <rect key="frame" x="117" y="54" width="99" height="15"/>
+                                            <rect key="frame" x="117" y="54" width="90" height="15"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" name="controlHighlightColor" catalog="System" colorSpace="catalog"/>
                                             <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -94,7 +94,7 @@
                                             <textInputTraits key="textInputTraits"/>
                                         </textField>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PtK-qt-JKJ">
-                                            <rect key="frame" x="112" y="11" width="20" height="13"/>
+                                            <rect key="frame" x="112" y="10" width="20" height="13"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </imageView>
                                     </subviews>
@@ -102,6 +102,7 @@
                                 <connections>
                                     <outlet property="banniereSerie" destination="yOd-SF-MGr" id="sMZ-7J-Y3g"/>
                                     <outlet property="debut" destination="r5J-Ct-SkM" id="KhE-5n-9YW"/>
+                                    <outlet property="drapeau" destination="PtK-qt-JKJ" id="pZb-JV-l8i"/>
                                     <outlet property="fin" destination="LWu-SW-ODY" id="ppC-xv-ahd"/>
                                     <outlet property="globalRating" destination="iWY-yL-jll" id="r2i-8w-k67"/>
                                     <outlet property="miniGraphe" destination="J2f-m1-lk8" id="JN6-r5-xr5"/>
@@ -417,13 +418,13 @@
                         <outlet property="cadreSerieEncours" destination="uqC-v5-rRl" id="jIF-16-n32"/>
                         <outlet property="cadreSerieFinie" destination="mCh-dL-cpL" id="CFg-PY-WVi"/>
                         <outlet property="cadreSerieWatchlist" destination="s2a-BW-jJ7" id="3TF-E3-eyu"/>
-                        <outlet property="cptAbandonnees" destination="VFf-0T-BJb" id="CJg-uQ-KBy"/>
-                        <outlet property="cptAdecouvrir" destination="1Do-wS-Ndc" id="9uf-Jx-U42"/>
-                        <outlet property="cptAjour" destination="Yds-Lf-QOR" id="cMM-Fw-PSF"/>
-                        <outlet property="cptAnciennes" destination="Lig-xd-cYT" id="zYV-hG-UCC"/>
-                        <outlet property="cptAttendre" destination="Dcy-dd-VdT" id="XPJ-4s-nXn"/>
-                        <outlet property="cptAvenir" destination="rFU-fM-M3i" id="iQk-Ow-zUv"/>
-                        <outlet property="cptAvoir" destination="6pT-a6-EtR" id="cyt-ba-fvX"/>
+                        <outlet property="cptSaisonsAnnoncees" destination="rFU-fM-M3i" id="Gzs-eD-Ktm"/>
+                        <outlet property="cptSaisonsDiffusees" destination="6pT-a6-EtR" id="x4L-46-NGv"/>
+                        <outlet property="cptSaisonsOnTheAir" destination="Dcy-dd-VdT" id="nLD-cK-9WT"/>
+                        <outlet property="cptSeriesAbandonnees" destination="VFf-0T-BJb" id="vax-91-bmR"/>
+                        <outlet property="cptSeriesEnCours" destination="Yds-Lf-QOR" id="Qms-nx-uaU"/>
+                        <outlet property="cptSeriesFinies" destination="Lig-xd-cYT" id="pRm-O8-uF3"/>
+                        <outlet property="cptWatchList" destination="1Do-wS-Ndc" id="mSB-38-UDi"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LVN-Ba-hTa" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1080,7 +1081,7 @@
                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                         </textView>
                                         <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="EN COURS" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pat-qZ-Fwo">
-                                            <rect key="frame" x="112" y="57" width="85" height="15"/>
+                                            <rect key="frame" x="112" y="57" width="90" height="15"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" name="controlHighlightColor" catalog="System" colorSpace="catalog"/>
                                             <nil key="textColor"/>
@@ -1092,7 +1093,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Saison" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dk6-Zj-uW4">
-                                            <rect key="frame" x="112" y="28" width="206" height="21"/>
+                                            <rect key="frame" x="112" y="28" width="191" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                             <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

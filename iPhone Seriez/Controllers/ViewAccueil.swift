@@ -20,13 +20,14 @@ class ViewAccueil: UIViewController  {
     var allSeries: [Serie] = [Serie]()
     var imagesCache : NSCache = NSCache<NSString, UIImage>()
     
-    @IBOutlet weak var cptAnciennes: UITextField!
-    @IBOutlet weak var cptAjour: UITextField!
-    @IBOutlet weak var cptAttendre: UITextField!
-    @IBOutlet weak var cptAvoir: UITextField!
-    @IBOutlet weak var cptAvenir: UITextField!
-    @IBOutlet weak var cptAdecouvrir: UITextField!
-    @IBOutlet weak var cptAbandonnees: UITextField!
+    @IBOutlet weak var cptSeriesFinies: UITextField!
+    @IBOutlet weak var cptSeriesEnCours: UITextField!
+    @IBOutlet weak var cptSeriesAbandonnees: UITextField!
+    @IBOutlet weak var cptSaisonsOnTheAir: UITextField!
+    @IBOutlet weak var cptSaisonsDiffusees: UITextField!
+    @IBOutlet weak var cptSaisonsAnnoncees: UITextField!
+    @IBOutlet weak var cptWatchList: UITextField!
+
     
     @IBOutlet weak var cadreSaisonAvenir: UIView!
     @IBOutlet weak var cadreSaisonAvoir: UIView!
@@ -56,13 +57,13 @@ class ViewAccueil: UIViewController  {
         makeGreenGradiant(carre: cadreConseil)
 
         // Faire des jolis compteurs à coins ronds
-        makeJolisCompteurs(compteur: cptAnciennes)
-        makeJolisCompteurs(compteur: cptAjour)
-        makeJolisCompteurs(compteur: cptAttendre)
-        makeJolisCompteurs(compteur: cptAvoir)
-        makeJolisCompteurs(compteur: cptAvenir)
-        makeJolisCompteurs(compteur: cptAdecouvrir)
-        makeJolisCompteurs(compteur: cptAbandonnees)
+        makeJolisCompteurs(compteur: cptSeriesFinies)
+        makeJolisCompteurs(compteur: cptSeriesEnCours)
+        makeJolisCompteurs(compteur: cptSeriesAbandonnees)
+        makeJolisCompteurs(compteur: cptSaisonsOnTheAir)
+        makeJolisCompteurs(compteur: cptSaisonsDiffusees)
+        makeJolisCompteurs(compteur: cptSaisonsAnnoncees)
+        makeJolisCompteurs(compteur: cptWatchList)
         
         // Connexion aux sources de données
         trakt.start()
@@ -73,7 +74,7 @@ class ViewAccueil: UIViewController  {
         loadDB()
         allSeries = allSeries.sorted(by:  { $0.serie < $1.serie })
         updateCompteurs()
-        updateStatistics()
+        //updateStatistics()
         
     }
     
@@ -190,6 +191,7 @@ class ViewAccueil: UIViewController  {
     
     @IBAction func downloadAll(_ sender: Any) {
         allSeries = trakt.getWatched()
+        for uneSerie in allSeries { trakt.getSaisons(uneSerie: uneSerie) }
         allSeries = self.merge(allSeries, adds: trakt.getStopped())
         allSeries = self.merge(allSeries, adds: trakt.getWatchlist())
         
@@ -205,16 +207,14 @@ class ViewAccueil: UIViewController  {
             {
                 compteur = compteur + 1
                 DispatchQueue.main.async { infoWindow.message = "\(uneSerie.serie) (\(compteur)/\(totalCompteur))" }
-                print("Loading \(uneSerie.serie) [ idIMDB: \(uneSerie.idIMdb), idTVdb: \(uneSerie.idTVdb), idTrakt: \(uneSerie.idTrakt), idMovieDB: \(uneSerie.idMoviedb) ]")
                 self.downloadGlobalInfo(serie: uneSerie)
-                print()
             }
             
             infoWindow.dismiss(animated: true, completion: { })
             
             DispatchQueue.main.async {
                 self.saveDB()
-                //TODO self.updateCompteurs()
+                self.updateCompteurs()
             }
         }
     }
@@ -228,6 +228,17 @@ class ViewAccueil: UIViewController  {
         let dataIMDB : Serie = self.imdb.getSerieGlobalInfos(idIMDB: serie.idIMdb)
 
         serie.cleverMerge(TVdb: dataTVdb, Moviedb: dataMoviedb, Trakt: dataTrakt, BetaSeries: dataBetaSeries, IMDB: dataIMDB)
+        
+        if ( (serie.watchlist == false) && (serie.unfollowed == false) )
+        {
+            for saison in serie.saisons
+            {
+                if (saison.watched == false)
+                {
+                    serie.saisons[saison.saison - 1].ends = self.trakt.getLastEpisodeDate(traktID : serie.idTrakt, saison : saison.saison, episode : serie.saisons[saison.saison - 1].nbEpisodes)
+                }
+            }
+        }
     }
     
     func downloadSerieDetails(serie : Serie)
@@ -297,20 +308,14 @@ class ViewAccueil: UIViewController  {
             viewController.title = "Watchlist"
             viewController.accueil = self
             viewController.isWatchlist = true
-            for uneSerie in allSeries
-            {
-                if (uneSerie.watchlist) { buildList.append(uneSerie) }
-            }
+            for uneSerie in allSeries { if (uneSerie.watchlist) { buildList.append(uneSerie) } }
             viewController.viewList = buildList
             
         case "  Abandonnées":
             let viewController = segue.destination as! ViewSerieListe
             viewController.title = "Séries abandonnées"
             viewController.accueil = self
-            for uneSerie in allSeries
-            {
-                if (uneSerie.unfollowed) { buildList.append(uneSerie) }
-            }
+            for uneSerie in allSeries { if (uneSerie.unfollowed) { buildList.append(uneSerie) } }
             viewController.viewList = buildList
             
         case "  Finies":
@@ -321,9 +326,7 @@ class ViewAccueil: UIViewController  {
             {
                 if (uneSerie.saisons.count > 0)
                 {
-                    let lastSaison : Saison = uneSerie.saisons[uneSerie.saisons.count - 1]
-                    
-                    if ( (lastSaison.episodes[lastSaison.episodes.count - 1].watched == true) && (uneSerie.status == "Ended") )
+                    if ( (uneSerie.saisons[uneSerie.saisons.count - 1].watched == true) && (uneSerie.status == "Ended") )
                     {
                         buildList.append(uneSerie)
                     }
@@ -339,9 +342,7 @@ class ViewAccueil: UIViewController  {
             {
                 if (uneSerie.saisons.count > 0)
                 {
-                    let lastSaison : Saison = uneSerie.saisons[uneSerie.saisons.count - 1]
-                    
-                    if ( ((lastSaison.episodes[lastSaison.episodes.count - 1].watched == false) || (uneSerie.status != "Ended")) && (uneSerie.unfollowed == false) && (uneSerie.watchlist == false) )
+                    if ( ((uneSerie.saisons[uneSerie.saisons.count - 1].watched == false) || (uneSerie.status != "Ended")) && (uneSerie.unfollowed == false) && (uneSerie.watchlist == false) )
                     {
                         buildList.append(uneSerie)
                     }
@@ -357,9 +358,10 @@ class ViewAccueil: UIViewController  {
             {
                 for uneSaison in uneSerie.saisons
                 {
-                    if ( (uneSaison.episodes[0].date.compare(today) == .orderedAscending ) &&
-                        (uneSaison.episodes[uneSaison.episodes.count - 1].date.compare(today) == .orderedDescending ) &&
-                        (uneSaison.episodes[uneSaison.episodes.count - 1].watched == false)  &&
+                    if ( (uneSaison.starts != ZeroDate) &&
+                        (uneSaison.starts.compare(today) == .orderedAscending) &&
+                        ((uneSaison.ends.compare(today) == .orderedDescending)  || (uneSaison.ends == ZeroDate)) &&
+                        (uneSaison.watched == false)  &&
                         (uneSerie.watchlist == false) &&
                         (uneSerie.unfollowed == false) )
                     {
@@ -379,8 +381,10 @@ class ViewAccueil: UIViewController  {
             {
                 for uneSaison in uneSerie.saisons
                 {
-                    if ( (uneSaison.episodes[uneSaison.episodes.count - 1].date.compare(today) == .orderedAscending ) &&
-                        (uneSaison.episodes[uneSaison.episodes.count - 1].watched == false) &&
+                    if ( (uneSaison.starts != ZeroDate) &&
+                        (uneSaison.ends.compare(today) == .orderedAscending ) &&
+                        (uneSaison.ends != ZeroDate) &&
+                        (uneSaison.watched == false) &&
                         (uneSerie.watchlist == false) &&
                         (uneSerie.unfollowed == false) )
                     {
@@ -400,7 +404,7 @@ class ViewAccueil: UIViewController  {
             {
                 for uneSaison in uneSerie.saisons
                 {
-                    if ( (uneSaison.episodes[0].date.compare(today) == .orderedDescending ) &&
+                    if ( (uneSaison.starts.compare(today) == .orderedDescending) &&
                         (uneSerie.watchlist == false) &&
                         (uneSerie.unfollowed == false) )
                     {
@@ -420,55 +424,59 @@ class ViewAccueil: UIViewController  {
     
     func updateCompteurs()
     {
-        var valAnciennes : Int = 0
-        var valAjour : Int = 0
-        var valAttendre : Int = 0
-        var valAvoir : Int = 0
-        var valAvenir : Int = 0
-        var valptAdecouvrir : Int = 0
-        var valAbandonnees : Int = 0
+        var valSeriesFinies : Int = 0
+        var valSeriesEnCours : Int = 0
+        var valSaisonsOnTheAir : Int = 0
+        var valSaisonsDiffusees : Int = 0
+        var valSaisonsAnnoncees : Int = 0
+        var ValWatchList : Int = 0
+        var valSeriesAbandonnees : Int = 0
         let today : Date = Date()
         
         for uneSerie in allSeries
         {
-            if (uneSerie.unfollowed) { valAbandonnees = valAbandonnees + 1 }
-            if (uneSerie.watchlist) { valptAdecouvrir = valptAdecouvrir + 1 }
+            if (uneSerie.unfollowed) { valSeriesAbandonnees = valSeriesAbandonnees + 1 }
+            if (uneSerie.watchlist) { ValWatchList = ValWatchList + 1 }
             if (uneSerie.saisons.count > 0)
             {
                 let lastSaison : Saison = uneSerie.saisons[uneSerie.saisons.count - 1]
-                if ( (lastSaison.episodes[lastSaison.episodes.count - 1].watched == true) && (uneSerie.status == "Ended") ) { valAnciennes = valAnciennes + 1 }
-                if ( ((lastSaison.episodes[lastSaison.episodes.count - 1].watched == false) || (uneSerie.status != "Ended")) && (uneSerie.unfollowed == false) && (uneSerie.watchlist == false) ) { valAjour = valAjour + 1 }
+                
+                if ( (lastSaison.watched == true) && (uneSerie.status == "Ended") ) { valSeriesFinies = valSeriesFinies + 1 }
+                if ( ((lastSaison.watched == false) || (uneSerie.status != "Ended")) && (uneSerie.unfollowed == false) && (uneSerie.watchlist == false) ) { valSeriesEnCours = valSeriesEnCours + 1 }
             }
             
             for uneSaison in uneSerie.saisons
             {
-                if ( (uneSaison.episodes[0].date.compare(today) == .orderedAscending ) &&
-                    (uneSaison.episodes[uneSaison.episodes.count - 1].date.compare(today) == .orderedDescending ) &&
-                    (uneSaison.episodes[uneSaison.episodes.count - 1].watched == false)  &&
+                if ( (uneSaison.starts != ZeroDate) &&
+                    (uneSaison.starts.compare(today) == .orderedAscending) &&
+                    ((uneSaison.ends.compare(today) == .orderedDescending)  || (uneSaison.ends == ZeroDate)) &&
+                    (uneSaison.watched == false)  &&
                     (uneSerie.watchlist == false) &&
                     (uneSerie.unfollowed == false) )
-                { valAttendre = valAttendre + 1 }
-                
-                if ( (uneSaison.episodes[uneSaison.episodes.count - 1].date.compare(today) == .orderedAscending ) &&
-                    (uneSaison.episodes[uneSaison.episodes.count - 1].watched == false) &&
+                { valSaisonsOnTheAir = valSaisonsOnTheAir + 1 }
+
+                if ( (uneSaison.starts != ZeroDate) &&
+                    (uneSaison.ends.compare(today) == .orderedAscending) &&
+                    (uneSaison.ends != ZeroDate) &&
+                    (uneSaison.watched == false) &&
                     (uneSerie.watchlist == false) &&
                     (uneSerie.unfollowed == false) )
-                { valAvoir = valAvoir + 1 }
-                
-                if ( (uneSaison.episodes[0].date.compare(today) == .orderedDescending ) &&
+                { valSaisonsDiffusees = valSaisonsDiffusees + 1 }
+
+                if ( (uneSaison.starts.compare(today) == .orderedDescending) &&
                     (uneSerie.watchlist == false) &&
                     (uneSerie.unfollowed == false) )
-                { valAvenir = valAvenir + 1 }
+                { valSaisonsAnnoncees = valSaisonsAnnoncees + 1 }
             }
         }
         
-        cptAnciennes.text = String(valAnciennes)
-        cptAjour.text = String(valAjour)
-        cptAttendre.text = String(valAttendre)
-        cptAvoir.text = String(valAvoir)
-        cptAvenir.text = String(valAvenir)
-        cptAdecouvrir.text = String(valptAdecouvrir)
-        cptAbandonnees.text = String(valAbandonnees)
+        cptSeriesFinies.text = String(valSeriesFinies)
+        cptSeriesEnCours.text = String(valSeriesEnCours)
+        cptSaisonsOnTheAir.text = String(valSaisonsOnTheAir)
+        cptSaisonsDiffusees.text = String(valSaisonsDiffusees)
+        cptSaisonsAnnoncees.text = String(valSaisonsAnnoncees)
+        cptWatchList.text = String(ValWatchList)
+        cptSeriesAbandonnees.text = String(valSeriesAbandonnees)
     }
     
     func merge(_ db : [Serie], adds : [Serie]) -> [Serie]

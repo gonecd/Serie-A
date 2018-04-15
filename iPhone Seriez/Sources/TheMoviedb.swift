@@ -174,6 +174,8 @@ class TheMoviedb : NSObject
     {
         let uneSerie : Serie = Serie(serie: "")
         var request : URLRequest
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
         
         if (idMovieDB != "")  { request = URLRequest(url: URL(string: "https://api.themoviedb.org/3/tv/\(idMovieDB)?api_key=e12674d4eadc7acafcbf7821bc32403b&language=en-US&append_to_response=external_ids,content_ratings")!) }
         else                  { return uneSerie }
@@ -211,7 +213,21 @@ class TheMoviedb : NSObject
                             uneSerie.genres.append((((jsonResponse.object(forKey: "genres") as? NSArray ?? []).object(at: i) as! NSDictionary).object(forKey: "name")) as? String ?? "")
                         }
                         
-                        print("Hola")
+                        for i in 0..<((jsonResponse.object(forKey: "seasons") as? NSArray ?? []).count)
+                        {
+                            let readSaison : Int = (((jsonResponse.object(forKey: "seasons") as? NSArray ?? []).object(at: i) as! NSDictionary).object(forKey: "season_number")) as? Int ?? 0
+                            if (readSaison != 0)
+                            {
+                                let uneSaison : Saison = Saison(serie: uneSerie.serie, saison: readSaison)
+                                
+                                uneSaison.nbEpisodes = (((jsonResponse.object(forKey: "seasons") as? NSArray ?? []).object(at: i) as! NSDictionary).object(forKey: "episode_count")) as? Int ?? 0
+                                
+                                let stringDate : String = (((jsonResponse.object(forKey: "seasons") as? NSArray ?? []).object(at: i) as! NSDictionary).object(forKey: "air_date")) as? String ?? ""
+                                if (stringDate !=  "") { uneSaison.starts = dateFormatter.date(from: stringDate)! }
+
+                                uneSerie.saisons.append(uneSaison)
+                            }
+                        }
                     }
                     else
                     {
