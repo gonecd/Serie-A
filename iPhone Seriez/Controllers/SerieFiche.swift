@@ -12,6 +12,7 @@ class SerieFiche: UIViewController {
     
     var serie : Serie = Serie(serie: "")
     var image : UIImage = UIImage()
+    var accueil : ViewAccueil = ViewAccueil()
 
     @IBOutlet weak var resume: UITextView!
     @IBOutlet weak var banniere: UIImageView!
@@ -23,6 +24,45 @@ class SerieFiche: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
      
+        accueil.theTVdb.getSerieInfosLight(uneSerie: serie)
+        
+        DispatchQueue.global(qos: .utility).async {
+            
+            if (self.serie.idTVdb != "") { self.accueil.theTVdb.getEpisodesRatings(self.serie) }
+            DispatchQueue.main.async
+                {
+                    self.graphe.sendSerie(self.serie)
+                    self.graphe.setNeedsDisplay()
+            }
+            if (self.serie.idTrakt != "") { self.accueil.trakt.getEpisodesRatings(self.serie) }
+            DispatchQueue.main.async
+                {
+                    self.graphe.sendSerie(self.serie)
+                    self.graphe.setNeedsDisplay()
+            }
+            if (self.serie.idTVdb != "") { self.accueil.betaSeries.getEpisodesRatings(self.serie) }
+            DispatchQueue.main.async
+                {
+                    self.graphe.sendSerie(self.serie)
+                    self.graphe.setNeedsDisplay()
+            }
+            if (self.serie.idMoviedb != "") { self.accueil.theMoviedb.getEpisodesRatings(self.serie) }
+            DispatchQueue.main.async
+                {
+                    self.graphe.sendSerie(self.serie)
+                    self.graphe.setNeedsDisplay()
+            }
+            self.accueil.imdb.getEpisodesRatings(self.serie)
+            DispatchQueue.main.async
+                {
+                    self.graphe.sendSerie(self.serie)
+                    self.graphe.setNeedsDisplay()
+            }
+            
+        }
+        
+
+        
         resume.text = serie.resume
         banniere.image = image
         graphe.sendSerie(serie)

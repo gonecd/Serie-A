@@ -41,10 +41,10 @@ class Chercher: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
         initPickers(picker: pickerGenre)
         initPickers(picker: pickerLangue)
         
-        makeJolisGradiantsSimples(vue: viewNetworks)
-        makeJolisGradiantsDoubles(vue: viewAnnees)
-        makeJolisGradiantsSimples(vue: viewLangues)
-        makeJolisGradiantsDoubles(vue: viewGenres)
+        makeGradiant(carre : viewNetworks, couleur: "Rouge")
+        makeGradiant(carre : viewAnnees, couleur: "Rouge")
+        makeGradiant(carre : viewLangues, couleur: "Vert")
+        makeGradiant(carre : viewGenres, couleur: "Bleu")
     }
     
     func initPickers(picker : UIPickerView)
@@ -56,36 +56,6 @@ class Chercher: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
 
 
     }
-    
-    func makeJolisGradiantsDoubles(vue : UIView)
-    {
-        let gradient : CAGradientLayer = CAGradientLayer()
-        gradient.colors = [UIColor.green.withAlphaComponent(0.3).cgColor, UIColor.white.cgColor, UIColor.white.cgColor, UIColor.lightGray.cgColor, UIColor.white.cgColor, UIColor.white.cgColor, UIColor.red.withAlphaComponent(0.3).cgColor]
-        gradient.locations = [0.0, 0.1, 0.4, 0.5, 0.6, 0.9, 1.0]
-        gradient.startPoint = CGPoint(x: 0, y: 0)
-        gradient.endPoint = CGPoint(x: 1, y: 0)
-        gradient.frame = vue.bounds
-        
-        vue.layer.cornerRadius = 10;
-        vue.layer.masksToBounds = true;
-        vue.layer.insertSublayer(gradient, at: 0)
-    }
-    
-    
-    func makeJolisGradiantsSimples(vue : UIView)
-    {
-        let gradient : CAGradientLayer = CAGradientLayer()
-        gradient.colors = [UIColor.green.withAlphaComponent(0.3).cgColor, UIColor.white.cgColor, UIColor.white.cgColor, UIColor.lightGray.cgColor]
-        gradient.locations = [0.0, 0.2, 0.8, 1.0]
-        gradient.startPoint = CGPoint(x: 0, y: 0)
-        gradient.endPoint = CGPoint(x: 1, y: 0)
-        gradient.frame = vue.bounds
-        
-        vue.layer.cornerRadius = 10;
-        vue.layer.masksToBounds = true;
-        vue.layer.insertSublayer(gradient, at: 0)
-    }
-    
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1

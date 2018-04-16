@@ -177,7 +177,7 @@ class ViewSaisonListe: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let viewController = segue.destination as! SaisonFiche
         let tableCell : CellSaisonListe = sender as! CellSaisonListe
-        self.accueil.downloadSerieDetails(serie: self.viewList[tableCell.index])
+        viewController.accueil = self.accueil
         viewController.serie = viewList[tableCell.index]
         viewController.saison = allSaisons[tableCell.index]
         viewController.image = accueil.getImage(viewList[tableCell.index].banner)

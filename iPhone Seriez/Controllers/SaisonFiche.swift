@@ -22,12 +22,51 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
     var serie : Serie = Serie(serie: "")
     var image : UIImage = UIImage()
     var saison : Int = 0
+    var accueil : ViewAccueil = ViewAccueil()
 
     @IBOutlet weak var banniere: UIImageView!
     @IBOutlet weak var graphe: GraphSaison!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        accueil.theTVdb.getSerieInfosLight(uneSerie: serie)
+
+        DispatchQueue.global(qos: .utility).async {
+            
+            if (self.serie.idTVdb != "") { self.accueil.theTVdb.getEpisodesRatings(self.serie) }
+            DispatchQueue.main.async
+                {
+                    self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
+                    self.graphe.setNeedsDisplay()
+                }
+            if (self.serie.idTrakt != "") { self.accueil.trakt.getEpisodesRatings(self.serie) }
+            DispatchQueue.main.async
+                {
+                    self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
+                    self.graphe.setNeedsDisplay()
+            }
+            if (self.serie.idTVdb != "") { self.accueil.betaSeries.getEpisodesRatings(self.serie) }
+            DispatchQueue.main.async
+                {
+                    self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
+                    self.graphe.setNeedsDisplay()
+            }
+            if (self.serie.idMoviedb != "") { self.accueil.theMoviedb.getEpisodesRatings(self.serie) }
+            DispatchQueue.main.async
+                {
+                    self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
+                    self.graphe.setNeedsDisplay()
+            }
+            self.accueil.imdb.getEpisodesRatings(self.serie)
+            DispatchQueue.main.async
+                {
+                    self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
+                    self.graphe.setNeedsDisplay()
+            }
+
+        }
+        
         
         banniere.image = image
         graphe.sendSaison(serie.saisons[saison - 1])

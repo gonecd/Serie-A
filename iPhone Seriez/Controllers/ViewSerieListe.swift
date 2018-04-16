@@ -109,7 +109,7 @@ class ViewSerieListe: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let viewController = segue.destination as! SerieFiche
         let tableCell : CellSerieListe = sender as! CellSerieListe
-        self.accueil.downloadSerieDetails(serie: self.viewList[tableCell.index])
+        viewController.accueil = self.accueil
         viewController.serie = viewList[tableCell.index]
         viewController.image = accueil.getImage(viewList[tableCell.index].banner)
     }
