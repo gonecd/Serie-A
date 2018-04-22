@@ -242,5 +242,49 @@ class TheMoviedb : NSObject
         return uneSerie
     }
     
+    func getSimilarShows(movieDBid : String) -> (names : [String], ids : [String])
+    {
+        var showNames : [String] = []
+        var showIds : [String] = []
+        var ended : Bool = false
+
+        var request : URLRequest = URLRequest(url: URL(string: "https://api.themoviedb.org/3/tv/\(movieDBid)/similar?api_key=\(TheMoviedbUserkey)&language=en-US&page=1")!)
+        //var request : URLRequest = URLRequest(url: URL(string: "https://api.themoviedb.org/3/tv/\(movieDBid)/recommendations?api_key=\(TheMoviedbUserkey)&language=en-US&page=1")!)
+
+        request.httpMethod = "GET"
+        
+        let task : URLSessionDataTask = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
+            if let data = data, let response = response as? HTTPURLResponse {
+                do {
+                    if response.statusCode == 200
+                    {
+                        let jsonResponse : NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
+                        
+                        for oneShow in (jsonResponse.object(forKey: "results") as! NSArray)
+                        {
+                            let titre : String = ((oneShow as! NSDictionary).object(forKey: "name")) as? String ?? ""
+                            let idMovieDB : String = String(((oneShow as! NSDictionary).object(forKey: "id")) as? Int ?? 0)
+
+                            showNames.append(titre)
+                            showIds.append(idMovieDB)
+                        }
+                        
+                        ended = true
+                    }
+                    else
+                    {
+                        print("TheMoviedb::getSimilarShows failed for \(movieDBid)")
+                        ended = true
+                    }
+                } catch let error as NSError { print("TheMoviedb::getSimilarShows failed for \(movieDBid) : \(error.localizedDescription)"); ended = true; }
+            } else { print(error as Any); ended = true; }
+        })
+        task.resume()
+        
+        while (!ended) { usleep(1000) }
+        //while (task.state != URLSessionTask.State.completed) { usleep(1000) }
+
+        return (showNames, showIds)
+    }
 }
 

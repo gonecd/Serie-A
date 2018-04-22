@@ -67,7 +67,7 @@ class IMdb : NSObject
     {
         let uneSerie : Serie = Serie(serie: "")
         
-        if (IMDBrates[idIMDB] != nil)
+        if ( (IMDBrates[idIMDB] != nil) && (idIMDB != "") )
         {
             let columns = (IMDBrates[idIMDB] as! String).components(separatedBy: "\t")
             

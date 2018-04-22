@@ -129,6 +129,8 @@ class Graph: UIView {
         let origineY :CGFloat = self.frame.height - 30.0
         let hauteur : CGFloat = (self.frame.height - 30.0 - 10.0)
 
+        if (uneNote == 0) { return }
+        
         uneCouleur.setStroke()
         uneCouleur.setFill()
         

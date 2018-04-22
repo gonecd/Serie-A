@@ -21,7 +21,7 @@ func getDrapeau(country : String) -> UIImage
     case "CA": return #imageLiteral(resourceName: "Flag_of_Canada.png")
     case "CZ": return #imageLiteral(resourceName: "Flag_of_the_Czech_Republic.png")
     case "NO": return #imageLiteral(resourceName: "Flag_of_Norway.png")
-    case "SE": return #imageLiteral(resourceName: "Flag_of_Sweden.png")
+    case "BR": return #imageLiteral(resourceName: "Flag_of_Brazil.png")
         
     default:
         print("Pays sans drapeau : \(country)")

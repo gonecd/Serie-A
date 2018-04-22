@@ -126,8 +126,48 @@ class BetaSeries : NSObject
         task.resume()
         while (task.state != URLSessionTask.State.completed) { usleep(1000) }
 
-        
-        
         return uneSerie
+    }
+    
+    func getSimilarShows(TVDBid : String) -> (names : [String], ids : [String])
+    {
+        var showNames : [String] = []
+        var showIds : [String] = []
+        var ended : Bool = false
+
+        var request : URLRequest = URLRequest(url: URL(string: "https://api.betaseries.com/shows/similars?v=3.0&thetvdb_id=\(TVDBid)")!)
+        
+        request.httpMethod = "GET"
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue("\(BetaSeriesUserkey)", forHTTPHeaderField: "X-BetaSeries-Key")
+        
+        let task = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
+            if let data = data, let response = response as? HTTPURLResponse {
+                do {
+                    if (response.statusCode != 200) { print("BetaSeries::getSimilarShows error \(response.statusCode) received "); return; }
+                    
+                    let jsonResponse : NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
+                    
+                    for oneShow in (jsonResponse.object(forKey: "similars") as! NSArray)
+                    {
+                        let titre : String = ((oneShow as! NSDictionary).object(forKey: "show_title")) as? String ?? ""
+                        let idTVDB : String = String(((oneShow as! NSDictionary).object(forKey: "thetvdb_id")) as? Int ?? 0)
+                        
+                        showNames.append(titre)
+                        showIds.append(idTVDB)
+                    }
+                    
+                    ended = true
+                    
+                } catch let error as NSError { print("BetaSeries::getSimilarShows failed: \(error.localizedDescription)"); ended = true; }
+            } else { print(error as Any); ended = true; }
+        })
+        
+        task.resume()
+        
+        while (!ended) { usleep(1000) }
+        //while (task.state != URLSessionTask.State.completed) { usleep(1000) }
+
+        return (showNames, showIds)
     }
 }

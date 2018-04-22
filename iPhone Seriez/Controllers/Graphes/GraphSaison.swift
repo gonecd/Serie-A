@@ -35,7 +35,7 @@ class GraphSaison: UIView {
         let hauteur : CGFloat = (self.frame.height - 30.0 - 10.0)
         let largeur : CGFloat = (self.frame.width - origineX - 10.0)
         let textAttributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 10), NSAttributedStringKey.foregroundColor: UIColor.white]
-        let nbEpisodes : Int = theSaison.episodes.count
+        let nbEpisodes : Int = theSaison.nbEpisodes
 
         // Lignes
         UIColor.white.setStroke()
@@ -94,7 +94,7 @@ class GraphSaison: UIView {
     func traceGraphePoints()
     {
 
-        let nbEpisodes : Int = theSaison.episodes.count
+        let nbEpisodes : Int = theSaison.nbEpisodes
         let origineX : CGFloat = 30.0
         let largeur : CGFloat = (self.frame.width - origineX - 10.0)
 
@@ -113,11 +113,13 @@ class GraphSaison: UIView {
 
     func traceUnPoint(_ uneNote: Int, uneCouleur: UIColor, offsetEpisode: CGFloat, offsetSource: CGFloat)
     {
-        let diametre : CGFloat = 5.0
+        let diametre : CGFloat = 6.0
         let origineX : CGFloat = 30.0
         let origineY :CGFloat = self.frame.height - 30.0
         let hauteur : CGFloat = (self.frame.height - 30.0 - 10.0)
 
+        if (uneNote == 0) { return }
+        
         uneCouleur.setStroke()
         uneCouleur.setFill()
 

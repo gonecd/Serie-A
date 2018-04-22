@@ -314,6 +314,12 @@ class ViewAccueil: UIViewController  {
             viewController.viewList = buildList
             viewController.allSaisons = buildListSaisons
             
+        case "  Conseil":
+            let viewController = segue.destination as! ViewConseil
+            viewController.title = "Conseil"
+            viewController.accueil = self
+            viewController.allShows = self.allSeries
+
         default:
             print("Passer à la fenêtre \(bouton.titleLabel?.text ?? "")")
             

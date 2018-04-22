@@ -18,7 +18,7 @@
 		626D4729204C6DE900B1A64D /* IMdb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626D4728204C6DE900B1A64D /* IMdb.swift */; };
 		627A0E2820139E8300FE1777 /* GraphSaison.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627A0E2720139E8300FE1777 /* GraphSaison.swift */; };
 		627A0E2A20139E9900FE1777 /* GraphEpisode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627A0E2920139E9900FE1777 /* GraphEpisode.swift */; };
-		62A2758D2056A136002749ED /* Chercher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62A2758C2056A136002749ED /* Chercher.swift */; };
+		62A2758D2056A136002749ED /* ViewRecherche.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62A2758C2056A136002749ED /* ViewRecherche.swift */; };
 		62A581E71FBC5BCB002D8FD3 /* imdb.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62A581E51FBC5BCB002D8FD3 /* imdb.ico */; };
 		62A581E81FBC5BCB002D8FD3 /* rottentomatoes.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62A581E61FBC5BCB002D8FD3 /* rottentomatoes.ico */; };
 		62AC50A0200E58A200A8C841 /* SaisonFiche.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62AC509F200E58A200A8C841 /* SaisonFiche.swift */; };
@@ -33,6 +33,9 @@
 		62B087CA207BEE3A007703FF /* Flag_of_Norway.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087C7207BEE39007703FF /* Flag_of_Norway.png */; };
 		62B087CB207BEE3A007703FF /* Flag_of_the_Czech_Republic.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087C8207BEE39007703FF /* Flag_of_the_Czech_Republic.png */; };
 		62B087CC207BEE3A007703FF /* Flag_of_Sweden.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087C9207BEE3A007703FF /* Flag_of_Sweden.png */; };
+		62B4D8B4208B9BF4002110E8 /* ViewConseil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B4D8B3208B9BF4002110E8 /* ViewConseil.swift */; };
+		62B4D8B6208B9E08002110E8 /* GraphConseil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B4D8B5208B9E08002110E8 /* GraphConseil.swift */; };
+		62B4D8B8208CB7C0002110E8 /* Flag_of_Brazil.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B4D8B7208CB7BF002110E8 /* Flag_of_Brazil.png */; };
 		62CD57C32038B87D00DE28A1 /* GraphMiniSaison.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62CD57C22038B87D00DE28A1 /* GraphMiniSaison.swift */; };
 		62D0EBBB204C30BE009774B6 /* ViewSaisonListe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D0EBBA204C30BE009774B6 /* ViewSaisonListe.swift */; };
 		62D0EBBD204C374B009774B6 /* TheMoviedb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D0EBBC204C374B009774B6 /* TheMoviedb.swift */; };
@@ -77,7 +80,7 @@
 		626D4728204C6DE900B1A64D /* IMdb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMdb.swift; sourceTree = "<group>"; };
 		627A0E2720139E8300FE1777 /* GraphSaison.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphSaison.swift; sourceTree = "<group>"; };
 		627A0E2920139E9900FE1777 /* GraphEpisode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphEpisode.swift; sourceTree = "<group>"; };
-		62A2758C2056A136002749ED /* Chercher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chercher.swift; sourceTree = "<group>"; };
+		62A2758C2056A136002749ED /* ViewRecherche.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewRecherche.swift; sourceTree = "<group>"; };
 		62A581E51FBC5BCB002D8FD3 /* imdb.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = imdb.ico; sourceTree = "<group>"; };
 		62A581E61FBC5BCB002D8FD3 /* rottentomatoes.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = rottentomatoes.ico; sourceTree = "<group>"; };
 		62AC509F200E58A200A8C841 /* SaisonFiche.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaisonFiche.swift; sourceTree = "<group>"; };
@@ -92,6 +95,9 @@
 		62B087C7207BEE39007703FF /* Flag_of_Norway.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_Norway.png; sourceTree = "<group>"; };
 		62B087C8207BEE39007703FF /* Flag_of_the_Czech_Republic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_the_Czech_Republic.png; sourceTree = "<group>"; };
 		62B087C9207BEE3A007703FF /* Flag_of_Sweden.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_Sweden.png; sourceTree = "<group>"; };
+		62B4D8B3208B9BF4002110E8 /* ViewConseil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewConseil.swift; sourceTree = "<group>"; };
+		62B4D8B5208B9E08002110E8 /* GraphConseil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphConseil.swift; sourceTree = "<group>"; };
+		62B4D8B7208CB7BF002110E8 /* Flag_of_Brazil.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_Brazil.png; sourceTree = "<group>"; };
 		62CD57C22038B87D00DE28A1 /* GraphMiniSaison.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphMiniSaison.swift; sourceTree = "<group>"; };
 		62D0EBBA204C30BE009774B6 /* ViewSaisonListe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewSaisonListe.swift; sourceTree = "<group>"; };
 		62D0EBBC204C374B009774B6 /* TheMoviedb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TheMoviedb.swift; sourceTree = "<group>"; };
@@ -154,6 +160,7 @@
 			children = (
 				62DD87B11FB8A2E000A9B9EE /* Graph.swift */,
 				627A0E2720139E8300FE1777 /* GraphSaison.swift */,
+				62B4D8B5208B9E08002110E8 /* GraphConseil.swift */,
 				62CD57C22038B87D00DE28A1 /* GraphMiniSaison.swift */,
 				6224A5E62043141800450812 /* GraphMiniSerie.swift */,
 				627A0E2920139E9900FE1777 /* GraphEpisode.swift */,
@@ -180,8 +187,9 @@
 				624D27481FFBD4E100B49702 /* ViewAccueil.swift */,
 				62D0EBBA204C30BE009774B6 /* ViewSaisonListe.swift */,
 				6224A5E22041F30200450812 /* ViewSerieListe.swift */,
+				62B4D8B3208B9BF4002110E8 /* ViewConseil.swift */,
 				62AC509F200E58A200A8C841 /* SaisonFiche.swift */,
-				62A2758C2056A136002749ED /* Chercher.swift */,
+				62A2758C2056A136002749ED /* ViewRecherche.swift */,
 				62F8ECF32013775800A41EF7 /* EpisodeFiche.swift */,
 				62DD87A91FB7838400A9B9EE /* SerieFiche.swift */,
 			);
@@ -229,6 +237,7 @@
 				62B087C9207BEE3A007703FF /* Flag_of_Sweden.png */,
 				62B087C8207BEE39007703FF /* Flag_of_the_Czech_Republic.png */,
 				62B087C5207BED6F007703FF /* Flag_of_Canada.png */,
+				62B4D8B7208CB7BF002110E8 /* Flag_of_Brazil.png */,
 				62B087BF207BEBC5007703FF /* Flag_of_France.png */,
 				62B087BD207BEBC5007703FF /* Flag_of_Germany.png */,
 				62B087BE207BEBC5007703FF /* Flag_of_Spain.png */,
@@ -367,6 +376,7 @@
 				62DD87B71FB8BE4F00A9B9EE /* trakt.ico in Resources */,
 				62FF97DB2039AAFC007B658E /* Trash-icon.png in Resources */,
 				623D28921FED45D0005488D5 /* A.jpg in Resources */,
+				62B4D8B8208CB7C0002110E8 /* Flag_of_Brazil.png in Resources */,
 				62DD87B61FB8BE4F00A9B9EE /* thetvdb.png in Resources */,
 				62B087C4207BEBC6007703FF /* Flag_of_France.png in Resources */,
 				62FF97D82039076D007B658E /* TV-icon.png in Resources */,
@@ -390,8 +400,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				62B4D8B6208B9E08002110E8 /* GraphConseil.swift in Sources */,
 				62DD87AA1FB7838400A9B9EE /* SerieFiche.swift in Sources */,
 				62DD87AF1FB89E7D00A9B9EE /* Episode.swift in Sources */,
+				62B4D8B4208B9BF4002110E8 /* ViewConseil.swift in Sources */,
 				62D0EBBD204C374B009774B6 /* TheMoviedb.swift in Sources */,
 				62DD87AE1FB89E7D00A9B9EE /* Saison.swift in Sources */,
 				6224A5E52042207800450812 /* Constantes.swift in Sources */,
@@ -402,7 +414,7 @@
 				626D4727204C624500B1A64D /* Notes.swift in Sources */,
 				62DD87BA1FB8C15600A9B9EE /* BetaSeries.swift in Sources */,
 				62DD87B21FB8A2E000A9B9EE /* Graph.swift in Sources */,
-				62A2758D2056A136002749ED /* Chercher.swift in Sources */,
+				62A2758D2056A136002749ED /* ViewRecherche.swift in Sources */,
 				627A0E2820139E8300FE1777 /* GraphSaison.swift in Sources */,
 				627A0E2A20139E9900FE1777 /* GraphEpisode.swift in Sources */,
 				62DD87A41FB76F5D00A9B9EE /* TheTVdb.swift in Sources */,

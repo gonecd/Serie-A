@@ -30,46 +30,32 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        banniere.image = image
         accueil.theTVdb.getSerieInfosLight(uneSerie: serie)
-
+        
         DispatchQueue.global(qos: .utility).async {
             
+            
             if (self.serie.idTVdb != "") { self.accueil.theTVdb.getEpisodesRatings(self.serie) }
-            DispatchQueue.main.async
-                {
-                    self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
-                    self.graphe.setNeedsDisplay()
-                }
+            self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
+            DispatchQueue.main.async { self.graphe.setNeedsDisplay() }
+            
             if (self.serie.idTrakt != "") { self.accueil.trakt.getEpisodesRatings(self.serie) }
-            DispatchQueue.main.async
-                {
-                    self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
-                    self.graphe.setNeedsDisplay()
-            }
+            self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
+            DispatchQueue.main.async { self.graphe.setNeedsDisplay() }
+            
             if (self.serie.idTVdb != "") { self.accueil.betaSeries.getEpisodesRatings(self.serie) }
-            DispatchQueue.main.async
-                {
-                    self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
-                    self.graphe.setNeedsDisplay()
-            }
+            self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
+            DispatchQueue.main.async { self.graphe.setNeedsDisplay() }
+            
             if (self.serie.idMoviedb != "") { self.accueil.theMoviedb.getEpisodesRatings(self.serie) }
-            DispatchQueue.main.async
-                {
-                    self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
-                    self.graphe.setNeedsDisplay()
-            }
+            self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
+            DispatchQueue.main.async { self.graphe.setNeedsDisplay() }
+            
             self.accueil.imdb.getEpisodesRatings(self.serie)
-            DispatchQueue.main.async
-                {
-                    self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
-                    self.graphe.setNeedsDisplay()
-            }
-
+            self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
+            DispatchQueue.main.async { self.graphe.setNeedsDisplay() }
         }
-        
-        
-        banniere.image = image
-        graphe.sendSaison(serie.saisons[saison - 1])
     }
     
     @IBAction func back(_ sender: Any) {

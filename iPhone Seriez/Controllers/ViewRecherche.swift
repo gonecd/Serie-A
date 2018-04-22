@@ -1,5 +1,5 @@
 //
-//  Chercher.swift
+//  ViewRecherche.swift
 //  SerieA
 //
 //  Created by Cyril Delamare on 12/03/2018.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class Chercher: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+class ViewRecherche: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     @IBOutlet weak var pickerAnnee: UIPickerView!
     @IBOutlet weak var pickerGenre: UIPickerView!
     @IBOutlet weak var pickerNetwork: UIPickerView!

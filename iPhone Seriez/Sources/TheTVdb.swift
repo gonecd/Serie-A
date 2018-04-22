@@ -89,15 +89,14 @@ class TheTVdb : NSObject
                     tableauDeTaches.append(task)
                     task.resume()
                 }
-                
-                while (globalStatus == URLSessionTask.State.running)
+            }
+            while (globalStatus == URLSessionTask.State.running)
+            {
+                globalStatus = URLSessionTask.State.completed
+                usleep(1000)
+                for uneTache in tableauDeTaches
                 {
-                    globalStatus = URLSessionTask.State.completed
-                    usleep(1000)
-                    for uneTache in tableauDeTaches
-                    {
-                        if (uneTache.state == URLSessionTask.State.running) { globalStatus = URLSessionTask.State.running }
-                    }
+                    if (uneTache.state == URLSessionTask.State.running) { globalStatus = URLSessionTask.State.running }
                 }
             }
         }
@@ -250,7 +249,7 @@ class TheTVdb : NSObject
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
-
+        
         while ( continuer )
         {
             // Parsing de la saison
@@ -396,7 +395,7 @@ class TheTVdb : NSObject
     
     func getPoster(idTVdb : String, langue : String) -> String
     {
-    // Note langue = "en", "fr", ...
+        // Note langue = "en", "fr", ...
         var poster : String = ""
         
         let url = URL(string: "https://api.thetvdb.com/series/\(idTVdb)/images/query?keyType=poster")!
