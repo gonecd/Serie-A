@@ -21,8 +21,13 @@ class GraphConseil: UIView {
     var accueil : ViewAccueil = ViewAccueil()
     var vue : ViewConseil = ViewConseil()
     var grapheType : Int = 0
-
+    
     override func draw(_ dirtyRect: CGRect) {
+        
+        for subview in (self.subviews).reversed() {
+            subview.removeFromSuperview()
+        }
+        
         super.draw(dirtyRect)
         
         origineX = 35.0
@@ -114,15 +119,13 @@ class GraphConseil: UIView {
     {
         for index in 0..<serieListe.count
         {
-            print("\(serieListe[index].serie.serie) : \(serieListe[index].cpt) propositions / note = \(serieListe[index].serie.getGlobalRating()) %")
-            
-            if (grapheType == 0)
+            if (grapheType == 1)
             {
                 traceUnPoint(note: serieListe[index].serie.getGlobalRating(), nbConseils : serieListe[index].cpt, titre : serieListe[index].serie.serie, uneCouleur: colorTrakt)
             }
             else
             {
-            traceUneAffiche(note: serieListe[index].serie.getGlobalRating(), nbConseils : serieListe[index].cpt, poster : accueil.getImage(serieListe[index].serie.poster), titre : serieListe[index].serie.serie)
+                traceUneAffiche(note: serieListe[index].serie.getGlobalRating(), nbConseils : serieListe[index].cpt, poster : accueil.getImage(serieListe[index].serie.poster), titre : serieListe[index].serie.serie)
             }
         }
     }
@@ -134,7 +137,7 @@ class GraphConseil: UIView {
         let origineY :CGFloat = self.frame.height - 30.0
         let hauteur : CGFloat = (self.frame.height - 30.0 - 10.0)
         let textAttributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 10), NSAttributedStringKey.foregroundColor: UIColor.black]
-
+        
         if (note == 0) { return }
         
         uneCouleur.setStroke()
@@ -154,10 +157,10 @@ class GraphConseil: UIView {
         let nom : NSString = titre as NSString
         nom.draw(in: CGRect(x: origineX - 2 + (largeur * CGFloat(nbConseils) / CGFloat(maxConseils)),
                             y: origineY - 5 - (hauteur * CGFloat(note) / 100), width: 100, height: 12),
-                    withAttributes: textAttributes)
-
+                 withAttributes: textAttributes)
+        
     }
-
+    
     
     func traceUneAffiche(note: Int, nbConseils : Int, poster : UIImage, titre : String)
     {
@@ -168,8 +171,8 @@ class GraphConseil: UIView {
         if (note == 0) { return }
         
         let rect : CGRect = CGRect(x: origineX - 25 + (largeur * CGFloat(nbConseils) / CGFloat(maxConseils)),
-                                  y: origineY - 18 - (hauteur * CGFloat(note) / 100),
-                                  width: 25.0, height: 35.0)
+                                   y: origineY - 18 - (hauteur * CGFloat(note) / 100),
+                                   width: 25.0, height: 35.0)
         
         poster.draw(in: rect)
         
@@ -179,7 +182,7 @@ class GraphConseil: UIView {
         
         self.addSubview(button)
     }
-
+    
     
     @objc func buttonAction(sender: UIButton!) {
         self.vue.showDetails(serie: (sender.titleLabel?.text)!)

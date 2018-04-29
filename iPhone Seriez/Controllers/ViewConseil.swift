@@ -26,152 +26,162 @@ class ViewConseil: UIViewController {
     @IBOutlet weak var boutonWatchlist: UIButton!
     @IBOutlet weak var boutonClose: UIButton!
     
+    @IBOutlet weak var progressBar: UIProgressView!
+    
     var grapheType : Int = 0
     var accueil : ViewAccueil = ViewAccueil()
     var allShows : [Serie] = []
-    var allConseils : [Serie] = []
+    var allConseils : [(serie : Serie, cpt : Int)] = []
     var shortList : [Serie] = []
-
+    var conseilsMinimum : Int = 3
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         graph.accueil = accueil
         graph.vue = self
         detail.isHidden = true
 
-        for oneShow in allShows
-        {
-            if(oneShow.unfollowed)
+        progressBar.setProgress(0.0, animated: false)
+        progressBar.isHidden = false
+        
+
+        DispatchQueue.global(qos: .utility).async {
+            
+            let nbShows: Int = self.allShows.count
+            //let nbShows: Int = 25
+            var numShow : Int = 0
+            
+            //for oneShow in self.allShows
+            for index in 0..<nbShows
             {
-                addShowsToListe(newShows : self.accueil.trakt.getSimilarShows(IMDBid: oneShow.idIMdb), idType : "IMDB")
-                addShowsToListe(newShows : self.accueil.theMoviedb.getSimilarShows(movieDBid: oneShow.idMoviedb), idType : "MovieDB")
-                addShowsToListe(newShows : self.accueil.betaSeries.getSimilarShows(TVDBid: oneShow.idTVdb), idType : "TVDB")
+                if ( (self.allShows[index].unfollowed == false) &&
+                    (self.allShows[index].watchlist == false) &&
+                    ((self.allShows[index].saisons[self.allShows[index].saisons.count - 1].watched == false) || (self.allShows[index].status != "Ended")))
+                {
+                    self.addShowsToListe(newShows : self.accueil.trakt.getSimilarShows(IMDBid: self.allShows[index].idIMdb), idType : "IMDB")
+                    self.addShowsToListe(newShows : self.accueil.theMoviedb.getSimilarShows(movieDBid: self.allShows[index].idMoviedb), idType : "MovieDB")
+                    self.addShowsToListe(newShows : self.accueil.betaSeries.getSimilarShows(TVDBid: self.allShows[index].idTVdb), idType : "TVDB")
+                }
+                
+                numShow = numShow + 1
+                self.graph.sendSeries(liste : self.selectTopConseils(minConseils : self.conseilsMinimum))
+
+                DispatchQueue.main.async {
+                        self.progressBar.setProgress(Float(numShow)/Float(nbShows), animated: true)
+                        self.graph.setNeedsDisplay()
+                }
             }
+            
+            DispatchQueue.main.async { self.progressBar.isHidden = true }
         }
-        
-        graph.sendSeries(liste : selectTopConseils(minConseils : 3))
-        
     }
     
     
     func selectTopConseils(minConseils : Int) -> [(serie : Serie, cpt : Int)]
     {
-        var aggListe : [(serie : Serie, cpt : Int)] = []
-        var returnListe : [(serie : Serie, cpt : Int)] = []
+        var selection : [(serie : Serie, cpt : Int)] = []
         shortList = []
-        var found : Bool = false
-        
-        for oneShow in allConseils
+
+        for indexConseil in 0..<allConseils.count
         {
-            found = false
-            
-            for index in 0..<aggListe.count
+            if (allConseils[indexConseil].cpt > minConseils-1)
             {
-                if (oneShow.serie == aggListe[index].serie.serie)
-                {
-                    aggListe[index].cpt = aggListe[index].cpt + 1
-                    found = true
-                    continue
-                }
-            }
-            
-            if (found == false)
-            {
-                aggListe.append((serie: oneShow, cpt: 1))
+                selection.append((serie: allConseils[indexConseil].serie, cpt: allConseils[indexConseil].cpt))
+                shortList.append(allConseils[indexConseil].serie)
             }
         }
         
-        
-        for index in 0..<aggListe.count
-        {
-            if (aggListe[index].cpt > minConseils-1)
-            {
-                print(" ==> \(aggListe[index].cpt) propositions for \(aggListe[index].serie.serie)")
-                found = false
-                for uneSerie in allShows
-                {
-                    if (uneSerie.serie == aggListe[index].serie.serie)
-                    {
-                        aggListe[index].serie = uneSerie
-                        found = true
-                        continue
-                    }
-                }
-                
-                if (found == false)
-                {
-                    print("Il faut loader \(aggListe[index].serie.serie)")
-
-                    var dataTVdb : Serie = Serie(serie: "")
-                    var dataMoviedb : Serie = Serie(serie: "")
-                    var dataBetaSeries : Serie = Serie(serie: "")
-                    var dataTrakt : Serie = Serie(serie: "")
-                    var dataIMDB : Serie = Serie(serie: "")
-
-                    if (aggListe[index].serie.idIMdb != "")
-                    {
-                        print("Completing info using idIMdb")
-                        dataTrakt = self.accueil.trakt.getSerieGlobalInfos(idTraktOrIMDB: aggListe[index].serie.idIMdb)
-                        dataMoviedb = self.accueil.theMoviedb.getSerieGlobalInfos(idMovieDB: dataTrakt.idMoviedb)
-                        dataBetaSeries = self.accueil.betaSeries.getSerieGlobalInfos(idTVDB : dataTrakt.idTVdb, idIMDB : aggListe[index].serie.idIMdb)
-                        dataTVdb = self.accueil.theTVdb.getSerieGlobalInfos(idTVdb : dataTrakt.idTVdb)
-                        dataIMDB = self.accueil.imdb.getSerieGlobalInfos(idIMDB: dataTrakt.idMoviedb)
-
-                    } else if (aggListe[index].serie.idMoviedb != "")
-                    {
-                        print("Completing info using idMoviedb")
-                        dataMoviedb = self.accueil.theMoviedb.getSerieGlobalInfos(idMovieDB: aggListe[index].serie.idMoviedb)
-                        dataTrakt = self.accueil.trakt.getSerieGlobalInfos(idTraktOrIMDB: dataMoviedb.idIMdb)
-                        dataBetaSeries = self.accueil.betaSeries.getSerieGlobalInfos(idTVDB : dataMoviedb.idTVdb, idIMDB : dataMoviedb.idIMdb)
-                        dataTVdb = self.accueil.theTVdb.getSerieGlobalInfos(idTVdb : dataMoviedb.idTVdb)
-                        dataIMDB = self.accueil.imdb.getSerieGlobalInfos(idIMDB: dataMoviedb.idIMdb)
-
-                    } else if (aggListe[index].serie.idTVdb != "")
-                    {
-                        print("Completing info using idTVdb")
-                        dataTVdb = self.accueil.theTVdb.getSerieGlobalInfos(idTVdb : aggListe[index].serie.idTVdb)
-                        dataBetaSeries = self.accueil.betaSeries.getSerieGlobalInfos(idTVDB : aggListe[index].serie.idTVdb, idIMDB : dataTVdb.idIMdb)
-                        dataTrakt = self.accueil.trakt.getSerieGlobalInfos(idTraktOrIMDB: dataTVdb.idIMdb)
-                        aggListe[index].serie.idMoviedb = dataTrakt.idMoviedb
-                        dataMoviedb = self.accueil.theMoviedb.getSerieGlobalInfos(idMovieDB: dataTrakt.idMoviedb)
-                        dataIMDB = self.accueil.imdb.getSerieGlobalInfos(idIMDB: dataTVdb.idIMdb)
-
-                    }
-
-                    aggListe[index].serie.cleverMerge(TVdb: dataTVdb, Moviedb: dataMoviedb, Trakt: dataTrakt, BetaSeries: dataBetaSeries, IMDB: dataIMDB)
-                    
-                    // On ne prend que les séries inconnues
-                    returnListe.append((serie: aggListe[index].serie, cpt: aggListe[index].cpt))
-                    shortList.append(aggListe[index].serie)
-                }
-            }
-        }
-        
-        print("Coucou")
-        return returnListe
+        return selection
     }
+    
+    
+    func completeShowInfos(uneSerie : Serie)
+    {
+        var dataTVdb : Serie = Serie(serie: "")
+        var dataMoviedb : Serie = Serie(serie: "")
+        var dataBetaSeries : Serie = Serie(serie: "")
+        var dataTrakt : Serie = Serie(serie: "")
+        var dataIMDB : Serie = Serie(serie: "")
+        
+        print("Loading infos for \(uneSerie.serie)")
+        
+        if (uneSerie.idIMdb != "")
+        {
+            dataTrakt = self.accueil.trakt.getSerieGlobalInfos(idTraktOrIMDB: uneSerie.idIMdb)
+            dataMoviedb = self.accueil.theMoviedb.getSerieGlobalInfos(idMovieDB: dataTrakt.idMoviedb)
+            dataBetaSeries = self.accueil.betaSeries.getSerieGlobalInfos(idTVDB : dataTrakt.idTVdb, idIMDB : uneSerie.idIMdb)
+            dataTVdb = self.accueil.theTVdb.getSerieGlobalInfos(idTVdb : dataTrakt.idTVdb)
+            dataIMDB = self.accueil.imdb.getSerieGlobalInfos(idIMDB: uneSerie.idIMdb)
+            
+        } else if (uneSerie.idMoviedb != "")
+        {
+            dataMoviedb = self.accueil.theMoviedb.getSerieGlobalInfos(idMovieDB: uneSerie.idMoviedb)
+            dataTrakt = self.accueil.trakt.getSerieGlobalInfos(idTraktOrIMDB: dataMoviedb.idIMdb)
+            dataBetaSeries = self.accueil.betaSeries.getSerieGlobalInfos(idTVDB : dataMoviedb.idTVdb, idIMDB : dataMoviedb.idIMdb)
+            dataTVdb = self.accueil.theTVdb.getSerieGlobalInfos(idTVdb : dataMoviedb.idTVdb)
+            dataIMDB = self.accueil.imdb.getSerieGlobalInfos(idIMDB: dataMoviedb.idIMdb)
+            
+        } else if (uneSerie.idTVdb != "")
+        {
+            dataTVdb = self.accueil.theTVdb.getSerieGlobalInfos(idTVdb : uneSerie.idTVdb)
+            dataBetaSeries = self.accueil.betaSeries.getSerieGlobalInfos(idTVDB : uneSerie.idTVdb, idIMDB : dataTVdb.idIMdb)
+            dataTrakt = self.accueil.trakt.getSerieGlobalInfos(idTraktOrIMDB: dataTVdb.idIMdb)
+            uneSerie.idMoviedb = dataTrakt.idMoviedb
+            dataMoviedb = self.accueil.theMoviedb.getSerieGlobalInfos(idMovieDB: dataTrakt.idMoviedb)
+            dataIMDB = self.accueil.imdb.getSerieGlobalInfos(idIMDB: dataTVdb.idIMdb)
+            
+        }
+        
+        uneSerie.cleverMerge(TVdb: dataTVdb, Moviedb: dataMoviedb, Trakt: dataTrakt, BetaSeries: dataBetaSeries, IMDB: dataIMDB)
+    }
+    
     
     func addShowsToListe(newShows : (names : [String], ids : [String]), idType : String)
     {
         for index in 0..<newShows.names.count
         {
-            let uneSerie : Serie = Serie(serie: newShows.names[index])
-            switch (idType)
-            {
-            case "IMDB":
-                uneSerie.idIMdb = newShows.ids[index]
-                uneSerie.idTrakt = newShows.ids[index]
-
-            case "TVDB":
-                uneSerie.idTVdb = newShows.ids[index]
-
-            case "MovieDB":
-                uneSerie.idMoviedb = newShows.ids[index]
-
-            default:
-                print("ViewConseil::addShowsToListe Type inconnu : \(idType)")
-            }
-            allConseils.append(uneSerie)
+            addOneShow(show: newShows.names[index], id: newShows.ids[index], idType: idType)
         }
+    }
+    
+    func addOneShow(show : String, id : String, idType : String)
+    {
+        // Si la série est une série connue, on l'ignore
+        for uneSerie in allShows { if (uneSerie.serie == show) { return } }
+        
+        // Si la série est-elle déjà dans la liste, on incrémente juste son compteur
+        for indexConseil in 0..<allConseils.count
+        {
+            if (show == allConseils[indexConseil].serie.serie)
+            {
+                allConseils[indexConseil].cpt = allConseils[indexConseil].cpt + 1
+                if (allConseils[indexConseil].cpt == conseilsMinimum)
+                {
+                    completeShowInfos(uneSerie: allConseils[indexConseil].serie)
+                }
+                return
+            }
+        }
+        
+        // Sinon on l'ajoute à la liste
+        let uneSerie : Serie = Serie(serie: show)
+        switch (idType)
+        {
+        case "IMDB":
+            uneSerie.idIMdb = id
+            uneSerie.idTrakt = id
+            
+        case "TVDB":
+            uneSerie.idTVdb = id
+            
+        case "MovieDB":
+            uneSerie.idMoviedb = id
+            
+        default:
+            print("ViewConseil::addShowsToListe Type inconnu : \(idType)")
+        }
+        
+        allConseils.append((serie: uneSerie, cpt: 1))
     }
     
     func showDetails(serie : String)
@@ -221,12 +231,11 @@ class ViewConseil: UIViewController {
                 self.minigraphe.setType(type: 0)
                 self.minigraphe.setNeedsDisplay()
                 
-                continue
+                detail.isHidden = false
+
+                return
             }
         }
-        
-        detail.isHidden = false
-
     }
     
     

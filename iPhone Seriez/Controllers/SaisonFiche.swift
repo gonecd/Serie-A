@@ -35,7 +35,6 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         
         DispatchQueue.global(qos: .utility).async {
             
-            
             if (self.serie.idTVdb != "") { self.accueil.theTVdb.getEpisodesRatings(self.serie) }
             self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
             DispatchQueue.main.async { self.graphe.setNeedsDisplay() }

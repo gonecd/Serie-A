@@ -76,7 +76,7 @@ class IMdb : NSObject
         }
         else
         {
-            print("getSerieGlobalInfos::Not found for idIMDB = \(idIMDB)")
+            print("IMDB::getSerieGlobalInfos::Not found for id = \(idIMDB)")
         }
         
         return uneSerie

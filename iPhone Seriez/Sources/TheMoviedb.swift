@@ -193,17 +193,25 @@ class TheMoviedb : NSObject
                         uneSerie.idIMdb = (jsonResponse.object(forKey: "external_ids")! as AnyObject).object(forKey: "imdb_id") as? String ?? ""
                         uneSerie.idTVdb = String((jsonResponse.object(forKey: "external_ids")! as AnyObject).object(forKey: "tvdb_id") as? Int ?? 0)
                         uneSerie.idMoviedb = String(jsonResponse.object(forKey: "id") as? Int ?? 0)
-                        uneSerie.network = ((jsonResponse.object(forKey: "networks") as! NSArray).object(at: 0) as! NSDictionary).object(forKey: "name") as? String ?? ""
+                        if ((jsonResponse.object(forKey: "networks") != nil) && ((jsonResponse.object(forKey: "networks") as! NSArray).count > 0) )
+                        {
+                            uneSerie.network = ((jsonResponse.object(forKey: "networks") as! NSArray).object(at: 0) as! NSDictionary).object(forKey: "name") as? String ?? ""
+                        }
                         uneSerie.poster = jsonResponse.object(forKey: "poster_path") as? String ?? ""
                         if (uneSerie.poster != "") { uneSerie.poster = "https://image.tmdb.org/t/p/w92/" + uneSerie.poster }
-
                         uneSerie.status = jsonResponse.object(forKey: "status") as? String ?? ""
                         uneSerie.resume = jsonResponse.object(forKey: "overview") as? String ?? ""
                         uneSerie.ratingMovieDB = Int(10 * (jsonResponse.object(forKey: "vote_average") as? Double ?? 0.0))
                         uneSerie.ratersMovieDB = jsonResponse.object(forKey: "vote_count") as? Int ?? 0
-                        uneSerie.country = (jsonResponse.object(forKey: "origin_country") as! NSArray).object(at: 0) as? String ?? ""
+                        if ((jsonResponse.object(forKey: "origin_country") != nil) && ((jsonResponse.object(forKey: "origin_country") as! NSArray).count > 0) )
+                        {
+                            uneSerie.country = (jsonResponse.object(forKey: "origin_country") as! NSArray).object(at: 0) as? String ?? ""
+                        }
                         uneSerie.language = jsonResponse.object(forKey: "original_language") as? String ?? ""
-                        uneSerie.runtime = (jsonResponse.object(forKey: "episode_run_time") as! NSArray).object(at: 0) as? Int ?? 0
+                        if ((jsonResponse.object(forKey: "episode_run_time") != nil) && ((jsonResponse.object(forKey: "episode_run_time") as! NSArray).count > 0) )
+                        {
+                            uneSerie.runtime = (jsonResponse.object(forKey: "episode_run_time") as! NSArray).object(at: 0) as? Int ?? 0
+                        }
                         uneSerie.homepage = jsonResponse.object(forKey: "homepage") as? String ?? ""
                         uneSerie.nbSaisons = jsonResponse.object(forKey: "number_of_seasons") as? Int ?? 0
                         uneSerie.nbEpisodes = jsonResponse.object(forKey: "number_of_episodes") as? Int ?? 0
@@ -212,7 +220,7 @@ class TheMoviedb : NSObject
                         {
                             uneSerie.genres.append((((jsonResponse.object(forKey: "genres") as? NSArray ?? []).object(at: i) as! NSDictionary).object(forKey: "name")) as? String ?? "")
                         }
-                        
+
                         for i in 0..<((jsonResponse.object(forKey: "seasons") as? NSArray ?? []).count)
                         {
                             let readSaison : Int = (((jsonResponse.object(forKey: "seasons") as? NSArray ?? []).object(at: i) as! NSDictionary).object(forKey: "season_number")) as? Int ?? 0

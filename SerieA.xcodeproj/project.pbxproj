@@ -16,6 +16,8 @@
 		6255DBDA2083780900CA9BA3 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6255DBD92083780900CA9BA3 /* Helpers.swift */; };
 		626D4727204C624500B1A64D /* Notes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626D4726204C624500B1A64D /* Notes.swift */; };
 		626D4729204C6DE900B1A64D /* IMdb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626D4728204C6DE900B1A64D /* IMdb.swift */; };
+		6279645A2095D5BB00ED5578 /* Flag_of_Japan.png in Resources */ = {isa = PBXBuildFile; fileRef = 627964582095D5BB00ED5578 /* Flag_of_Japan.png */; };
+		6279645B2095D5BB00ED5578 /* Flag_of_Australia.png in Resources */ = {isa = PBXBuildFile; fileRef = 627964592095D5BB00ED5578 /* Flag_of_Australia.png */; };
 		627A0E2820139E8300FE1777 /* GraphSaison.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627A0E2720139E8300FE1777 /* GraphSaison.swift */; };
 		627A0E2A20139E9900FE1777 /* GraphEpisode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627A0E2920139E9900FE1777 /* GraphEpisode.swift */; };
 		62A2758D2056A136002749ED /* ViewRecherche.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62A2758C2056A136002749ED /* ViewRecherche.swift */; };
@@ -78,6 +80,8 @@
 		6255DBD92083780900CA9BA3 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		626D4726204C624500B1A64D /* Notes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notes.swift; sourceTree = "<group>"; };
 		626D4728204C6DE900B1A64D /* IMdb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMdb.swift; sourceTree = "<group>"; };
+		627964582095D5BB00ED5578 /* Flag_of_Japan.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_Japan.png; sourceTree = "<group>"; };
+		627964592095D5BB00ED5578 /* Flag_of_Australia.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_Australia.png; sourceTree = "<group>"; };
 		627A0E2720139E8300FE1777 /* GraphSaison.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphSaison.swift; sourceTree = "<group>"; };
 		627A0E2920139E9900FE1777 /* GraphEpisode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphEpisode.swift; sourceTree = "<group>"; };
 		62A2758C2056A136002749ED /* ViewRecherche.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewRecherche.swift; sourceTree = "<group>"; };
@@ -239,6 +243,8 @@
 				62B087C5207BED6F007703FF /* Flag_of_Canada.png */,
 				62B4D8B7208CB7BF002110E8 /* Flag_of_Brazil.png */,
 				62B087BF207BEBC5007703FF /* Flag_of_France.png */,
+				627964592095D5BB00ED5578 /* Flag_of_Australia.png */,
+				627964582095D5BB00ED5578 /* Flag_of_Japan.png */,
 				62B087BD207BEBC5007703FF /* Flag_of_Germany.png */,
 				62B087BE207BEBC5007703FF /* Flag_of_Spain.png */,
 				62B087BB207BEBC5007703FF /* Flag_of_the_United_Kingdom.png */,
@@ -369,6 +375,7 @@
 				62A581E81FBC5BCB002D8FD3 /* rottentomatoes.ico in Resources */,
 				62DD87751FB766C600A9B9EE /* Main.storyboard in Resources */,
 				62FF97D12039016B007B658E /* Bio-Hazard-icon.png in Resources */,
+				6279645B2095D5BB00ED5578 /* Flag_of_Australia.png in Resources */,
 				62B087AE207A7938007703FF /* Magnifi-icon.png in Resources */,
 				62B087C1207BEBC6007703FF /* Flag_of_the_United_States.png in Resources */,
 				62FF97D320390305007B658E /* List-icon.png in Resources */,
@@ -384,6 +391,7 @@
 				62FF97D02039016B007B658E /* Eye-icon.png in Resources */,
 				62B087CC207BEE3A007703FF /* Flag_of_Sweden.png in Resources */,
 				62B087AF207A7938007703FF /* Idea-icon.png in Resources */,
+				6279645A2095D5BB00ED5578 /* Flag_of_Japan.png in Resources */,
 				62FF97C02038C9A3007B658E /* themoviedb.ico in Resources */,
 				62FF97CF2039016B007B658E /* Play-icon.png in Resources */,
 				62FF97D72039076D007B658E /* Calendar-icon.png in Resources */,
