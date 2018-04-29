@@ -77,7 +77,7 @@ class GraphMiniSerie: UIView {
         let nbSource : CGFloat = 5.0
 
         // Couleur des lignes
-        UIColor.white.setStroke()
+        colorAxis.setStroke()
         
         // Cadre
         let path : UIBezierPath = UIBezierPath()
@@ -95,23 +95,23 @@ class GraphMiniSerie: UIView {
             path.addLine(to: CGPoint(x: centreX, y: centreY))
             path.stroke()
         }
-
+        
         // Quadrillage
         path.lineWidth = 0.5
         path.setLineDash([5.0,5.0], count: 2, phase: 5.0)
         path.addArc(withCenter: CGPoint(x: centreX, y: centreY),
-                     radius: rayon / 2,
-                     startAngle: 2 * .pi,
-                     endAngle: 0,
-                     clockwise: false)
+                    radius: rayon / 2,
+                    startAngle: 2 * .pi,
+                    endAngle: 0,
+                    clockwise: false)
         path.stroke()
     }
     
-    
+
     func backgroundBarres()
     {
         // Couleur des lignes
-        UIColor.white.setStroke()
+        colorAxis.setStroke()
         
         // Cadre
         let path : UIBezierPath = UIBezierPath()

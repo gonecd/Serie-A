@@ -41,10 +41,10 @@ class GraphEpisode: UIView {
     
     func background()
     {
-        let textAttributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 10), NSAttributedStringKey.foregroundColor: UIColor.white]
+        let textAttributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 10), NSAttributedStringKey.foregroundColor: colorAxis]
         
         // Lignes
-        UIColor.white.setStroke()
+        colorAxis.setStroke()
         
         // Cadre
         let path : UIBezierPath = UIBezierPath()

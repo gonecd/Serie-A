@@ -43,7 +43,7 @@ class Graph: UIView {
         let origineY :CGFloat = self.frame.height - 30.0
         let hauteur : CGFloat = (self.frame.height - 30.0 - 10.0)
         let largeur : CGFloat = (self.frame.width - origineX - 10.0)
-        let textAttributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 10), NSAttributedStringKey.foregroundColor: UIColor.white]
+        let textAttributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 10), NSAttributedStringKey.foregroundColor: colorAxis]
         let nbSaisons : Int = theSerie.saisons.count
 
        // Fond
@@ -51,7 +51,7 @@ class Graph: UIView {
         self.layer.masksToBounds = true
 
         // Lignes
-        UIColor.white.setStroke()
+        colorAxis.setStroke()
         
         // Cadre
         let path : UIBezierPath = UIBezierPath()
@@ -141,6 +141,7 @@ class Graph: UIView {
                     startAngle: 2 * .pi,
                     endAngle: 0,
                     clockwise: false)
+        path.lineWidth = 2.0
         path.stroke()
     }
 

@@ -18,6 +18,7 @@
 		626D4729204C6DE900B1A64D /* IMdb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626D4728204C6DE900B1A64D /* IMdb.swift */; };
 		6279645A2095D5BB00ED5578 /* Flag_of_Japan.png in Resources */ = {isa = PBXBuildFile; fileRef = 627964582095D5BB00ED5578 /* Flag_of_Japan.png */; };
 		6279645B2095D5BB00ED5578 /* Flag_of_Australia.png in Resources */ = {isa = PBXBuildFile; fileRef = 627964592095D5BB00ED5578 /* Flag_of_Australia.png */; };
+		6279645D2096246E00ED5578 /* data.tsv in Resources */ = {isa = PBXBuildFile; fileRef = 6279645C2096246E00ED5578 /* data.tsv */; };
 		627A0E2820139E8300FE1777 /* GraphSaison.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627A0E2720139E8300FE1777 /* GraphSaison.swift */; };
 		627A0E2A20139E9900FE1777 /* GraphEpisode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627A0E2920139E9900FE1777 /* GraphEpisode.swift */; };
 		62A2758D2056A136002749ED /* ViewRecherche.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62A2758C2056A136002749ED /* ViewRecherche.swift */; };
@@ -57,7 +58,6 @@
 		62DD87B81FB8BE4F00A9B9EE /* betaseries.png in Resources */ = {isa = PBXBuildFile; fileRef = 62DD87B51FB8BE4F00A9B9EE /* betaseries.png */; };
 		62DD87BA1FB8C15600A9B9EE /* BetaSeries.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD87B91FB8C15500A9B9EE /* BetaSeries.swift */; };
 		62F8ECF42013775800A41EF7 /* EpisodeFiche.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F8ECF32013775800A41EF7 /* EpisodeFiche.swift */; };
-		62FB3F8C2073C360009D1C74 /* data.tsv in Resources */ = {isa = PBXBuildFile; fileRef = 62FB3F8B2073C360009D1C74 /* data.tsv */; };
 		62FF97C02038C9A3007B658E /* themoviedb.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97BF2038C9A3007B658E /* themoviedb.ico */; };
 		62FF97CE2039016B007B658E /* Stop-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97CA2039016A007B658E /* Stop-icon.png */; };
 		62FF97CF2039016B007B658E /* Play-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97CB2039016B007B658E /* Play-icon.png */; };
@@ -82,6 +82,7 @@
 		626D4728204C6DE900B1A64D /* IMdb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMdb.swift; sourceTree = "<group>"; };
 		627964582095D5BB00ED5578 /* Flag_of_Japan.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_Japan.png; sourceTree = "<group>"; };
 		627964592095D5BB00ED5578 /* Flag_of_Australia.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_Australia.png; sourceTree = "<group>"; };
+		6279645C2096246E00ED5578 /* data.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = data.tsv; sourceTree = "<group>"; };
 		627A0E2720139E8300FE1777 /* GraphSaison.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphSaison.swift; sourceTree = "<group>"; };
 		627A0E2920139E9900FE1777 /* GraphEpisode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphEpisode.swift; sourceTree = "<group>"; };
 		62A2758C2056A136002749ED /* ViewRecherche.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewRecherche.swift; sourceTree = "<group>"; };
@@ -123,7 +124,6 @@
 		62DD87B51FB8BE4F00A9B9EE /* betaseries.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = betaseries.png; sourceTree = "<group>"; };
 		62DD87B91FB8C15500A9B9EE /* BetaSeries.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BetaSeries.swift; sourceTree = "<group>"; };
 		62F8ECF32013775800A41EF7 /* EpisodeFiche.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeFiche.swift; sourceTree = "<group>"; };
-		62FB3F8B2073C360009D1C74 /* data.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = data.tsv; sourceTree = "<group>"; };
 		62FF97BF2038C9A3007B658E /* themoviedb.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = themoviedb.ico; sourceTree = "<group>"; };
 		62FF97CA2039016A007B658E /* Stop-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Stop-icon.png"; sourceTree = "<group>"; };
 		62FF97CB2039016B007B658E /* Play-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Play-icon.png"; sourceTree = "<group>"; };
@@ -229,7 +229,7 @@
 			isa = PBXGroup;
 			children = (
 				626D4726204C624500B1A64D /* Notes.swift */,
-				62FB3F8B2073C360009D1C74 /* data.tsv */,
+				6279645C2096246E00ED5578 /* data.tsv */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -379,7 +379,6 @@
 				62B087AE207A7938007703FF /* Magnifi-icon.png in Resources */,
 				62B087C1207BEBC6007703FF /* Flag_of_the_United_States.png in Resources */,
 				62FF97D320390305007B658E /* List-icon.png in Resources */,
-				62FB3F8C2073C360009D1C74 /* data.tsv in Resources */,
 				62DD87B71FB8BE4F00A9B9EE /* trakt.ico in Resources */,
 				62FF97DB2039AAFC007B658E /* Trash-icon.png in Resources */,
 				623D28921FED45D0005488D5 /* A.jpg in Resources */,
@@ -387,6 +386,7 @@
 				62DD87B61FB8BE4F00A9B9EE /* thetvdb.png in Resources */,
 				62B087C4207BEBC6007703FF /* Flag_of_France.png in Resources */,
 				62FF97D82039076D007B658E /* TV-icon.png in Resources */,
+				6279645D2096246E00ED5578 /* data.tsv in Resources */,
 				62B087C3207BEBC6007703FF /* Flag_of_Spain.png in Resources */,
 				62FF97D02039016B007B658E /* Eye-icon.png in Resources */,
 				62B087CC207BEE3A007703FF /* Flag_of_Sweden.png in Resources */,

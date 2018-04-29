@@ -10,8 +10,8 @@ import UIKit
 
 class GraphConseil: UIView {
     
-    var serieListe : [(serie : Serie, cpt : Int)] = []
-    let maxConseils : Int = 10
+    var serieListe : [(serie : Serie, cpt : Int, category : Int)] = []
+    var maxConseils : Int = 10
     
     var origineX : CGFloat = 0.0
     var origineY : CGFloat = 0.0
@@ -21,7 +21,11 @@ class GraphConseil: UIView {
     var accueil : ViewAccueil = ViewAccueil()
     var vue : ViewConseil = ViewConseil()
     var grapheType : Int = 0
-    
+    var showSuivies : Bool = true
+    var showWatchlist : Bool = true
+    var showAbandonnees : Bool = true
+    var showInconnues : Bool = true
+
     override func draw(_ dirtyRect: CGRect) {
         
         for subview in (self.subviews).reversed() {
@@ -43,9 +47,29 @@ class GraphConseil: UIView {
         self.afficheConseils()
     }
     
-    func sendSeries(liste : [(serie : Serie, cpt : Int)])
+    func sendSeries(liste : [(serie : Serie, cpt : Int, category : Int)], max : Int)
     {
         serieListe = liste
+        maxConseils = max
+    }
+    
+    func toggleCategory(category : Int)
+    {
+        switch (category)
+        {
+        case categAbandonnees:
+            showAbandonnees = !showAbandonnees
+        case categInconnues:
+            showInconnues = !showInconnues
+        case categSuivies:
+            showSuivies = !showSuivies
+        case categWatchlist:
+            showWatchlist = !showWatchlist
+        default:
+            print("Categorie inconnue dans toggleCategory")
+            return
+        }
+
     }
     
     func setType(type : Int)
@@ -59,11 +83,11 @@ class GraphConseil: UIView {
         let origineY :CGFloat = self.frame.height - 30.0
         let hauteur : CGFloat = (self.frame.height - 30.0 - 10.0)
         let largeur : CGFloat = (self.frame.width - origineX - 10.0)
-        let textAttributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 10), NSAttributedStringKey.foregroundColor: UIColor.white]
+        let textAttributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 10), NSAttributedStringKey.foregroundColor: colorAxis]
         let maxCitations : Int = maxConseils
         
         // Lignes
-        UIColor.white.setStroke()
+        colorAxis.setStroke()
         
         // Cadre
         let path : UIBezierPath = UIBezierPath()
@@ -121,7 +145,20 @@ class GraphConseil: UIView {
         {
             if (grapheType == 1)
             {
-                traceUnPoint(note: serieListe[index].serie.getGlobalRating(), nbConseils : serieListe[index].cpt, titre : serieListe[index].serie.serie, uneCouleur: colorTrakt)
+                switch (serieListe[index].category)
+                {
+                case categAbandonnees:
+                    if (showAbandonnees) { traceUnPoint(note: serieListe[index].serie.getGlobalRating(), nbConseils : serieListe[index].cpt, titre : serieListe[index].serie.serie, uneCouleur: UIColor.red) }
+                case categInconnues:
+                    if (showInconnues) { traceUnPoint(note: serieListe[index].serie.getGlobalRating(), nbConseils : serieListe[index].cpt, titre : serieListe[index].serie.serie, uneCouleur: UIColor.blue) }
+                case categSuivies:
+                    if (showSuivies) { traceUnPoint(note: serieListe[index].serie.getGlobalRating(), nbConseils : serieListe[index].cpt, titre : serieListe[index].serie.serie, uneCouleur: UIColor.green) }
+                case categWatchlist:
+                    if (showWatchlist) { traceUnPoint(note: serieListe[index].serie.getGlobalRating(), nbConseils : serieListe[index].cpt, titre : serieListe[index].serie.serie, uneCouleur: UIColor.yellow) }
+                default:
+                    print("Categorie inconnue dans afficheConseils")
+                    return
+                }
             }
             else
             {
@@ -144,7 +181,7 @@ class GraphConseil: UIView {
         uneCouleur.withAlphaComponent(0.5).setFill()
         
         let path : UIBezierPath = UIBezierPath()
-        path.addArc(withCenter: CGPoint(x: origineX - 10 + (largeur * CGFloat(nbConseils) / CGFloat(maxConseils)),
+        path.addArc(withCenter: CGPoint(x: origineX + 12 + (largeur * CGFloat(nbConseils-1) / CGFloat(maxConseils)),
                                         y: origineY - (hauteur * CGFloat(note) / 100) ),
                     radius: diametre / 2,
                     startAngle: 2 * .pi,
@@ -155,8 +192,8 @@ class GraphConseil: UIView {
         
         
         let nom : NSString = titre as NSString
-        nom.draw(in: CGRect(x: origineX - 2 + (largeur * CGFloat(nbConseils) / CGFloat(maxConseils)),
-                            y: origineY - 5 - (hauteur * CGFloat(note) / 100), width: 100, height: 12),
+        nom.draw(in: CGRect(x: origineX + 20 + (largeur * CGFloat(nbConseils-1) / CGFloat(maxConseils)),
+                            y: origineY - 6 - (hauteur * CGFloat(note) / 100), width: 200, height: 12),
                  withAttributes: textAttributes)
         
     }
@@ -167,12 +204,14 @@ class GraphConseil: UIView {
         let origineX : CGFloat = 30.0
         let origineY :CGFloat = self.frame.height - 30.0
         let hauteur : CGFloat = (self.frame.height - 30.0 - 10.0)
+        var i : Int = 0
+        if (maxConseils == 3) { i = Int(arc4random_uniform(3)) }
         
         if (note == 0) { return }
         
-        let rect : CGRect = CGRect(x: origineX - 25 + (largeur * CGFloat(nbConseils) / CGFloat(maxConseils)),
-                                   y: origineY - 18 - (hauteur * CGFloat(note) / 100),
-                                   width: 25.0, height: 35.0)
+        let rect : CGRect = CGRect(x: origineX + 5 + (largeur * CGFloat(nbConseils-1) / CGFloat(maxConseils))  + CGFloat(i*32),
+                                   y: origineY - 20 - (hauteur * CGFloat(note) / 100),
+                                   width: 30.0, height: 42.0)
         
         poster.draw(in: rect)
         

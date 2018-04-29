@@ -75,7 +75,7 @@ class GraphMiniSaison: UIView {
         let longueurFleche : CGFloat = 3.0
         
         // Couleur des lignes
-        UIColor.white.setStroke()
+        colorAxis.setStroke()
         path.lineWidth = 0.5
         
         // Lignes horizontales

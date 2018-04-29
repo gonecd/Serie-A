@@ -635,7 +635,8 @@ class Trakt : NSObject
         var showNames : [String] = []
         var showIds : [String] = []
         var ended : Bool = false
-        
+        var compteur : Int = 0
+
         var request = URLRequest(url: URL(string: "https://api.trakt.tv/shows/\(IMDBid)/related")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("Bearer \(self.Token)", forHTTPHeaderField: "Authorization")
@@ -654,8 +655,12 @@ class Trakt : NSObject
                         let titre : String = ((oneShow as! NSDictionary).object(forKey: "title")) as? String ?? ""
                         let idIMDB : String =  ((oneShow as! NSDictionary).object(forKey: "ids")! as AnyObject).object(forKey: "imdb") as? String ?? ""
                         
-                        showNames.append(titre)
-                        showIds.append(idIMDB)
+                        if (compteur < similarShowsPerSource)
+                        {
+                            compteur = compteur + 1
+                            showNames.append(titre)
+                            showIds.append(idIMDB)
+                        }
                     }
                     
                     ended = true
@@ -665,12 +670,103 @@ class Trakt : NSObject
         }
         
         task.resume()
-        
         while (!ended) { usleep(1000) }
-        //while (task.state != URLSessionTask.State.completed) { usleep(1000) }
         
         return (showNames, showIds)
     }
+    
+    func getPopularShows() -> (names : [String], ids : [String])
+    {
+        var showNames : [String] = []
+        var showIds : [String] = []
+        var ended : Bool = false
+        var compteur : Int = 0
+
+        var request = URLRequest(url: URL(string: "https://api.trakt.tv/shows/popular")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("Bearer \(self.Token)", forHTTPHeaderField: "Authorization")
+        request.addValue("2", forHTTPHeaderField: "trakt-api-version")
+        request.addValue("\(self.TraktClientID)", forHTTPHeaderField: "trakt-api-key")
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let data = data, let response = response as? HTTPURLResponse {
+                do {
+                    if (response.statusCode != 200) { print("Trakt::getPopularShows : error \(response.statusCode) received "); return; }
+                    
+                    let jsonResponse : NSArray = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSArray
+                    
+                    for oneShow in jsonResponse
+                    {
+                        let titre : String = ((oneShow as! NSDictionary).object(forKey: "title")) as? String ?? ""
+                        let idIMDB : String =  ((oneShow as! NSDictionary).object(forKey: "ids")! as AnyObject).object(forKey: "imdb") as? String ?? ""
+
+                        if (compteur < popularShowsPerSource)
+                        {
+                            compteur = compteur + 1
+                            showNames.append(titre)
+                            showIds.append(idIMDB)
+                        }
+                    }
+                    
+                    ended = true
+                    
+                } catch let error as NSError { print("Trakt::getPopularShows : \(error.localizedDescription)"); ended = true; }
+            } else { print(error as Any); ended = true; }
+        }
+        
+        task.resume()
+        while (!ended) { usleep(1000) }
+        
+        return (showNames, showIds)
+    }
+    
+    func getTrendingShows() -> (names : [String], ids : [String])
+    {
+        var showNames : [String] = []
+        var showIds : [String] = []
+        var ended : Bool = false
+        var compteur : Int = 0
+
+        var request = URLRequest(url: URL(string: "https://api.trakt.tv/shows/trending")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("Bearer \(self.Token)", forHTTPHeaderField: "Authorization")
+        request.addValue("2", forHTTPHeaderField: "trakt-api-version")
+        request.addValue("\(self.TraktClientID)", forHTTPHeaderField: "trakt-api-key")
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let data = data, let response = response as? HTTPURLResponse {
+                do {
+                    if (response.statusCode != 200) { print("Trakt::getTrendingShows : error \(response.statusCode) received "); return; }
+                    
+                    let jsonResponse : NSArray = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSArray
+                    
+                    for oneShow in jsonResponse
+                    {
+                        let titre : String = (((oneShow as! NSDictionary).object(forKey: "show") as! NSDictionary).object(forKey: "title")) as? String ?? ""
+                        let idIMDB : String =  (((oneShow as! NSDictionary).object(forKey: "show") as! NSDictionary).object(forKey: "ids")! as AnyObject).object(forKey: "imdb") as? String ?? ""
+                        
+                        if (compteur < popularShowsPerSource)
+                        {
+                            compteur = compteur + 1
+                            showNames.append(titre)
+                            showIds.append(idIMDB)
+                        }
+                    }
+                    
+                    ended = true
+                    
+                } catch let error as NSError { print("Trakt::getTrendingShows : \(error.localizedDescription)"); ended = true; }
+            } else { print(error as Any); ended = true; }
+        }
+        
+        task.resume()
+        while (!ended) { usleep(1000) }
+        
+        return (showNames, showIds)
+    }
+    
+
+    
 }
 
 

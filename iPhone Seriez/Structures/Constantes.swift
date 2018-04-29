@@ -41,17 +41,28 @@ var ecartTypeMovieDBeps    : Double    = 10.513
 var moyenneBetaSerieseps   : Int       = 85
 var ecartTypeBetaSerieseps : Double    = 10.870
 
-
 let notesMid    : Double = 60.0
 let notesRange  : Double = 25.0
 
+// Limitations de chargement
+let similarShowsPerSource       : Int = 8
+let popularShowsPerSource       : Int = 10
+
 // Couleurs de remplissage des sources
 let colorTrakt      : UIColor = UIColor.red
-let colorTVdb       : UIColor = UIColor.white
+let colorTVdb       : UIColor = UIColor.gray
 let colorBetaSeries : UIColor = UIColor.blue
 let colorIMDB       : UIColor = UIColor.yellow
 let colorMoviedb    : UIColor = UIColor.green
 
+let colorBackground : UIColor = UIColor.white
+let colorAxis       : UIColor = UIColor.darkGray
+
+// Categories pour les conseils
+let categInconnues      : Int = 0
+let categWatchlist      : Int = 1
+let categAbandonnees    : Int = 2
+let categSuivies        : Int = 3
 
 // Genres on MovieDB
 let genresMovieDB: NSDictionary = [
@@ -75,6 +86,9 @@ let genresMovieDB: NSDictionary = [
     "War" : 10752,
     "Western" : 37
 ]
+
+let genreDocumentaire   : Int = 99
+let genreAnimation      : Int = 16
 
 // Années on MovieDB
 let anneesMovieDB: NSDictionary = [
