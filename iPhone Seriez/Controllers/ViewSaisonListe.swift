@@ -60,7 +60,7 @@ class ViewSaisonListe: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CellSaisonListe", for: indexPath) as! CellSaisonListe
         
-        cell.banniereSerie?.image = accueil.getImage(viewList[indexPath.row].poster)
+        cell.banniereSerie?.image = getImage(viewList[indexPath.row].poster)
         cell.index = indexPath.row
         cell.titre.text = viewList[indexPath.row].serie
         
@@ -180,7 +180,7 @@ class ViewSaisonListe: UITableViewController {
         viewController.accueil = self.accueil
         viewController.serie = viewList[tableCell.index]
         viewController.saison = allSaisons[tableCell.index]
-        viewController.image = accueil.getImage(viewList[tableCell.index].banner)
+        viewController.image = getImage(viewList[tableCell.index].banner)
     }
     
     override func tableView(_ tableView: UITableView, editActionsForRowAt: IndexPath) -> [UITableViewRowAction]? {

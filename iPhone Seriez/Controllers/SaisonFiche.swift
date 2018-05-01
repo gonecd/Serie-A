@@ -26,6 +26,7 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
 
     @IBOutlet weak var banniere: UIImageView!
     @IBOutlet weak var graphe: GraphSaison!
+    @IBOutlet weak var roue: UIActivityIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,6 +35,8 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         accueil.theTVdb.getSerieInfosLight(uneSerie: serie)
         
         DispatchQueue.global(qos: .utility).async {
+            
+            DispatchQueue.main.async { self.roue.startAnimating() }
             
             if (self.serie.idTVdb != "") { self.accueil.theTVdb.getEpisodesRatings(self.serie) }
             self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
@@ -54,6 +57,8 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
             self.accueil.imdb.getEpisodesRatings(self.serie)
             self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
             DispatchQueue.main.async { self.graphe.setNeedsDisplay() }
+
+            DispatchQueue.main.async { self.roue.stopAnimating() }
         }
     }
     

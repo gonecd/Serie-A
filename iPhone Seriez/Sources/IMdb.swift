@@ -17,11 +17,19 @@ class IMdb : NSObject
     
     override init()
     {
+        trace(texte : "<< IMdb : init >>", logLevel : logFuncCalls, scope : scopeSource)
+        trace(texte : "<< IMdb : init >> Params : No Params", logLevel : logFuncParams, scope : scopeSource)
+        
         super.init()
+        
+        trace(texte : "<< IMdb : init >> Return : No Return", logLevel : logFuncReturn, scope : scopeSource)
     }
     
     func loadDB()
     {
+        trace(texte : "<< IMdb : loadDB >>", logLevel : logFuncCalls, scope : scopeSource)
+        trace(texte : "<< IMdb : loadDB >> Params : No Params", logLevel : logFuncParams, scope : scopeSource)
+        
         print("IMdb::Loading Ref")
         
         if let filepath = Bundle.main.path(forResource: "data", ofType: "tsv") {
@@ -36,11 +44,16 @@ class IMdb : NSObject
                 print("IMdb::Loading Ref failed")
             }
         }
+        
+        trace(texte : "<< IMdb : loadDB >> Return : No Return", logLevel : logFuncReturn, scope : scopeSource)
     }
     
     
     func getEpisodesRatings(_ uneSerie: Serie)
     {
+        trace(texte : "<< IMdb : getEpisodesRatings >>", logLevel : logFuncCalls, scope : scopeSource)
+        trace(texte : "<< IMdb : getEpisodesRatings >> Params : uneSerie = \(uneSerie)", logLevel : logFuncParams, scope : scopeSource)
+        
         for uneSaison in uneSerie.saisons
         {
             for unEpisode in uneSaison.episodes
@@ -61,10 +74,15 @@ class IMdb : NSObject
                 }
             }
         }
+
+        trace(texte : "<< IMdb : getEpisodesRatings >> Return : No Return", logLevel : logFuncReturn, scope : scopeSource)
     }
     
     func getSerieGlobalInfos(idIMDB : String) -> Serie
     {
+        trace(texte : "<< IMdb : getSerieGlobalInfos >>", logLevel : logFuncCalls, scope : scopeSource)
+        trace(texte : "<< IMdb : getSerieGlobalInfos >> Params : idIMDB = \(idIMDB)", logLevel : logFuncParams, scope : scopeSource)
+        
         let uneSerie : Serie = Serie(serie: "")
         
         if ( (IMDBrates[idIMDB] != nil) && (idIMDB != "") )
@@ -79,6 +97,7 @@ class IMdb : NSObject
             print("IMDB::getSerieGlobalInfos::Not found for id = \(idIMDB)")
         }
         
+        trace(texte : "<< IMdb : getSerieGlobalInfos >> Return : uneSerie = \(uneSerie)", logLevel : logFuncReturn, scope : scopeSource)
         return uneSerie
     }
 

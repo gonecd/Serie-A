@@ -57,7 +57,7 @@ class ViewSerieListe: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CellSerieListe", for: indexPath) as! CellSerieListe
         
-        cell.banniereSerie?.image = accueil.getImage(viewList[indexPath.row].poster)
+        cell.banniereSerie?.image = getImage(viewList[indexPath.row].poster)
         cell.index = indexPath.row
         cell.titre.text = viewList[indexPath.row].serie
         cell.saison.text =  String(viewList[indexPath.row].nbSaisons) + " Saisons - " + String(viewList[indexPath.row].nbEpisodes) + " Epiosdes - " + String(viewList[indexPath.row].runtime) + " min"
@@ -90,6 +90,8 @@ class ViewSerieListe: UITableViewController {
         cell.drapeau.image = getDrapeau(country: viewList[indexPath.row].country)
         
         // Affichage du mini graphe
+        // Couleur de fond
+        //cell.miniGraphe.backgroundColor = colorBackground
         cell.miniGraphe.sendNotes(rateTrakt: viewList[indexPath.row].getFairGlobalRatingTrakt(),
                                   rateTVdb: viewList[indexPath.row].getFairGlobalRatingTVdb(),
                                   rateBetaSeries: viewList[indexPath.row].getFairGlobalRatingBetaSeries(),
@@ -111,7 +113,7 @@ class ViewSerieListe: UITableViewController {
         let tableCell : CellSerieListe = sender as! CellSerieListe
         viewController.accueil = self.accueil
         viewController.serie = viewList[tableCell.index]
-        viewController.image = accueil.getImage(viewList[tableCell.index].banner)
+        viewController.image = getImage(viewList[tableCell.index].banner)
     }
     
     @IBAction func addSerie(_ sender: Any) {

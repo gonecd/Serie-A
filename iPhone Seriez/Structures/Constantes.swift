@@ -48,6 +48,21 @@ let notesRange  : Double = 25.0
 let similarShowsPerSource       : Int = 8
 let popularShowsPerSource       : Int = 10
 
+// Log levels
+let logAucun           : Int = 0
+let logFuncCalls       : Int = 2
+let logFuncParams      : Int = 5
+let logFuncReturn      : Int = 8
+let logDebug           : Int = 10
+
+// Log Scopes
+let scopeSource         : Int = 0
+let scopeGraphe         : Int = 1
+let scopeController     : Int = 2
+let scopeHelper         : Int = 3
+let scopeStructure      : Int = 4
+
+
 // Couleurs de remplissage des sources
 let colorTrakt      : UIColor = UIColor.red
 let colorTVdb       : UIColor = UIColor.gray
@@ -55,7 +70,7 @@ let colorBetaSeries : UIColor = UIColor.blue
 let colorIMDB       : UIColor = UIColor.yellow
 let colorMoviedb    : UIColor = UIColor.green
 
-let colorBackground : UIColor = UIColor.white
+let colorBackground : UIColor = UIColor.lightGray
 let colorAxis       : UIColor = UIColor.darkGray
 
 // Categories pour les conseils

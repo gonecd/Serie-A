@@ -53,8 +53,6 @@ class ViewRecherche: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
         picker.delegate = self
         picker.layer.cornerRadius = 20;
         picker.layer.masksToBounds = true;
-
-
     }
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -133,12 +131,9 @@ class ViewRecherche: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
         let viewController = segue.destination as! ViewSerieListe
         
         var seriesTrouvees : [Serie]
-        seriesTrouvees = self.accueil.theMoviedb.chercher(genreIncl: inGenres.text,
-                                                          genreExcl: outGenres.text,
-                                                          anneeBeg: inAnnees.text,
-                                                          anneeEnd: outAnnees.text,
-                                                          langue: inLangues.text,
-                                                          network: inNetworks.text)
+        seriesTrouvees = self.accueil.theMoviedb.chercher(genreIncl: inGenres.text, genreExcl: outGenres.text,
+                                                          anneeBeg: inAnnees.text, anneeEnd: outAnnees.text,
+                                                          langue: inLangues.text, network: inNetworks.text)
         
         for uneSerie in seriesTrouvees
         {
@@ -153,33 +148,16 @@ class ViewRecherche: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
     }
     
     
-    @IBAction func plusInNetworks(_ sender: Any) { pickerNetwork.isHidden = false }
-    @IBAction func razInNetworks(_ sender: Any) { inNetworks.text = "Tous" }
-    
-    @IBAction func plusInGenres(_ sender: Any) {
-        modeGenresInclude = true
-        pickerGenre.isHidden = false
-    }
-    @IBAction func plusOutGenres(_ sender: Any) {
-        modeGenresInclude = false
-        pickerGenre.isHidden = false
-    }
-    @IBAction func razInGenres(_ sender: Any) { inGenres.text = "Tous" }
-    @IBAction func razOutGenres(_ sender: Any) { outGenres.text = "Aucun" }
-    
-    @IBAction func plusInAnnees(_ sender: Any)
-    {
-        pickerAnnee.isHidden = false
-        modeAnneesInclude = true
-    }
-    @IBAction func plusOutAnnees(_ sender: Any)
-    {
-        pickerAnnee.isHidden = false
-        modeAnneesInclude = false
-    }
-    
-    @IBAction func plusInLangues(_ sender: Any) { pickerLangue.isHidden = false }
-    @IBAction func razInLangues(_ sender: Any) { inLangues.text = "Toutes" }
+    @IBAction func plusInNetworks(_ sender: Any)    { pickerNetwork.isHidden = false }
+    @IBAction func razInNetworks(_ sender: Any)     { inNetworks.text = "Tous" }
+    @IBAction func plusInGenres(_ sender: Any)      { modeGenresInclude = true;  pickerGenre.isHidden = false; }
+    @IBAction func plusOutGenres(_ sender: Any)     { modeGenresInclude = false; pickerGenre.isHidden = false; }
+    @IBAction func razInGenres(_ sender: Any)       { inGenres.text = "Tous" }
+    @IBAction func razOutGenres(_ sender: Any)      { outGenres.text = "Aucun" }
+    @IBAction func plusInAnnees(_ sender: Any)      { pickerAnnee.isHidden = false; modeAnneesInclude = true; }
+    @IBAction func plusOutAnnees(_ sender: Any)     { pickerAnnee.isHidden = false; modeAnneesInclude = false; }
+    @IBAction func plusInLangues(_ sender: Any)     { pickerLangue.isHidden = false }
+    @IBAction func razInLangues(_ sender: Any)      { inLangues.text = "Toutes" }
     
 }
 

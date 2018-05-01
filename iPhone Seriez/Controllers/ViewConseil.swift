@@ -26,6 +26,7 @@ class ViewConseil: UIViewController {
     @IBOutlet weak var progressBar: UIProgressView!
     @IBOutlet weak var chooser: UISegmentedControl!
     @IBOutlet weak var goButton: UIButton!
+    @IBOutlet weak var roue: UIActivityIndicatorView!
     
     @IBOutlet weak var boutonSuivies: UIButton!
     @IBOutlet weak var boutonAbandons: UIButton!
@@ -41,7 +42,6 @@ class ViewConseil: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        graph.accueil = accueil
         graph.vue = self
         detail.isHidden = true
 
@@ -179,7 +179,7 @@ class ViewConseil: UIViewController {
                 self.saison.text =  String(oneShow.nbSaisons) + " Saisons - " + String(oneShow.nbEpisodes) + " Epiosdes - " + String(oneShow.runtime) + " min"
                 self.resume.text = oneShow.resume
 
-                self.poster.image = self.accueil.getImage(oneShow.poster)
+                self.poster.image = getImage(oneShow.poster)
                 self.globalRating.text = String(oneShow.getGlobalRating()) + " %"
                 arrondir(texte: self.globalRating, radius: 12.0)
 
@@ -268,8 +268,9 @@ class ViewConseil: UIViewController {
         detail.isHidden = true
     }
     
-    @IBAction func loadConseils(_ sender: Any) {
-        
+    @IBAction func loadConseils(_ sender: Any)
+    {
+        self.roue.startAnimating()
         goButton.isHidden = true
         allConseils = []
 
@@ -310,6 +311,7 @@ class ViewConseil: UIViewController {
                 DispatchQueue.main.async {
                     self.progressBar.isHidden = true
                     self.goButton.isHidden = false
+                    self.roue.stopAnimating()
                 }
             }
         }
@@ -325,6 +327,7 @@ class ViewConseil: UIViewController {
             self.graph.sendSeries(liste : self.selectTopConseils(minConseils : self.conseilsMinimum), max : 3)
             self.graph.setNeedsDisplay()
             self.goButton.isHidden = false
+            self.roue.stopAnimating()
         }
         else
         {
@@ -338,6 +341,7 @@ class ViewConseil: UIViewController {
             self.graph.sendSeries(liste : self.selectTopConseils(minConseils : self.conseilsMinimum), max : 3)
             self.graph.setNeedsDisplay()
             self.goButton.isHidden = false
+            self.roue.stopAnimating()
         }
     }
     

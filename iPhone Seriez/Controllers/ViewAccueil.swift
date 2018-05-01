@@ -18,7 +18,6 @@ class ViewAccueil: UIViewController  {
     var imdb : IMdb = IMdb.init()
     
     var allSeries: [Serie] = [Serie]()
-    var imagesCache : NSCache = NSCache<NSString, UIImage>()
     
     @IBOutlet weak var cptSeriesFinies: UITextField!
     @IBOutlet weak var cptSeriesEnCours: UITextField!
@@ -39,9 +38,13 @@ class ViewAccueil: UIViewController  {
     @IBOutlet weak var cadreConseil: UIView!
     
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func viewDidLoad()
+    {
+        trace(texte : "<< ViewAccueil : viewDidLoad >>", logLevel : logFuncCalls, scope : scopeController)
+        trace(texte : "<< ViewAccueil : viewDidLoad >> Params : No Params", logLevel : logFuncParams, scope : scopeController)
         
+        super.viewDidLoad()
+
         // Faire des jolis carrés dégradés à coins ronds
         makeGradiant(carre: cadreSerieAbandonnee, couleur : "Bleu")
         makeGradiant(carre: cadreSerieEncours, couleur : "Bleu")
@@ -71,10 +74,15 @@ class ViewAccueil: UIViewController  {
         loadDB()
         allSeries = allSeries.sorted(by:  { $0.serie < $1.serie })
         updateCompteurs()
+
+        trace(texte : "<< ViewAccueil : viewDidLoad >> Return : No Return", logLevel : logFuncReturn, scope : scopeController)
     }
     
     @IBAction func downloadStatuses(_ sender: Any)
     {
+        trace(texte : "<< ViewAccueil : downloadStatuses >>", logLevel : logFuncCalls, scope : scopeController)
+        trace(texte : "<< ViewAccueil : downloadStatuses >> Params : sender = \(sender)", logLevel : logFuncParams, scope : scopeController)
+        
         var reloadSeries : [Serie] = [Serie]()
         reloadSeries = trakt.getWatched()
         reloadSeries = self.merge(reloadSeries, adds: trakt.getStopped())
@@ -84,10 +92,16 @@ class ViewAccueil: UIViewController  {
         self.saveDB()
         self.updateCompteurs()
         self.view.setNeedsDisplay()
+
+        trace(texte : "<< ViewAccueil : downloadStatuses >> Return : No Return", logLevel : logFuncReturn, scope : scopeController)
     }
    
     
-    @IBAction func downloadAll(_ sender: Any) {
+    @IBAction func downloadAll(_ sender: Any)
+    {
+        trace(texte : "<< ViewAccueil : downloadAll >>", logLevel : logFuncCalls, scope : scopeController)
+        trace(texte : "<< ViewAccueil : downloadAll >> Params : sender = \(sender)", logLevel : logFuncParams, scope : scopeController)
+        
         allSeries = trakt.getWatched()
         for uneSerie in allSeries { trakt.getSaisons(uneSerie: uneSerie) }
         allSeries = self.merge(allSeries, adds: trakt.getStopped())
@@ -115,10 +129,14 @@ class ViewAccueil: UIViewController  {
                 self.updateCompteurs()
             }
         }
-    }
+        trace(texte : "<< ViewAccueil : downloadAll >> Return : No Return", logLevel : logFuncReturn, scope : scopeController)
+  }
     
     func downloadGlobalInfo(serie : Serie)
     {
+        trace(texte : "<< ViewAccueil : downloadGlobalInfo >>", logLevel : logFuncCalls, scope : scopeController)
+        trace(texte : "<< ViewAccueil : downloadGlobalInfo >> Params : serie = \(serie)", logLevel : logFuncParams, scope : scopeController)
+        
         let dataTVdb : Serie = self.theTVdb.getSerieGlobalInfos(idTVdb: serie.idTVdb)
         let dataMoviedb : Serie = self.theMoviedb.getSerieGlobalInfos(idMovieDB: serie.idMoviedb)
         let dataBetaSeries : Serie = self.betaSeries.getSerieGlobalInfos(idTVDB : serie.idTVdb, idIMDB : serie.idIMdb)
@@ -137,61 +155,67 @@ class ViewAccueil: UIViewController  {
                 }
             }
         }
+        trace(texte : "<< ViewAccueil : downloadGlobalInfo >> Return : No Return", logLevel : logFuncReturn, scope : scopeController)
     }
     
     func downloadSerieDetails(serie : Serie)
     {
+        trace(texte : "<< ViewAccueil : downloadSerieDetails >>", logLevel : logFuncCalls, scope : scopeController)
+        trace(texte : "<< ViewAccueil : downloadSerieDetails >> Params : serie = \(serie)", logLevel : logFuncParams, scope : scopeController)
+        
         self.theTVdb.getSerieInfosLight(uneSerie: serie)
         if (serie.idTVdb != "") { self.theTVdb.getEpisodesRatings(serie) }
         if (serie.idTrakt != "") { self.trakt.getEpisodesRatings(serie) }
         if (serie.idTVdb != "") { self.betaSeries.getEpisodesRatings(serie) }
         if (serie.idMoviedb != "") { self.theMoviedb.getEpisodesRatings(serie) }
         self.imdb.getEpisodesRatings(serie)
+
+        trace(texte : "<< ViewAccueil : downloadSerieDetails >> Return : No Return", logLevel : logFuncReturn, scope : scopeController)
     }
     
     func saveDB ()
     {
+        trace(texte : "<< ViewAccueil : saveDB >>", logLevel : logFuncCalls, scope : scopeController)
+        trace(texte : "<< ViewAccueil : saveDB >> Params : No Params", logLevel : logFuncParams, scope : scopeController)
+        
         if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
             let pathToSVG = dir.appendingPathComponent("SerieA.db")
             let success : Bool = NSKeyedArchiver.archiveRootObject(allSeries, toFile: pathToSVG.path)
-            print("DB saved : \(success)")
+            trace(texte : "<< ViewAccueil : loadDB >> DB saved witch success = \(success)", logLevel : logDebug, scope : scopeController)
         }
+        
+        trace(texte : "<< ViewAccueil : saveDB >> Return : No Return", logLevel : logFuncReturn, scope : scopeController)
     }
     
     func loadDB ()
     {
+        trace(texte : "<< ViewAccueil : loadDB >>", logLevel : logFuncCalls, scope : scopeController)
+        trace(texte : "<< ViewAccueil : loadDB >> Params : No Params", logLevel : logFuncParams, scope : scopeController)
+        
         if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
             let pathToSVG = dir.appendingPathComponent("SerieA.db")
             if (FileManager.default.fileExists(atPath: pathToSVG.path))
             {
                 allSeries = (NSKeyedUnarchiver.unarchiveObject(withFile: pathToSVG.path) as? [Serie])!
-                print("DB loaded")
+                trace(texte : "<< ViewAccueil : loadDB >> DB loaded", logLevel : logDebug, scope : scopeController)
             }
         }
+        trace(texte : "<< ViewAccueil : loadDB >> Return : No Return", logLevel : logFuncReturn, scope : scopeController)
     }
     
     override func didReceiveMemoryWarning() {
+        trace(texte : "<< ViewAccueil : didReceiveMemoryWarning >>", logLevel : logFuncCalls, scope : scopeController)
+        trace(texte : "<< ViewAccueil : didReceiveMemoryWarning >> Params : No Params", logLevel : logFuncParams, scope : scopeController)
+        
         super.didReceiveMemoryWarning()
-    }
-    
-    func getImage(_ url: String) -> UIImage
-    {
-        if (url == "") { return UIImage() }
         
-        do {
-            if ((imagesCache.object(forKey: url as NSString)) == nil)
-            {
-                let imageData : Data = try Data.init(contentsOf: URL(string: url)!)
-                imagesCache.setObject(UIImage.init(data: imageData)!, forKey: url as NSString)
-            }
-            return imagesCache.object(forKey: url as NSString)!
-        }
-        catch let error as NSError { print("getImage failed for \(url) : \(error)") }
-        
-        return UIImage()
+        trace(texte : "<< ViewAccueil : didReceiveMemoryWarning >> Return : No Return", logLevel : logFuncReturn, scope : scopeController)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        trace(texte : "<< ViewAccueil : prepare >>", logLevel : logFuncCalls, scope : scopeController)
+        trace(texte : "<< ViewAccueil : prepare >> Params : segue = \(segue), sender = \(String(describing: sender))", logLevel : logFuncParams, scope : scopeController)
+        
         let bouton = sender as! UIButton
         var buildList = [Serie]()
         var buildListSaisons = [Int]()
@@ -324,10 +348,14 @@ class ViewAccueil: UIViewController  {
             print("Passer à la fenêtre \(bouton.titleLabel?.text ?? "")")
             
         }
+        trace(texte : "<< ViewAccueil : prepare >> Return : No Return", logLevel : logFuncReturn, scope : scopeController)
     }
     
     func updateCompteurs()
     {
+        trace(texte : "<< ViewAccueil : updateCompteurs >>", logLevel : logFuncCalls, scope : scopeController)
+        trace(texte : "<< ViewAccueil : updateCompteurs >> Params : No Params", logLevel : logFuncParams, scope : scopeController)
+        
         var valSeriesFinies : Int = 0
         var valSeriesEnCours : Int = 0
         var valSaisonsOnTheAir : Int = 0
@@ -381,10 +409,15 @@ class ViewAccueil: UIViewController  {
         cptSaisonsAnnoncees.text = String(valSaisonsAnnoncees)
         cptWatchList.text = String(ValWatchList)
         cptSeriesAbandonnees.text = String(valSeriesAbandonnees)
+
+        trace(texte : "<< ViewAccueil : updateCompteurs >> Return : No Return", logLevel : logFuncReturn, scope : scopeController)
     }
     
     func merge(_ db : [Serie], adds : [Serie]) -> [Serie]
     {
+        trace(texte : "<< ViewAccueil : merge >>", logLevel : logFuncCalls, scope : scopeController)
+        trace(texte : "<< ViewAccueil : merge >> Params : db = \(db), adds = \(adds)", logLevel : logFuncParams, scope : scopeController)
+        
         var merged : Bool = false
         var newDB : [Serie] = db
         
@@ -405,50 +438,73 @@ class ViewAccueil: UIViewController  {
             if (!merged) { newDB.append(uneSerie) }
         }
         
+        trace(texte : "<< ViewAccueil : mergeStatuses >> Return : newDB = \(newDB)", logLevel : logFuncReturn, scope : scopeController)
         return newDB
     }
     
     func mergeStatuses(_ db : [Serie], adds : [Serie]) -> [Serie]
     {
+        trace(texte : "<< ViewAccueil : mergeStatuses >>", logLevel : logFuncCalls, scope : scopeController)
+        trace(texte : "<< ViewAccueil : mergeStatuses >> Params : db = \(db), adds = \(adds)", logLevel : logFuncParams, scope : scopeController)
+        
         for uneSerie in adds {
             for dbSerie in db {
                 if (dbSerie.idTrakt == uneSerie.idTrakt) { dbSerie.mergeStatuses(uneSerie) }
             }
         }
+        trace(texte : "<< ViewAccueil : mergeStatuses >> Return : db = \(db)", logLevel : logFuncReturn, scope : scopeController)
         return db
     }
     
     
     
     // Fonctions de gestion de la watchlist
-    func chercherUneSerieSurTrakt(nomSerie:String) -> [Serie]
+    func chercherUneSerieSurTrakt(nomSerie : String) -> [Serie]
     {
+        trace(texte : "<< ViewAccueil : chercherUneSerieSurTrakt >>", logLevel : logFuncCalls, scope : scopeController)
+        trace(texte : "<< ViewAccueil : chercherUneSerieSurTrakt >> Params : nomSerie = \(nomSerie)", logLevel : logFuncParams, scope : scopeController)
+        
+        trace(texte : "<< ViewAccueil : chercherUneSerieSurTrakt >> Return : probably ...)", logLevel : logFuncReturn, scope : scopeController)
         return trakt.recherche(serieArechercher: nomSerie)
     }
     
+    
     func ajouterUneSerieDansLaWatchlistTrakt(uneSerie : Serie) -> Bool
     {
+        trace(texte : "<< ViewAccueil : ajouterUneSerieDansLaWatchlistTrakt >>", logLevel : logFuncCalls, scope : scopeController)
+        trace(texte : "<< ViewAccueil : ajouterUneSerieDansLaWatchlistTrakt >> Params : uneSerie = \(uneSerie)", logLevel : logFuncParams, scope : scopeController)
+        
         if (self.trakt.addToWatchlist(theTVdbId: uneSerie.idTVdb))
         {
             self.downloadGlobalInfo(serie: uneSerie)
             self.allSeries.append(uneSerie)
             self.saveDB()
             updateCompteurs()
+
+            trace(texte : "<< ViewAccueil : ajouterUneSerieDansLaWatchlistTrakt >> Return : true", logLevel : logFuncReturn, scope : scopeController)
             return true
         }
+
+        trace(texte : "<< ViewAccueil : ajouterUneSerieDansLaWatchlistTrakt >> Return : false", logLevel : logFuncReturn, scope : scopeController)
         return false
     }
     
+    
     func supprimerUneSerieDansLaWatchlistTrakt(uneSerie: Serie) -> Bool
     {
+        trace(texte : "<< ViewAccueil : supprimerUneSerieDansLaWatchlistTrakt >>", logLevel : logFuncCalls, scope : scopeController)
+        trace(texte : "<< ViewAccueil : supprimerUneSerieDansLaWatchlistTrakt >> Params : uneSerie = \(uneSerie)", logLevel : logFuncParams, scope : scopeController)
+        
         if (self.trakt.removeFromWatchlist(theTVdbId: uneSerie.idTVdb))
         {
             self.allSeries.remove(at: self.allSeries.index(of: uneSerie)!)
             self.saveDB()
             updateCompteurs()
             
+            trace(texte : "<< ViewAccueil : supprimerUneSerieDansLaWatchlistTrakt >> Return : true", logLevel : logFuncReturn, scope : scopeController)
             return true
         }
+        trace(texte : "<< ViewAccueil : supprimerUneSerieDansLaWatchlistTrakt >> Return : false", logLevel : logFuncReturn, scope : scopeController)
         return false
     }
     

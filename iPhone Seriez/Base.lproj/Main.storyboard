@@ -760,6 +760,12 @@
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9Iv-b1-Uit" customClass="Graph" customModule="SerieA" customModuleProvider="target">
                                 <rect key="frame" x="16" y="148" width="343" height="191"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="R1Z-AZ-Xjb">
+                                        <rect key="frame" x="303" y="22" width="20" height="20"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </activityIndicatorView>
+                                </subviews>
                                 <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nm3-xV-7a6">
@@ -858,6 +864,7 @@
                         <outlet property="graphe" destination="9Iv-b1-Uit" id="B3o-hr-I6T"/>
                         <outlet property="network" destination="8vZ-fO-SBe" id="rtp-wy-XAm"/>
                         <outlet property="resume" destination="tmG-fY-AvF" id="PLm-uw-hiZ"/>
+                        <outlet property="roue" destination="R1Z-AZ-Xjb" id="LPk-Bf-64e"/>
                         <outlet property="status" destination="1b0-UZ-RZC" id="cfY-Sw-SYz"/>
                     </connections>
                 </viewController>
@@ -944,6 +951,12 @@
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="t5a-rH-JHH" customClass="GraphSaison" customModule="SerieA" customModuleProvider="target">
                                 <rect key="frame" x="16" y="149" width="343" height="179"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="RJo-Mz-uo9">
+                                        <rect key="frame" x="302" y="24" width="20" height="20"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </activityIndicatorView>
+                                </subviews>
                                 <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
                         </subviews>
@@ -953,6 +966,7 @@
                     <connections>
                         <outlet property="banniere" destination="xpc-Sy-cRK" id="lyr-ij-iKi"/>
                         <outlet property="graphe" destination="t5a-rH-JHH" id="fgB-5V-9cP"/>
+                        <outlet property="roue" destination="RJo-Mz-uo9" id="PPC-mi-DjN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4H8-ba-mks" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1339,6 +1353,10 @@
                                     <action selector="toggleCategory:" destination="Hoe-9h-uf9" eventType="touchUpInside" id="Bph-p4-gdi"/>
                                 </connections>
                             </button>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Afi-fr-GQZ">
+                                <rect key="frame" x="321" y="14" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </activityIndicatorView>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pyA-QY-Xi5">
                                 <rect key="frame" x="192" y="526" width="80" height="27"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1381,6 +1399,7 @@
                         <outlet property="poster" destination="9Kv-yT-eqH" id="5pa-YZ-6l2"/>
                         <outlet property="progressBar" destination="iWN-6C-jA5" id="pUc-zq-Ptz"/>
                         <outlet property="resume" destination="BGF-ZX-WLj" id="yZq-SZ-AHP"/>
+                        <outlet property="roue" destination="Afi-fr-GQZ" id="BPs-Nh-jpj"/>
                         <outlet property="saison" destination="gwJ-vA-k5r" id="9E0-Db-Rrx"/>
                         <outlet property="status" destination="nmK-Xt-N8Y" id="e55-Ss-y7C"/>
                         <outlet property="titre" destination="20E-zs-3RF" id="jYS-z9-eGc"/>

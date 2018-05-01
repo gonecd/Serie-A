@@ -20,12 +20,14 @@ class SerieFiche: UIViewController {
     @IBOutlet weak var network: UILabel!
     @IBOutlet weak var genre: UITextView!
     @IBOutlet weak var status: UILabel!
+    @IBOutlet weak var roue: UIActivityIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
      
         resume.text = serie.resume
         banniere.image = image
+        //graphe.backgroundColor = colorBackground
         graphe.sendSerie(serie)
 
         // Affichage des genres
@@ -58,6 +60,8 @@ class SerieFiche: UIViewController {
         
         DispatchQueue.global(qos: .utility).async {
             
+            DispatchQueue.main.async { self.roue.startAnimating() }
+
             if (self.serie.idTVdb != "") { self.accueil.theTVdb.getEpisodesRatings(self.serie) }
             self.graphe.sendSerie(self.serie)
             DispatchQueue.main.async { self.graphe.setNeedsDisplay() }
@@ -77,6 +81,8 @@ class SerieFiche: UIViewController {
             self.accueil.imdb.getEpisodesRatings(self.serie)
             self.graphe.sendSerie(self.serie)
             DispatchQueue.main.async { self.graphe.setNeedsDisplay() }
+
+            DispatchQueue.main.async { self.roue.stopAnimating() }
         }
     }
  

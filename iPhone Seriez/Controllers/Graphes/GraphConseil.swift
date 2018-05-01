@@ -18,7 +18,6 @@ class GraphConseil: UIView {
     var hauteur  : CGFloat = 0.0
     var largeur  : CGFloat = 0.0
     var bordure  : CGFloat = 10.0
-    var accueil : ViewAccueil = ViewAccueil()
     var vue : ViewConseil = ViewConseil()
     var grapheType : Int = 0
     var showSuivies : Bool = true
@@ -162,7 +161,7 @@ class GraphConseil: UIView {
             }
             else
             {
-                traceUneAffiche(note: serieListe[index].serie.getGlobalRating(), nbConseils : serieListe[index].cpt, poster : accueil.getImage(serieListe[index].serie.poster), titre : serieListe[index].serie.serie)
+                traceUneAffiche(note: serieListe[index].serie.getGlobalRating(), nbConseils : serieListe[index].cpt, poster : getImage(serieListe[index].serie.poster), titre : serieListe[index].serie.serie)
             }
         }
     }
