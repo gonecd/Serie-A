@@ -14,8 +14,6 @@ class ViewRecherche: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
     @IBOutlet weak var pickerNetwork: UIPickerView!
     @IBOutlet weak var pickerLangue: UIPickerView!
     
-    var accueil : ViewAccueil = ViewAccueil()
-    
     @IBOutlet weak var viewNetworks: UIView!
     @IBOutlet weak var inNetworks: UITextView!
     
@@ -131,19 +129,18 @@ class ViewRecherche: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
         let viewController = segue.destination as! ViewSerieListe
         
         var seriesTrouvees : [Serie]
-        seriesTrouvees = self.accueil.theMoviedb.chercher(genreIncl: inGenres.text, genreExcl: outGenres.text,
-                                                          anneeBeg: inAnnees.text, anneeEnd: outAnnees.text,
-                                                          langue: inLangues.text, network: inNetworks.text)
+        seriesTrouvees = theMoviedb.chercher(genreIncl: inGenres.text, genreExcl: outGenres.text,
+                                             anneeBeg: inAnnees.text, anneeEnd: outAnnees.text,
+                                             langue: inLangues.text, network: inNetworks.text)
         
         for uneSerie in seriesTrouvees
         {
             print("Enrichissement de \(uneSerie.serie)")
-            self.accueil.theMoviedb.getIDs(serie: uneSerie)
-            self.accueil.downloadGlobalInfo(serie: uneSerie)
+            theMoviedb.getIDs(serie: uneSerie)
+            db.downloadGlobalInfo(serie: uneSerie)
         }
         
         viewController.title = "Propositions de séries"
-        viewController.accueil = self.accueil
         viewController.viewList = seriesTrouvees
     }
     
@@ -158,6 +155,7 @@ class ViewRecherche: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
     @IBAction func plusOutAnnees(_ sender: Any)     { pickerAnnee.isHidden = false; modeAnneesInclude = false; }
     @IBAction func plusInLangues(_ sender: Any)     { pickerLangue.isHidden = false }
     @IBAction func razInLangues(_ sender: Any)      { inLangues.text = "Toutes" }
+    
     
 }
 

@@ -42,7 +42,7 @@ func trace(texte : String, logLevel : Int, scope : Int)
     let showGraphe      : Bool = true
     let showController  : Bool = true
     let showStructure   : Bool = true
-
+    
     
     if (logLevel <= showLogLevel )
     {
@@ -52,17 +52,17 @@ func trace(texte : String, logLevel : Int, scope : Int)
             || ((scope == scopeStructure) && (showStructure))
             || ((scope == scopeController) && (showController)) )
         {
-        if (showTimeStamp)
-        {
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:SS.sss"
-
-            print(dateFormatter.string(from: Date()) + " : " + texte)
-        }
-        else
-        {
-            print(texte)
-        }
+            if (showTimeStamp)
+            {
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:SS.sss"
+                
+                print(dateFormatter.string(from: Date()) + " : " + texte)
+            }
+            else
+            {
+                print(texte)
+            }
         }
     }
 }
@@ -85,7 +85,7 @@ func getDrapeau(country : String) -> UIImage
     case "BR": return #imageLiteral(resourceName: "Flag_of_Brazil.png")
     case "JP": return #imageLiteral(resourceName: "Flag_of_Japan.png")
     case "AU": return #imageLiteral(resourceName: "Flag_of_Australia.png")
-
+        
     default:
         print("Pays sans drapeau : \(country)")
         return UIImage()
@@ -126,7 +126,7 @@ func makeGradiant(carre : UIView, couleur : String)
     carre.layer.shadowRadius = 10.0
     
     carre.layer.insertSublayer(myGradient, at: 0)
-
+    
     trace(texte : "<< Helper : makeGradiant >> Return : No Return", logLevel : logFuncReturn, scope : scopeHelper)
 }
 
@@ -138,7 +138,7 @@ func arrondir(texte: UITextField, radius : CGFloat)
     
     texte.layer.cornerRadius = radius
     texte.layer.masksToBounds = true
-
+    
     trace(texte : "<< Helper : arrondir >> Return : No Return", logLevel : logFuncReturn, scope : scopeHelper)
 }
 
@@ -146,10 +146,10 @@ func daysBetweenDates(startDate: Date, endDate: Date) -> Int
 {
     trace(texte : "<< Helper : daysBetweenDates >>", logLevel : logFuncCalls, scope : scopeHelper)
     trace(texte : "<< Helper : daysBetweenDates >> Params : startDate = \(startDate), endDate = \(endDate)", logLevel : logFuncParams, scope : scopeHelper)
-
+    
     let calendar = Calendar.current
     let components = calendar.dateComponents([Calendar.Component.day], from: startDate, to: endDate)
-
+    
     trace(texte : "<< Helper : daysBetweenDates >> Return : days = \(components.day!)", logLevel : logFuncReturn, scope : scopeHelper)
     return components.day!
 }

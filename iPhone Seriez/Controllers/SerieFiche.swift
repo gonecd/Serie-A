@@ -12,7 +12,6 @@ class SerieFiche: UIViewController {
     
     var serie : Serie = Serie(serie: "")
     var image : UIImage = UIImage()
-    var accueil : ViewAccueil = ViewAccueil()
 
     @IBOutlet weak var resume: UITextView!
     @IBOutlet weak var banniere: UIImageView!
@@ -56,29 +55,29 @@ class SerieFiche: UIViewController {
         network.layer.masksToBounds = true
         network.text? = serie.network
         
-        accueil.theTVdb.getSerieInfosLight(uneSerie: serie)
+        theTVdb.getSerieInfosLight(uneSerie: serie)
         
         DispatchQueue.global(qos: .utility).async {
             
             DispatchQueue.main.async { self.roue.startAnimating() }
 
-            if (self.serie.idTVdb != "") { self.accueil.theTVdb.getEpisodesRatings(self.serie) }
+            if (self.serie.idTVdb != "") { theTVdb.getEpisodesRatings(self.serie) }
             self.graphe.sendSerie(self.serie)
             DispatchQueue.main.async { self.graphe.setNeedsDisplay() }
             
-            if (self.serie.idTrakt != "") { self.accueil.trakt.getEpisodesRatings(self.serie) }
+            if (self.serie.idTrakt != "") { trakt.getEpisodesRatings(self.serie) }
             self.graphe.sendSerie(self.serie)
             DispatchQueue.main.async { self.graphe.setNeedsDisplay() }
             
-            if (self.serie.idTVdb != "") { self.accueil.betaSeries.getEpisodesRatings(self.serie) }
+            if (self.serie.idTVdb != "") { betaSeries.getEpisodesRatings(self.serie) }
             self.graphe.sendSerie(self.serie)
             DispatchQueue.main.async { self.graphe.setNeedsDisplay() }
             
-            if (self.serie.idMoviedb != "") { self.accueil.theMoviedb.getEpisodesRatings(self.serie) }
+            if (self.serie.idMoviedb != "") { theMoviedb.getEpisodesRatings(self.serie) }
             self.graphe.sendSerie(self.serie)
             DispatchQueue.main.async { self.graphe.setNeedsDisplay() }
             
-            self.accueil.imdb.getEpisodesRatings(self.serie)
+            imdb.getEpisodesRatings(self.serie)
             self.graphe.sendSerie(self.serie)
             DispatchQueue.main.async { self.graphe.setNeedsDisplay() }
 

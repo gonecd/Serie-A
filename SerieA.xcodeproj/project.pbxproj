@@ -19,6 +19,7 @@
 		6279645A2095D5BB00ED5578 /* Flag_of_Japan.png in Resources */ = {isa = PBXBuildFile; fileRef = 627964582095D5BB00ED5578 /* Flag_of_Japan.png */; };
 		6279645B2095D5BB00ED5578 /* Flag_of_Australia.png in Resources */ = {isa = PBXBuildFile; fileRef = 627964592095D5BB00ED5578 /* Flag_of_Australia.png */; };
 		6279645D2096246E00ED5578 /* data.tsv in Resources */ = {isa = PBXBuildFile; fileRef = 6279645C2096246E00ED5578 /* data.tsv */; };
+		6279645F2099D32400ED5578 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6279645E2099D32400ED5578 /* Database.swift */; };
 		627A0E2820139E8300FE1777 /* GraphSaison.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627A0E2720139E8300FE1777 /* GraphSaison.swift */; };
 		627A0E2A20139E9900FE1777 /* GraphEpisode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627A0E2920139E9900FE1777 /* GraphEpisode.swift */; };
 		62A2758D2056A136002749ED /* ViewRecherche.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62A2758C2056A136002749ED /* ViewRecherche.swift */; };
@@ -83,6 +84,7 @@
 		627964582095D5BB00ED5578 /* Flag_of_Japan.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_Japan.png; sourceTree = "<group>"; };
 		627964592095D5BB00ED5578 /* Flag_of_Australia.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_Australia.png; sourceTree = "<group>"; };
 		6279645C2096246E00ED5578 /* data.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = data.tsv; sourceTree = "<group>"; };
+		6279645E2099D32400ED5578 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		627A0E2720139E8300FE1777 /* GraphSaison.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphSaison.swift; sourceTree = "<group>"; };
 		627A0E2920139E9900FE1777 /* GraphEpisode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphEpisode.swift; sourceTree = "<group>"; };
 		62A2758C2056A136002749ED /* ViewRecherche.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewRecherche.swift; sourceTree = "<group>"; };
@@ -164,10 +166,10 @@
 			children = (
 				62DD87B11FB8A2E000A9B9EE /* Graph.swift */,
 				627A0E2720139E8300FE1777 /* GraphSaison.swift */,
-				62B4D8B5208B9E08002110E8 /* GraphConseil.swift */,
-				62CD57C22038B87D00DE28A1 /* GraphMiniSaison.swift */,
-				6224A5E62043141800450812 /* GraphMiniSerie.swift */,
 				627A0E2920139E9900FE1777 /* GraphEpisode.swift */,
+				6224A5E62043141800450812 /* GraphMiniSerie.swift */,
+				62CD57C22038B87D00DE28A1 /* GraphMiniSaison.swift */,
+				62B4D8B5208B9E08002110E8 /* GraphConseil.swift */,
 			);
 			path = Graphes;
 			sourceTree = "<group>";
@@ -177,6 +179,7 @@
 			children = (
 				6224A5E42042207800450812 /* Constantes.swift */,
 				6255DBD92083780900CA9BA3 /* Helpers.swift */,
+				6279645E2099D32400ED5578 /* Database.swift */,
 				62DD87AD1FB89E7D00A9B9EE /* Serie.swift */,
 				62DD87AB1FB89E7D00A9B9EE /* Saison.swift */,
 				62DD87AC1FB89E7D00A9B9EE /* Episode.swift */,
@@ -192,10 +195,10 @@
 				62D0EBBA204C30BE009774B6 /* ViewSaisonListe.swift */,
 				6224A5E22041F30200450812 /* ViewSerieListe.swift */,
 				62B4D8B3208B9BF4002110E8 /* ViewConseil.swift */,
-				62AC509F200E58A200A8C841 /* SaisonFiche.swift */,
 				62A2758C2056A136002749ED /* ViewRecherche.swift */,
-				62F8ECF32013775800A41EF7 /* EpisodeFiche.swift */,
 				62DD87A91FB7838400A9B9EE /* SerieFiche.swift */,
+				62AC509F200E58A200A8C841 /* SaisonFiche.swift */,
+				62F8ECF32013775800A41EF7 /* EpisodeFiche.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -432,6 +435,7 @@
 				6255DBDA2083780900CA9BA3 /* Helpers.swift in Sources */,
 				62DD87B01FB89E7D00A9B9EE /* Serie.swift in Sources */,
 				62D0EBBB204C30BE009774B6 /* ViewSaisonListe.swift in Sources */,
+				6279645F2099D32400ED5578 /* Database.swift in Sources */,
 				62AC50A0200E58A200A8C841 /* SaisonFiche.swift in Sources */,
 				62DD87701FB766C600A9B9EE /* AppDelegate.swift in Sources */,
 			);

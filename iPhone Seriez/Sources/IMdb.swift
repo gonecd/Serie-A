@@ -25,10 +25,10 @@ class IMdb : NSObject
         trace(texte : "<< IMdb : init >> Return : No Return", logLevel : logFuncReturn, scope : scopeSource)
     }
     
-    func loadDB()
+    func loadDataFile()
     {
-        trace(texte : "<< IMdb : loadDB >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< IMdb : loadDB >> Params : No Params", logLevel : logFuncParams, scope : scopeSource)
+        trace(texte : "<< IMdb : loadDataFile >>", logLevel : logFuncCalls, scope : scopeSource)
+        trace(texte : "<< IMdb : loadDataFile >> Params : No Params", logLevel : logFuncParams, scope : scopeSource)
         
         print("IMdb::Loading Ref")
         
@@ -45,7 +45,7 @@ class IMdb : NSObject
             }
         }
         
-        trace(texte : "<< IMdb : loadDB >> Return : No Return", logLevel : logFuncReturn, scope : scopeSource)
+        trace(texte : "<< IMdb : loadDataFile >> Return : No Return", logLevel : logFuncReturn, scope : scopeSource)
     }
     
     

@@ -34,8 +34,6 @@ class ViewConseil: UIViewController {
     @IBOutlet weak var boutonWatchlist: UIButton!
     
     var grapheType : Int = 0
-    var accueil : ViewAccueil = ViewAccueil()
-    var allShows : [Serie] = []
     var allConseils : [(serie : Serie, cpt : Int, category : Int)] = []
     var shortList : [Serie] = []
     var conseilsMinimum : Int = 3
@@ -76,28 +74,28 @@ class ViewConseil: UIViewController {
         
         if (uneSerie.idIMdb != "")
         {
-            dataTrakt = self.accueil.trakt.getSerieGlobalInfos(idTraktOrIMDB: uneSerie.idIMdb)
-            dataMoviedb = self.accueil.theMoviedb.getSerieGlobalInfos(idMovieDB: dataTrakt.idMoviedb)
-            dataBetaSeries = self.accueil.betaSeries.getSerieGlobalInfos(idTVDB : dataTrakt.idTVdb, idIMDB : uneSerie.idIMdb)
-            dataTVdb = self.accueil.theTVdb.getSerieGlobalInfos(idTVdb : dataTrakt.idTVdb)
-            dataIMDB = self.accueil.imdb.getSerieGlobalInfos(idIMDB: uneSerie.idIMdb)
+            dataTrakt = trakt.getSerieGlobalInfos(idTraktOrIMDB: uneSerie.idIMdb)
+            dataMoviedb = theMoviedb.getSerieGlobalInfos(idMovieDB: dataTrakt.idMoviedb)
+            dataBetaSeries = betaSeries.getSerieGlobalInfos(idTVDB : dataTrakt.idTVdb, idIMDB : uneSerie.idIMdb)
+            dataTVdb = theTVdb.getSerieGlobalInfos(idTVdb : dataTrakt.idTVdb)
+            dataIMDB = imdb.getSerieGlobalInfos(idIMDB: uneSerie.idIMdb)
             
         } else if (uneSerie.idMoviedb != "")
         {
-            dataMoviedb = self.accueil.theMoviedb.getSerieGlobalInfos(idMovieDB: uneSerie.idMoviedb)
-            dataTrakt = self.accueil.trakt.getSerieGlobalInfos(idTraktOrIMDB: dataMoviedb.idIMdb)
-            dataBetaSeries = self.accueil.betaSeries.getSerieGlobalInfos(idTVDB : dataMoviedb.idTVdb, idIMDB : dataMoviedb.idIMdb)
-            dataTVdb = self.accueil.theTVdb.getSerieGlobalInfos(idTVdb : dataMoviedb.idTVdb)
-            dataIMDB = self.accueil.imdb.getSerieGlobalInfos(idIMDB: dataMoviedb.idIMdb)
+            dataMoviedb = theMoviedb.getSerieGlobalInfos(idMovieDB: uneSerie.idMoviedb)
+            dataTrakt = trakt.getSerieGlobalInfos(idTraktOrIMDB: dataMoviedb.idIMdb)
+            dataBetaSeries = betaSeries.getSerieGlobalInfos(idTVDB : dataMoviedb.idTVdb, idIMDB : dataMoviedb.idIMdb)
+            dataTVdb = theTVdb.getSerieGlobalInfos(idTVdb : dataMoviedb.idTVdb)
+            dataIMDB = imdb.getSerieGlobalInfos(idIMDB: dataMoviedb.idIMdb)
             
         } else if (uneSerie.idTVdb != "")
         {
-            dataTVdb = self.accueil.theTVdb.getSerieGlobalInfos(idTVdb : uneSerie.idTVdb)
-            dataBetaSeries = self.accueil.betaSeries.getSerieGlobalInfos(idTVDB : uneSerie.idTVdb, idIMDB : dataTVdb.idIMdb)
-            dataTrakt = self.accueil.trakt.getSerieGlobalInfos(idTraktOrIMDB: dataTVdb.idIMdb)
+            dataTVdb = theTVdb.getSerieGlobalInfos(idTVdb : uneSerie.idTVdb)
+            dataBetaSeries = betaSeries.getSerieGlobalInfos(idTVDB : uneSerie.idTVdb, idIMDB : dataTVdb.idIMdb)
+            dataTrakt = trakt.getSerieGlobalInfos(idTraktOrIMDB: dataTVdb.idIMdb)
             uneSerie.idMoviedb = dataTrakt.idMoviedb
-            dataMoviedb = self.accueil.theMoviedb.getSerieGlobalInfos(idMovieDB: dataTrakt.idMoviedb)
-            dataIMDB = self.accueil.imdb.getSerieGlobalInfos(idIMDB: dataTVdb.idIMdb)
+            dataMoviedb = theMoviedb.getSerieGlobalInfos(idMovieDB: dataTrakt.idMoviedb)
+            dataIMDB = imdb.getSerieGlobalInfos(idIMDB: dataTVdb.idIMdb)
             
         }
         
@@ -132,7 +130,7 @@ class ViewConseil: UIViewController {
         }
         
         // Si la série est une série connue, on l'ajoute à la liste
-        for uneSerie in allShows
+        for uneSerie in db.shows
         {
             if (uneSerie.serie == show)
             {
@@ -283,20 +281,19 @@ class ViewConseil: UIViewController {
 
             DispatchQueue.global(qos: .utility).async {
                 
-                let nbShows: Int = self.allShows.count
+                let nbShows: Int = db.shows.count
                 //let nbShows: Int = 25
                 var numShow : Int = 0
                 
-                //for oneShow in self.allShows
                 for index in 0..<nbShows
                 {
-                    if ( (self.allShows[index].unfollowed == false) &&
-                        (self.allShows[index].watchlist == false) &&
-                        ((self.allShows[index].saisons[self.allShows[index].saisons.count - 1].watched == false) || (self.allShows[index].status != "Ended")))
+                    if ( (db.shows[index].unfollowed == false) &&
+                        (db.shows[index].watchlist == false) &&
+                        ((db.shows[index].saisons[db.shows[index].saisons.count - 1].watched == false) || (db.shows[index].status != "Ended")))
                     {
-                        self.addShowsToListe(newShows : self.accueil.trakt.getSimilarShows(IMDBid: self.allShows[index].idIMdb), idType : "IMDB")
-                        self.addShowsToListe(newShows : self.accueil.theMoviedb.getSimilarShows(movieDBid: self.allShows[index].idMoviedb), idType : "MovieDB")
-                        self.addShowsToListe(newShows : self.accueil.betaSeries.getSimilarShows(TVDBid: self.allShows[index].idTVdb), idType : "TVDB")
+                        self.addShowsToListe(newShows : trakt.getSimilarShows(IMDBid: db.shows[index].idIMdb), idType : "IMDB")
+                        self.addShowsToListe(newShows : theMoviedb.getSimilarShows(movieDBid: db.shows[index].idMoviedb), idType : "MovieDB")
+                        self.addShowsToListe(newShows : betaSeries.getSimilarShows(TVDBid: db.shows[index].idTVdb), idType : "TVDB")
                     }
                     
                     numShow = numShow + 1
@@ -320,9 +317,9 @@ class ViewConseil: UIViewController {
             // POPULAR
             self.conseilsMinimum = 1
 
-            self.addShowsToListe(newShows : self.accueil.trakt.getPopularShows(), idType : "IMDB")
-            self.addShowsToListe(newShows : self.accueil.theMoviedb.getPopularShows(), idType : "MovieDB")
-            self.addShowsToListe(newShows : self.accueil.betaSeries.getPopularShows(), idType : "TVDB")
+            self.addShowsToListe(newShows : trakt.getPopularShows(), idType : "IMDB")
+            self.addShowsToListe(newShows : theMoviedb.getPopularShows(), idType : "MovieDB")
+            self.addShowsToListe(newShows : betaSeries.getPopularShows(), idType : "TVDB")
 
             self.graph.sendSeries(liste : self.selectTopConseils(minConseils : self.conseilsMinimum), max : 3)
             self.graph.setNeedsDisplay()
@@ -334,9 +331,9 @@ class ViewConseil: UIViewController {
             // TRENDING
             self.conseilsMinimum = 1
 
-            self.addShowsToListe(newShows : self.accueil.trakt.getTrendingShows(), idType : "IMDB")
-            self.addShowsToListe(newShows : self.accueil.theMoviedb.getTrendingShows(), idType : "MovieDB")
-            self.addShowsToListe(newShows : self.accueil.betaSeries.getTrendingShows(), idType : "TVDB")
+            self.addShowsToListe(newShows : trakt.getTrendingShows(), idType : "IMDB")
+            self.addShowsToListe(newShows : theMoviedb.getTrendingShows(), idType : "MovieDB")
+            self.addShowsToListe(newShows : betaSeries.getTrendingShows(), idType : "TVDB")
             
             self.graph.sendSeries(liste : self.selectTopConseils(minConseils : self.conseilsMinimum), max : 3)
             self.graph.setNeedsDisplay()

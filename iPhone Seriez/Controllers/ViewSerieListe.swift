@@ -111,7 +111,6 @@ class ViewSerieListe: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let viewController = segue.destination as! SerieFiche
         let tableCell : CellSerieListe = sender as! CellSerieListe
-        viewController.accueil = self.accueil
         viewController.serie = viewList[tableCell.index]
         viewController.image = getImage(viewList[tableCell.index].banner)
     }
@@ -134,13 +133,13 @@ class ViewSerieListe: UITableViewController {
     
     func searchSerie(alertView: UIAlertAction!)
     {
-        let seriesTrouvees : [Serie] = accueil.chercherUneSerieSurTrakt(nomSerie: self.popupTextField.text!)
+        let seriesTrouvees : [Serie] = trakt.recherche(serieArechercher: self.popupTextField.text!)
         let actionSheetController: UIAlertController = UIAlertController(title: "Ajouter à ma watchlist", message: nil, preferredStyle: .actionSheet)
         
         for uneSerie in seriesTrouvees
         {
             let uneAction: UIAlertAction = UIAlertAction(title: uneSerie.serie+" ("+String(uneSerie.year)+")", style: UIAlertActionStyle.default) { action -> Void in
-                if (self.accueil.ajouterUneSerieDansLaWatchlistTrakt(uneSerie: uneSerie))
+                if (self.ajouterUneSerieDansLaWatchlistTrakt(uneSerie: uneSerie))
                 {
                     self.viewList.append(uneSerie)
                     self.liste.reloadData()
@@ -158,15 +157,15 @@ class ViewSerieListe: UITableViewController {
     
     override func tableView(_ tableView: UITableView, editActionsForRowAt: IndexPath) -> [UITableViewRowAction]? {
         let reload = UITableViewRowAction(style: .normal, title: "Reload") { action, index in
-            self.accueil.downloadGlobalInfo(serie: self.viewList[index.row])
-            self.accueil.saveDB()
+            db.downloadGlobalInfo(serie: self.viewList[index.row])
+            db.saveDB()
             self.liste.reloadData()
             self.view.setNeedsDisplay()
         }
         reload.backgroundColor = .green
         
         let remove = UITableViewRowAction(style: .destructive, title: "Remove") { action, index in
-            if (self.accueil.supprimerUneSerieDansLaWatchlistTrakt(uneSerie: self.viewList[index.row]))
+            if (self.supprimerUneSerieDansLaWatchlistTrakt(uneSerie: self.viewList[index.row]))
             {
                 self.viewList.remove(at: index.row)
                 self.liste.reloadData()
@@ -191,6 +190,46 @@ class ViewSerieListe: UITableViewController {
         self.liste.reloadData()
         self.view.setNeedsDisplay()
     }
+    
+    func ajouterUneSerieDansLaWatchlistTrakt(uneSerie : Serie) -> Bool
+    {
+        trace(texte : "<< ViewSerieListe : ajouterUneSerieDansLaWatchlistTrakt >>", logLevel : logFuncCalls, scope : scopeController)
+        trace(texte : "<< ViewSerieListe : ajouterUneSerieDansLaWatchlistTrakt >> Params : uneSerie = \(uneSerie)", logLevel : logFuncParams, scope : scopeController)
+        
+        if (trakt.addToWatchlist(theTVdbId: uneSerie.idTVdb))
+        {
+            db.downloadGlobalInfo(serie: uneSerie)
+            db.shows.append(uneSerie)
+            db.saveDB()
+            //TODO : updateCompteurs()
+            
+            trace(texte : "<< ViewSerieListe : ajouterUneSerieDansLaWatchlistTrakt >> Return : true", logLevel : logFuncReturn, scope : scopeController)
+            return true
+        }
+        
+        trace(texte : "<< ViewSerieListe : ajouterUneSerieDansLaWatchlistTrakt >> Return : false", logLevel : logFuncReturn, scope : scopeController)
+        return false
+    }
+    
+    
+    func supprimerUneSerieDansLaWatchlistTrakt(uneSerie: Serie) -> Bool
+    {
+        trace(texte : "<< ViewSerieListe : supprimerUneSerieDansLaWatchlistTrakt >>", logLevel : logFuncCalls, scope : scopeController)
+        trace(texte : "<< ViewSerieListe : supprimerUneSerieDansLaWatchlistTrakt >> Params : uneSerie = \(uneSerie)", logLevel : logFuncParams, scope : scopeController)
+        
+        if (trakt.removeFromWatchlist(theTVdbId: uneSerie.idTVdb))
+        {
+            db.shows.remove(at: db.shows.index(of: uneSerie)!)
+            db.saveDB()
+            //TODO : updateCompteurs()
+            
+            trace(texte : "<< ViewSerieListe : supprimerUneSerieDansLaWatchlistTrakt >> Return : true", logLevel : logFuncReturn, scope : scopeController)
+            return true
+        }
+        trace(texte : "<< ViewSerieListe : supprimerUneSerieDansLaWatchlistTrakt >> Return : false", logLevel : logFuncReturn, scope : scopeController)
+        return false
+    }
+    
     
 }
 

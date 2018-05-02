@@ -10,6 +10,16 @@ import UIKit
 
 let ZeroDate : Date = Date.init(timeIntervalSince1970: 0)
 
+
+// Structures globales
+var trakt       : Trakt      = Trakt.init()
+var theTVdb     : TheTVdb    = TheTVdb.init()
+var betaSeries  : BetaSeries = BetaSeries.init()
+var theMoviedb  : TheMoviedb = TheMoviedb.init()
+var imdb        : IMdb       = IMdb.init()
+var db          : Database   = Database.init()
+
+
 // Correction des notes pour homogénéisation
 let correctionTVdb          : Int = 77
 let correctionBetaSeries    : Int = 86
@@ -50,9 +60,11 @@ let popularShowsPerSource       : Int = 10
 
 // Log levels
 let logAucun           : Int = 0
-let logFuncCalls       : Int = 2
-let logFuncParams      : Int = 5
-let logFuncReturn      : Int = 8
+let logErrors          : Int = 1
+let logWarnings        : Int = 2
+let logFuncCalls       : Int = 5
+let logFuncParams      : Int = 6
+let logFuncReturn      : Int = 7
 let logDebug           : Int = 10
 
 // Log Scopes

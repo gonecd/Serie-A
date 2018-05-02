@@ -15,11 +15,11 @@ class GraphMiniSaison: UIView {
     var noteMoviedb : Int = 0
     var noteIMdb : Int = 0
     
-    var moyTrakt : Double = 0.0
-    var moyTVdb : Double = 0.0
-    var moyBetaSeries : Double = 0.0
-    var moyMoviedb : Double = 0.0
-    var moyIMdb : Double = 0.0
+    var moyTrakt : Int = 0
+    var moyTVdb : Int = 0
+    var moyBetaSeries : Int = 0
+    var moyMoviedb : Int = 0
+    var moyIMdb : Int = 0
     
     var origineX : CGFloat = 0.0
     var origineY :CGFloat = 0.0
@@ -45,7 +45,7 @@ class GraphMiniSaison: UIView {
     
     
     func sendNotes(rateTrakt : Int, rateTVdb : Int, rateBetaSeries : Int, rateMoviedb : Int, rateIMdb : Int,
-                   seasonsAverageTrakt : Double, seasonsAverageTVdb : Double, seasonsAverageBetaSeries : Double, seasonsAverageMoviedb : Double, seasonsAverageIMdb : Double)
+                   seasonsAverageTrakt : Int, seasonsAverageTVdb : Int, seasonsAverageBetaSeries : Int, seasonsAverageMoviedb : Int, seasonsAverageIMdb : Int)
     {
         noteTrakt = rateTrakt
         noteTVdb = rateTVdb
@@ -53,20 +53,11 @@ class GraphMiniSaison: UIView {
         noteMoviedb = rateMoviedb
         noteIMdb = rateIMdb
         
-        if (seasonsAverageTrakt.isNaN) { moyTrakt = 80.0 }
-        else { moyTrakt = seasonsAverageTrakt }
-        
-        if (seasonsAverageTVdb.isNaN) { moyTVdb = 80.0 }
-        else { moyTVdb = seasonsAverageTVdb }
-        
-        if (seasonsAverageBetaSeries.isNaN) { moyBetaSeries = 80.0 }
-        else { moyBetaSeries = seasonsAverageBetaSeries }
-        
-        if (seasonsAverageMoviedb.isNaN) { moyMoviedb = 80.0 }
-        else { moyMoviedb = seasonsAverageMoviedb }
-        
-        if (seasonsAverageIMdb.isNaN) { moyIMdb = 80.0 }
-        else { moyIMdb = seasonsAverageIMdb }
+        moyTrakt = seasonsAverageTrakt
+        moyTVdb = seasonsAverageTVdb
+        moyBetaSeries = seasonsAverageBetaSeries
+        moyMoviedb = seasonsAverageMoviedb
+        moyIMdb = seasonsAverageIMdb
     }
     
     func background()
@@ -102,17 +93,11 @@ class GraphMiniSaison: UIView {
     
     func traceGraphePoints()
     {
-        traceUnPoint(noteX: noteTVdb,           noteY: noteTVdb,        color: colorTVdb)
-        traceUnPoint(noteX: noteTrakt,          noteY: noteTrakt,       color: colorTrakt)
-        traceUnPoint(noteX: noteBetaSeries,     noteY: noteBetaSeries,  color: colorBetaSeries)
-        traceUnPoint(noteX: noteMoviedb,        noteY: noteMoviedb,     color: colorMoviedb)
-        traceUnPoint(noteX: noteIMdb,           noteY: noteIMdb,        color: colorIMDB)
-
-//        if (moyTVdb != 0.0)       { traceUnPoint(noteTVdb,       noteY: Int(Double(noteTVdb * 80) / moyTVdb),             color: colorTVdb) }
-//        if (moyTrakt != 0.0)      { traceUnPoint(noteTrakt,      noteY: Int(Double(noteTrakt * 80) / moyTrakt),           color: colorTrakt) }
-//        if (moyBetaSeries != 0.0) { traceUnPoint(noteBetaSeries, noteY: Int(Double(noteBetaSeries * 80) / moyBetaSeries), color: colorBetaSeries) }
-//        if (moyMoviedb != 0.0)    { traceUnPoint(noteMoviedb,    noteY: Int(Double(noteMoviedb * 80) / moyMoviedb),       color: colorMoviedb) }
-//        if (moyIMdb != 0.0)       { traceUnPoint(noteIMdb,       noteY: Int(Double(noteIMdb * 80) / moyIMdb),             color: colorIMDB) }
+        traceUnPoint(noteX: noteTVdb,           noteY: moyTVdb,        color: colorTVdb)
+        traceUnPoint(noteX: noteTrakt,          noteY: moyTrakt,       color: colorTrakt)
+        traceUnPoint(noteX: noteBetaSeries,     noteY: moyBetaSeries,  color: colorBetaSeries)
+        traceUnPoint(noteX: noteMoviedb,        noteY: moyMoviedb,     color: colorMoviedb)
+        traceUnPoint(noteX: noteIMdb,           noteY: moyIMdb,        color: colorIMDB)
 
     }
     

@@ -34,7 +34,6 @@ class ViewSaisonListe: UITableViewController {
     var viewList: [Serie] = [Serie]()
     var allSaisons: [Int] = [Int]()
     let dateFormatter = DateFormatter()
-    var accueil : ViewAccueil = ViewAccueil()
     
     @IBOutlet var liste: UITableView!
     
@@ -98,47 +97,39 @@ class ViewSaisonListe: UITableViewController {
             cell.avantapres.isHidden = true
             cell.diffusion.isHidden = true
             cell.jours.isHidden = true
-           
-//            var totBetaSeriesMoy : Int = 0
-//            var totTraktMoy : Int = 0
-//            var totTVdbMoy : Int = 0
-//            var totMoviedbMoy : Int = 0
-//            var totIMdbMoy : Int = 0
-//            var nbEpsMoy = 0
-//
-//            for loopSaison in viewList[indexPath.row].saisons
-//            {
-//                if (loopSaison.saison < allSaisons[indexPath.row])
-//                {
-//                    totBetaSeriesMoy = totBetaSeriesMoy + loopSaison.getFairRatingBetaSeries()
-//                    totTraktMoy = totTraktMoy + loopSaison.getFairRatingTrakt()
-//                    totTVdbMoy = totTVdbMoy + loopSaison.getFairRatingTVdb()
-//                    totMoviedbMoy = totMoviedbMoy + loopSaison.getFairRatingMoviedb()
-//                    totIMdbMoy = totIMdbMoy + loopSaison.getFairRatingIMdb()
-//                    nbEpsMoy = nbEpsMoy + 1
-//                }
-//            }
             
-            cell.miniGraphe.sendNotes(rateTrakt : viewList[indexPath.row].getFairGlobalRatingTrakt(),
-                                      rateTVdb: viewList[indexPath.row].getFairGlobalRatingTVdb(),
-                                      rateBetaSeries: viewList[indexPath.row].getFairGlobalRatingBetaSeries(),
-                                      rateMoviedb: viewList[indexPath.row].getFairGlobalRatingMoviedb(),
-                                      rateIMdb: viewList[indexPath.row].getFairGlobalRatingIMdb(),
-                                      seasonsAverageTrakt: 0.0,
-                                      seasonsAverageTVdb: 0.0,
-                                      seasonsAverageBetaSeries: 0.0,
-                                      seasonsAverageMoviedb: 0.0,
-                                      seasonsAverageIMdb: 0.0)
-//            cell.miniGraphe.sendNotes(rateTrakt : uneSaison.getFairRatingTrakt(),
-//                                      rateTVdb: uneSaison.getFairRatingTVdb(),
-//                                      rateBetaSeries: uneSaison.getFairRatingBetaSeries(),
-//                                      rateMoviedb: uneSaison.getFairRatingMoviedb(),
-//                                      rateIMdb: uneSaison.getFairRatingIMdb(),
-//                                      seasonsAverageTrakt: Double(totTraktMoy)/Double(nbEpsMoy),
-//                                      seasonsAverageTVdb: Double(totTVdbMoy)/Double(nbEpsMoy),
-//                                      seasonsAverageBetaSeries: Double(totBetaSeriesMoy)/Double(nbEpsMoy),
-//                                      seasonsAverageMoviedb: Double(totMoviedbMoy)/Double(nbEpsMoy),
-//                                      seasonsAverageIMdb: Double(totIMdbMoy)/Double(nbEpsMoy))
+            
+            
+            var totBetaSeriesMoy : Int = 0
+            var totTraktMoy : Int = 0
+            var totTVdbMoy : Int = 0
+            var totMoviedbMoy : Int = 0
+            var totIMdbMoy : Int = 0
+            var nbSeasons = 0
+            
+            for loopSaison in viewList[indexPath.row].saisons
+            {
+                if (loopSaison.saison < allSaisons[indexPath.row])
+                {
+                    totBetaSeriesMoy = totBetaSeriesMoy + loopSaison.getFairRatingBetaSeries()
+                    totTraktMoy = totTraktMoy + loopSaison.getFairRatingTrakt()
+                    totTVdbMoy = totTVdbMoy + loopSaison.getFairRatingTVdb()
+                    totMoviedbMoy = totMoviedbMoy + loopSaison.getFairRatingMoviedb()
+                    totIMdbMoy = totIMdbMoy + loopSaison.getFairRatingIMdb()
+                    nbSeasons = nbSeasons + 1
+                }
+            }
+            
+            cell.miniGraphe.sendNotes(rateTrakt : viewList[indexPath.row].ratingTrakt,
+                                      rateTVdb: viewList[indexPath.row].ratingTVDB,
+                                      rateBetaSeries: viewList[indexPath.row].ratingBetaSeries,
+                                      rateMoviedb: viewList[indexPath.row].ratingMovieDB,
+                                      rateIMdb: viewList[indexPath.row].ratingIMDB,
+                                      seasonsAverageTrakt: computeValue(noteCurrentSeason : uneSaison.getFairRatingTrakt(), totalPrevSeasons : totTraktMoy, nbPrevSeasons : nbSeasons),
+                                      seasonsAverageTVdb: computeValue(noteCurrentSeason : uneSaison.getFairRatingTVdb(), totalPrevSeasons : totTVdbMoy, nbPrevSeasons : nbSeasons),
+                                      seasonsAverageBetaSeries: computeValue(noteCurrentSeason : uneSaison.getFairRatingBetaSeries(), totalPrevSeasons : totBetaSeriesMoy, nbPrevSeasons : nbSeasons),
+                                      seasonsAverageMoviedb: computeValue(noteCurrentSeason : uneSaison.getFairRatingMoviedb(), totalPrevSeasons : totMoviedbMoy, nbPrevSeasons : nbSeasons),
+                                      seasonsAverageIMdb: computeValue(noteCurrentSeason : uneSaison.getFairRatingIMdb(), totalPrevSeasons : totIMdbMoy, nbPrevSeasons : nbSeasons))
             cell.miniGraphe.setNeedsDisplay()
         }
         else
@@ -171,13 +162,23 @@ class ViewSaisonListe: UITableViewController {
     }
     
     
+    func computeValue(noteCurrentSeason : Int, totalPrevSeasons : Int, nbPrevSeasons : Int) -> Int
+    {
+        if ((nbPrevSeasons == 0) || (totalPrevSeasons == 0) ) { return 50 }
+        
+        let moyPrevSeasons : Int = Int( Double(totalPrevSeasons) / Double(nbPrevSeasons) )
+        let difference : Int = Int((Double((noteCurrentSeason - moyPrevSeasons)) / Double(moyPrevSeasons)) * 100 )
+        
+        return (50 + difference)
+    }
+    
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let viewController = segue.destination as! SaisonFiche
         let tableCell : CellSaisonListe = sender as! CellSaisonListe
-        viewController.accueil = self.accueil
         viewController.serie = viewList[tableCell.index]
         viewController.saison = allSaisons[tableCell.index]
         viewController.image = getImage(viewList[tableCell.index].banner)
@@ -185,8 +186,8 @@ class ViewSaisonListe: UITableViewController {
     
     override func tableView(_ tableView: UITableView, editActionsForRowAt: IndexPath) -> [UITableViewRowAction]? {
         let reload = UITableViewRowAction(style: .normal, title: "Reload") { action, index in
-            self.accueil.downloadGlobalInfo(serie: self.viewList[index.row])
-            self.accueil.saveDB()
+            db.downloadGlobalInfo(serie: self.viewList[index.row])
+            db.saveDB()
             self.liste.reloadData()
             self.view.setNeedsDisplay()
         }
