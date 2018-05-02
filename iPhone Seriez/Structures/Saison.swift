@@ -55,7 +55,7 @@ class Saison : NSObject, NSCoding
     {
         var total : Int = 0
         var nb : Int = 0
-        
+
         for episode in self.episodes {
             if (episode.getFairRatingTrakt() != 0)
             {
@@ -67,12 +67,12 @@ class Saison : NSObject, NSCoding
         if (nb != 0) { return Int(Double(total) / Double(nb)) }
         return 0
     }
-    
+
     func getFairRatingTVdb() -> Int
     {
         var total : Int = 0
         var nb : Int = 0
-        
+
         for episode in self.episodes {
             if (episode.getFairRatingTVdb() != 0)
             {
@@ -80,16 +80,16 @@ class Saison : NSObject, NSCoding
                 nb = nb + 1
             }
         }
-        
+
         if (nb != 0) { return Int(Double(total) / Double(nb)) }
         return 0
     }
-    
+
     func getFairRatingBetaSeries() -> Int
     {
         var total : Int = 0
         var nb : Int = 0
-        
+
         for episode in self.episodes {
             if (episode.getFairRatingBetaSeries() != 0)
             {
@@ -97,16 +97,16 @@ class Saison : NSObject, NSCoding
                 nb = nb + 1
             }
         }
-        
+
         if (nb != 0) { return Int(Double(total) / Double(nb)) }
         return 0
     }
-    
+
     func getFairRatingIMdb() -> Int
     {
         var total : Int = 0
         var nb : Int = 0
-        
+
         for episode in self.episodes {
             if (episode.getFairRatingIMdb() != 0)
             {
@@ -114,18 +114,18 @@ class Saison : NSObject, NSCoding
                 nb = nb + 1
             }
         }
-        
+
         if (nb != 0) { return Int(Double(total) / Double(nb)) }
         return 0
     }
-    
 
-    
+
+
     func getFairRatingMoviedb() -> Int
     {
         var total : Int = 0
         var nb : Int = 0
-        
+
         for episode in self.episodes {
             if (episode.getFairRatingMoviedb() != 0)
             {
@@ -133,7 +133,7 @@ class Saison : NSObject, NSCoding
                 nb = nb + 1
             }
         }
-        
+
         if (nb != 0) { return Int(Double(total) / Double(nb)) }
         return 0
     }

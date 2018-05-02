@@ -40,7 +40,8 @@ class Database : NSObject
             {
                 if (saison.watched == false)
                 {
-                    serie.saisons[saison.saison - 1].ends = trakt.getLastEpisodeDate(traktID : serie.idTrakt, saison : saison.saison, episode : serie.saisons[saison.saison - 1].nbEpisodes)
+                    //serie.saisons[saison.saison - 1].ends = trakt.getLastEpisodeDate(traktID : serie.idTrakt, saison : saison.saison, episode : serie.saisons[saison.saison - 1].nbEpisodes)
+                    serie.saisons[saison.saison - 1].ends = betaSeries.getLastEpisodeDate(TVdbId : serie.idTVdb, saison : saison.saison, episode : serie.saisons[saison.saison - 1].nbEpisodes)
                 }
             }
         }

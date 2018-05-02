@@ -277,5 +277,55 @@ class BetaSeries : NSObject
         trace(texte : "<< BetaSeries : getTrendingShows >> Return : showNames=\(showNames), showIds=\(showIds)", logLevel : logFuncReturn, scope : scopeSource)
         return (showNames, showIds)
     }
-
+    
+    
+    
+    func getLastEpisodeDate(TVdbId : String, saison : Int, episode : Int) -> Date
+    {
+        trace(texte : "<< BetaSeries : getLastEpisodeDate >>", logLevel : logFuncCalls, scope : scopeSource)
+        trace(texte : "<< BetaSeries : getLastEpisodeDate >> Params : TVdbId=\(TVdbId), saison=\(saison), episode=\(episode)", logLevel : logFuncParams, scope : scopeSource)
+        
+        var ended : Bool = false
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        var uneDate : Date = Date()
+        
+        var request : URLRequest = URLRequest(url: URL(string: "https://api.betaseries.com/shows/episodes?v=3.0&thetvdb_id=\(TVdbId)&season=\(saison)&episode=\(episode)")!)
+        request.httpMethod = "GET"
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue("\(BetaSeriesUserkey)", forHTTPHeaderField: "X-BetaSeries-Key")
+        
+        let task = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
+            if let data = data, let response = response as? HTTPURLResponse {
+                do {
+                    if (response.statusCode != 200) { print("BetaSeries::getLastEpisodeDate error \(response.statusCode) received "); return; }
+                    
+                    let jsonResponse : NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
+                    let episodeArray : NSArray = (jsonResponse.object(forKey: "episodes")) as! NSArray
+                    
+                    if (episodeArray.count > 0)
+                    {
+                        let stringDate : String = ((episodeArray.object(at: 0) as! NSDictionary).object(forKey: "date")) as? String ?? ""
+                        if (stringDate !=  "") { uneDate = dateFormatter.date(from: stringDate)! }
+                    }
+                    else
+                    {
+                        uneDate = ZeroDate
+                    }
+                    
+                    ended = true
+                    
+                } catch let error as NSError { print("BetaSeries::getSimilarShows failed: \(error.localizedDescription)"); ended = true; }
+            } else { print(error as Any); ended = true; }
+        })
+        
+        task.resume()
+        while (!ended) { usleep(1000) }
+        
+        trace(texte : "<< BetaSeries : getLastEpisodeDate >> Return : getLastEpisodeDate = \(uneDate)", logLevel : logFuncReturn, scope : scopeSource)
+        return (uneDate)
+    }
+    
+    
+    
 }

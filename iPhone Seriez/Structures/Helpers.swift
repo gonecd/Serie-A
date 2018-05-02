@@ -36,12 +36,12 @@ func getImage(_ url: String) -> UIImage
 func trace(texte : String, logLevel : Int, scope : Int)
 {
     let showTimeStamp   : Bool = true
-    let showLogLevel    : Int  = logFuncCalls
+    let showLogLevel    : Int  = logFuncReturn
     let showSource      : Bool = true
     let showHelper      : Bool = false
-    let showGraphe      : Bool = true
-    let showController  : Bool = true
-    let showStructure   : Bool = true
+    let showGraphe      : Bool = false
+    let showController  : Bool = false
+    let showStructure   : Bool = false
     
     
     if (logLevel <= showLogLevel )

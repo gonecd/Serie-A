@@ -57,6 +57,8 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
             self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
             DispatchQueue.main.async { self.graphe.setNeedsDisplay() }
 
+            db.saveDB()
+            
             DispatchQueue.main.async { self.roue.stopAnimating() }
         }
     }

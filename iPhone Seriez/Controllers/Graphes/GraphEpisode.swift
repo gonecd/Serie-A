@@ -20,7 +20,7 @@ class GraphEpisode: UIView {
     override func draw(_ dirtyRect: CGRect) {
         super.draw(dirtyRect)
         
-        origineX = 35.0
+        origineX = 10.0
         origineY = (self.frame.height - 25.0)
         hauteur  = (self.frame.height - 25.0 - bordure)
         largeur  = (self.frame.width - origineX - bordure)
@@ -71,24 +71,24 @@ class GraphEpisode: UIView {
         }
         
         // Positionnement des icones de sources
-        #imageLiteral(resourceName: "thetvdb.png").draw(in: CGRect(x: 10.0, y:  16.0, width: 18.0, height: 18.0))
-        #imageLiteral(resourceName: "trakt.ico").draw(in: CGRect(x: 10.0, y:  46.0, width: 18.0, height: 18.0))
-        #imageLiteral(resourceName: "betaseries.png").draw(in: CGRect(x: 10.0, y:  76.0, width: 18.0, height: 18.0))
-        #imageLiteral(resourceName: "imdb.ico").draw(in: CGRect(x: 10.0, y:  106.0, width: 18.0, height: 18.0))
-        #imageLiteral(resourceName: "themoviedb.ico").draw(in: CGRect(x: 10.0, y:  136.0, width: 18.0, height: 18.0))
+//        #imageLiteral(resourceName: "thetvdb.png").draw(in: CGRect(x: 10.0, y:  16.0, width: 18.0, height: 18.0))
+//        #imageLiteral(resourceName: "trakt.ico").draw(in: CGRect(x: 10.0, y:  46.0, width: 18.0, height: 18.0))
+//        #imageLiteral(resourceName: "betaseries.png").draw(in: CGRect(x: 10.0, y:  76.0, width: 18.0, height: 18.0))
+//        #imageLiteral(resourceName: "imdb.ico").draw(in: CGRect(x: 10.0, y:  106.0, width: 18.0, height: 18.0))
+//        #imageLiteral(resourceName: "themoviedb.ico").draw(in: CGRect(x: 10.0, y:  136.0, width: 18.0, height: 18.0))
         
     }
     
     func traceBarres()
     {
-        traceUneBarre(theEpisode.getFairRatingTVdb(),       color: colorTVdb,       offset: 5)
-        traceUneBarre(theEpisode.getFairRatingTrakt(),      color: colorTrakt,      offset: 4)
-        traceUneBarre(theEpisode.getFairRatingBetaSeries(), color: colorBetaSeries, offset: 3)
-        traceUneBarre(theEpisode.getFairRatingIMdb(),       color: colorIMDB,       offset: 2)
-        traceUneBarre(theEpisode.getFairRatingMoviedb(),    color: colorMoviedb,    offset: 1)
+        traceUneBarre(theEpisode.getFairRatingTVdb(),       color: colorTVdb,       offset: 5, image : #imageLiteral(resourceName: "thetvdb.png"))
+        traceUneBarre(theEpisode.getFairRatingTrakt(),      color: colorTrakt,      offset: 4, image : #imageLiteral(resourceName: "trakt.ico"))
+        traceUneBarre(theEpisode.getFairRatingBetaSeries(), color: colorBetaSeries, offset: 3, image : #imageLiteral(resourceName: "betaseries.png"))
+        traceUneBarre(theEpisode.getFairRatingIMdb(),       color: colorIMDB,       offset: 2, image : #imageLiteral(resourceName: "imdb.ico"))
+        traceUneBarre(theEpisode.getFairRatingMoviedb(),    color: colorMoviedb,    offset: 1, image : #imageLiteral(resourceName: "themoviedb.ico"))
     }
     
-    func traceUneBarre(_ noteX: Int, color: UIColor, offset: Int)
+    func traceUneBarre(_ noteX: Int, color: UIColor, offset: Int, image : UIImage)
     {
         let nbSource : CGFloat = 5.0
         let col : CGFloat = hauteur / (4 * nbSource)
@@ -115,6 +115,11 @@ class GraphEpisode: UIView {
         
         path.stroke()
         path.fill()
+        
+        image.draw(in: CGRect(x: origineX + ( largeur * CGFloat(noteX) / 100) - 12.0,
+                              y:  origineY - (CGFloat(offset - 1) * hauteur / nbSource) - (3 * col) - 4.0,
+                              width: 24.0, height: 24.0))
+        
     }
 }
 

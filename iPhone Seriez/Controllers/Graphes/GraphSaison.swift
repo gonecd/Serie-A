@@ -102,16 +102,16 @@ class GraphSaison: UIView {
         {
             let offset : CGFloat = (largeur * (CGFloat(i)+0.5) / CGFloat(nbEpisodes))
 
-            traceUnPoint(theSaison.episodes[i].getFairRatingTVdb(), uneCouleur: colorTVdb, offsetEpisode: offset, offsetSource: 2)
-            traceUnPoint(theSaison.episodes[i].getFairRatingTrakt(), uneCouleur: colorTrakt, offsetEpisode: offset, offsetSource: 4)
-            traceUnPoint(theSaison.episodes[i].getFairRatingBetaSeries(), uneCouleur: colorBetaSeries, offsetEpisode: offset, offsetSource: 6)
-            traceUnPoint(theSaison.episodes[i].getFairRatingMoviedb(), uneCouleur: colorMoviedb, offsetEpisode: offset, offsetSource: 8)
-            traceUnPoint(theSaison.episodes[i].getFairRatingIMdb(), uneCouleur: colorIMDB, offsetEpisode: offset, offsetSource: 10)
+            traceUnPoint(theSaison.episodes[i].getFairRatingTVdb(), uneCouleur: colorTVdb, offsetEpisode: offset, offsetSource: 2, nbRaters : theSaison.episodes[i].ratersTVdb)
+            traceUnPoint(theSaison.episodes[i].getFairRatingTrakt(), uneCouleur: colorTrakt, offsetEpisode: offset, offsetSource: 4, nbRaters : theSaison.episodes[i].ratersTrakt)
+            traceUnPoint(theSaison.episodes[i].getFairRatingBetaSeries(), uneCouleur: colorBetaSeries, offsetEpisode: offset, offsetSource: 6, nbRaters : theSaison.episodes[i].ratersBetaSeries)
+            traceUnPoint(theSaison.episodes[i].getFairRatingMoviedb(), uneCouleur: colorMoviedb, offsetEpisode: offset, offsetSource: 8, nbRaters : theSaison.episodes[i].ratersMoviedb)
+            traceUnPoint(theSaison.episodes[i].getFairRatingIMdb(), uneCouleur: colorIMDB, offsetEpisode: offset, offsetSource: 10, nbRaters : theSaison.episodes[i].ratersIMdb)
         }
     }
 
 
-    func traceUnPoint(_ uneNote: Int, uneCouleur: UIColor, offsetEpisode: CGFloat, offsetSource: CGFloat)
+    func traceUnPoint(_ uneNote: Int, uneCouleur: UIColor, offsetEpisode: CGFloat, offsetSource: CGFloat, nbRaters : Int)
     {
         let diametre : CGFloat = 6.0
         let origineX : CGFloat = 30.0
@@ -131,6 +131,7 @@ class GraphSaison: UIView {
                     endAngle: 0,
                     clockwise: false)
         path.stroke()
-        path.fill()
+        
+        if (nbRaters > 10) { path.fill() }
     }
 }

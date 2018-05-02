@@ -81,6 +81,8 @@ class SerieFiche: UIViewController {
             self.graphe.sendSerie(self.serie)
             DispatchQueue.main.async { self.graphe.setNeedsDisplay() }
 
+            db.saveDB()
+            
             DispatchQueue.main.async { self.roue.stopAnimating() }
         }
     }
