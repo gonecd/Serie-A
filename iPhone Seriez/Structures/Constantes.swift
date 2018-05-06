@@ -19,6 +19,12 @@ var theMoviedb  : TheMoviedb = TheMoviedb.init()
 var imdb        : IMdb       = IMdb.init()
 var db          : Database   = Database.init()
 
+// Code des source
+let sourceTrakt         : Int = 0
+let sourceTVdb          : Int = 1
+let sourceBetaSeries    : Int = 2
+let sourceMovieDB       : Int = 3
+let sourceIMdb          : Int = 4
 
 // Correction des notes pour homogénéisation
 let correctionTVdb          : Int = 77

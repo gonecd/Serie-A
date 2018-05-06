@@ -445,5 +445,54 @@ class TheMoviedb : NSObject
         return (showNames, showIds)
     }
     
+    
+    func getReviews(movieDBid : String) -> (comments : [String], likes : [Int], dates : [Date], source : [Int])
+    {
+        trace(texte : "<< TheMoviedb : getReviews >>", logLevel : logFuncCalls, scope : scopeSource)
+        trace(texte : "<< TheMoviedb : getReviews >> Params : movieDBid=\(movieDBid)", logLevel : logFuncParams, scope : scopeSource)
+        
+        var ended : Bool = false
+        var foundComments : [String] = []
+        var foundLikes : [Int] = []
+        var foundDates : [Date] = []
+        var foundSource : [Int] = []
+
+        var request : URLRequest = URLRequest(url: URL(string: "https://api.themoviedb.org/3/tv/\(movieDBid)/reviews?api_key=\(TheMoviedbUserkey)&language=en-US&page=1")!)
+        
+        request.httpMethod = "GET"
+        
+        let task : URLSessionDataTask = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
+            if let data = data, let response = response as? HTTPURLResponse {
+                do {
+                    if response.statusCode == 200
+                    {
+                        let jsonResponse : NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
+                        
+                        for oneReview in (jsonResponse.object(forKey: "results") as! NSArray)
+                        {
+                            let review : String = ((oneReview as! NSDictionary).object(forKey: "content")) as? String ?? ""
+                            
+                            foundComments.append(review)
+                            foundLikes.append(0)
+                            foundDates.append(ZeroDate)
+                            foundSource.append(sourceMovieDB)
+                        }
+                        
+                        ended = true
+                    }
+                    else
+                    {
+                        print("TheMoviedb::getReviews failed for \(movieDBid)")
+                        ended = true
+                    }
+                } catch let error as NSError { print("TheMoviedb::getReviews failed for \(movieDBid) : \(error.localizedDescription)"); ended = true; }
+            } else { print(error as Any); ended = true; }
+        })
+        task.resume()
+        while (!ended) { usleep(1000) }
+        
+        trace(texte : "<< TheMoviedb : getReviews >> Return : foundComments=\(foundComments), foundLikes=\(foundLikes), foundDates=\(foundDates), foundSource=\(foundSource)", logLevel : logFuncReturn, scope : scopeSource)
+        return (foundComments, foundLikes, foundDates, foundSource)
+    }
 }
 

@@ -120,11 +120,11 @@ class ViewSaisonListe: UITableViewController {
                 }
             }
             
-            cell.miniGraphe.sendNotes(rateTrakt : viewList[indexPath.row].ratingTrakt,
-                                      rateTVdb: viewList[indexPath.row].ratingTVDB,
-                                      rateBetaSeries: viewList[indexPath.row].ratingBetaSeries,
-                                      rateMoviedb: viewList[indexPath.row].ratingMovieDB,
-                                      rateIMdb: viewList[indexPath.row].ratingIMDB,
+            cell.miniGraphe.sendNotes(rateTrakt : uneSaison.getFairRatingTrakt(),
+                                      rateTVdb: uneSaison.getFairRatingTVdb(),
+                                      rateBetaSeries: uneSaison.getFairRatingBetaSeries(),
+                                      rateMoviedb: uneSaison.getFairRatingMoviedb(),
+                                      rateIMdb: uneSaison.getFairRatingIMdb(),
                                       seasonsAverageTrakt: computeValue(noteCurrentSeason : uneSaison.getFairRatingTrakt(), totalPrevSeasons : totTraktMoy, nbPrevSeasons : nbSeasons),
                                       seasonsAverageTVdb: computeValue(noteCurrentSeason : uneSaison.getFairRatingTVdb(), totalPrevSeasons : totTVdbMoy, nbPrevSeasons : nbSeasons),
                                       seasonsAverageBetaSeries: computeValue(noteCurrentSeason : uneSaison.getFairRatingBetaSeries(), totalPrevSeasons : totBetaSeriesMoy, nbPrevSeasons : nbSeasons),

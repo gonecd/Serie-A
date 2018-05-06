@@ -157,6 +157,7 @@ class ViewSerieListe: UITableViewController {
     
     override func tableView(_ tableView: UITableView, editActionsForRowAt: IndexPath) -> [UITableViewRowAction]? {
         let reload = UITableViewRowAction(style: .normal, title: "Reload") { action, index in
+
             db.downloadGlobalInfo(serie: self.viewList[index.row])
             db.saveDB()
             self.liste.reloadData()

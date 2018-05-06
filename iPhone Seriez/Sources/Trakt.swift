@@ -782,7 +782,80 @@ class Trakt : NSObject
     }
     
     
-    
+    func getComments(IMDBid : String, season : Int, episode : Int) -> (comments : [String], likes : [Int], dates : [Date], source : [Int])
+    {
+        trace(texte : "<< Trakt : getComments >>", logLevel : logFuncCalls, scope : scopeSource)
+        trace(texte : "<< Trakt : getComments >> Params : IMDBid=\(IMDBid), season=\(season), IMDBid=\(episode)", logLevel : logFuncParams, scope : scopeSource)
+        
+        var stringURL : String = ""
+        var ended : Bool = false
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+
+        var foundComments : [String] = []
+        var foundLikes : [Int] = []
+        var foundDates : [Date] = []
+        var foundSource : [Int] = []
+
+        if (episode == 0)
+        {
+            if (season == 0)
+            {
+                stringURL = "https://api.trakt.tv/shows/\(IMDBid)/comments/likes"
+            }
+            else
+            {
+                stringURL = "https://api.trakt.tv/shows/\(IMDBid)/seasons/\(season)/comments/likes"
+            }
+        }
+        else
+        {
+            stringURL = "https://api.trakt.tv/shows/\(IMDBid)/seasons/\(season)/episodes/\(episode)/comments/likes"
+        }
+
+        
+        var request = URLRequest(url: URL(string: stringURL)!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("Bearer \(self.Token)", forHTTPHeaderField: "Authorization")
+        request.addValue("2", forHTTPHeaderField: "trakt-api-version")
+        request.addValue("\(self.TraktClientID)", forHTTPHeaderField: "trakt-api-key")
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let data = data, let response = response as? HTTPURLResponse {
+                do {
+                    if (response.statusCode != 200) { print("Trakt::getComments : error \(response.statusCode) received "); return; }
+                    
+                    let jsonResponse : NSArray = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSArray
+                    
+                    for oneComment in jsonResponse
+                    {
+                        let comment : String = ((oneComment as! NSDictionary).object(forKey: "comment")) as? String ?? ""
+                        //let spoiler : Bool = ((oneComment as! NSDictionary).object(forKey: "spoiler")) as? Bool ?? false
+                        //let review : Bool = ((oneComment as! NSDictionary).object(forKey: "review")) as? Bool ?? false
+                        let oneLike : Int = ((oneComment as! NSDictionary).object(forKey: "likes")) as? Int ?? 0
+                        let stringDate : String = ((oneComment as! NSDictionary).object(forKey: "created_at")) as? String ?? ""
+                        var oneDate : Date = ZeroDate
+                        if (stringDate !=  "") { oneDate = dateFormatter.date(from: stringDate)! }
+                        
+                        foundComments.append(comment)
+                        foundLikes.append(oneLike)
+                        foundDates.append(oneDate)
+                        foundSource.append(sourceTrakt)
+                    }
+                    
+                    ended = true
+                    
+                } catch let error as NSError { print("Trakt::getComments : \(error.localizedDescription)"); ended = true; }
+            } else { print(error as Any); ended = true; }
+        }
+        
+        task.resume()
+        while (!ended) { usleep(1000) }
+        
+        trace(texte : "<< Trakt : getComments >> Return : foundComments=\(foundComments), foundLikes=\(foundLikes), foundDates=\(foundDates), foundSource=\(foundSource)", logLevel : logFuncReturn, scope : scopeSource)
+        return (foundComments, foundLikes, foundDates, foundSource)
+    }
+
 }
 
 
