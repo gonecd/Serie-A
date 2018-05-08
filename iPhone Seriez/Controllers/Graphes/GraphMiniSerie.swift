@@ -57,7 +57,7 @@ class GraphMiniSerie: UIView {
             self.traceGrapheBarre()
             self.backgroundBarres()
         }
-        trace(texte : "<< GraphMiniSerie : draw >> Return : No Return", logLevel : logFuncReturn, scope : scopeSource)
+        trace(texte : "<< GraphMiniSerie : draw >> Return : No Return", logLevel : logFuncReturn, scope : scopeGraphe)
     }
     
     
@@ -68,7 +68,7 @@ class GraphMiniSerie: UIView {
         
         grapheType = type
         
-        trace(texte : "<< GraphMiniSerie : setType >> Return : No Return", logLevel : logFuncReturn, scope : scopeSource)
+        trace(texte : "<< GraphMiniSerie : setType >> Return : No Return", logLevel : logFuncReturn, scope : scopeGraphe)
     }
     
     func sendNotes(rateTrakt : Int, rateTVdb : Int, rateBetaSeries : Int, rateMoviedb : Int, rateIMdb : Int)
@@ -83,7 +83,7 @@ class GraphMiniSerie: UIView {
         noteRottenTomatoes = 71
         noteMoviedb = rateMoviedb
 
-        trace(texte : "<< GraphMiniSerie : sendNotes >> Return : No Return", logLevel : logFuncReturn, scope : scopeSource)
+        trace(texte : "<< GraphMiniSerie : sendNotes >> Return : No Return", logLevel : logFuncReturn, scope : scopeGraphe)
     }
     
     func backgroundCercles()
@@ -123,7 +123,7 @@ class GraphMiniSerie: UIView {
                     clockwise: false)
         path.stroke()
 
-        trace(texte : "<< GraphMiniSerie : backgroundCercles >> Return : No Return", logLevel : logFuncReturn, scope : scopeSource)
+        trace(texte : "<< GraphMiniSerie : backgroundCercles >> Return : No Return", logLevel : logFuncReturn, scope : scopeGraphe)
     }
     
 
@@ -153,7 +153,7 @@ class GraphMiniSerie: UIView {
         path2.addLine(to: CGPoint(x: origineX + largeur, y: origineY - (hauteur / 2)))
         path2.stroke()
 
-        trace(texte : "<< GraphMiniSerie : backgroundBarres >> Return : No Return", logLevel : logFuncReturn, scope : scopeSource)
+        trace(texte : "<< GraphMiniSerie : backgroundBarres >> Return : No Return", logLevel : logFuncReturn, scope : scopeGraphe)
     }
     
     
@@ -168,7 +168,7 @@ class GraphMiniSerie: UIView {
         traceUneBarre(noteIMDB,       color: colorIMDB,       offset: 4)
         traceUneBarre(noteMoviedb,    color: colorMoviedb,    offset: 5)
 
-        trace(texte : "<< GraphMiniSerie : traceGrapheBarre >> Return : No Return", logLevel : logFuncReturn, scope : scopeSource)
+        trace(texte : "<< GraphMiniSerie : traceGrapheBarre >> Return : No Return", logLevel : logFuncReturn, scope : scopeGraphe)
     }
     
     
@@ -194,7 +194,7 @@ class GraphMiniSerie: UIView {
         path.stroke()
         path.fill()
 
-        trace(texte : "<< GraphMiniSerie : traceUneBarre >> Return : No Return", logLevel : logFuncReturn, scope : scopeSource)
+        trace(texte : "<< GraphMiniSerie : traceUneBarre >> Return : No Return", logLevel : logFuncReturn, scope : scopeGraphe)
     }
     
     
@@ -209,7 +209,7 @@ class GraphMiniSerie: UIView {
         traceUnCercle(noteIMDB,       color: colorIMDB,       offset: 4)
         traceUnCercle(noteMoviedb,    color: colorMoviedb,    offset: 5)
 
-        trace(texte : "<< GraphMiniSerie : traceGrapheCercle >> Return : No Return", logLevel : logFuncReturn, scope : scopeSource)
+        trace(texte : "<< GraphMiniSerie : traceGrapheCercle >> Return : No Return", logLevel : logFuncReturn, scope : scopeGraphe)
     }
     
     
@@ -240,7 +240,7 @@ class GraphMiniSerie: UIView {
         
         path.fill()
 
-        trace(texte : "<< GraphMiniSerie : traceUnCercle >> Return : No Return", logLevel : logFuncReturn, scope : scopeSource)
+        trace(texte : "<< GraphMiniSerie : traceUnCercle >> Return : No Return", logLevel : logFuncReturn, scope : scopeGraphe)
     }
     
 

@@ -142,6 +142,17 @@ func arrondir(texte: UITextField, radius : CGFloat)
     trace(texte : "<< Helper : arrondir >> Return : No Return", logLevel : logFuncReturn, scope : scopeHelper)
 }
 
+func arrondirLabel(texte: UILabel, radius : CGFloat)
+{
+    trace(texte : "<< Helper : arrondirLabel >>", logLevel : logFuncCalls, scope : scopeHelper)
+    trace(texte : "<< Helper : arrondirLabel >> Params : texte = \(texte), radius = \(radius)", logLevel : logFuncParams, scope : scopeHelper)
+    
+    texte.layer.cornerRadius = radius
+    texte.layer.masksToBounds = true
+    
+    trace(texte : "<< Helper : arrondirLabel >> Return : No Return", logLevel : logFuncReturn, scope : scopeHelper)
+}
+
 func daysBetweenDates(startDate: Date, endDate: Date) -> Int
 {
     trace(texte : "<< Helper : daysBetweenDates >>", logLevel : logFuncCalls, scope : scopeHelper)

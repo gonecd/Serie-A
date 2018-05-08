@@ -20,6 +20,17 @@ class Database : NSObject
         trace(texte : "<< Database : init >> Return : No Return", logLevel : logFuncReturn, scope : scopeHelper)
     }
     
+    func refreshSeasonDates()
+    {
+        for uneSerie in shows
+        {
+            for uneSaison in uneSerie.saisons
+            {
+                if ((uneSaison.starts == ZeroDate) && uneSaison.episodes != []) { uneSaison.starts = uneSaison.episodes[0].date }
+                if ((uneSaison.ends == ZeroDate) && uneSaison.episodes != []) { uneSaison.ends = uneSaison.episodes[uneSaison.episodes.count-1].date }
+            }
+        }
+    }
     
     func downloadGlobalInfo(serie : Serie)
     {
@@ -89,6 +100,8 @@ class Database : NSObject
                 shows = (NSKeyedUnarchiver.unarchiveObject(withFile: pathToSVG.path) as? [Serie])!
                 shows = shows.sorted(by:  { $0.serie < $1.serie })
 
+                refreshSeasonDates()
+                
                 trace(texte : "<< Database : loadDB >> DB loaded", logLevel : logDebug, scope : scopeHelper)
             }
         }
