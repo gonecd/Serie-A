@@ -157,5 +157,78 @@ class ViewRecherche: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
     @IBAction func razInLangues(_ sender: Any)      { inLangues.text = "Toutes" }
     
     
+    
+    
+    //////////////////////////////////////////////////
+    // Recherche par nom
+    //////////////////////////////////////////////////
+    
+    @IBAction func addSerie(_ sender: Any) {
+        let alert = UIAlertController(title: "Série à rechercher", message: "", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addTextField(configurationHandler: configurationTextField)
+        alert.addAction(UIAlertAction(title: "Annuler", style: UIAlertActionStyle.default, handler:doNothing))
+        alert.addAction(UIAlertAction(title: "Valider", style: UIAlertActionStyle.default, handler:searchSerie))
+        self.present(alert, animated: true, completion: { })
+    }
+    
+    func configurationTextField(textField: UITextField!){
+        textField.placeholder = "Nom de la série"
+        popupTextField = textField
+    }
+    
+    var popupTextField : UITextField = UITextField()
+    func doNothing(alertView: UIAlertAction!) {}
+    
+    func searchSerie(alertView: UIAlertAction!)
+    {
+        let seriesTrouvees : [Serie] = trakt.recherche(serieArechercher: self.popupTextField.text!)
+        let actionSheetController: UIAlertController = UIAlertController(title: "Ajouter à ma watchlist", message: nil, preferredStyle: .actionSheet)
+        
+        for uneSerie in seriesTrouvees
+        {
+            let uneAction: UIAlertAction = UIAlertAction(title: uneSerie.serie+" ("+String(uneSerie.year)+")", style: UIAlertActionStyle.default) { action -> Void in
+                if (self.ajouterUneSerieDansLaWatchlistTrakt(uneSerie: uneSerie))
+                {
+                    trace(texte : "<< ViewRecherche : searchSerie >> Return : true", logLevel : logFuncReturn, scope : scopeController)
+                }
+            }
+            actionSheetController.addAction(uneAction)
+        }
+        
+        let cancelAction: UIAlertAction = UIAlertAction(title: "Annuler", style: UIAlertActionStyle.cancel, handler: doNothing)
+        actionSheetController.addAction(cancelAction)
+        
+        present(actionSheetController, animated: true, completion: nil)
+    }
+    
+    
+    func ajouterUneSerieDansLaWatchlistTrakt(uneSerie : Serie) -> Bool
+    {
+        trace(texte : "<< ViewRecherche : ajouterUneSerieDansLaWatchlistTrakt >>", logLevel : logFuncCalls, scope : scopeController)
+        trace(texte : "<< ViewRecherche : ajouterUneSerieDansLaWatchlistTrakt >> Params : uneSerie = \(uneSerie)", logLevel : logFuncParams, scope : scopeController)
+        
+        if (trakt.addToWatchlist(theTVdbId: uneSerie.idTVdb))
+        {
+            db.downloadGlobalInfo(serie: uneSerie)
+            uneSerie.watchlist = true
+            db.shows.append(uneSerie)
+            db.saveDB()
+            //TODO : updateCompteurs()
+            
+            trace(texte : "<< ViewRecherche : ajouterUneSerieDansLaWatchlistTrakt >> Return : true", logLevel : logFuncReturn, scope : scopeController)
+            return true
+        }
+        
+        trace(texte : "<< ViewRecherche : ajouterUneSerieDansLaWatchlistTrakt >> Return : false", logLevel : logFuncReturn, scope : scopeController)
+        return false
+    }
+    
+    
+
+    
+    
+    
+    
+    
 }
 

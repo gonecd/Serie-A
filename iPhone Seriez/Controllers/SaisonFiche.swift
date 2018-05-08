@@ -26,12 +26,17 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
     @IBOutlet weak var banniere: UIImageView!
     @IBOutlet weak var graphe: GraphSaison!
     @IBOutlet weak var roue: UIActivityIndicatorView!
+    @IBOutlet weak var labelSerie: UILabel!
+    @IBOutlet weak var labelSaison: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         banniere.image = image
         theTVdb.getSerieInfosLight(uneSerie: serie)
+        labelSerie.text = serie.serie
+        labelSaison.text = "Saison " + String(saison)
+        
         
         DispatchQueue.global(qos: .utility).async {
             
@@ -61,10 +66,6 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
             
             DispatchQueue.main.async { self.roue.stopAnimating() }
         }
-    }
-    
-    @IBAction func back(_ sender: Any) {
-        dismiss(animated: true, completion: {})
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

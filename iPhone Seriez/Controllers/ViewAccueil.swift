@@ -153,7 +153,6 @@ class ViewAccueil: UIViewController  {
         case "  Watchlist":
             let viewController = segue.destination as! ViewSerieListe
             viewController.title = "Watchlist"
-            viewController.accueil = self
             viewController.isWatchlist = true
             for uneSerie in db.shows { if (uneSerie.watchlist) { buildList.append(uneSerie) } }
             viewController.viewList = buildList
@@ -161,14 +160,12 @@ class ViewAccueil: UIViewController  {
         case "  Abandonnées":
             let viewController = segue.destination as! ViewSerieListe
             viewController.title = "Séries abandonnées"
-            viewController.accueil = self
             for uneSerie in db.shows { if (uneSerie.unfollowed) { buildList.append(uneSerie) } }
             viewController.viewList = buildList
             
         case "  Finies":
             let viewController = segue.destination as! ViewSerieListe
             viewController.title = "Séries anciennes et finies"
-            viewController.accueil = self
             for uneSerie in db.shows
             {
                 if (uneSerie.saisons.count > 0)
@@ -184,7 +181,6 @@ class ViewAccueil: UIViewController  {
         case "  En cours":
             let viewController = segue.destination as! ViewSerieListe
             viewController.title = "Séries en cours"
-            viewController.accueil = self
             for uneSerie in db.shows
             {
                 if (uneSerie.saisons.count > 0)
@@ -262,7 +258,7 @@ class ViewAccueil: UIViewController  {
             
         case "  Conseil":
             let viewController = segue.destination as! ViewConseil
-            viewController.title = "Conseil"
+            viewController.title = "Séries conseillées"
 
         default:
             print("Passer à la fenêtre \(bouton.titleLabel?.text ?? "")")

@@ -89,10 +89,6 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
         }
     }
     
-    @IBAction func back(_ sender: Any) {
-        dismiss(animated: true, completion: {})
-    }
-    
     @IBAction func webIMdb(_ sender: AnyObject) {
         if (serie.saisons[saison-1].episodes[episode-1].idIMdb != "")
         {

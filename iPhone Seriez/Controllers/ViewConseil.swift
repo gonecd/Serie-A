@@ -27,6 +27,7 @@ class ViewConseil: UIViewController {
     @IBOutlet weak var chooser: UISegmentedControl!
     @IBOutlet weak var goButton: UIButton!
     @IBOutlet weak var roue: UIActivityIndicatorView!
+    @IBOutlet weak var serieDeReference: UILabel!
     
     @IBOutlet weak var boutonSuivies: UIButton!
     @IBOutlet weak var boutonAbandons: UIButton!
@@ -37,14 +38,33 @@ class ViewConseil: UIViewController {
     var allConseils : [(serie : Serie, cpt : Int, category : Int)] = []
     var shortList : [Serie] = []
     var conseilsMinimum : Int = 3
-    
+    var watchlistCandidate : Serie = Serie(serie: "")
+    var idIMdbToSearch : String = ""
+    var idMoviedbToSearch : String = ""
+    var idTVdbToSearch : String = ""
+    var serieToSearch : String = ""
+
     override func viewDidLoad() {
         super.viewDidLoad()
         graph.vue = self
         detail.isHidden = true
-
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        if (self.serieToSearch != "")
+        {
+            chooser.isHidden = true
+            serieDeReference.isHidden = false
+            serieDeReference.text = "Série de référence : " + serieToSearch
+            loadConseils(graph)
+            self.serieToSearch = ""
+        }
+        else
+        {
+            serieDeReference.isHidden = true
+            chooser.isHidden = false
+        }
+    }
     
     func selectTopConseils(minConseils : Int) -> [(serie : Serie, cpt : Int, category : Int)]
     {
@@ -173,6 +193,8 @@ class ViewConseil: UIViewController {
         {
             if (oneShow.serie == serie)
             {
+                watchlistCandidate = oneShow
+                
                 self.titre.text = oneShow.serie
                 self.saison.text =  String(oneShow.nbSaisons) + " Saisons - " + String(oneShow.nbEpisodes) + " Epiosdes - " + String(oneShow.runtime) + " min"
                 self.resume.text = oneShow.resume
@@ -259,7 +281,13 @@ class ViewConseil: UIViewController {
     
     
     @IBAction func addToWatchList(_ sender: Any) {
-        print("Adding to Watchlist")
+            if (trakt.addToWatchlist(theTVdbId: watchlistCandidate.idTVdb))
+            {
+                db.downloadGlobalInfo(serie: watchlistCandidate)
+                watchlistCandidate.watchlist = true
+                db.shows.append(watchlistCandidate)
+                db.saveDB()
+            }
     }
     
     @IBAction func closeDetails(_ sender: Any) {
@@ -271,10 +299,27 @@ class ViewConseil: UIViewController {
         self.roue.startAnimating()
         goButton.isHidden = true
         allConseils = []
-
-        if (chooser.selectedSegmentIndex == 0)
+        
+        if (self.serieToSearch != "")
         {
-            // SIMILAR
+            // SIMILAR TO ONE SHOW
+            self.conseilsMinimum = 1
+            
+            DispatchQueue.global(qos: .utility).async {
+                self.addShowsToListe(newShows : trakt.getSimilarShows(IMDBid: self.idIMdbToSearch), idType : "IMDB")
+                self.addShowsToListe(newShows : theMoviedb.getSimilarShows(movieDBid: self.idMoviedbToSearch), idType : "MovieDB")
+                self.addShowsToListe(newShows : betaSeries.getSimilarShows(TVDBid: self.idTVdbToSearch), idType : "TVDB")
+                self.graph.sendSeries(liste : self.selectTopConseils(minConseils : self.conseilsMinimum), max : 3)
+                
+                DispatchQueue.main.async {
+                    self.graph.setNeedsDisplay()
+                    self.roue.stopAnimating()
+                }
+            }
+        }
+        else if (chooser.selectedSegmentIndex == 0)
+        {
+            // SIMILAR TO LIBRARY
             self.conseilsMinimum = 3
             progressBar.setProgress(0.0, animated: false)
             progressBar.isHidden = false

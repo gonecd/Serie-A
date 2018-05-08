@@ -29,7 +29,6 @@ class ViewSerieListe: UITableViewController {
     var viewList: [Serie] = [Serie]()
     var allSaisons: [Int] = [Int]()
     let dateFormatter = DateFormatter()
-    var accueil : ViewAccueil = ViewAccueil()
     var grapheType : Int = 0
     
     @IBOutlet var liste: UITableView!
@@ -115,46 +114,6 @@ class ViewSerieListe: UITableViewController {
         viewController.image = getImage(viewList[tableCell.index].banner)
     }
     
-    @IBAction func addSerie(_ sender: Any) {
-        let alert = UIAlertController(title: "Série à rechercher", message: "", preferredStyle: UIAlertControllerStyle.alert)
-        alert.addTextField(configurationHandler: configurationTextField)
-        alert.addAction(UIAlertAction(title: "Annuler", style: UIAlertActionStyle.default, handler:doNothing))
-        alert.addAction(UIAlertAction(title: "Valider", style: UIAlertActionStyle.default, handler:searchSerie))
-        self.present(alert, animated: true, completion: { })
-    }
-    
-    func configurationTextField(textField: UITextField!){
-        textField.placeholder = "Nom de la série"
-        popupTextField = textField
-    }
-    
-    var popupTextField : UITextField = UITextField()
-    func doNothing(alertView: UIAlertAction!) {}
-    
-    func searchSerie(alertView: UIAlertAction!)
-    {
-        let seriesTrouvees : [Serie] = trakt.recherche(serieArechercher: self.popupTextField.text!)
-        let actionSheetController: UIAlertController = UIAlertController(title: "Ajouter à ma watchlist", message: nil, preferredStyle: .actionSheet)
-        
-        for uneSerie in seriesTrouvees
-        {
-            let uneAction: UIAlertAction = UIAlertAction(title: uneSerie.serie+" ("+String(uneSerie.year)+")", style: UIAlertActionStyle.default) { action -> Void in
-                if (self.ajouterUneSerieDansLaWatchlistTrakt(uneSerie: uneSerie))
-                {
-                    self.viewList.append(uneSerie)
-                    self.liste.reloadData()
-                    self.view.setNeedsDisplay()
-                }
-            }
-            actionSheetController.addAction(uneAction)
-        }
-        
-        let cancelAction: UIAlertAction = UIAlertAction(title: "Annuler", style: UIAlertActionStyle.cancel, handler: doNothing)
-        actionSheetController.addAction(cancelAction)
-        
-        present(actionSheetController, animated: true, completion: nil)
-    }
-    
     override func tableView(_ tableView: UITableView, editActionsForRowAt: IndexPath) -> [UITableViewRowAction]? {
         let reload = UITableViewRowAction(style: .normal, title: "Reload") { action, index in
 
@@ -191,27 +150,6 @@ class ViewSerieListe: UITableViewController {
         self.liste.reloadData()
         self.view.setNeedsDisplay()
     }
-    
-    func ajouterUneSerieDansLaWatchlistTrakt(uneSerie : Serie) -> Bool
-    {
-        trace(texte : "<< ViewSerieListe : ajouterUneSerieDansLaWatchlistTrakt >>", logLevel : logFuncCalls, scope : scopeController)
-        trace(texte : "<< ViewSerieListe : ajouterUneSerieDansLaWatchlistTrakt >> Params : uneSerie = \(uneSerie)", logLevel : logFuncParams, scope : scopeController)
-        
-        if (trakt.addToWatchlist(theTVdbId: uneSerie.idTVdb))
-        {
-            db.downloadGlobalInfo(serie: uneSerie)
-            db.shows.append(uneSerie)
-            db.saveDB()
-            //TODO : updateCompteurs()
-            
-            trace(texte : "<< ViewSerieListe : ajouterUneSerieDansLaWatchlistTrakt >> Return : true", logLevel : logFuncReturn, scope : scopeController)
-            return true
-        }
-        
-        trace(texte : "<< ViewSerieListe : ajouterUneSerieDansLaWatchlistTrakt >> Return : false", logLevel : logFuncReturn, scope : scopeController)
-        return false
-    }
-    
     
     func supprimerUneSerieDansLaWatchlistTrakt(uneSerie: Serie) -> Bool
     {
