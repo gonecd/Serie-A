@@ -161,7 +161,13 @@ class GraphConseil: UIView {
             }
             else
             {
-                traceUneAffiche(note: serieListe[index].serie.getGlobalRating(), nbConseils : serieListe[index].cpt, poster : getImage(serieListe[index].serie.poster), titre : serieListe[index].serie.serie)
+                if ( ( (serieListe[index].category == categAbandonnees) && showAbandonnees)
+                    || ( (serieListe[index].category == categInconnues) && showInconnues)
+                    || ( (serieListe[index].category == categSuivies) && showSuivies)
+                    || ( (serieListe[index].category == categWatchlist) && showWatchlist) )
+                {
+                    traceUneAffiche(note: serieListe[index].serie.getGlobalRating(), nbConseils : serieListe[index].cpt, poster : getImage(serieListe[index].serie.poster), titre : serieListe[index].serie.serie)
+                }
             }
         }
     }
@@ -215,7 +221,7 @@ class GraphConseil: UIView {
         poster.draw(in: rect)
         
         let button = UIButton(frame: rect)
-        button.setTitle(titre, for: .normal)
+        button.restorationIdentifier = titre
         button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
         
         self.addSubview(button)
@@ -223,7 +229,8 @@ class GraphConseil: UIView {
     
     
     @objc func buttonAction(sender: UIButton!) {
-        self.vue.showDetails(serie: (sender.titleLabel?.text)!)
+        //self.vue.showDetails(serie: (sender.titleLabel?.text)!)
+        self.vue.showDetails(serie: (sender.restorationIdentifier)!)
     }
     
 }

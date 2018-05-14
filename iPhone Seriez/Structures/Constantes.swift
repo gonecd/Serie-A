@@ -148,7 +148,7 @@ let networksMovieDB: NSDictionary = [
     "Netflix" : 213,
     "Showtime" : 67,
     "Starz" : 318,
-    "Ths CW" : 71,
+    "The CW" : 71,
     "TF1" : 290,
     "France 2" : 361,
     "France 3" : 249,

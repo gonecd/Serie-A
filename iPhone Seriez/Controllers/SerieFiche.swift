@@ -49,6 +49,7 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
     @IBOutlet weak var certif: UILabel!
     @IBOutlet weak var langue: UILabel!
     @IBOutlet weak var drapeau: UIImageView!
+    @IBOutlet weak var drapeauBgd: UILabel!
     
     
     override func viewDidLoad() {
@@ -77,7 +78,8 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
         arrondirLabel(texte: duree, radius: 8)
         arrondirLabel(texte: certif, radius: 8)
         arrondirLabel(texte: langue, radius: 8)
-        
+        arrondirLabel(texte: drapeauBgd, radius: 8)
+
         // Affichage du status
         if (serie.status == "Ended")
         {

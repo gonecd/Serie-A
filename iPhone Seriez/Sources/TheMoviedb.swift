@@ -75,45 +75,40 @@ class TheMoviedb : NSObject
     }
     
     
-    func chercher(genreIncl: String, genreExcl: String, anneeBeg: String, anneeEnd: String, langue: String, network: String) -> [Serie]
+    func chercher(genreIncl: String, genreExcl: String, anneeBeg: String, anneeEnd: String, langue: String, network: String) -> ([Serie], Int)
     {
         trace(texte : "<< TheMoviedb : chercher >>", logLevel : logFuncCalls, scope : scopeSource)
         trace(texte : "<< TheMoviedb : chercher >> Params : genreIncl :\(genreIncl), genreExcl :\(genreExcl), anneeBeg :\(anneeBeg), anneeEnd :\(anneeEnd), langue :\(langue), network :\(network), ", logLevel : logFuncParams, scope : scopeSource)
         
         var listeSeries : [Serie] = []
+        var cpt : Int = 0
         
         var buildURL : String = "https://api.themoviedb.org/3/discover/tv?api_key=\(TheMoviedbUserkey)&language=en-US&sort_by=popularity.desc"
         
-        if (genreIncl != "Tous")
+        if (genreIncl != "")
         {
             buildURL = buildURL + "&with_genres="
-            for unGenre in genreIncl.split(separator: "\n") { buildURL = buildURL + String(genresMovieDB[unGenre] as? Int ?? 0) + "," }
+            for unGenre in genreIncl.split(separator: ",") { buildURL = buildURL + String(genresMovieDB[unGenre] as? Int ?? 0) + "," }
             buildURL.removeLast()
         }
         
-        if (genreExcl != "Aucun")
+        if (genreExcl != "")
         {
             buildURL = buildURL + "&without_genres="
-            for unGenre in genreExcl.split(separator: "\n") { buildURL = buildURL + String(genresMovieDB[unGenre] as? Int ?? 0) + "," }
+            for unGenre in genreExcl.split(separator: ",") { buildURL = buildURL + String(genresMovieDB[unGenre] as? Int ?? 0) + "," }
             buildURL.removeLast()
         }
         
-        if (network != "Tous")
+        if (network != "")
         {
             buildURL = buildURL + "&with_networks="
-            for unNetwork in network.split(separator: "\n") { buildURL = buildURL + String(networksMovieDB[unNetwork] as? Int ?? 0) + "|" }
+            for unNetwork in network.split(separator: ",") { buildURL = buildURL + String(networksMovieDB[unNetwork] as? Int ?? 0) + "|" }
             buildURL.removeLast()
         }
         
-        if (anneeBeg != "N/A") { buildURL = buildURL + "&first_air_date.gte=" + anneeBeg + "-01-01"}
-        if (anneeEnd != "N/A") { buildURL = buildURL + "&first_air_date.lte=" + anneeEnd + "-12-31"}
-
-        if (langue != "Toutes")
-        {
-            buildURL = buildURL + "&with_original_language="
-            for uneLangue in langue.split(separator: "\n") { buildURL = buildURL + (languesMovieDB[uneLangue] as? String ?? "") + "|" }
-            buildURL.removeLast()
-        }
+        if (anneeBeg != "") { buildURL = buildURL + "&first_air_date.gte=" + anneeBeg + "-01-01"}
+        if (anneeEnd != "") { buildURL = buildURL + "&first_air_date.lte=" + anneeEnd + "-12-31"}
+        if (langue != "") { buildURL = buildURL + "&with_original_language=" + langue }
         
         print("Requesting TheMovieDB : \(buildURL)")
         var request : URLRequest = URLRequest(url: NSURL(string: buildURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)! as URL)
@@ -126,6 +121,8 @@ class TheMoviedb : NSObject
                     {
                         let jsonResponse : NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
 
+                        cpt = jsonResponse.object(forKey: "total_results") as? Int ?? 0
+                        
                         if (jsonResponse.object(forKey: "results") != nil)
                         {
                             for uneSerie in jsonResponse.object(forKey: "results")! as! NSArray
@@ -150,8 +147,8 @@ class TheMoviedb : NSObject
 
         usleep(5000)
         
-        trace(texte : "<< TheMoviedb : chercher >> Return : listeSeries=\(listeSeries)", logLevel : logFuncReturn, scope : scopeSource)
-        return listeSeries
+        trace(texte : "<< TheMoviedb : chercher >> Return : listeSeries=\(listeSeries), cpt=\(cpt)", logLevel : logFuncReturn, scope : scopeSource)
+        return (listeSeries, cpt)
     }
     
     

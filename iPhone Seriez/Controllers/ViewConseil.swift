@@ -248,20 +248,10 @@ class ViewConseil: UIViewController {
         if (grapheType == 0)
         {
             grapheType = 1
-            
-            boutonSuivies.isHidden = false
-            boutonWatchlist.isHidden = false
-            boutonAbandons.isHidden = false
-            boutonInconnues.isHidden = false
         }
         else
         {
             grapheType = 0
-
-            boutonSuivies.isHidden = true
-            boutonWatchlist.isHidden = true
-            boutonAbandons.isHidden = true
-            boutonInconnues.isHidden = true
         }
         
         self.graph.setType(type: grapheType)
@@ -271,10 +261,42 @@ class ViewConseil: UIViewController {
     @IBAction func toggleCategory(_ sender: Any) {
         let myButton : UIButton = sender as! UIButton
         
-        if (myButton == boutonSuivies) { self.graph.toggleCategory(category : categSuivies) }
-        if (myButton == boutonWatchlist) { self.graph.toggleCategory(category : categWatchlist) }
-        if (myButton == boutonAbandons) { self.graph.toggleCategory(category : categAbandonnees) }
-        if (myButton == boutonInconnues) { self.graph.toggleCategory(category : categInconnues) }
+        if (myButton == boutonSuivies)
+        {
+            self.graph.toggleCategory(category : categSuivies)
+            
+            if boutonSuivies.titleColor(for: .normal) == UIColor.darkGray { boutonSuivies.setTitleColor(UIColor.green, for: .normal) }
+            else { boutonSuivies.setTitleColor(UIColor.darkGray, for: .normal) }
+            boutonSuivies.setNeedsDisplay()
+        }
+        
+        
+        if (myButton == boutonWatchlist)
+        {
+            self.graph.toggleCategory(category : categWatchlist)
+            
+            if boutonWatchlist.titleColor(for: .normal) == UIColor.darkGray { boutonWatchlist.setTitleColor(UIColor.yellow, for: .normal) }
+            else { boutonWatchlist.setTitleColor(UIColor.darkGray, for: .normal) }
+            boutonWatchlist.setNeedsDisplay()
+        }
+        
+        if (myButton == boutonAbandons)
+        {
+            self.graph.toggleCategory(category : categAbandonnees)
+            
+            if boutonAbandons.titleColor(for: .normal) == UIColor.darkGray { boutonAbandons.setTitleColor(UIColor.red, for: .normal) }
+            else { boutonAbandons.setTitleColor(UIColor.darkGray, for: .normal) }
+            boutonAbandons.setNeedsDisplay()
+        }
+        
+        if (myButton == boutonInconnues)
+        {
+            self.graph.toggleCategory(category : categInconnues)
+            
+            if boutonInconnues.titleColor(for: .normal) == UIColor.darkGray { boutonInconnues.setTitleColor(UIColor.blue, for: .normal) }
+            else { boutonInconnues.setTitleColor(UIColor.darkGray, for: .normal) }
+            boutonInconnues.setNeedsDisplay()
+        }
 
         self.graph.setNeedsDisplay()
     }

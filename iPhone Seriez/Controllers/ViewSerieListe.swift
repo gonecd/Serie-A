@@ -33,6 +33,7 @@ class ViewSerieListe: UITableViewController {
     
     @IBOutlet var liste: UITableView!
     var isWatchlist : Bool = false
+    var isPropositions : Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -115,6 +116,7 @@ class ViewSerieListe: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, editActionsForRowAt: IndexPath) -> [UITableViewRowAction]? {
+        // Function Reload Data
         let reload = UITableViewRowAction(style: .normal, title: "Reload") { action, index in
 
             db.downloadGlobalInfo(serie: self.viewList[index.row])
@@ -124,6 +126,7 @@ class ViewSerieListe: UITableViewController {
         }
         reload.backgroundColor = .green
         
+        // Function Remove from watchlist
         let remove = UITableViewRowAction(style: .destructive, title: "Remove") { action, index in
             if (self.supprimerUneSerieDansLaWatchlistTrakt(uneSerie: self.viewList[index.row]))
             {
@@ -134,7 +137,20 @@ class ViewSerieListe: UITableViewController {
         }
         remove.backgroundColor = .red
         
+        // Function Add to watclist
+        let addWatchlist = UITableViewRowAction(style: .destructive, title: "Add to watchlist") { action, index in
+            if (trakt.addToWatchlist(theTVdbId: self.viewList[index.row].idTVdb))
+            {
+                db.downloadGlobalInfo(serie: self.viewList[index.row])
+                self.viewList[index.row].watchlist = true
+                db.shows.append(self.viewList[index.row])
+                db.saveDB()
+            }
+        }
+        addWatchlist.backgroundColor = .purple
+        
         if (self.isWatchlist) { return [reload, remove] }
+        else if (self.isPropositions) { return [addWatchlist] }
         else { return [reload] }
     }
     
