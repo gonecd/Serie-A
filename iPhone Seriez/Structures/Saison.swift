@@ -157,13 +157,15 @@ class Saison : NSObject, NSCoding
         }
     }
 
-    func mergeStatuses(_ uneSaison : Saison)
+    func mergeStatuses(_ updatedSaison : Saison)
     {
-        for unEpisode in uneSaison.episodes
+        self.watched = updatedSaison.watched
+        
+        for updatedEpisode in updatedSaison.episodes
         {
-            if (unEpisode.episode <= self.episodes.count)
+            if (updatedEpisode.episode <= self.episodes.count)
             {
-                self.episodes[unEpisode.episode - 1].mergeStatuses(unEpisode)
+                self.episodes[updatedEpisode.episode - 1].mergeStatuses(updatedEpisode)
             }
         }
     }

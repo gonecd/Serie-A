@@ -48,6 +48,10 @@ class ViewConseil: UIViewController {
         super.viewDidLoad()
         graph.vue = self
         detail.isHidden = true
+        detail.layer.borderWidth = 5.0
+        detail.layer.borderColor = UIColor.darkGray.cgColor
+        detail.layer.cornerRadius = 5.0
+        detail.layer.masksToBounds = true
     }
     
     override func viewDidAppear(_ animated: Bool) {

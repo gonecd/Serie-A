@@ -82,7 +82,7 @@ class ViewAccueil: UIViewController  {
         reloadSeries = db.merge(reloadSeries, adds: trakt.getStopped())
         reloadSeries = db.merge(reloadSeries, adds: trakt.getWatchlist())
         
-        db.shows = db.merge(db.shows, adds: reloadSeries)
+        db.shows = db.mergeStatuses(db.shows, adds: reloadSeries)
         db.saveDB()
         
         self.updateCompteurs()

@@ -45,15 +45,15 @@ class Database : NSObject
         
         serie.cleverMerge(TVdb: dataTVdb, Moviedb: dataMoviedb, Trakt: dataTrakt, BetaSeries: dataBetaSeries, IMDB: dataIMDB)
         
-        if ( (serie.watchlist == false) && (serie.unfollowed == false) )
+        if (serie.unfollowed == false)
         {
             for saison in serie.saisons
             {
-                if (saison.watched == false)
-                {
+//                if (saison.watched == false)
+//                {
                     //serie.saisons[saison.saison - 1].ends = trakt.getLastEpisodeDate(traktID : serie.idTrakt, saison : saison.saison, episode : serie.saisons[saison.saison - 1].nbEpisodes)
                     serie.saisons[saison.saison - 1].ends = betaSeries.getLastEpisodeDate(TVdbId : serie.idTVdb, saison : saison.saison, episode : serie.saisons[saison.saison - 1].nbEpisodes)
-                }
+//                }
             }
         }
         trace(texte : "<< Database : downloadGlobalInfo >> Return : No Return", logLevel : logFuncReturn, scope : scopeHelper)
@@ -144,7 +144,7 @@ class Database : NSObject
         
         for uneSerie in adds {
             for dbSerie in db {
-                if (dbSerie.idTrakt == uneSerie.idTrakt) { dbSerie.mergeStatuses(uneSerie) }
+                if (dbSerie.idIMdb == uneSerie.idIMdb) { dbSerie.mergeStatuses(uneSerie) }
             }
         }
         trace(texte : "<< Database : mergeStatuses >> Return : db = \(db)", logLevel : logFuncReturn, scope : scopeHelper)

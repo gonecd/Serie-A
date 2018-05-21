@@ -138,9 +138,19 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
             self.graphe.sendSerie(self.serie)
             DispatchQueue.main.async { self.graphe.setNeedsDisplay() }
             
+            for saison in self.serie.saisons {
+                self.serie.saisons[saison.saison - 1].ends = betaSeries.getLastEpisodeDate(TVdbId : self.serie.idTVdb, saison : saison.saison, episode : self.serie.saisons[saison.saison - 1].nbEpisodes)
+            }
+            
             db.saveDB()
             
-            DispatchQueue.main.async { self.roue.stopAnimating() }
+            DispatchQueue.main.async {
+                self.roue.stopAnimating()
+                self.viewComments.reloadData()
+                self.viewComments.setNeedsLayout()
+                self.viewSaisons.reloadData()
+                self.viewSaisons.setNeedsLayout()
+            }
         }
     }
     

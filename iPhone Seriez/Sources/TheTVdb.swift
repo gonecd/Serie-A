@@ -263,7 +263,10 @@ class TheTVdb : NSObject
                         uneSerie.ratersTVDB = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "siteRatingCount") as? Int ?? 0
                         uneSerie.idTVdb = String((jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "id") as? Int ?? 0)
                         uneSerie.idIMdb = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "imdbId") as? String ?? ""
-                        uneSerie.runtime = Int((jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "runtime") as? String ?? "0")!
+                        
+                        let textRuntime : String = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "runtime") as? String ?? "0"
+                        if (textRuntime != "" ) { uneSerie.runtime = Int(textRuntime)! }
+
                         uneSerie.certification = (jsonResponse.object(forKey: "data")! as AnyObject).object(forKey: "rating") as? String ?? ""
                     }
                     else

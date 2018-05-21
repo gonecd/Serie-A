@@ -858,7 +858,7 @@
                         <viewLayoutGuide key="safeArea" id="xVv-Ir-JgY"/>
                     </view>
                     <navigationItem key="navigationItem" title="Serie" id="hWZ-Qk-JNc">
-                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="reply" id="QTx-Pc-nhu">
+                        <barButtonItem key="rightBarButtonItem" image="Chart-icon.png" style="plain" id="QTx-Pc-nhu">
                             <connections>
                                 <action selector="graphe:" destination="shf-Lk-5bU" id="LrJ-e4-aef"/>
                             </connections>
@@ -1241,7 +1241,7 @@
                         </barButtonItem>
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="Series TableView" id="grz-03-VM5">
-                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="reply" id="yll-Dt-cir">
+                        <barButtonItem key="rightBarButtonItem" image="Chart-icon.png" style="plain" id="yll-Dt-cir">
                             <connections>
                                 <action selector="changeGraphe:" destination="fqA-tO-WRq" id="IHQ-Ie-ppb"/>
                             </connections>
@@ -1264,48 +1264,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="diffusées entre 2001 et 2012" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gti-3c-4r7">
-                                <rect key="frame" x="45" y="156" width="270" height="24"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" editable="NO" text="Toutes les séries" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8wY-yA-Bad">
-                                <rect key="frame" x="40" y="250" width="275" height="80"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" editable="NO" text="Toutes les séries" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m3v-cq-Yra">
-                                <rect key="frame" x="48" y="90" width="275" height="58"/>
+                                <rect key="frame" x="48" y="90" width="275" height="391"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="mais pas Animation ou Documentary" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uQ2-ty-CMj">
-                                <rect key="frame" x="45" y="320" width="270" height="24"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" editable="NO" text="Toutes les séries" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V4Q-sf-53n">
-                                <rect key="frame" x="40" y="355" width="275" height="80"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="quelle que soit la langue" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SJ3-Qw-9kd">
-                                <rect key="frame" x="45" y="430" width="270" height="24"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="S0s-i2-VEk">
                                 <rect key="frame" x="0.0" y="100" width="334" height="134"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1333,6 +1298,64 @@
                                     </textField>
                                 </subviews>
                                 <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <gestureRecognizers/>
+                            </view>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FyT-yr-hT0">
+                                <rect key="frame" x="0.0" y="200" width="334" height="200"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Dans" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1zX-N0-WxW">
+                                        <rect key="frame" x="237" y="8" width="80" height="24"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="20"/>
+                                        <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Rechercher dans :" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hN0-2S-7C7">
+                                        <rect key="frame" x="17" y="21" width="139" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Le titre" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rAs-NZ-fI5">
+                                        <rect key="frame" x="84" y="60" width="54" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Le résumé" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XRc-ET-BL5">
+                                        <rect key="frame" x="84" y="105" width="80" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Le casting" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i5d-hr-cNM">
+                                        <rect key="frame" x="84" y="150" width="79" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="ykY-68-QMb">
+                                        <rect key="frame" x="197" y="100" width="49" height="31"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="onTintColor" name="controlHighlightColor" catalog="System" colorSpace="catalog"/>
+                                    </switch>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="wrr-ZB-VgC">
+                                        <rect key="frame" x="197" y="145" width="49" height="31"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="onTintColor" name="controlHighlightColor" catalog="System" colorSpace="catalog"/>
+                                    </switch>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="q2i-T2-ffG">
+                                        <rect key="frame" x="197" y="55" width="49" height="31"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="onTintColor" name="controlHighlightColor" catalog="System" colorSpace="catalog"/>
+                                    </switch>
+                                </subviews>
+                                <color key="backgroundColor" red="0.0" green="0.56031829119999998" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <gestureRecognizers/>
                             </view>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Nw2-Kn-fKA">
@@ -1438,10 +1461,10 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <state key="selected">
-                                            <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="deviceRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="buttonSelect:" destination="4Gu-xL-44j" eventType="touchUpInside" id="KVO-5H-JFS"/>
+                                            <action selector="buttonSelect3States:" destination="4Gu-xL-44j" eventType="touchUpInside" id="sNN-a0-OYU"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8p5-vI-fxJ">
@@ -1454,10 +1477,10 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <state key="selected">
-                                            <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="deviceRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="buttonSelect:" destination="4Gu-xL-44j" eventType="touchUpInside" id="Q6W-uA-EvF"/>
+                                            <action selector="buttonSelect3States:" destination="4Gu-xL-44j" eventType="touchUpInside" id="f1K-4d-ley"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BIP-9F-bTl">
@@ -1470,10 +1493,10 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <state key="selected">
-                                            <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="deviceRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="buttonSelect:" destination="4Gu-xL-44j" eventType="touchUpInside" id="6gX-Vr-eoY"/>
+                                            <action selector="buttonSelect3States:" destination="4Gu-xL-44j" eventType="touchUpInside" id="qxt-gF-RW0"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y2z-nR-vsh">
@@ -1486,10 +1509,10 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <state key="selected">
-                                            <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="deviceRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="buttonSelect:" destination="4Gu-xL-44j" eventType="touchUpInside" id="FJT-Lg-ARf"/>
+                                            <action selector="buttonSelect3States:" destination="4Gu-xL-44j" eventType="touchUpInside" id="Zvc-CI-lgK"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gww-i2-2rX">
@@ -1502,10 +1525,10 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <state key="selected">
-                                            <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="deviceRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="buttonSelect:" destination="4Gu-xL-44j" eventType="touchUpInside" id="Rsu-bX-ApB"/>
+                                            <action selector="buttonSelect3States:" destination="4Gu-xL-44j" eventType="touchUpInside" id="m9f-bD-UBc"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1D3-iZ-NqQ">
@@ -1518,10 +1541,10 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <state key="selected">
-                                            <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="deviceRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="buttonSelect:" destination="4Gu-xL-44j" eventType="touchUpInside" id="oPx-vg-mZw"/>
+                                            <action selector="buttonSelect3States:" destination="4Gu-xL-44j" eventType="touchUpInside" id="kfT-92-QeE"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bGG-ZX-vOm">
@@ -1534,10 +1557,10 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <state key="selected">
-                                            <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="deviceRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="buttonSelect:" destination="4Gu-xL-44j" eventType="touchUpInside" id="dZy-fi-fKk"/>
+                                            <action selector="buttonSelect3States:" destination="4Gu-xL-44j" eventType="touchUpInside" id="jd4-Cc-FmM"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gWW-rM-fD8">
@@ -1550,10 +1573,10 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <state key="selected">
-                                            <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="deviceRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="buttonSelect:" destination="4Gu-xL-44j" eventType="touchUpInside" id="CCf-4R-zA1"/>
+                                            <action selector="buttonSelect3States:" destination="4Gu-xL-44j" eventType="touchUpInside" id="33e-fh-SeR"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ysn-qg-uFZ">
@@ -1566,10 +1589,10 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <state key="selected">
-                                            <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="deviceRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="buttonSelect:" destination="4Gu-xL-44j" eventType="touchUpInside" id="Zq0-RA-oBI"/>
+                                            <action selector="buttonSelect3States:" destination="4Gu-xL-44j" eventType="touchUpInside" id="idk-3I-IBB"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sT9-5B-EOR">
@@ -1582,10 +1605,10 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <state key="selected">
-                                            <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="deviceRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="buttonSelect:" destination="4Gu-xL-44j" eventType="touchUpInside" id="hts-DE-sWD"/>
+                                            <action selector="buttonSelect3States:" destination="4Gu-xL-44j" eventType="touchUpInside" id="sqd-91-iSb"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GQd-2V-f4y">
@@ -1598,10 +1621,10 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <state key="selected">
-                                            <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="deviceRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="buttonSelect:" destination="4Gu-xL-44j" eventType="touchUpInside" id="V6g-NA-thP"/>
+                                            <action selector="buttonSelect3States:" destination="4Gu-xL-44j" eventType="touchUpInside" id="B1C-Mn-rxH"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="r5J-gt-Qqz">
@@ -1614,10 +1637,10 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <state key="selected">
-                                            <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="deviceRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="buttonSelect:" destination="4Gu-xL-44j" eventType="touchUpInside" id="qO5-Ic-gsf"/>
+                                            <action selector="buttonSelect3States:" destination="4Gu-xL-44j" eventType="touchUpInside" id="gsU-wd-aSr"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EZ7-DJ-3eF">
@@ -1630,10 +1653,10 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <state key="selected">
-                                            <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="deviceRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="buttonSelect:" destination="4Gu-xL-44j" eventType="touchUpInside" id="vXU-oZ-vyR"/>
+                                            <action selector="buttonSelect3States:" destination="4Gu-xL-44j" eventType="touchUpInside" id="CGw-ss-Hg2"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zi4-5F-7Ih">
@@ -1646,10 +1669,10 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <state key="selected">
-                                            <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="deviceRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="buttonSelect:" destination="4Gu-xL-44j" eventType="touchUpInside" id="2Ig-se-hOE"/>
+                                            <action selector="buttonSelect3States:" destination="4Gu-xL-44j" eventType="touchUpInside" id="OiU-I5-v3r"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Yk7-W8-Ajc">
@@ -1662,10 +1685,10 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <state key="selected">
-                                            <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="deviceRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="buttonSelect:" destination="4Gu-xL-44j" eventType="touchUpInside" id="qvH-Bz-WD0"/>
+                                            <action selector="buttonSelect3States:" destination="4Gu-xL-44j" eventType="touchUpInside" id="ixO-WV-19T"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UcO-kW-h5V">
@@ -1678,10 +1701,10 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <state key="selected">
-                                            <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="deviceRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="buttonSelect:" destination="4Gu-xL-44j" eventType="touchUpInside" id="vjI-GH-gjq"/>
+                                            <action selector="buttonSelect3States:" destination="4Gu-xL-44j" eventType="touchUpInside" id="B8v-W8-CGI"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="awY-cl-ziX">
@@ -1694,10 +1717,10 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <state key="selected">
-                                            <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="deviceRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="buttonSelect:" destination="4Gu-xL-44j" eventType="touchUpInside" id="JO5-d6-qjr"/>
+                                            <action selector="buttonSelect3States:" destination="4Gu-xL-44j" eventType="touchUpInside" id="5P8-KQ-hmo"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nn3-OG-ejJ">
@@ -1710,10 +1733,10 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <state key="selected">
-                                            <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="deviceRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="buttonSelect:" destination="4Gu-xL-44j" eventType="touchUpInside" id="ilQ-KM-SSh"/>
+                                            <action selector="buttonSelect3States:" destination="4Gu-xL-44j" eventType="touchUpInside" id="REC-4Q-DBz"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2eR-ly-FiI">
@@ -1726,10 +1749,10 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <state key="selected">
-                                            <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="deviceRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="buttonSelect:" destination="4Gu-xL-44j" eventType="touchUpInside" id="9Ft-QG-m2h"/>
+                                            <action selector="buttonSelect3States:" destination="4Gu-xL-44j" eventType="touchUpInside" id="n6A-K3-dlq"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -1757,10 +1780,10 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <state key="selected">
-                                            <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="deviceRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="buttonSelect:" destination="4Gu-xL-44j" eventType="touchUpInside" id="b1i-oF-1jD"/>
+                                            <action selector="buttonSelect2States:" destination="4Gu-xL-44j" eventType="touchUpInside" id="R0A-R3-bgh"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EEq-l3-FxT">
@@ -1773,10 +1796,10 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <state key="selected">
-                                            <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="deviceRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="buttonSelect:" destination="4Gu-xL-44j" eventType="touchUpInside" id="YGD-gM-dps"/>
+                                            <action selector="buttonSelect2States:" destination="4Gu-xL-44j" eventType="touchUpInside" id="7Kq-eN-9Xl"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RBm-0S-2zP">
@@ -1789,10 +1812,10 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <state key="selected">
-                                            <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="deviceRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="buttonSelect:" destination="4Gu-xL-44j" eventType="touchUpInside" id="xdy-tm-lGL"/>
+                                            <action selector="buttonSelect2States:" destination="4Gu-xL-44j" eventType="touchUpInside" id="OpT-Mv-MYC"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="idb-Un-fO4">
@@ -1805,10 +1828,10 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <state key="selected">
-                                            <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="deviceRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="buttonSelect:" destination="4Gu-xL-44j" eventType="touchUpInside" id="4Bs-9B-1eO"/>
+                                            <action selector="buttonSelect2States:" destination="4Gu-xL-44j" eventType="touchUpInside" id="AqJ-Iq-0jX"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lzL-KG-piC">
@@ -1821,10 +1844,10 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <state key="selected">
-                                            <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="deviceRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="buttonSelect:" destination="4Gu-xL-44j" eventType="touchUpInside" id="fI3-UR-4Tg"/>
+                                            <action selector="buttonSelect2States:" destination="4Gu-xL-44j" eventType="touchUpInside" id="GRh-xU-h3w"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Klt-Bp-NbF">
@@ -1837,10 +1860,10 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <state key="selected">
-                                            <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="deviceRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="buttonSelect:" destination="4Gu-xL-44j" eventType="touchUpInside" id="zb1-T4-vmO"/>
+                                            <action selector="buttonSelect2States:" destination="4Gu-xL-44j" eventType="touchUpInside" id="sLi-mL-vLv"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oPw-aE-wqj">
@@ -1853,10 +1876,10 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <state key="selected">
-                                            <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="deviceRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="buttonSelect:" destination="4Gu-xL-44j" eventType="touchUpInside" id="va4-KQ-nv9"/>
+                                            <action selector="buttonSelect2States:" destination="4Gu-xL-44j" eventType="touchUpInside" id="GDz-hf-ZBW"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1kn-Ji-174">
@@ -1869,10 +1892,10 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <state key="selected">
-                                            <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="deviceRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="buttonSelect:" destination="4Gu-xL-44j" eventType="touchUpInside" id="CDr-Qs-6O3"/>
+                                            <action selector="buttonSelect2States:" destination="4Gu-xL-44j" eventType="touchUpInside" id="zEL-sY-zz4"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yln-rY-dmJ">
@@ -1885,10 +1908,10 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <state key="selected">
-                                            <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="deviceRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="buttonSelect:" destination="4Gu-xL-44j" eventType="touchUpInside" id="goJ-Vx-XnZ"/>
+                                            <action selector="buttonSelect2States:" destination="4Gu-xL-44j" eventType="touchUpInside" id="1qM-Nl-h8t"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Aq9-Ze-3iY">
@@ -1901,10 +1924,10 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <state key="selected">
-                                            <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="deviceRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="buttonSelect:" destination="4Gu-xL-44j" eventType="touchUpInside" id="gyT-RT-Lrs"/>
+                                            <action selector="buttonSelect2States:" destination="4Gu-xL-44j" eventType="touchUpInside" id="LWE-xB-Fgd"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k5R-J3-2gN">
@@ -1917,10 +1940,10 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <state key="selected">
-                                            <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="deviceRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="buttonSelect:" destination="4Gu-xL-44j" eventType="touchUpInside" id="k77-zs-WDb"/>
+                                            <action selector="buttonSelect2States:" destination="4Gu-xL-44j" eventType="touchUpInside" id="0f8-R8-89k"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -2027,6 +2050,7 @@
                         <outlet property="cptResults" destination="y8H-cQ-HoP" id="j1g-E7-cP8"/>
                         <outlet property="crime" destination="gWW-rM-fD8" id="8Ie-oC-14k"/>
                         <outlet property="debut" destination="EfD-jb-Zg6" id="RbX-y3-I31"/>
+                        <outlet property="descriptionTexte" destination="m3v-cq-Yra" id="gYD-zc-Sid"/>
                         <outlet property="documentary" destination="1D3-iZ-NqQ" id="4Zi-Be-Xvo"/>
                         <outlet property="drama" destination="bGG-ZX-vOm" id="ApO-ut-YTB"/>
                         <outlet property="family" destination="gww-i2-2rX" id="Zwe-s6-Ks9"/>
@@ -2035,10 +2059,14 @@
                         <outlet property="francais" destination="kNV-MX-SK6" id="pxT-ha-twm"/>
                         <outlet property="history" destination="sT9-5B-EOR" id="o3Y-dB-HeW"/>
                         <outlet property="horror" destination="GQd-2V-f4y" id="tUA-U2-YdO"/>
+                        <outlet property="inCasting" destination="wrr-ZB-VgC" id="YuH-ed-ygG"/>
+                        <outlet property="inResume" destination="ykY-68-QMb" id="TUV-Du-WA4"/>
+                        <outlet property="inTitre" destination="q2i-T2-ffG" id="Mem-kF-42Q"/>
                         <outlet property="labelAnnee" destination="Ydu-uW-s3f" id="l11-c1-mPQ"/>
                         <outlet property="labelGenre" destination="VZf-lT-Agd" id="q6m-SI-cR7"/>
                         <outlet property="labelLangue" destination="x6j-B0-cbb" id="qZf-PS-Jg2"/>
                         <outlet property="labelNetwork" destination="iJS-HX-hwU" id="Adk-hb-XjG"/>
+                        <outlet property="labelTexteLoc" destination="1zX-N0-WxW" id="vut-dm-iIH"/>
                         <outlet property="labelTitre" destination="orP-eA-ZfM" id="fIt-5n-Vms"/>
                         <outlet property="music" destination="ysn-qg-uFZ" id="Z4c-1L-Qye"/>
                         <outlet property="mystery" destination="UcO-kW-h5V" id="NkA-fA-ele"/>
@@ -2049,13 +2077,8 @@
                         <outlet property="subViewGenre" destination="cvY-XS-gkl" id="sbQ-FD-Gkj"/>
                         <outlet property="subViewLangue" destination="syk-KC-Bj2" id="X8d-Bd-RZq"/>
                         <outlet property="subViewNetwork" destination="iGh-Yd-USK" id="nqo-Ep-Ow1"/>
+                        <outlet property="subViewTexteLoc" destination="FyT-yr-hT0" id="xgk-Cb-skA"/>
                         <outlet property="subViewTitre" destination="S0s-i2-VEk" id="hSe-bz-2T2"/>
-                        <outlet property="texteAnnees" destination="gti-3c-4r7" id="Nzj-8h-fab"/>
-                        <outlet property="texteGenresExclus" destination="uQ2-ty-CMj" id="5lQ-di-yOM"/>
-                        <outlet property="texteGenresInclus" destination="8wY-yA-Bad" id="KRi-XN-cwO"/>
-                        <outlet property="texteLangues" destination="SJ3-Qw-9kd" id="9R3-vT-FOi"/>
-                        <outlet property="texteNetwork" destination="V4Q-sf-53n" id="JmV-lk-SS3"/>
-                        <outlet property="texteTitre" destination="m3v-cq-Yra" id="bH7-qO-O3f"/>
                         <outlet property="thriller" destination="2eR-ly-FiI" id="s7E-JZ-ah9"/>
                         <outlet property="titre" destination="pQw-d2-cDK" id="n53-AK-zQ6"/>
                         <outlet property="tvMovie" destination="EZ7-DJ-3eF" id="SUt-Ia-LjE"/>
@@ -2065,7 +2088,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tPw-aH-SPL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-583" y="859"/>
+            <point key="canvasLocation" x="-583.20000000000005" y="858.62068965517244"/>
         </scene>
         <!--Conseils-->
         <scene sceneID="WQ0-32-nZY">
@@ -2132,21 +2155,12 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EAu-Th-yTJ">
-                                        <rect key="frame" x="8" y="358" width="120" height="40"/>
+                                        <rect key="frame" x="22" y="350" width="120" height="40"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" name="controlHighlightColor" catalog="System" colorSpace="catalog"/>
                                         <state key="normal" title="Watchlist"/>
                                         <connections>
                                             <action selector="addToWatchList:" destination="Hoe-9h-uf9" eventType="touchUpInside" id="0wO-sp-cBL"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dtT-um-8tM">
-                                        <rect key="frame" x="199" y="358" width="120" height="40"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <color key="backgroundColor" name="controlHighlightColor" catalog="System" colorSpace="catalog"/>
-                                        <state key="normal" title="Close"/>
-                                        <connections>
-                                            <action selector="closeDetails:" destination="Hoe-9h-uf9" eventType="touchUpInside" id="8SP-l9-uPM"/>
                                         </connections>
                                     </button>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0rQ-cK-F21">
@@ -2161,6 +2175,15 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textView>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dtT-um-8tM">
+                                        <rect key="frame" x="187" y="350" width="120" height="40"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" name="controlHighlightColor" catalog="System" colorSpace="catalog"/>
+                                        <state key="normal" title="Close"/>
+                                        <connections>
+                                            <action selector="closeDetails:" destination="Hoe-9h-uf9" eventType="touchUpInside" id="8SP-l9-uPM"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
@@ -2256,7 +2279,7 @@
                     </view>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Conseils" id="ZD5-yc-Wy9">
-                        <barButtonItem key="rightBarButtonItem" systemItem="reply" id="ufj-BW-ZBr">
+                        <barButtonItem key="rightBarButtonItem" image="Chart-icon.png" id="ufj-BW-ZBr">
                             <connections>
                                 <action selector="changeType:" destination="Hoe-9h-uf9" id="hOx-TX-gnj"/>
                             </connections>
@@ -2294,6 +2317,7 @@
     <resources>
         <image name="Air-icon.png" width="48" height="48"/>
         <image name="Calendar-icon.png" width="48" height="48"/>
+        <image name="Chart-icon.png" width="24" height="24"/>
         <image name="Idea-icon.png" width="128" height="128"/>
         <image name="List-icon.png" width="128" height="128"/>
         <image name="Magnifi-icon.png" width="128" height="128"/>
@@ -2310,7 +2334,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="i4G-SQ-1fU"/>
-        <segue reference="ogQ-U5-GBF"/>
+        <segue reference="kVk-dp-Uur"/>
         <segue reference="si9-zD-4Gf"/>
         <segue reference="QYO-Gb-S4a"/>
     </inferredMetricsTieBreakers>

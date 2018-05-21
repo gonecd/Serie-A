@@ -13,6 +13,7 @@ class ViewSearch: UIViewController
     
     @IBOutlet weak var subViewAnnee: UIView!
     @IBOutlet weak var subViewTitre: UIView!
+    @IBOutlet weak var subViewTexteLoc: UIView!
     @IBOutlet weak var subViewGenre: UIView!
     @IBOutlet weak var subViewNetwork: UIView!
     @IBOutlet weak var subViewLangue: UIView!
@@ -22,17 +23,17 @@ class ViewSearch: UIViewController
     @IBOutlet weak var roueResults: UIActivityIndicatorView!
     
     @IBOutlet weak var labelTitre: UILabel!
+    @IBOutlet weak var labelTexteLoc: UILabel!
     @IBOutlet weak var labelAnnee: UILabel!
     @IBOutlet weak var labelGenre: UILabel!
     @IBOutlet weak var labelNetwork: UILabel!
     @IBOutlet weak var labelLangue: UILabel!
     
-    @IBOutlet weak var texteTitre: UITextView!
-    @IBOutlet weak var texteAnnees: UILabel!
-    @IBOutlet weak var texteGenresInclus: UITextView!
-    @IBOutlet weak var texteGenresExclus: UILabel!
-    @IBOutlet weak var texteLangues: UILabel!
-    @IBOutlet weak var texteNetwork: UITextView!
+    @IBOutlet weak var descriptionTexte: UITextView!
+    
+    @IBOutlet weak var inTitre: UISwitch!
+    @IBOutlet weak var inResume: UISwitch!
+    @IBOutlet weak var inCasting: UISwitch!
     
     @IBOutlet weak var titre: UITextField!
     @IBOutlet weak var debut: UITextField!
@@ -92,17 +93,20 @@ class ViewSearch: UIViewController
         view.addGestureRecognizer(tap)
 
         labelTitre.transform = CGAffineTransform.init(rotationAngle: ( 3.1415926535/2.0))
+        labelTexteLoc.transform = CGAffineTransform.init(rotationAngle: ( 3.1415926535/2.0))
         labelAnnee.transform = CGAffineTransform.init(rotationAngle: ( 3.1415926535/2.0))
         labelGenre.transform = CGAffineTransform.init(rotationAngle: ( 3.1415926535/2.0))
         labelNetwork.transform = CGAffineTransform.init(rotationAngle: ( 3.1415926535/2.0))
         labelLangue.transform = CGAffineTransform.init(rotationAngle: ( 3.1415926535/2.0))
         labelTitre.frame.origin = CGPoint(x: 300.0, y: 10.0)
+        labelTexteLoc.frame.origin = CGPoint(x: 300.0, y: 10.0)
         labelAnnee.frame.origin = CGPoint(x: 10.0, y: 10.0)
         labelGenre.frame.origin = CGPoint(x: 10.0, y: 10.0)
         labelNetwork.frame.origin = CGPoint(x: 10.0, y: 10.0)
         labelLangue.frame.origin = CGPoint(x: 10.0, y: 10.0)
 
         makeGradiant(carre: subViewTitre, couleur: "Rouge")
+        makeGradiant(carre: subViewTexteLoc, couleur: "Vert")
         makeGradiant(carre: subViewAnnee, couleur: "Vert")
         makeGradiant(carre: subViewGenre, couleur: "Bleu")
         makeGradiant(carre: subViewNetwork, couleur: "Rouge")
@@ -110,6 +114,7 @@ class ViewSearch: UIViewController
         makeGradiant(carre: carreResults, couleur: "Vert")
 
         subViewTitre.frame.origin.x = -333
+        subViewTexteLoc.frame.origin.x = -333
         subViewAnnee.frame.origin.x = 373
         subViewGenre.frame.origin.x = 373
         subViewNetwork.frame.origin.x = 373
@@ -120,12 +125,7 @@ class ViewSearch: UIViewController
         arrondir(texte: cptResults, radius: 10.0)
         cptResults.text = "+" + "\u{221E}"
         
-        texteTitre.text = ""
-        texteAnnees.text = ""
-        texteGenresInclus.text = ""
-        texteGenresExclus.text = ""
-        texteLangues.text = ""
-        texteNetwork.text = ""
+        descriptionTexte.text = ""
     }
     
     
@@ -136,13 +136,21 @@ class ViewSearch: UIViewController
         {
             if gesture.direction == UISwipeGestureRecognizerDirection.right {
                 if (self.activeSubView == nil) {
-                    UIView.animate(withDuration: 0.7, animations: { self.subViewTitre.frame.origin.x = 0 } )
-                    self.activeSubView = subViewTitre
+                    if ( (gesture.location(in: self.view).y > 100.0) && (gesture.location(in: self.view).y < 200.0) )
+                    {
+                        UIView.animate(withDuration: 0.7, animations: { self.subViewTitre.frame.origin.x = 0 } )
+                        self.activeSubView = subViewTitre
+                    }
+                    else if ( (gesture.location(in: self.view).y > 200.0) && (gesture.location(in: self.view).y < 350.0) )
+                    {
+                        UIView.animate(withDuration: 0.7, animations: { self.subViewTexteLoc.frame.origin.x = 0 } )
+                        self.activeSubView = subViewTexteLoc
+                    }
                 }
             }
             else if gesture.direction == UISwipeGestureRecognizerDirection.left {
                 if (self.activeSubView != nil) {
-                    UIView.animate(withDuration: 0.7, animations: { self.subViewTitre.frame.origin.x = -300 } )
+                    UIView.animate(withDuration: 0.7, animations: { self.activeSubView.frame.origin.x = -300 } )
                     self.activeSubView = nil
                     self.updateRechercheTitre()
                 }
@@ -196,14 +204,9 @@ class ViewSearch: UIViewController
         UIView.animate(withDuration: 0.7, animations: { self.subViewLangue.frame.origin.x = 373 } )
         
         UIView.animate(withDuration: 0.7, animations: { self.subViewTitre.frame.origin.x = -300 } )
-        
-        texteTitre.text = ""
-        texteAnnees.text = ""
-        texteGenresInclus.text = ""
-        texteGenresExclus.text = ""
-        texteLangues.text = ""
-        texteNetwork.text = ""
+        UIView.animate(withDuration: 0.7, animations: { self.subViewTexteLoc.frame.origin.x = -300 } )
 
+        descriptionTexte.text = ""
         updateRechercheTitre()
     }
     
@@ -217,23 +220,34 @@ class ViewSearch: UIViewController
         UIView.animate(withDuration: 0.7, animations: { self.subViewLangue.frame.origin.x = 340 } )
         
         UIView.animate(withDuration: 0.7, animations: { self.subViewTitre.frame.origin.x = -333 } )
-        
-        texteTitre.text = ""
-        texteAnnees.text = ""
-        texteGenresInclus.text = ""
-        texteGenresExclus.text = ""
-        texteLangues.text = ""
-        texteNetwork.text = ""
+        UIView.animate(withDuration: 0.7, animations: { self.subViewTexteLoc.frame.origin.x = -333 } )
 
+        descriptionTexte.text = ""
         updateRecherche()
     }
     
     
-    @IBAction func buttonSelect(_ sender: Any) {
+    @IBAction func buttonSelect3States(_ sender: Any) {
+        let button : UIButton = sender as! UIButton
+        
+        if (button.isSelected == false) {
+            button.setTitleColor(UIColor.green, for: .selected)
+            button.isSelected = true
+        }
+        else if ((button.isSelected == true) && (button.titleColor(for: .selected) == UIColor.green )) {
+            button.setTitleColor(UIColor.red, for: .selected)
+            button.isSelected = true
+        }
+        else if ((button.isSelected == true) && (button.titleColor(for: .selected) == UIColor.red )) {
+            button.setTitleColor(UIColor.green, for: .selected)
+            button.isSelected = false
+        }
+    }
+
+    @IBAction func buttonSelect2States(_ sender: Any) {
         let button : UIButton = sender as! UIButton
         button.isSelected = !button.isSelected
     }
-
     
     @objc func dismissKeyboard() {
         view.endEditing(true)
@@ -241,15 +255,34 @@ class ViewSearch: UIViewController
     
     func updateRechercheTitre()
     {
+        var chercherDans : String = ""
+        
         // Choix du titre
-        if (titre.text == "") { texteTitre.text = "Toutes les séries" }
-        else { texteTitre.text = "Séries où l'on peut trouver : " + titre.text! }
+        if (titre.text == "") { descriptionTexte.text = "Toutes les séries" }
+        else
+        {
+            descriptionTexte.text = "Séries où l'on peut trouver : \n     " + titre.text!
+            if (inTitre.isOn) {
+                descriptionTexte.text = descriptionTexte.text + "\n\n  dans le titre"
+                chercherDans = "title,"
+            }
+            
+            if (inResume.isOn) {
+                descriptionTexte.text = descriptionTexte.text + "\n\n  dans le résumé"
+                chercherDans = chercherDans + "overview,"
+            }
+            if (inCasting.isOn) {
+                descriptionTexte.text = descriptionTexte.text + "\n\n  dans le casting"
+                chercherDans = chercherDans + "people,"
+            }
+        }
         
         // Recherche sur Trakt
         seriesTrouvees = []
 
-        if (titre.text != "") {
-            seriesTrouvees = trakt.recherche(serieArechercher: titre.text!)
+        if ((titre.text != "") && (chercherDans != "")) {
+            chercherDans.removeLast()
+            seriesTrouvees = trakt.recherche(serieArechercher: titre.text!, aChercherDans : chercherDans)
         }
         
         cptResults.text = String(seriesTrouvees.count)
@@ -258,48 +291,75 @@ class ViewSearch: UIViewController
     
     func updateRecherche ()
     {
-        texteTitre.text = "Toutes les séries"
+        descriptionTexte.text = "Toutes les séries"
         
         // Choix de la periode
         if (debut.text == "") {
-            if (fin.text == "") { texteAnnees.text = "" }
-            else { texteAnnees.text = "diffusées avant " + fin.text! }
+            if (fin.text == "") { descriptionTexte.text = descriptionTexte.text + "\n\n" }
+            else { descriptionTexte.text = descriptionTexte.text + "\n\ndiffusées avant " + fin.text! }
         }
         else {
-            if (fin.text == "") { texteAnnees.text = "diffusées après " + debut.text! }
-            else { texteAnnees.text = "diffusées entre " + debut.text! + " et " + fin.text! }
+            if (fin.text == "") { descriptionTexte.text = descriptionTexte.text + "\n\ndiffusées après " + debut.text! }
+            else { descriptionTexte.text = descriptionTexte.text + "\n\ndiffusées entre " + debut.text! + " et " + fin.text! }
         }
         
+
+
         // Choix des genres
         var tmpGenres : String = ""
-        if (action.isSelected) { tmpGenres = tmpGenres + "Action, " }
-        if (adventure.isSelected) { tmpGenres = tmpGenres + "Adventure, " }
-        if (animation.isSelected) { tmpGenres = tmpGenres + "Animation, " }
-        if (comedy.isSelected) { tmpGenres = tmpGenres + "Comedy, " }
-        if (crime.isSelected) { tmpGenres = tmpGenres + "Crime, " }
-        if (documentary.isSelected) { tmpGenres = tmpGenres + "Documentary, " }
-        if (family.isSelected) { tmpGenres = tmpGenres + "Family, " }
-        if (fantasy.isSelected) { tmpGenres = tmpGenres + "Fantasy, " }
-        if (history.isSelected) { tmpGenres = tmpGenres + "History, " }
-        if (horror.isSelected) { tmpGenres = tmpGenres + "Horror, " }
-        if (music.isSelected) { tmpGenres = tmpGenres + "Music, " }
-        if (mystery.isSelected) { tmpGenres = tmpGenres + "Mystery, " }
-        if (romance.isSelected) { tmpGenres = tmpGenres + "Romance, " }
-        if (scienceFiction.isSelected) { tmpGenres = tmpGenres + "Science Fiction, " }
-        if (tvMovie.isSelected) { tmpGenres = tmpGenres + "TV Movie, " }
-        if (thriller.isSelected) { tmpGenres = tmpGenres + "Thriller, " }
-        if (war.isSelected) { tmpGenres = tmpGenres + "War, " }
-        if (western.isSelected) { tmpGenres = tmpGenres + "Western, " }
-        if (tmpGenres == "" ) { texteGenresInclus.text = "Tous genres confondus" }
+        if (action.isSelected && (action.titleColor(for: .selected) == UIColor.green)) { tmpGenres = tmpGenres + "Action, " }
+        if (adventure.isSelected && (adventure.titleColor(for: .selected) == UIColor.green)) { tmpGenres = tmpGenres + "Adventure, " }
+        if (animation.isSelected && (animation.titleColor(for: .selected) == UIColor.green)) { tmpGenres = tmpGenres + "Animation, " }
+        if (comedy.isSelected && (comedy.titleColor(for: .selected) == UIColor.green)) { tmpGenres = tmpGenres + "Comedy, " }
+        if (crime.isSelected && (crime.titleColor(for: .selected) == UIColor.green)) { tmpGenres = tmpGenres + "Crime, " }
+        if (documentary.isSelected && (documentary.titleColor(for: .selected) == UIColor.green)) { tmpGenres = tmpGenres + "Documentary, " }
+        if (family.isSelected && (family.titleColor(for: .selected) == UIColor.green)) { tmpGenres = tmpGenres + "Family, " }
+        if (fantasy.isSelected && (fantasy.titleColor(for: .selected) == UIColor.green)) { tmpGenres = tmpGenres + "Fantasy, " }
+        if (history.isSelected && (history.titleColor(for: .selected) == UIColor.green)) { tmpGenres = tmpGenres + "History, " }
+        if (horror.isSelected && (horror.titleColor(for: .selected) == UIColor.green)) { tmpGenres = tmpGenres + "Horror, " }
+        if (music.isSelected && (music.titleColor(for: .selected) == UIColor.green)) { tmpGenres = tmpGenres + "Music, " }
+        if (mystery.isSelected && (mystery.titleColor(for: .selected) == UIColor.green)) { tmpGenres = tmpGenres + "Mystery, " }
+        if (romance.isSelected && (romance.titleColor(for: .selected) == UIColor.green)) { tmpGenres = tmpGenres + "Romance, " }
+        if (scienceFiction.isSelected && (scienceFiction.titleColor(for: .selected) == UIColor.green)) { tmpGenres = tmpGenres + "Science Fiction, " }
+        if (tvMovie.isSelected && (tvMovie.titleColor(for: .selected) == UIColor.green)) { tmpGenres = tmpGenres + "TV Movie, " }
+        if (thriller.isSelected && (thriller.titleColor(for: .selected) == UIColor.green)) { tmpGenres = tmpGenres + "Thriller, " }
+        if (war.isSelected && (war.titleColor(for: .selected) == UIColor.green)) { tmpGenres = tmpGenres + "War, " }
+        if (western.isSelected && (western.titleColor(for: .selected) == UIColor.green)) { tmpGenres = tmpGenres + "Western, " }
+        if (tmpGenres == "" ) { descriptionTexte.text = descriptionTexte.text + "\n\ntous genres confondus" }
         else {
             tmpGenres.removeLast()
             tmpGenres.removeLast()
-            texteGenresInclus.text = "de genre " + tmpGenres
+            descriptionTexte.text = descriptionTexte.text + "\n\nde genre " + tmpGenres
         }
 
         // TODO : exclusions de genres
-        texteGenresExclus.text = ""
+        var tmpGenres2 : String = ""
+        if (action.isSelected && (action.titleColor(for: .selected) == UIColor.red)) { tmpGenres2 = tmpGenres2 + "Action, " }
+        if (adventure.isSelected && (adventure.titleColor(for: .selected) == UIColor.red)) { tmpGenres2 = tmpGenres2 + "Adventure, " }
+        if (animation.isSelected && (animation.titleColor(for: .selected) == UIColor.red)) { tmpGenres2 = tmpGenres2 + "Animation, " }
+        if (comedy.isSelected && (comedy.titleColor(for: .selected) == UIColor.red)) { tmpGenres2 = tmpGenres2 + "Comedy, " }
+        if (crime.isSelected && (crime.titleColor(for: .selected) == UIColor.red)) { tmpGenres2 = tmpGenres2 + "Crime, " }
+        if (documentary.isSelected && (documentary.titleColor(for: .selected) == UIColor.red)) { tmpGenres2 = tmpGenres2 + "Documentary, " }
+        if (family.isSelected && (family.titleColor(for: .selected) == UIColor.red)) { tmpGenres2 = tmpGenres2 + "Family, " }
+        if (fantasy.isSelected && (fantasy.titleColor(for: .selected) == UIColor.red)) { tmpGenres2 = tmpGenres2 + "Fantasy, " }
+        if (history.isSelected && (history.titleColor(for: .selected) == UIColor.red)) { tmpGenres2 = tmpGenres2 + "History, " }
+        if (horror.isSelected && (horror.titleColor(for: .selected) == UIColor.red)) { tmpGenres2 = tmpGenres2 + "Horror, " }
+        if (music.isSelected && (music.titleColor(for: .selected) == UIColor.red)) { tmpGenres2 = tmpGenres2 + "Music, " }
+        if (mystery.isSelected && (mystery.titleColor(for: .selected) == UIColor.red)) { tmpGenres2 = tmpGenres2 + "Mystery, " }
+        if (romance.isSelected && (romance.titleColor(for: .selected) == UIColor.red)) { tmpGenres2 = tmpGenres2 + "Romance, " }
+        if (scienceFiction.isSelected && (scienceFiction.titleColor(for: .selected) == UIColor.red)) { tmpGenres2 = tmpGenres2 + "Science Fiction, " }
+        if (tvMovie.isSelected && (tvMovie.titleColor(for: .selected) == UIColor.red)) { tmpGenres2 = tmpGenres2 + "TV Movie, " }
+        if (thriller.isSelected && (thriller.titleColor(for: .selected) == UIColor.red)) { tmpGenres2 = tmpGenres2 + "Thriller, " }
+        if (war.isSelected && (war.titleColor(for: .selected) == UIColor.red)) { tmpGenres2 = tmpGenres2 + "War, " }
+        if (western.isSelected && (western.titleColor(for: .selected) == UIColor.red)) { tmpGenres2 = tmpGenres2 + "Western, " }
+        if (tmpGenres2 == "" ) { descriptionTexte.text = descriptionTexte.text + "" }
+        else {
+            tmpGenres2.removeLast()
+            tmpGenres2.removeLast()
+            descriptionTexte.text = descriptionTexte.text + "\nmais pas de genre " + tmpGenres2
+        }
         
+
         // Choix du network de diffusion
         var tmpNetworks : String = ""
         if (ABC.isSelected) { tmpNetworks = tmpNetworks + "ABC, " }
@@ -313,11 +373,11 @@ class ViewSearch: UIViewController
         if (Starz.isSelected) { tmpNetworks = tmpNetworks + "Starz, " }
         if (TheCW.isSelected) { tmpNetworks = tmpNetworks + "The CW, " }
         if (Canal.isSelected) { tmpNetworks = tmpNetworks + "Canal+, " }
-        if (tmpNetworks == "" ) { texteNetwork.text = "" }
+        if (tmpNetworks == "" ) { descriptionTexte.text = descriptionTexte.text + "\n\n" }
         else {
             tmpNetworks.removeLast()
             tmpNetworks.removeLast()
-            texteNetwork.text = "vues sur " + tmpNetworks
+            descriptionTexte.text = descriptionTexte.text + "\n\nvues sur " + tmpNetworks
         }
         
         
@@ -325,20 +385,20 @@ class ViewSearch: UIViewController
         var tmpLangue : String = ""
         if (francais.isSelected) {
             if (anglais.isSelected) {
-                texteLangues.text = "en français ou en anglais"
+                descriptionTexte.text = descriptionTexte.text + "\n\nen français ou en anglais"
                 tmpLangue = "en|fr"
             }
             else {
-                texteLangues.text = "en français uniquement"
+                descriptionTexte.text = descriptionTexte.text + "\n\nen français uniquement"
                 tmpLangue = "fr"
             }
         }
         else {
             if (anglais.isSelected) {
-                texteLangues.text = "en anglais uniquement"
+                descriptionTexte.text = descriptionTexte.text + "\n\nen anglais uniquement"
                 tmpLangue = "en"
             }
-            else { texteLangues.text = "quelle que soit la langue" }
+            else { descriptionTexte.text = descriptionTexte.text + "\n\nquelle que soit la langue" }
         }
         
         // Recherche sur TheMovieDB
@@ -346,11 +406,11 @@ class ViewSearch: UIViewController
         seriesTrouvees = []
 
         (seriesTrouvees, nbSeriesTrouvees) = theMoviedb.chercher(genreIncl: tmpGenres.replacingOccurrences(of: ", ", with: ","),
-                                             genreExcl: "",
-                                             anneeBeg: debut.text!,
-                                             anneeEnd: fin.text!,
-                                             langue: tmpLangue,
-                                             network: tmpNetworks.replacingOccurrences(of: ", ", with: ","))
+                                                                 genreExcl: tmpGenres2.replacingOccurrences(of: ", ", with: ","),
+                                                                 anneeBeg: debut.text!,
+                                                                 anneeEnd: fin.text!,
+                                                                 langue: tmpLangue,
+                                                                 network: tmpNetworks.replacingOccurrences(of: ", ", with: ","))
 
         cptResults.text = String(nbSeriesTrouvees)
         

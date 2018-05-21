@@ -183,9 +183,9 @@ class Episode : NSObject, NSCoding
     }
     
     
-    func mergeStatuses(_ unEpisode : Episode)
+    func mergeStatuses(_ updatedEpisode : Episode)
     {
-        if (unEpisode.watched != false)        { self.watched = unEpisode.watched }
+        self.watched = updatedEpisode.watched
     }
     
 }

@@ -188,16 +188,16 @@ class Serie : NSObject, NSCoding
         }
     }
     
-    func mergeStatuses(_ uneSerie : Serie)
+    func mergeStatuses(_ updatedSerie : Serie)
     {
-        if (uneSerie.unfollowed != false)   { self.unfollowed = uneSerie.unfollowed }
-        if (uneSerie.watchlist != false)    { self.watchlist = uneSerie.watchlist }
+        self.unfollowed = updatedSerie.unfollowed
+        self.watchlist = updatedSerie.watchlist
         
-        for uneSaison in uneSerie.saisons
+        for updatedSaison in updatedSerie.saisons
         {
-            if (uneSaison.saison <= self.saisons.count)
+            if (updatedSaison.saison <= self.saisons.count)
             {
-                self.saisons[uneSaison.saison - 1].mergeStatuses(uneSaison)
+                self.saisons[updatedSaison.saison - 1].mergeStatuses(updatedSaison)
             }
         }
     }

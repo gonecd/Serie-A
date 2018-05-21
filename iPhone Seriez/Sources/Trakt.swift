@@ -151,13 +151,16 @@ class Trakt : NSObject
     
     
     
-    func recherche(serieArechercher : String) -> [Serie]
+    func recherche(serieArechercher : String, aChercherDans : String) -> [Serie]
     {
         trace(texte : "<< Trakt : recherche >>", logLevel : logFuncCalls, scope : scopeSource)
         trace(texte : "<< Trakt : recherche >> Params : serieArechercher = \(serieArechercher)", logLevel : logFuncParams, scope : scopeSource)
         
         var serieListe : [Serie] = []
-        var request = URLRequest(url: URL(string: "https://api.trakt.tv/search/show?fields=title&query=\(serieArechercher.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)!)")!)
+        
+        if (aChercherDans == "") { return serieListe }
+        
+        var request = URLRequest(url: URL(string: "https://api.trakt.tv/search/show?fields=\(aChercherDans)&query=\(serieArechercher.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)!)")!)
         
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("Bearer \(self.Token)", forHTTPHeaderField: "Authorization")

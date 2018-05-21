@@ -85,7 +85,7 @@ let scopeStructure      : Int = 4
 let colorTrakt      : UIColor = UIColor.red
 let colorTVdb       : UIColor = UIColor.gray
 let colorBetaSeries : UIColor = UIColor.blue
-let colorIMDB       : UIColor = UIColor.yellow
+let colorIMDB       : UIColor = UIColor.orange
 let colorMoviedb    : UIColor = UIColor.green
 
 let colorBackground : UIColor = UIColor.lightGray
