@@ -128,15 +128,18 @@ class Graph: UIView {
         let origineX : CGFloat = 30.0
         let origineY :CGFloat = self.frame.height - 30.0
         let hauteur : CGFloat = (self.frame.height - 30.0 - 10.0)
-
-        if (uneNote == 0) { return }
+        var note : Int = uneNote
         
+        if (uneNote == 0) { return }
+        if (uneNote > 100 ) { note = 100 }
+        if (uneNote < 0 ) { note = 0 }
+
         uneCouleur.setStroke()
         uneCouleur.setFill()
         
         let path : UIBezierPath = UIBezierPath()
         path.addArc(withCenter: CGPoint(x: origineX - 5 + offsetSaison + offsetSource,
-                                        y: origineY - (hauteur * CGFloat(uneNote) / 100)),
+                                        y: origineY - (hauteur * CGFloat(note) / 100)),
                     radius: diametre / 2,
                     startAngle: 2 * .pi,
                     endAngle: 0,

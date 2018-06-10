@@ -19,20 +19,12 @@ class Trakt : NSObject
     
     override init()
     {
-        trace(texte : "<< Trakt : init >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< Trakt : init >> Params : No Params", logLevel : logFuncParams, scope : scopeSource)
-        
         super.init()
-        
-        trace(texte : "<< Trakt : init >> Return : No Return", logLevel : logFuncReturn, scope : scopeSource)
     }
     
     
     func start() -> Bool
     {
-        trace(texte : "<< Trakt : start >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< Trakt : start >> Params : No Params", logLevel : logFuncParams, scope : scopeSource)
-        
         let defaults = UserDefaults.standard
         
         if ((defaults.object(forKey: "TraktToken")) != nil) {
@@ -47,14 +39,12 @@ class Trakt : NSObject
                 self.refreshToken(self.RefreshToken)
             }
             
-            trace(texte : "<< Trakt : start >> Return : true", logLevel : logFuncReturn, scope : scopeSource)
             return true
         }
         else
         {
-            self.downloadToken(key: "61B43659")
+            self.downloadToken(key: "8AC2DD53")
             
-            trace(texte : "<< Trakt : start >> Return : false", logLevel : logFuncReturn, scope : scopeSource)
             return false
         }
     }
@@ -62,9 +52,6 @@ class Trakt : NSObject
     
     func downloadToken(key : String)
     {
-        trace(texte : "<< Trakt : downloadToken >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< Trakt : downloadToken >> Params : key = \(key)", logLevel : logFuncParams, scope : scopeSource)
-        
         var request = URLRequest(url: URL(string: "https://api.trakt.tv/oauth/token")!)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -98,16 +85,11 @@ class Trakt : NSObject
         
         task.resume()
         while (task.state != URLSessionTask.State.completed) { sleep(1) }
-        
-        trace(texte : "<< Trakt : downloadToken >> Return : No Return", logLevel : logFuncReturn, scope : scopeSource)
     }
     
     
     func refreshToken (_ refresher: String)
     {
-        trace(texte : "<< Trakt : refreshToken >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< Trakt : refreshToken >> Params : refresher = \(refresher)", logLevel : logFuncParams, scope : scopeSource)
-        
         let url = URL(string: self.TraktURL)!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -144,8 +126,6 @@ class Trakt : NSObject
         })
         task.resume()
         while (task.state != URLSessionTask.State.completed) { sleep(1) }
-        
-        trace(texte : "<< Trakt : refreshToken >> Return : No Return", logLevel : logFuncReturn, scope : scopeSource)
     }
     
     
@@ -153,9 +133,6 @@ class Trakt : NSObject
     
     func recherche(serieArechercher : String, aChercherDans : String) -> [Serie]
     {
-        trace(texte : "<< Trakt : recherche >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< Trakt : recherche >> Params : serieArechercher = \(serieArechercher)", logLevel : logFuncParams, scope : scopeSource)
-        
         var serieListe : [Serie] = []
         
         if (aChercherDans == "") { return serieListe }
@@ -195,16 +172,12 @@ class Trakt : NSObject
         task.resume()
         while (task.state != URLSessionTask.State.completed) { sleep(1) }
         
-        trace(texte : "<< Trakt : recherche >> Return : serieListe = \(serieListe)", logLevel : logFuncReturn, scope : scopeSource)
         return serieListe
     }
     
     
     func addToWatchlist(theTVdbId : String) -> Bool
     {
-        trace(texte : "<< Trakt : addToWatchlist >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< Trakt : addToWatchlist >> Params : theTVdbId = \(theTVdbId)", logLevel : logFuncParams, scope : scopeSource)
-        
         var success : Bool = false
         var request = URLRequest(url: URL(string: "https://api.trakt.tv/sync/watchlist")!)
         request.httpMethod = "POST"
@@ -233,16 +206,12 @@ class Trakt : NSObject
         task.resume()
         while (task.state != URLSessionTask.State.completed) { usleep(1000) }
         
-        trace(texte : "<< Trakt : addToWatchlist >> Return : success = \(success)", logLevel : logFuncReturn, scope : scopeSource)
         return success
     }
     
     
     func removeFromWatchlist(theTVdbId : String) -> Bool
     {
-        trace(texte : "<< Trakt : removeFromWatchlist >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< Trakt : removeFromWatchlist >> Params : theTVdbId = \(theTVdbId)", logLevel : logFuncParams, scope : scopeSource)
-        
        var success : Bool = false
         var request = URLRequest(url: URL(string: "https://api.trakt.tv/sync/watchlist/remove")!)
         request.httpMethod = "POST"
@@ -271,16 +240,12 @@ class Trakt : NSObject
         task.resume()
         while (task.state != URLSessionTask.State.completed) { usleep(1000) }
         
-        trace(texte : "<< Trakt : removeFromWatchlist >> Return : success = \(success)", logLevel : logFuncReturn, scope : scopeSource)
         return success
     }
     
     
     func getWatchlist() -> [Serie]
     {
-        trace(texte : "<< Trakt : getWatchlist >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< Trakt : getWatchlist >> Params : No Params", logLevel : logFuncParams, scope : scopeSource)
-        
         var request = URLRequest(url: URL(string: "https://api.trakt.tv/users/gonecd/watchlist/shows")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("Bearer \(self.Token)", forHTTPHeaderField: "Authorization")
@@ -315,16 +280,12 @@ class Trakt : NSObject
         task.resume()
         while (task.state != URLSessionTask.State.completed) { sleep(1) }
         
-        trace(texte : "<< Trakt : getWatchlist >> Return : returnSeries = \(returnSeries)", logLevel : logFuncReturn, scope : scopeSource)
         return returnSeries
     }
     
     
     func getEpisodesRatings(_ uneSerie: Serie)
     {
-        trace(texte : "<< Trakt : getEpisodesRatings >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< Trakt : getEpisodesRatings >> Params : uneSerie = \(uneSerie)", logLevel : logFuncParams, scope : scopeSource)
-
         let today : Date = Date()
         
         for uneSaison in uneSerie.saisons
@@ -389,14 +350,10 @@ class Trakt : NSObject
                 usleep(1000)
             }
         }
-        trace(texte : "<< Trakt : getEpisodesRatings >> Return : No Return", logLevel : logFuncReturn, scope : scopeSource)
     }
     
     func getStopped() -> [Serie]
     {
-        trace(texte : "<< Trakt : getStopped >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< Trakt : getStopped >> Params : No Params", logLevel : logFuncParams, scope : scopeSource)
-        
         var request = URLRequest(url: URL(string: "https://api.trakt.tv/users/gonecd/lists/Abandon/items/shows")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("Bearer \(self.Token)", forHTTPHeaderField: "Authorization")
@@ -431,16 +388,12 @@ class Trakt : NSObject
         task.resume()
         while (task.state != URLSessionTask.State.completed) { sleep(1) }
  
-        trace(texte : "<< Trakt : getStopped >> Return : returnSeries = \(returnSeries)", logLevel : logFuncReturn, scope : scopeSource)
         return returnSeries
     }
     
     
     func getWatched() -> [Serie]
     {
-        trace(texte : "<< Trakt : getWatched >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< Trakt : getWatched >> Params : No Params", logLevel : logFuncParams, scope : scopeSource)
-        
         var request = URLRequest(url: URL(string: "https://api.trakt.tv/sync/watched/shows")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("Bearer \(self.Token)", forHTTPHeaderField: "Authorization")
@@ -481,16 +434,12 @@ class Trakt : NSObject
         task.resume()
         while (task.state != URLSessionTask.State.completed) { sleep(1) }
  
-        trace(texte : "<< Trakt : getWatched >> Return : returnSeries = \(returnSeries)", logLevel : logFuncReturn, scope : scopeSource)
         return returnSeries
     }
     
 
     func getSerieGlobalInfos(idTraktOrIMDB : String) -> Serie
     {
-        trace(texte : "<< Trakt : getSerieGlobalInfos >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< Trakt : getSerieGlobalInfos >> Params : idTraktOrIMDB = \(idTraktOrIMDB)", logLevel : logFuncParams, scope : scopeSource)
-        
         let uneSerie : Serie = Serie(serie: "")
         var request : URLRequest
         
@@ -535,15 +484,11 @@ class Trakt : NSObject
         task.resume()
         while (task.state != URLSessionTask.State.completed) { usleep(1000) }
         
-        trace(texte : "<< Trakt : getSerieGlobalInfos >> Return : uneSerie = \(uneSerie)", logLevel : logFuncReturn, scope : scopeSource)
         return uneSerie
     }
     
     func getSaisons(uneSerie : Serie)
     {
-        trace(texte : "<< Trakt : getSaisons >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< Trakt : getSaisons >> Params : uneSerie = \(uneSerie)", logLevel : logFuncParams, scope : scopeSource)
-        
        let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
         
@@ -596,15 +541,11 @@ class Trakt : NSObject
         task.resume()
         while (task.state != URLSessionTask.State.completed) { usleep(1000) }
 
-        trace(texte : "<< Trakt : getSaisons >> Return : No Return", logLevel : logFuncReturn, scope : scopeSource)
     }
     
     
     func getLastEpisodeDate(traktID : String, saison : Int, episode : Int) -> Date
     {
-        trace(texte : "<< Trakt : getLastEpisodeDate >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< Trakt : getLastEpisodeDate >> Params : traktID = \(traktID), saison = \(saison), episode = \(episode)", logLevel : logFuncParams, scope : scopeSource)
-        
         var diffDate : Date = ZeroDate
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
@@ -633,15 +574,11 @@ class Trakt : NSObject
         task.resume()
         while (task.state != URLSessionTask.State.completed) { usleep(1000) }
         
-        trace(texte : "<< Trakt : getSerieGlobalInfos >> Return : getLastEpisodeDate = \(diffDate)", logLevel : logFuncReturn, scope : scopeSource)
         return diffDate
     }
     
     func getSimilarShows(IMDBid : String) -> (names : [String], ids : [String])
     {
-        trace(texte : "<< Trakt : getSimilarShows >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< Trakt : getSimilarShows >> Params : IMDBid = \(IMDBid)", logLevel : logFuncParams, scope : scopeSource)
-        
         var showNames : [String] = []
         var showIds : [String] = []
         var ended : Bool = false
@@ -682,15 +619,11 @@ class Trakt : NSObject
         task.resume()
         while (!ended) { usleep(1000) }
         
-        trace(texte : "<< Trakt : getSerieGlobalInfos >> Return : showNames = \(showNames), showIds = \(showIds)", logLevel : logFuncReturn, scope : scopeSource)
         return (showNames, showIds)
     }
     
     func getPopularShows() -> (names : [String], ids : [String])
     {
-        trace(texte : "<< Trakt : getPopularShows >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< Trakt : getPopularShows >> Params : No Params", logLevel : logFuncParams, scope : scopeSource)
-        
         var showNames : [String] = []
         var showIds : [String] = []
         var ended : Bool = false
@@ -731,15 +664,11 @@ class Trakt : NSObject
         task.resume()
         while (!ended) { usleep(1000) }
         
-        trace(texte : "<< Trakt : getPopularShows >> Return : showNames = \(showNames), showIds = \(showIds)", logLevel : logFuncReturn, scope : scopeSource)
        return (showNames, showIds)
     }
     
     func getTrendingShows() -> (names : [String], ids : [String])
     {
-        trace(texte : "<< Trakt : getTrendingShows >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< Trakt : getTrendingShows >> Params : No Params", logLevel : logFuncParams, scope : scopeSource)
-        
         var showNames : [String] = []
         var showIds : [String] = []
         var ended : Bool = false
@@ -780,16 +709,12 @@ class Trakt : NSObject
         task.resume()
         while (!ended) { usleep(1000) }
         
-        trace(texte : "<< Trakt : getTrendingShows >> Return : showNames = \(showNames), showIds = \(showIds)", logLevel : logFuncReturn, scope : scopeSource)
         return (showNames, showIds)
     }
     
     
     func getComments(IMDBid : String, season : Int, episode : Int) -> (comments : [String], likes : [Int], dates : [Date], source : [Int])
     {
-        trace(texte : "<< Trakt : getComments >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< Trakt : getComments >> Params : IMDBid=\(IMDBid), season=\(season), IMDBid=\(episode)", logLevel : logFuncParams, scope : scopeSource)
-        
         var stringURL : String = ""
         var ended : Bool = false
         let dateFormatter = DateFormatter()
@@ -855,7 +780,6 @@ class Trakt : NSObject
         task.resume()
         while (!ended) { usleep(1000) }
         
-        trace(texte : "<< Trakt : getComments >> Return : foundComments=\(foundComments), foundLikes=\(foundLikes), foundDates=\(foundDates), foundSource=\(foundSource)", logLevel : logFuncReturn, scope : scopeSource)
         return (foundComments, foundLikes, foundDates, foundSource)
     }
 

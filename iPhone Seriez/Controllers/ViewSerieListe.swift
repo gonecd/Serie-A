@@ -169,19 +169,14 @@ class ViewSerieListe: UITableViewController {
     
     func supprimerUneSerieDansLaWatchlistTrakt(uneSerie: Serie) -> Bool
     {
-        trace(texte : "<< ViewSerieListe : supprimerUneSerieDansLaWatchlistTrakt >>", logLevel : logFuncCalls, scope : scopeController)
-        trace(texte : "<< ViewSerieListe : supprimerUneSerieDansLaWatchlistTrakt >> Params : uneSerie = \(uneSerie)", logLevel : logFuncParams, scope : scopeController)
-        
         if (trakt.removeFromWatchlist(theTVdbId: uneSerie.idTVdb))
         {
             db.shows.remove(at: db.shows.index(of: uneSerie)!)
             db.saveDB()
             //TODO : updateCompteurs()
             
-            trace(texte : "<< ViewSerieListe : supprimerUneSerieDansLaWatchlistTrakt >> Return : true", logLevel : logFuncReturn, scope : scopeController)
             return true
         }
-        trace(texte : "<< ViewSerieListe : supprimerUneSerieDansLaWatchlistTrakt >> Return : false", logLevel : logFuncReturn, scope : scopeController)
         return false
     }
     

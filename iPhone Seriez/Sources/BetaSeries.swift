@@ -14,20 +14,12 @@ class BetaSeries : NSObject
     
     override init()
     {
-        trace(texte : "<< BetaSeries : init >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< BetaSeries : init >> Params : No Params", logLevel : logFuncParams, scope : scopeSource)
-        
         super.init()
-        
-        trace(texte : "<< BetaSeries : init >> Return : No Return", logLevel : logFuncReturn, scope : scopeSource)
     }
     
     
     func getEpisodesRatings(_ uneSerie: Serie)
     {
-        trace(texte : "<< BetaSeries : getEpisodesRatings >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< BetaSeries : getEpisodesRatings >> Params : uneSerie :\(uneSerie)", logLevel : logFuncParams, scope : scopeSource)
-        
         var url : URL
         var request : URLRequest
         var task : URLSessionDataTask
@@ -85,15 +77,11 @@ class BetaSeries : NSObject
             task.resume()
             while (task.state != URLSessionTask.State.completed) { usleep(1000) }
         }
-        trace(texte : "<< BetaSeries : getEpisodesRatings >> Return : No Return", logLevel : logFuncReturn, scope : scopeSource)
     }
     
     
     func getSerieGlobalInfos(idTVDB : String, idIMDB : String) -> Serie
     {
-        trace(texte : "<< BetaSeries : getSerieGlobalInfos >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< BetaSeries : getSerieGlobalInfos >> Params : idTVDB=\(idTVDB), idIMDB=\(idIMDB)", logLevel : logFuncParams, scope : scopeSource)
-        
         let uneSerie : Serie = Serie(serie: "")
         var request : URLRequest
         
@@ -138,15 +126,11 @@ class BetaSeries : NSObject
         task.resume()
         while (task.state != URLSessionTask.State.completed) { usleep(1000) }
 
-        trace(texte : "<< BetaSeries : getSerieGlobalInfos >> Return : uneSerie=\(uneSerie)", logLevel : logFuncReturn, scope : scopeSource)
         return uneSerie
     }
     
     func getSimilarShows(TVDBid : String) -> (names : [String], ids : [String])
     {
-        trace(texte : "<< BetaSeries : getSimilarShows >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< BetaSeries : getSimilarShows >> Params : TVDBid=\(TVDBid)", logLevel : logFuncParams, scope : scopeSource)
-        
         var showNames : [String] = []
         var showIds : [String] = []
         var ended : Bool = false
@@ -187,15 +171,11 @@ class BetaSeries : NSObject
         task.resume()
         while (!ended) { usleep(1000) }
 
-        trace(texte : "<< BetaSeries : getSerieGlobalInfos >> Return : showNames=\(showNames), showIds=\(showIds)", logLevel : logFuncReturn, scope : scopeSource)
         return (showNames, showIds)
     }
     
     func getTrendingShows() -> (names : [String], ids : [String])
     {
-        trace(texte : "<< BetaSeries : getTrendingShows >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< BetaSeries : getTrendingShows >> Params : No Params", logLevel : logFuncParams, scope : scopeSource)
-        
         var showNames : [String] = []
         var showIds : [String] = []
         var ended : Bool = false
@@ -231,15 +211,11 @@ class BetaSeries : NSObject
         task.resume()
         while (!ended) { usleep(1000) }
         
-        trace(texte : "<< BetaSeries : getTrendingShows >> Return : showNames=\(showNames), showIds=\(showIds)", logLevel : logFuncReturn, scope : scopeSource)
         return (showNames, showIds)
     }
 
     func getPopularShows() -> (names : [String], ids : [String])
     {
-        trace(texte : "<< BetaSeries : getPopularShows >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< BetaSeries : getPopularShows >> Params : No Params", logLevel : logFuncParams, scope : scopeSource)
-        
         var showNames : [String] = []
         var showIds : [String] = []
         var ended : Bool = false
@@ -274,7 +250,6 @@ class BetaSeries : NSObject
         task.resume()
         while (!ended) { usleep(1000) }
         
-        trace(texte : "<< BetaSeries : getTrendingShows >> Return : showNames=\(showNames), showIds=\(showIds)", logLevel : logFuncReturn, scope : scopeSource)
         return (showNames, showIds)
     }
     
@@ -282,9 +257,6 @@ class BetaSeries : NSObject
     
     func getLastEpisodeDate(TVdbId : String, saison : Int, episode : Int) -> Date
     {
-        trace(texte : "<< BetaSeries : getLastEpisodeDate >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< BetaSeries : getLastEpisodeDate >> Params : TVdbId=\(TVdbId), saison=\(saison), episode=\(episode)", logLevel : logFuncParams, scope : scopeSource)
-        
         var ended : Bool = false
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -322,10 +294,7 @@ class BetaSeries : NSObject
         task.resume()
         while (!ended) { usleep(1000) }
         
-        trace(texte : "<< BetaSeries : getLastEpisodeDate >> Return : getLastEpisodeDate = \(uneDate)", logLevel : logFuncReturn, scope : scopeSource)
         return (uneDate)
     }
-    
-    
     
 }

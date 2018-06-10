@@ -44,7 +44,7 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
     
     @IBOutlet weak var network: UILabel!
     @IBOutlet weak var status: UILabel!
-    @IBOutlet weak var genre: UITextView!
+    @IBOutlet weak var genre: UILabel!
     @IBOutlet weak var duree: UILabel!
     @IBOutlet weak var certif: UILabel!
     @IBOutlet weak var langue: UILabel!
@@ -61,7 +61,6 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
         annee.text = "(" + String(serie.year) + ")"
         resume.text = serie.resume
         banniere.image = image
-        //graphe.backgroundColor = colorBackground
         graphe.sendSerie(serie)
         
         // Affichage des genres
@@ -79,6 +78,7 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
         arrondirLabel(texte: certif, radius: 8)
         arrondirLabel(texte: langue, radius: 8)
         arrondirLabel(texte: drapeauBgd, radius: 8)
+        arrondirLabel(texte: genre, radius: 8)
 
         // Affichage du status
         if (serie.status == "Ended")

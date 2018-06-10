@@ -32,11 +32,12 @@ class ViewAccueil: UIViewController  {
     
     override func viewDidLoad()
     {
-        trace(texte : "<< ViewAccueil : viewDidLoad >>", logLevel : logFuncCalls, scope : scopeController)
-        trace(texte : "<< ViewAccueil : viewDidLoad >> Params : No Params", logLevel : logFuncParams, scope : scopeController)
-        
         super.viewDidLoad()
 
+        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(handleGesture))
+        swipeDown.direction = .down
+        self.view.addGestureRecognizer(swipeDown)
+        
         // Faire des jolis carrés dégradés à coins ronds
         makeGradiant(carre: cadreSerieAbandonnee, couleur : "Bleu")
         makeGradiant(carre: cadreSerieEncours, couleur : "Bleu")
@@ -60,7 +61,7 @@ class ViewAccueil: UIViewController  {
         // Initialisation sources de données
         if (trakt.start() == false)
         {
-            trace(texte : "<< ViewAccueil : downloadStatuses >> Problème d'initialisation de la connexion à Trakt", logLevel : logWarnings, scope : scopeController)
+            print("Problème d'initialisation de la connexion à Trakt")
         }
         theTVdb.initializeToken()
         imdb.loadDataFile()
@@ -68,17 +69,18 @@ class ViewAccueil: UIViewController  {
         // Chargement de la dernière sauvegarde
         db.loadDB()
         updateCompteurs()
-
-        trace(texte : "<< ViewAccueil : viewDidLoad >> Return : No Return", logLevel : logFuncReturn, scope : scopeController)
+    }
+    
+    @objc func handleGesture(gesture: UISwipeGestureRecognizer) -> Void {
+        print("Gesture vers le bas")
+        
     }
     
     @IBAction func downloadStatuses(_ sender: Any)
     {
-        trace(texte : "<< ViewAccueil : downloadStatuses >>", logLevel : logFuncCalls, scope : scopeController)
-        trace(texte : "<< ViewAccueil : downloadStatuses >> Params : sender = \(sender)", logLevel : logFuncParams, scope : scopeController)
-        
         var reloadSeries : [Serie] = [Serie]()
         reloadSeries = trakt.getWatched()
+        for uneSerie in db.shows { trakt.getSaisons(uneSerie: uneSerie) }
         reloadSeries = db.merge(reloadSeries, adds: trakt.getStopped())
         reloadSeries = db.merge(reloadSeries, adds: trakt.getWatchlist())
         
@@ -87,16 +89,11 @@ class ViewAccueil: UIViewController  {
         
         self.updateCompteurs()
         self.view.setNeedsDisplay()
-
-        trace(texte : "<< ViewAccueil : downloadStatuses >> Return : No Return", logLevel : logFuncReturn, scope : scopeController)
     }
    
     
     @IBAction func downloadAll(_ sender: Any)
     {
-        trace(texte : "<< ViewAccueil : downloadAll >>", logLevel : logFuncCalls, scope : scopeController)
-        trace(texte : "<< ViewAccueil : downloadAll >> Params : sender = \(sender)", logLevel : logFuncParams, scope : scopeController)
-        
         db.shows = trakt.getWatched()
         for uneSerie in db.shows { trakt.getSaisons(uneSerie: uneSerie) }
         db.shows = db.merge(db.shows, adds: trakt.getStopped())
@@ -124,23 +121,14 @@ class ViewAccueil: UIViewController  {
                 self.updateCompteurs()
             }
         }
-        trace(texte : "<< ViewAccueil : downloadAll >> Return : No Return", logLevel : logFuncReturn, scope : scopeController)
   }
     
 
     override func didReceiveMemoryWarning() {
-        trace(texte : "<< ViewAccueil : didReceiveMemoryWarning >>", logLevel : logFuncCalls, scope : scopeController)
-        trace(texte : "<< ViewAccueil : didReceiveMemoryWarning >> Params : No Params", logLevel : logFuncParams, scope : scopeController)
-        
         super.didReceiveMemoryWarning()
-        
-        trace(texte : "<< ViewAccueil : didReceiveMemoryWarning >> Return : No Return", logLevel : logFuncReturn, scope : scopeController)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        trace(texte : "<< ViewAccueil : prepare >>", logLevel : logFuncCalls, scope : scopeController)
-        trace(texte : "<< ViewAccueil : prepare >> Params : segue = \(segue), sender = \(String(describing: sender))", logLevel : logFuncParams, scope : scopeController)
-        
         let bouton = sender as! UIButton
         var buildList = [Serie]()
         var buildListSaisons = [Int]()
@@ -264,14 +252,10 @@ class ViewAccueil: UIViewController  {
             print("Passer à la fenêtre \(bouton.titleLabel?.text ?? "")")
             
         }
-        trace(texte : "<< ViewAccueil : prepare >> Return : No Return", logLevel : logFuncReturn, scope : scopeController)
     }
     
     func updateCompteurs()
     {
-        trace(texte : "<< ViewAccueil : updateCompteurs >>", logLevel : logFuncCalls, scope : scopeController)
-        trace(texte : "<< ViewAccueil : updateCompteurs >> Params : No Params", logLevel : logFuncParams, scope : scopeController)
-        
         var valSeriesFinies : Int = 0
         var valSeriesEnCours : Int = 0
         var valSaisonsOnTheAir : Int = 0
@@ -325,8 +309,6 @@ class ViewAccueil: UIViewController  {
         cptSaisonsAnnoncees.text = String(valSaisonsAnnoncees)
         cptWatchList.text = String(ValWatchList)
         cptSeriesAbandonnees.text = String(valSeriesAbandonnees)
-
-        trace(texte : "<< ViewAccueil : updateCompteurs >> Return : No Return", logLevel : logFuncReturn, scope : scopeController)
     }
     
  

@@ -64,22 +64,6 @@ let notesRange  : Double = 25.0
 let similarShowsPerSource       : Int = 8
 let popularShowsPerSource       : Int = 10
 
-// Log levels
-let logAucun           : Int = 0
-let logErrors          : Int = 1
-let logWarnings        : Int = 2
-let logFuncCalls       : Int = 5
-let logFuncParams      : Int = 6
-let logFuncReturn      : Int = 7
-let logDebug           : Int = 10
-
-// Log Scopes
-let scopeSource         : Int = 0
-let scopeGraphe         : Int = 1
-let scopeController     : Int = 2
-let scopeHelper         : Int = 3
-let scopeStructure      : Int = 4
-
 
 // Couleurs de remplissage des sources
 let colorTrakt      : UIColor = UIColor.red

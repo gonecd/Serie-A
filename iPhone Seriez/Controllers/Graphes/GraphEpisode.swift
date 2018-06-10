@@ -69,14 +69,6 @@ class GraphEpisode: UIView {
                                     y: origineY + 5.0, width: 20, height: 10),
                          withAttributes: textAttributes)
         }
-        
-        // Positionnement des icones de sources
-//        #imageLiteral(resourceName: "thetvdb.png").draw(in: CGRect(x: 10.0, y:  16.0, width: 18.0, height: 18.0))
-//        #imageLiteral(resourceName: "trakt.ico").draw(in: CGRect(x: 10.0, y:  46.0, width: 18.0, height: 18.0))
-//        #imageLiteral(resourceName: "betaseries.png").draw(in: CGRect(x: 10.0, y:  76.0, width: 18.0, height: 18.0))
-//        #imageLiteral(resourceName: "imdb.ico").draw(in: CGRect(x: 10.0, y:  106.0, width: 18.0, height: 18.0))
-//        #imageLiteral(resourceName: "themoviedb.ico").draw(in: CGRect(x: 10.0, y:  136.0, width: 18.0, height: 18.0))
-        
     }
     
     func traceBarres()

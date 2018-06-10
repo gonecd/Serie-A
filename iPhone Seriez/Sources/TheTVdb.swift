@@ -19,19 +19,11 @@ class TheTVdb : NSObject
     
     override init()
     {
-        trace(texte : "<< TheTVdb : init >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< TheTVdb : init >> Params : No Params", logLevel : logFuncParams, scope : scopeSource)
-        
         super.init()
-        
-        trace(texte : "<< TheTVdb : init >> Return : No Return", logLevel : logFuncReturn, scope : scopeSource)
     }
     
     func initializeToken()
     {
-        trace(texte : "<< TheTVdb : initializeToken >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< TheTVdb : initializeToken >> Params : No Params", logLevel : logFuncParams, scope : scopeSource)
-        
         // Première connection pour récupérer un token valable ??? temps ( = 24h ? ) et le dumper dans un fichier /tmp/TheTVdbToken
         
         var request = URLRequest(url: URL(string: "https://api.thetvdb.com/login")!)
@@ -58,14 +50,10 @@ class TheTVdb : NSObject
         task.resume()
         while (task.state != URLSessionTask.State.completed) { sleep(1) }
 
-        trace(texte : "<< TheTVdb : initializeToken >> Return : No Return", logLevel : logFuncReturn, scope : scopeSource)
     }
     
     func getEpisodesRatings(_ uneSerie: Serie)
     {
-        trace(texte : "<< TheTVdb : getEpisodesRatings >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< TheTVdb : getEpisodesRatings >> Params : uneSerie :\(uneSerie)", logLevel : logFuncParams, scope : scopeSource)
-        
         var request : URLRequest
         var task : URLSessionDataTask
         let today : Date = Date()
@@ -113,16 +101,11 @@ class TheTVdb : NSObject
                 }
             }
         }
-
-        trace(texte : "<< TheTVdb : getEpisodesRatings >> Return : No Return", logLevel : logFuncReturn, scope : scopeSource)
     }
     
     
     func getSerieInfosLight(uneSerie: Serie)
     {
-        trace(texte : "<< TheTVdb : getSerieInfosLight >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< TheTVdb : getSerieInfosLight >> Params : uneSerie :\(uneSerie)", logLevel : logFuncParams, scope : scopeSource)
-        
         var pageToLoad  : Int = 1
         var continuer   : Bool = true
         
@@ -224,14 +207,10 @@ class TheTVdb : NSObject
             
             pageToLoad = pageToLoad + 1
         }
-        trace(texte : "<< TheTVdb : getSerieInfosLight >> Return : No Return", logLevel : logFuncReturn, scope : scopeSource)
     }
     
     func getSerieGlobalInfos(idTVdb : String) -> Serie
     {
-        trace(texte : "<< TheTVdb : getSerieGlobalInfos >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< TheTVdb : getSerieGlobalInfos >> Params : idTVdb :\(idTVdb)", logLevel : logFuncParams, scope : scopeSource)
-        
         let uneSerie : Serie = Serie(serie: "")
         var request : URLRequest
         
@@ -280,7 +259,6 @@ class TheTVdb : NSObject
         task.resume()
         while (task.state != URLSessionTask.State.completed) { usleep(1000) }
         
-        trace(texte : "<< TheTVdb : getSerieGlobalInfos >> Return : uneSerie = \(uneSerie)", logLevel : logFuncReturn, scope : scopeSource)
         return uneSerie
     }
     

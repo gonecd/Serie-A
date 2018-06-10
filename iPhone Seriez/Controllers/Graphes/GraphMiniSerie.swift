@@ -29,9 +29,6 @@ class GraphMiniSerie: UIView {
     var grapheType : Int = 0
 
     override func draw(_ dirtyRect: CGRect) {
-        trace(texte : "<< GraphMiniSerie : draw >>", logLevel : logFuncCalls, scope : scopeGraphe)
-        trace(texte : "<< GraphMiniSerie : draw >> Params : No Params", logLevel : logFuncParams, scope : scopeGraphe)
-        
         super.draw(dirtyRect)
         
         origineX = bordure
@@ -57,40 +54,26 @@ class GraphMiniSerie: UIView {
             self.traceGrapheBarre()
             self.backgroundBarres()
         }
-        trace(texte : "<< GraphMiniSerie : draw >> Return : No Return", logLevel : logFuncReturn, scope : scopeGraphe)
     }
     
     
     func setType(type : Int)
     {
-        trace(texte : "<< GraphMiniSerie : setType >>", logLevel : logFuncCalls, scope : scopeGraphe)
-        trace(texte : "<< GraphMiniSerie : setType >> Params : type=\(type)", logLevel : logFuncParams, scope : scopeGraphe)
-        
         grapheType = type
-        
-        trace(texte : "<< GraphMiniSerie : setType >> Return : No Return", logLevel : logFuncReturn, scope : scopeGraphe)
     }
     
     func sendNotes(rateTrakt : Int, rateTVdb : Int, rateBetaSeries : Int, rateMoviedb : Int, rateIMdb : Int)
     {
-        trace(texte : "<< GraphMiniSerie : sendNotes >>", logLevel : logFuncCalls, scope : scopeGraphe)
-        trace(texte : "<< GraphMiniSerie : sendNotes >> Params : rateTrakt=\(rateTrakt), rateTVdb=\(rateTVdb), rateBetaSeries=\(rateBetaSeries), rateMoviedb=\(rateMoviedb), rateIMdb=\(rateIMdb), ", logLevel : logFuncParams, scope : scopeGraphe)
-        
         noteTrakt = rateTrakt
         noteTVdb = rateTVdb
         noteBetaSeries = rateBetaSeries
         noteIMDB = rateIMdb
         noteRottenTomatoes = 71
         noteMoviedb = rateMoviedb
-
-        trace(texte : "<< GraphMiniSerie : sendNotes >> Return : No Return", logLevel : logFuncReturn, scope : scopeGraphe)
     }
     
     func backgroundCercles()
     {
-        trace(texte : "<< GraphMiniSerie : backgroundCercles >>", logLevel : logFuncCalls, scope : scopeGraphe)
-        trace(texte : "<< GraphMiniSerie : backgroundCercles >> Params : No Params", logLevel : logFuncParams, scope : scopeGraphe)
-        
         let nbSource : CGFloat = 5.0
 
         // Couleur des lignes
@@ -122,16 +105,11 @@ class GraphMiniSerie: UIView {
                     endAngle: 0,
                     clockwise: false)
         path.stroke()
-
-        trace(texte : "<< GraphMiniSerie : backgroundCercles >> Return : No Return", logLevel : logFuncReturn, scope : scopeGraphe)
     }
     
 
     func backgroundBarres()
     {
-        trace(texte : "<< GraphMiniSerie : backgroundBarres >>", logLevel : logFuncCalls, scope : scopeGraphe)
-        trace(texte : "<< GraphMiniSerie : backgroundBarres >> Params : No Params", logLevel : logFuncParams, scope : scopeGraphe)
-        
         // Couleur des lignes
         colorAxis.setStroke()
         
@@ -152,31 +130,21 @@ class GraphMiniSerie: UIView {
         path2.move(to: CGPoint(x: origineX, y: origineY - (hauteur / 2)))
         path2.addLine(to: CGPoint(x: origineX + largeur, y: origineY - (hauteur / 2)))
         path2.stroke()
-
-        trace(texte : "<< GraphMiniSerie : backgroundBarres >> Return : No Return", logLevel : logFuncReturn, scope : scopeGraphe)
     }
     
     
     func traceGrapheBarre()
     {
-        trace(texte : "<< GraphMiniSerie : traceGrapheBarre >>", logLevel : logFuncCalls, scope : scopeGraphe)
-        trace(texte : "<< GraphMiniSerie : traceGrapheBarre >> Params : No Params", logLevel : logFuncParams, scope : scopeGraphe)
-        
         traceUneBarre(noteTVdb,       color: colorTVdb,       offset: 1)
         traceUneBarre(noteTrakt,      color: colorTrakt,      offset: 2)
         traceUneBarre(noteBetaSeries, color: colorBetaSeries, offset: 3)
         traceUneBarre(noteIMDB,       color: colorIMDB,       offset: 4)
         traceUneBarre(noteMoviedb,    color: colorMoviedb,    offset: 5)
-
-        trace(texte : "<< GraphMiniSerie : traceGrapheBarre >> Return : No Return", logLevel : logFuncReturn, scope : scopeGraphe)
     }
     
     
     func traceUneBarre(_ noteX: Int, color: UIColor, offset: Int)
     {
-        trace(texte : "<< GraphMiniSerie : traceUneBarre >>", logLevel : logFuncCalls, scope : scopeGraphe)
-        trace(texte : "<< GraphMiniSerie : traceUneBarre >> Params : noteX=\(noteX), color=\(color), offset=\(offset)", logLevel : logFuncParams, scope : scopeGraphe)
-        
         let nbSource : CGFloat = 5.0
         let col : CGFloat = largeur / (4 * nbSource)
         
@@ -193,31 +161,21 @@ class GraphMiniSerie: UIView {
         
         path.stroke()
         path.fill()
-
-        trace(texte : "<< GraphMiniSerie : traceUneBarre >> Return : No Return", logLevel : logFuncReturn, scope : scopeGraphe)
     }
     
     
     func traceGrapheCercle()
     {
-        trace(texte : "<< GraphMiniSerie : traceGrapheCercle >>", logLevel : logFuncCalls, scope : scopeGraphe)
-        trace(texte : "<< GraphMiniSerie : traceGrapheCercle >> Params : No Params", logLevel : logFuncParams, scope : scopeGraphe)
-        
         traceUnCercle(noteTVdb,       color: colorTVdb,       offset: 1)
         traceUnCercle(noteTrakt,      color: colorTrakt,      offset: 2)
         traceUnCercle(noteBetaSeries, color: colorBetaSeries, offset: 3)
         traceUnCercle(noteIMDB,       color: colorIMDB,       offset: 4)
         traceUnCercle(noteMoviedb,    color: colorMoviedb,    offset: 5)
-
-        trace(texte : "<< GraphMiniSerie : traceGrapheCercle >> Return : No Return", logLevel : logFuncReturn, scope : scopeGraphe)
     }
     
     
     func traceUnCercle(_ noteX: Int, color: UIColor, offset: Int)
     {
-        trace(texte : "<< GraphMiniSerie : traceUnCercle >>", logLevel : logFuncCalls, scope : scopeGraphe)
-        trace(texte : "<< GraphMiniSerie : traceUnCercle >> Params : noteX=\(noteX), color=\(color), offset=\(offset)", logLevel : logFuncParams, scope : scopeGraphe)
-        
         let nbSource : CGFloat = 5.0
         let taille : CGFloat = rayon * CGFloat(noteX) / 100
         
@@ -239,8 +197,6 @@ class GraphMiniSerie: UIView {
         path.stroke()
         
         path.fill()
-
-        trace(texte : "<< GraphMiniSerie : traceUnCercle >> Return : No Return", logLevel : logFuncReturn, scope : scopeGraphe)
     }
     
 

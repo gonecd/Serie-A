@@ -248,52 +248,6 @@ class Serie : NSObject, NSCoding
         }
     }
     
-    
-    //    func getGlobalRating() -> Int
-    //    {
-    //        var total : Int = 0
-    //        var nb : Int = 0
-    //
-    //        if (getFairRatingTrakt() != 0)
-    //        {
-    //            total = total + getFairRatingTrakt()
-    //            nb = nb + 1
-    //        }
-    //
-    //        if (getFairRatingTVdb() != 0)
-    //        {
-    //            total = total + getFairRatingTVdb()
-    //            nb = nb + 1
-    //        }
-    //
-    //        if (getFairRatingBetaSeries() != 0)
-    //        {
-    //            total = total + getFairRatingBetaSeries()
-    //            nb = nb + 1
-    //        }
-    //
-    //        if (getFairRatingMoviedb() != 0)
-    //        {
-    //            total = total + getFairRatingMoviedb()
-    //            nb = nb + 1
-    //        }
-    //
-    //        if (getFairRatingIMdb() != 0)
-    //        {
-    //            total = total + getFairRatingIMdb()
-    //            nb = nb + 1
-    //        }
-    //
-    //        if (nb > 0)
-    //        {
-    //            return Int(Double(total) / Double(nb))
-    //        }
-    //        else
-    //        {
-    //            return 0
-    //        }
-    //    }
-    
     func getFairRatingTrakt() -> Int
     {
         var total : Int = 0
@@ -458,7 +412,8 @@ class Serie : NSObject, NSCoding
         else if (BetaSeries.resume != "") { self.resume = BetaSeries.resume }
         else { self.resume = TVdb.resume }
         
-        if (TVdb.genres != []) { self.genres = TVdb.genres }
+        if (Moviedb.genres != []) { self.genres = Moviedb.genres }
+        else if (TVdb.genres != []) { self.genres = TVdb.genres }
         else if (BetaSeries.genres != []) { self.genres = BetaSeries.genres }
         else { self.genres = Trakt.genres }
         

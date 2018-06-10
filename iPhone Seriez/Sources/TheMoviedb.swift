@@ -14,19 +14,11 @@ class TheMoviedb : NSObject
     
     override init()
     {
-        trace(texte : "<< TheMoviedb : init >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< TheMoviedb : init >> Params : No Params", logLevel : logFuncParams, scope : scopeSource)
-        
         super.init()
-        
-        trace(texte : "<< TheMoviedb : init >> Return : No Return", logLevel : logFuncReturn, scope : scopeSource)
     }
     
     func getEpisodesRatings(_ uneSerie: Serie)
     {
-        trace(texte : "<< TheMoviedb : getEpisodesRatings >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< TheMoviedb : getEpisodesRatings >> Params : uneSerie :\(uneSerie)", logLevel : logFuncParams, scope : scopeSource)
-        
         var request : URLRequest
         var task : URLSessionDataTask
         let today : Date = Date()
@@ -71,15 +63,11 @@ class TheMoviedb : NSObject
             task.resume()
             while (task.state != URLSessionTask.State.completed) { usleep(1000) }
         }
-        trace(texte : "<< TheMoviedb : getEpisodesRatings >> Return : No Return", logLevel : logFuncReturn, scope : scopeSource)
     }
     
     
     func chercher(genreIncl: String, genreExcl: String, anneeBeg: String, anneeEnd: String, langue: String, network: String) -> ([Serie], Int)
     {
-        trace(texte : "<< TheMoviedb : chercher >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< TheMoviedb : chercher >> Params : genreIncl :\(genreIncl), genreExcl :\(genreExcl), anneeBeg :\(anneeBeg), anneeEnd :\(anneeEnd), langue :\(langue), network :\(network), ", logLevel : logFuncParams, scope : scopeSource)
-        
         var listeSeries : [Serie] = []
         var cpt : Int = 0
         
@@ -110,7 +98,6 @@ class TheMoviedb : NSObject
         if (anneeEnd != "") { buildURL = buildURL + "&first_air_date.lte=" + anneeEnd + "-12-31"}
         if (langue != "") { buildURL = buildURL + "&with_original_language=" + langue }
         
-        print("Requesting TheMovieDB : \(buildURL)")
         var request : URLRequest = URLRequest(url: NSURL(string: buildURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)! as URL)
         request.httpMethod = "GET"
 
@@ -129,8 +116,11 @@ class TheMoviedb : NSObject
                             {
                                 let newSerie : Serie = Serie(serie: ((uneSerie as AnyObject).object(forKey: "name") as! String))
                                 newSerie.idMoviedb = String(((uneSerie as AnyObject).object(forKey: "id") as! Int))
-                                print("Ajout de \(newSerie.serie)")
-
+                                let dateTexte : String = (uneSerie as AnyObject).object(forKey: "first_air_date") as? String ?? ""
+                                if (dateTexte.count > 3) {
+                                    newSerie.year = Int(dateTexte.split(separator: "-")[0])!
+                                }
+                                
                                 listeSeries.append(newSerie)
                             }
                         }
@@ -147,16 +137,12 @@ class TheMoviedb : NSObject
 
         usleep(5000)
         
-        trace(texte : "<< TheMoviedb : chercher >> Return : listeSeries=\(listeSeries), cpt=\(cpt)", logLevel : logFuncReturn, scope : scopeSource)
         return (listeSeries, cpt)
     }
     
     
     func getIDs(serie: Serie)
     {
-        trace(texte : "<< TheMoviedb : getIDs >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< TheMoviedb : getIDs >> Params : serie :\(serie)", logLevel : logFuncParams, scope : scopeSource)
-        
         var request : URLRequest = URLRequest(url: NSURL(string: "https://api.themoviedb.org/3/tv/\(serie.idMoviedb)/external_ids?api_key=\(TheMoviedbUserkey)&language=en-US")! as URL)
         request.httpMethod = "GET"
         
@@ -180,14 +166,10 @@ class TheMoviedb : NSObject
         })
         task.resume()
         while (task.state != URLSessionTask.State.completed) { usleep(1000) }
-        trace(texte : "<< TheMoviedb : getIDs >> Return : No Return", logLevel : logFuncReturn, scope : scopeSource)
     }
     
     func getSerieGlobalInfos(idMovieDB : String) -> Serie
     {
-        trace(texte : "<< TheMoviedb : getSerieGlobalInfos >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< TheMoviedb : getSerieGlobalInfos >> Params : idMovieDB :\(idMovieDB)", logLevel : logFuncParams, scope : scopeSource)
-        
         let uneSerie : Serie = Serie(serie: "")
         var request : URLRequest
         let dateFormatter = DateFormatter()
@@ -263,16 +245,12 @@ class TheMoviedb : NSObject
         task.resume()
         while (task.state != URLSessionTask.State.completed) { usleep(1000) }
         
-        trace(texte : "<< TheMoviedb : getSerieGlobalInfos >> Return : uneSerie=\(uneSerie)", logLevel : logFuncReturn, scope : scopeSource)
         return uneSerie
     }
     
     
     func getSimilarShows(movieDBid : String) -> (names : [String], ids : [String])
     {
-        trace(texte : "<< TheMoviedb : getSimilarShows >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< TheMoviedb : getSimilarShows >> Params : movieDBid=\(movieDBid)", logLevel : logFuncParams, scope : scopeSource)
-        
         var showNames : [String] = []
         var showIds : [String] = []
         var ended : Bool = false
@@ -323,15 +301,11 @@ class TheMoviedb : NSObject
         task.resume()
         while (!ended) { usleep(1000) }
         
-        trace(texte : "<< TheMoviedb : getSerieGlobalInfos >> Return : showNames=\(showNames), showIds=\(showIds)", logLevel : logFuncReturn, scope : scopeSource)
         return (showNames, showIds)
     }
     
     func getTrendingShows() -> (names : [String], ids : [String])
     {
-        trace(texte : "<< TheMoviedb : getTrendingShows >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< TheMoviedb : getTrendingShows >> Params : No Params", logLevel : logFuncParams, scope : scopeSource)
-        
         var showNames : [String] = []
         var showIds : [String] = []
         var ended : Bool = false
@@ -380,15 +354,11 @@ class TheMoviedb : NSObject
         task.resume()
         while (!ended) { usleep(1000) }
         
-        trace(texte : "<< TheMoviedb : getTrendingShows >> Return : showNames=\(showNames), showIds=\(showIds)", logLevel : logFuncReturn, scope : scopeSource)
         return (showNames, showIds)
     }
     
     func getPopularShows() -> (names : [String], ids : [String])
     {
-        trace(texte : "<< TheMoviedb : getPopularShows >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< TheMoviedb : getPopularShows >> Params : No Params", logLevel : logFuncParams, scope : scopeSource)
-        
         var showNames : [String] = []
         var showIds : [String] = []
         var ended : Bool = false
@@ -438,16 +408,12 @@ class TheMoviedb : NSObject
         task.resume()
         while (!ended) { usleep(1000) }
         
-        trace(texte : "<< TheMoviedb : getPopularShows >> Return : showNames=\(showNames), showIds=\(showIds)", logLevel : logFuncReturn, scope : scopeSource)
         return (showNames, showIds)
     }
     
     
     func getReviews(movieDBid : String) -> (comments : [String], likes : [Int], dates : [Date], source : [Int])
     {
-        trace(texte : "<< TheMoviedb : getReviews >>", logLevel : logFuncCalls, scope : scopeSource)
-        trace(texte : "<< TheMoviedb : getReviews >> Params : movieDBid=\(movieDBid)", logLevel : logFuncParams, scope : scopeSource)
-        
         var ended : Bool = false
         var foundComments : [String] = []
         var foundLikes : [Int] = []
@@ -488,7 +454,6 @@ class TheMoviedb : NSObject
         task.resume()
         while (!ended) { usleep(1000) }
         
-        trace(texte : "<< TheMoviedb : getReviews >> Return : foundComments=\(foundComments), foundLikes=\(foundLikes), foundDates=\(foundDates), foundSource=\(foundSource)", logLevel : logFuncReturn, scope : scopeSource)
         return (foundComments, foundLikes, foundDates, foundSource)
     }
 }
