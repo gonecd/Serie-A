@@ -8,8 +8,6 @@
 
 import Foundation
 
-// Path to data source = https://datasets.imdbws.com/title.ratings.tsv.gz
-
 
 class IMdb : NSObject
 {
@@ -24,18 +22,25 @@ class IMdb : NSObject
     {
         print("IMdb::Loading Ref")
         
-        if let filepath = Bundle.main.path(forResource: "data", ofType: "tsv") {
-            do {
-                let contents = try String(contentsOfFile: filepath)
-                let rows = contents.components(separatedBy: "\n")
-                for row in rows {
-                    let columns = row.components(separatedBy: "\t")
-                    IMDBrates.setValue(row, forKey: columns[0])
-                }
-            } catch {
-                print("IMdb::Loading Ref failed")
+        if FileManager.default.fileExists(atPath: IMdbDir.appendingPathComponent("ratings.tsv").path) {
+            let contents = try! String(contentsOfFile: IMdbDir.appendingPathComponent("ratings.tsv").path)
+            let rows = contents.components(separatedBy: "\n")
+            for row in rows {
+                let columns = row.components(separatedBy: "\t")
+                IMDBrates.setValue(row, forKey: columns[0])
             }
         }
+    }
+    
+    func downloadData()
+    {
+        if FileManager.default.fileExists(atPath: IMdbDir.appendingPathComponent("ratings.tsv").path) {
+            try! FileManager.default.removeItem(at: IMdbDir.appendingPathComponent("ratings.tsv"))
+        }
+        
+        let rawData = NSData(contentsOf: URL(string: "https://datasets.imdbws.com/title.ratings.tsv.gz")!)
+        let unzippedData : Data = rawData! as Data
+        try! unzippedData.gunzipped().write(to: IMdbDir.appendingPathComponent("ratings.tsv"))
     }
     
     

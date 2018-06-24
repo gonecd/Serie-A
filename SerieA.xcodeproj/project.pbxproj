@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		621B1D9D20D665B800F4F3BD /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 621B1D9C20D665B800F4F3BD /* Configuration.swift */; };
+		621B1DB020D6998200F4F3BD /* Data+Gzip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 621B1DAF20D6998200F4F3BD /* Data+Gzip.swift */; };
 		6224A5E32041F30200450812 /* ViewSerieListe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6224A5E22041F30200450812 /* ViewSerieListe.swift */; };
 		6224A5E52042207800450812 /* Constantes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6224A5E42042207800450812 /* Constantes.swift */; };
 		6224A5E72043141800450812 /* GraphMiniSerie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6224A5E62043141800450812 /* GraphMiniSerie.swift */; };
@@ -71,7 +73,22 @@
 		62FF97DB2039AAFC007B658E /* Trash-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97DA2039AAFC007B658E /* Trash-icon.png */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		621B1DA520D6917F00F4F3BD /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		621B1D9C20D665B800F4F3BD /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
+		621B1DAF20D6998200F4F3BD /* Data+Gzip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+Gzip.swift"; sourceTree = "<group>"; };
 		6224A5E22041F30200450812 /* ViewSerieListe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewSerieListe.swift; sourceTree = "<group>"; };
 		6224A5E42042207800450812 /* Constantes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constantes.swift; sourceTree = "<group>"; };
 		6224A5E62043141800450812 /* GraphMiniSerie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphMiniSerie.swift; sourceTree = "<group>"; };
@@ -149,6 +166,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		621B1DAA20D6945A00F4F3BD /* External */ = {
+			isa = PBXGroup;
+			children = (
+				621B1DAF20D6998200F4F3BD /* Data+Gzip.swift */,
+			);
+			path = External;
+			sourceTree = "<group>";
+		};
 		624D87492043323A00AFDA06 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
@@ -199,6 +224,7 @@
 				62DD87A91FB7838400A9B9EE /* SerieFiche.swift */,
 				62AC509F200E58A200A8C841 /* SaisonFiche.swift */,
 				62F8ECF32013775800A41EF7 /* EpisodeFiche.swift */,
+				621B1D9C20D665B800F4F3BD /* Configuration.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -275,6 +301,7 @@
 			isa = PBXGroup;
 			children = (
 				62DD876F1FB766C600A9B9EE /* AppDelegate.swift */,
+				621B1DAA20D6945A00F4F3BD /* External */,
 				626D472A204C6EB700B1A64D /* Data */,
 				624D874D204332BC00AFDA06 /* Images */,
 				624D87492043323A00AFDA06 /* Sources */,
@@ -317,6 +344,7 @@
 				62DD87681FB766C600A9B9EE /* Sources */,
 				62DD87691FB766C600A9B9EE /* Frameworks */,
 				62DD876A1FB766C600A9B9EE /* Resources */,
+				621B1DA520D6917F00F4F3BD /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -413,6 +441,7 @@
 			files = (
 				62B4D8B6208B9E08002110E8 /* GraphConseil.swift in Sources */,
 				62DD87AA1FB7838400A9B9EE /* SerieFiche.swift in Sources */,
+				621B1D9D20D665B800F4F3BD /* Configuration.swift in Sources */,
 				62DD87AF1FB89E7D00A9B9EE /* Episode.swift in Sources */,
 				62B4D8B4208B9BF4002110E8 /* ViewConseil.swift in Sources */,
 				62D0EBBD204C374B009774B6 /* TheMoviedb.swift in Sources */,
@@ -425,6 +454,7 @@
 				626D4727204C624500B1A64D /* Notes.swift in Sources */,
 				62DD87BA1FB8C15600A9B9EE /* BetaSeries.swift in Sources */,
 				62DD87B21FB8A2E000A9B9EE /* Graph.swift in Sources */,
+				621B1DB020D6998200F4F3BD /* Data+Gzip.swift in Sources */,
 				627A0E2820139E8300FE1777 /* GraphSaison.swift in Sources */,
 				627A0E2A20139E9900FE1777 /* GraphEpisode.swift in Sources */,
 				62DD87A41FB76F5D00A9B9EE /* TheTVdb.swift in Sources */,
@@ -581,6 +611,14 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = MXLKZ7P9DM;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/iPhone\\ Seriez",
+					"$(PROJECT_DIR)/iPhone\\ Seriez",
+					"$(PROJECT_DIR)/iPhone\\ Seriez",
+					"$(PROJECT_DIR)/iPhone\\ Seriez/Controllers",
+					"$(PROJECT_DIR)/iPhone\\ Seriez/Controllers",
+				);
 				INFOPLIST_FILE = "iPhone Seriez/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Home.SerieA;
@@ -598,6 +636,14 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = MXLKZ7P9DM;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/iPhone\\ Seriez",
+					"$(PROJECT_DIR)/iPhone\\ Seriez",
+					"$(PROJECT_DIR)/iPhone\\ Seriez",
+					"$(PROJECT_DIR)/iPhone\\ Seriez/Controllers",
+					"$(PROJECT_DIR)/iPhone\\ Seriez/Controllers",
+				);
 				INFOPLIST_FILE = "iPhone Seriez/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Home.SerieA;

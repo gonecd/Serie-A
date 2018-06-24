@@ -196,7 +196,7 @@ class TheMoviedb : NSObject
                             uneSerie.network = ((jsonResponse.object(forKey: "networks") as! NSArray).object(at: 0) as! NSDictionary).object(forKey: "name") as? String ?? ""
                         }
                         uneSerie.poster = jsonResponse.object(forKey: "poster_path") as? String ?? ""
-                        if (uneSerie.poster != "") { uneSerie.poster = "https://image.tmdb.org/t/p/w92/" + uneSerie.poster }
+                        if (uneSerie.poster != "") { uneSerie.poster = "https://image.tmdb.org/t/p/w92" + uneSerie.poster }
                         uneSerie.status = jsonResponse.object(forKey: "status") as? String ?? ""
                         uneSerie.resume = jsonResponse.object(forKey: "overview") as? String ?? ""
                         uneSerie.ratingMovieDB = Int(10 * (jsonResponse.object(forKey: "vote_average") as? Double ?? 0.0))

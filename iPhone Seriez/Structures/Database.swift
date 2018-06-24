@@ -12,6 +12,13 @@ class Database : NSObject
 {
 
     var shows : [Serie] = []
+    var valSeriesFinies : Int = 0
+    var valSeriesEnCours : Int = 0
+    var valSaisonsOnTheAir : Int = 0
+    var valSaisonsDiffusees : Int = 0
+    var valSaisonsAnnoncees : Int = 0
+    var valWatchList : Int = 0
+    var valSeriesAbandonnees : Int = 0
 
     override init()
     {
@@ -54,25 +61,21 @@ class Database : NSObject
     
     func saveDB ()
     {
-        if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-            let pathToSVG = dir.appendingPathComponent("SerieA.db")
-            if (NSKeyedArchiver.archiveRootObject(shows, toFile: pathToSVG.path) == false) {
-                print ("Echec de la sauvegarde")
-            }
+        let pathToSVG = AppDir.appendingPathComponent("SerieA.db")
+        if (NSKeyedArchiver.archiveRootObject(shows, toFile: pathToSVG.path) == false) {
+            print ("Echec de la sauvegarde")
         }
     }
     
     func loadDB ()
     {
-        if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-            let pathToSVG = dir.appendingPathComponent("SerieA.db")
-            if (FileManager.default.fileExists(atPath: pathToSVG.path))
-            {
-                shows = (NSKeyedUnarchiver.unarchiveObject(withFile: pathToSVG.path) as? [Serie])!
-                shows = shows.sorted(by:  { $0.serie < $1.serie })
-
-                refreshSeasonDates()
-            }
+        let pathToSVG = AppDir.appendingPathComponent("SerieA.db")
+        if (FileManager.default.fileExists(atPath: pathToSVG.path))
+        {
+            shows = (NSKeyedUnarchiver.unarchiveObject(withFile: pathToSVG.path) as? [Serie])!
+            shows = shows.sorted(by:  { $0.serie < $1.serie })
+            
+            refreshSeasonDates()
         }
     }
     
@@ -111,6 +114,55 @@ class Database : NSObject
         return db
     }
     
+    func updateCompteurs()
+    {
+        let today : Date = Date()
+        valSeriesFinies = 0
+        valSeriesEnCours = 0
+        valSaisonsOnTheAir = 0
+        valSaisonsDiffusees = 0
+        valSaisonsAnnoncees = 0
+        valWatchList = 0
+        valSeriesAbandonnees = 0
+
+        for uneSerie in db.shows
+        {
+            if (uneSerie.unfollowed) { valSeriesAbandonnees = valSeriesAbandonnees + 1 }
+            if (uneSerie.watchlist) { valWatchList = valWatchList + 1 }
+            if (uneSerie.saisons.count > 0)
+            {
+                let lastSaison : Saison = uneSerie.saisons[uneSerie.saisons.count - 1]
+                
+                if ( (lastSaison.watched == true) && (uneSerie.status == "Ended") ) { valSeriesFinies = valSeriesFinies + 1 }
+                if ( ((lastSaison.watched == false) || (uneSerie.status != "Ended")) && (uneSerie.unfollowed == false) && (uneSerie.watchlist == false) ) { valSeriesEnCours = valSeriesEnCours + 1 }
+            }
+            
+            for uneSaison in uneSerie.saisons
+            {
+                if ( (uneSaison.starts != ZeroDate) &&
+                    (uneSaison.starts.compare(today) == .orderedAscending) &&
+                    ((uneSaison.ends.compare(today) == .orderedDescending)  || (uneSaison.ends == ZeroDate)) &&
+                    (uneSaison.watched == false)  &&
+                    (uneSerie.watchlist == false) &&
+                    (uneSerie.unfollowed == false) )
+                { valSaisonsOnTheAir = valSaisonsOnTheAir + 1 }
+                
+                if ( (uneSaison.starts != ZeroDate) &&
+                    (uneSaison.ends.compare(today) == .orderedAscending) &&
+                    (uneSaison.ends != ZeroDate) &&
+                    (uneSaison.watched == false) &&
+                    (uneSerie.watchlist == false) &&
+                    (uneSerie.unfollowed == false) )
+                { valSaisonsDiffusees = valSaisonsDiffusees + 1 }
+                
+                if ( (uneSaison.starts.compare(today) == .orderedDescending) &&
+                    (uneSerie.watchlist == false) &&
+                    (uneSerie.unfollowed == false) )
+                { valSaisonsAnnoncees = valSaisonsAnnoncees + 1 }
+            }
+        }
+        
+    }
     
     
 

@@ -10,7 +10,42 @@ import UIKit
 
 var imagesCache : NSCache = NSCache<NSString, UIImage>()
 
+
+func checkDirectories()
+{
+    do
+    {
+        if (FileManager.default.fileExists(atPath: PosterDir.path) == false) {
+            try FileManager.default.createDirectory(at: PosterDir, withIntermediateDirectories: false, attributes: nil)
+        }
+        
+        if (FileManager.default.fileExists(atPath: IMdbDir.path) == false) {
+            try FileManager.default.createDirectory(at: IMdbDir, withIntermediateDirectories: false, attributes: nil)
+        }
+    }
+    catch let error as NSError { print(error.localizedDescription); }
+}
+
+
 func getImage(_ url: String) -> UIImage
+{
+    if (url == "") { return UIImage() }
+    
+    let pathToImage = PosterDir.appendingPathComponent(URL(string: url)!.lastPathComponent).path
+    
+    if (FileManager.default.fileExists(atPath: pathToImage))
+    {
+        return UIImage(contentsOfFile: pathToImage)!
+    }
+    else
+    {
+        let imageData = NSData(contentsOf: URL(string: url)!)
+        imageData?.write(toFile: pathToImage, atomically: true)
+        return UIImage(data: imageData! as Data)!
+    }
+}
+
+func getImageCached(_ url: String) -> UIImage
 {
     if (url == "") { return UIImage() }
     
@@ -67,7 +102,11 @@ func makeGradiant(carre : UIView, couleur : String)
     {
         myGradient.colors = [UIColor(red: 0.0, green: 80.0/255.0, blue: 0.0, alpha: 1.0).cgColor, UIColor(red: 0.0, green: 143.0/255.0, blue: 0.0, alpha: 1.0).cgColor]
     }
-    
+    else if (couleur == "Gris")
+    {
+        myGradient.colors = [UIColor.darkGray.cgColor, UIColor.gray.cgColor]
+    }
+
     myGradient.startPoint = CGPoint(x: 0, y: 0)
     myGradient.endPoint = CGPoint(x: 1, y: 1)
     myGradient.frame = carre.bounds
@@ -80,7 +119,6 @@ func makeGradiant(carre : UIView, couleur : String)
     carre.layer.shadowRadius = 10.0
     
     carre.layer.insertSublayer(myGradient, at: 0)
-    
 }
 
 

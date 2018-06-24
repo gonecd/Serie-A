@@ -28,25 +28,24 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
     @IBOutlet weak var roue: UIActivityIndicatorView!
     @IBOutlet weak var labelSerie: UILabel!
     @IBOutlet weak var labelSaison: UILabel!
+    @IBOutlet weak var episodesList: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         banniere.image = image
-        theTVdb.getSerieInfosLight(uneSerie: serie)
         labelSerie.text = serie.serie
         labelSaison.text = "Saison " + String(saison)
-        
+        graphe.setNeedsDisplay()
         
         DispatchQueue.global(qos: .utility).async {
             
             DispatchQueue.main.async { self.roue.startAnimating() }
             
+            theTVdb.getSerieInfosLight(uneSerie: self.serie)
+            DispatchQueue.main.async { self.episodesList.reloadData() }
+
             if (self.serie.idTVdb != "") { theTVdb.getEpisodesRatings(self.serie) }
-            self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
-            DispatchQueue.main.async { self.graphe.setNeedsDisplay() }
-            
-            if (self.serie.idTrakt != "") { trakt.getEpisodesRatings(self.serie) }
             self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
             DispatchQueue.main.async { self.graphe.setNeedsDisplay() }
             
@@ -62,6 +61,10 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
             self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
             DispatchQueue.main.async { self.graphe.setNeedsDisplay() }
 
+            if (self.serie.idTrakt != "") { trakt.getEpisodesRatings(self.serie) }
+            self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
+            DispatchQueue.main.async { self.graphe.setNeedsDisplay() }
+            
             db.saveDB()
             
             DispatchQueue.main.async { self.roue.stopAnimating() }

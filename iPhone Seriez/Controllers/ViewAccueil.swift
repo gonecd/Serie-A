@@ -28,15 +28,14 @@ class ViewAccueil: UIViewController  {
     @IBOutlet weak var cadreSerieFinie: UIView!
     @IBOutlet weak var cadreRecherche: UIView!
     @IBOutlet weak var cadreConseil: UIView!
+    @IBOutlet weak var cadreConfiguration: UIView!
     
     
     override func viewDidLoad()
     {
         super.viewDidLoad()
 
-        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(handleGesture))
-        swipeDown.direction = .down
-        self.view.addGestureRecognizer(swipeDown)
+        checkDirectories()
         
         // Faire des jolis carrés dégradés à coins ronds
         makeGradiant(carre: cadreSerieAbandonnee, couleur : "Bleu")
@@ -48,6 +47,8 @@ class ViewAccueil: UIViewController  {
         makeGradiant(carre: cadreSerieWatchlist, couleur : "Vert")
         makeGradiant(carre: cadreRecherche, couleur : "Vert")
         makeGradiant(carre: cadreConseil, couleur : "Vert")
+        makeGradiant(carre: cadreConseil, couleur : "Vert")
+        makeGradiant(carre: cadreConfiguration, couleur : "Gris")
 
         // Faire des jolis compteurs à coins ronds
         arrondir(texte: cptSeriesFinies, radius : 10.0)
@@ -61,69 +62,28 @@ class ViewAccueil: UIViewController  {
         // Initialisation sources de données
         if (trakt.start() == false)
         {
-            print("Problème d'initialisation de la connexion à Trakt")
+            print("Le token trakt a du être reloadé car trop vieux")
         }
         theTVdb.initializeToken()
         imdb.loadDataFile()
         
         // Chargement de la dernière sauvegarde
         db.loadDB()
-        updateCompteurs()
+        db.updateCompteurs()
     }
-    
-    @objc func handleGesture(gesture: UISwipeGestureRecognizer) -> Void {
-        print("Gesture vers le bas")
-        
-    }
-    
-    @IBAction func downloadStatuses(_ sender: Any)
-    {
-        var reloadSeries : [Serie] = [Serie]()
-        reloadSeries = trakt.getWatched()
-        for uneSerie in db.shows { trakt.getSaisons(uneSerie: uneSerie) }
-        reloadSeries = db.merge(reloadSeries, adds: trakt.getStopped())
-        reloadSeries = db.merge(reloadSeries, adds: trakt.getWatchlist())
-        
-        db.shows = db.mergeStatuses(db.shows, adds: reloadSeries)
-        db.saveDB()
-        
-        self.updateCompteurs()
-        self.view.setNeedsDisplay()
-    }
-   
-    
-    @IBAction func downloadAll(_ sender: Any)
-    {
-        db.shows = trakt.getWatched()
-        for uneSerie in db.shows { trakt.getSaisons(uneSerie: uneSerie) }
-        db.shows = db.merge(db.shows, adds: trakt.getStopped())
-        db.shows = db.merge(db.shows, adds: trakt.getWatchlist())
-        
-        let infoWindow : UIAlertController = UIAlertController(title: "Loading ...", message: "", preferredStyle: UIAlertControllerStyle.alert)
-        self.present(infoWindow, animated: true, completion: { })
-        
-        DispatchQueue.global(qos: .utility).async {
-            
-            let totalCompteur : Int = db.shows.count
-            var compteur : Int = 0
-            
-            for uneSerie in db.shows
-            {
-                compteur = compteur + 1
-                DispatchQueue.main.async { infoWindow.message = "\(uneSerie.serie) (\(compteur)/\(totalCompteur))" }
-                db.downloadGlobalInfo(serie: uneSerie)
-            }
-            
-            infoWindow.dismiss(animated: true, completion: { })
-            
-            DispatchQueue.main.async {
-                db.saveDB()
-                self.updateCompteurs()
-            }
-        }
-  }
     
 
+    override func viewDidAppear(_ animated: Bool) {
+        cptSeriesFinies.text = String(db.valSeriesFinies)
+        cptSeriesEnCours.text = String(db.valSeriesEnCours)
+        cptSaisonsOnTheAir.text = String(db.valSaisonsOnTheAir)
+        cptSaisonsDiffusees.text = String(db.valSaisonsDiffusees)
+        cptSaisonsAnnoncees.text = String(db.valSaisonsAnnoncees)
+        cptWatchList.text = String(db.valWatchList)
+        cptSeriesAbandonnees.text = String(db.valSeriesAbandonnees)
+    }
+    
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -252,63 +212,6 @@ class ViewAccueil: UIViewController  {
             print("Passer à la fenêtre \(bouton.titleLabel?.text ?? "")")
             
         }
-    }
-    
-    func updateCompteurs()
-    {
-        var valSeriesFinies : Int = 0
-        var valSeriesEnCours : Int = 0
-        var valSaisonsOnTheAir : Int = 0
-        var valSaisonsDiffusees : Int = 0
-        var valSaisonsAnnoncees : Int = 0
-        var ValWatchList : Int = 0
-        var valSeriesAbandonnees : Int = 0
-        let today : Date = Date()
-        
-        for uneSerie in db.shows
-        {
-            if (uneSerie.unfollowed) { valSeriesAbandonnees = valSeriesAbandonnees + 1 }
-            if (uneSerie.watchlist) { ValWatchList = ValWatchList + 1 }
-            if (uneSerie.saisons.count > 0)
-            {
-                let lastSaison : Saison = uneSerie.saisons[uneSerie.saisons.count - 1]
-                
-                if ( (lastSaison.watched == true) && (uneSerie.status == "Ended") ) { valSeriesFinies = valSeriesFinies + 1 }
-                if ( ((lastSaison.watched == false) || (uneSerie.status != "Ended")) && (uneSerie.unfollowed == false) && (uneSerie.watchlist == false) ) { valSeriesEnCours = valSeriesEnCours + 1 }
-            }
-            
-            for uneSaison in uneSerie.saisons
-            {
-                if ( (uneSaison.starts != ZeroDate) &&
-                    (uneSaison.starts.compare(today) == .orderedAscending) &&
-                    ((uneSaison.ends.compare(today) == .orderedDescending)  || (uneSaison.ends == ZeroDate)) &&
-                    (uneSaison.watched == false)  &&
-                    (uneSerie.watchlist == false) &&
-                    (uneSerie.unfollowed == false) )
-                { valSaisonsOnTheAir = valSaisonsOnTheAir + 1 }
-
-                if ( (uneSaison.starts != ZeroDate) &&
-                    (uneSaison.ends.compare(today) == .orderedAscending) &&
-                    (uneSaison.ends != ZeroDate) &&
-                    (uneSaison.watched == false) &&
-                    (uneSerie.watchlist == false) &&
-                    (uneSerie.unfollowed == false) )
-                { valSaisonsDiffusees = valSaisonsDiffusees + 1 }
-
-                if ( (uneSaison.starts.compare(today) == .orderedDescending) &&
-                    (uneSerie.watchlist == false) &&
-                    (uneSerie.unfollowed == false) )
-                { valSaisonsAnnoncees = valSaisonsAnnoncees + 1 }
-            }
-        }
-        
-        cptSeriesFinies.text = String(valSeriesFinies)
-        cptSeriesEnCours.text = String(valSeriesEnCours)
-        cptSaisonsOnTheAir.text = String(valSaisonsOnTheAir)
-        cptSaisonsDiffusees.text = String(valSaisonsDiffusees)
-        cptSaisonsAnnoncees.text = String(valSaisonsAnnoncees)
-        cptWatchList.text = String(ValWatchList)
-        cptSeriesAbandonnees.text = String(valSeriesAbandonnees)
     }
     
  

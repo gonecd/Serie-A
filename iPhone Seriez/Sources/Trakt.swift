@@ -43,7 +43,7 @@ class Trakt : NSObject
         }
         else
         {
-            self.downloadToken(key: "8AC2DD53")
+            self.downloadToken(key: "181595F0")
             
             return false
         }
@@ -212,7 +212,7 @@ class Trakt : NSObject
     
     func removeFromWatchlist(theTVdbId : String) -> Bool
     {
-       var success : Bool = false
+        var success : Bool = false
         var request = URLRequest(url: URL(string: "https://api.trakt.tv/sync/watchlist/remove")!)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -387,7 +387,7 @@ class Trakt : NSObject
         
         task.resume()
         while (task.state != URLSessionTask.State.completed) { sleep(1) }
- 
+        
         return returnSeries
     }
     
@@ -433,11 +433,11 @@ class Trakt : NSObject
         
         task.resume()
         while (task.state != URLSessionTask.State.completed) { sleep(1) }
- 
+        
         return returnSeries
     }
     
-
+    
     func getSerieGlobalInfos(idTraktOrIMDB : String) -> Serie
     {
         let uneSerie : Serie = Serie(serie: "")
@@ -489,9 +489,10 @@ class Trakt : NSObject
     
     func getSaisons(uneSerie : Serie)
     {
-       let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        //dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+
         var request = URLRequest(url: URL(string: "https://api.trakt.tv/shows/\(uneSerie.idTrakt)/seasons?extended=full")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("Bearer \(self.Token)", forHTTPHeaderField: "Authorization")
@@ -521,15 +522,17 @@ class Trakt : NSObject
                                 }
                                 
                                 let stringDate : String = ((uneSaison as! NSDictionary).object(forKey: "first_aired")) as? String ?? ""
-                                if (stringDate !=  "") { uneSerie.saisons[saisonNum - 1].starts = dateFormatter.date(from: stringDate)! }
+                                //if (stringDate !=  "") { uneSerie.saisons[saisonNum - 1].starts = dateFormatter.date(from: stringDate)! }
+                                if (stringDate !=  "") { uneSerie.saisons[saisonNum - 1].starts = dateFormatter.date(from: String(stringDate.dropLast(14)))! }
                             }
                             else
                             {
                                 let ficheSaison : Saison = Saison(serie: uneSerie.serie, saison: saisonNum)
                                 ficheSaison.nbEpisodes = ((uneSaison as! NSDictionary).object(forKey: "episode_count")) as? Int ?? 0
                                 let stringDate : String = ((uneSaison as! NSDictionary).object(forKey: "first_aired")) as? String ?? ""
-                                if (stringDate !=  "") { ficheSaison.starts = dateFormatter.date(from: stringDate)! }
-                                
+                                //if (stringDate !=  "") { ficheSaison.starts = dateFormatter.date(from: stringDate)! }
+                                if (stringDate !=  "") { ficheSaison.starts = dateFormatter.date(from: String(stringDate.dropLast(14)))! }
+
                                 uneSerie.saisons.append(ficheSaison)
                             }
                         }
@@ -540,7 +543,7 @@ class Trakt : NSObject
         
         task.resume()
         while (task.state != URLSessionTask.State.completed) { usleep(1000) }
-
+        
     }
     
     
@@ -664,7 +667,7 @@ class Trakt : NSObject
         task.resume()
         while (!ended) { usleep(1000) }
         
-       return (showNames, showIds)
+        return (showNames, showIds)
     }
     
     func getTrendingShows() -> (names : [String], ids : [String])
@@ -719,12 +722,12 @@ class Trakt : NSObject
         var ended : Bool = false
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-
+        
         var foundComments : [String] = []
         var foundLikes : [Int] = []
         var foundDates : [Date] = []
         var foundSource : [Int] = []
-
+        
         if (episode == 0)
         {
             if (season == 0)
@@ -740,7 +743,7 @@ class Trakt : NSObject
         {
             stringURL = "https://api.trakt.tv/shows/\(IMDBid)/seasons/\(season)/episodes/\(episode)/comments/likes"
         }
-
+        
         
         var request = URLRequest(url: URL(string: stringURL)!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -782,7 +785,7 @@ class Trakt : NSObject
         
         return (foundComments, foundLikes, foundDates, foundSource)
     }
-
+    
 }
 
 

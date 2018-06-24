@@ -9,7 +9,9 @@
 import UIKit
 
 let ZeroDate : Date = Date.init(timeIntervalSince1970: 0)
-
+let AppDir : URL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+let PosterDir : URL = AppDir.appendingPathComponent("poster")
+let IMdbDir : URL = AppDir.appendingPathComponent("imdb")
 
 // Structures globales
 var trakt       : Trakt      = Trakt.init()

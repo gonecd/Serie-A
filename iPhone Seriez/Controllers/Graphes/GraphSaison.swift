@@ -98,7 +98,7 @@ class GraphSaison: UIView {
         let origineX : CGFloat = 30.0
         let largeur : CGFloat = (self.frame.width - origineX - 10.0)
 
-        for i:Int in 0 ..< nbEpisodes
+        for i:Int in 0 ..< theSaison.episodes.count
         {
             let offset : CGFloat = (largeur * (CGFloat(i)+0.5) / CGFloat(nbEpisodes))
 

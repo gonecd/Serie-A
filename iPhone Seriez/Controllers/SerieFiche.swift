@@ -102,11 +102,12 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
         self.graphe.sendSerie(self.serie)
         self.graphe.setNeedsDisplay()
         
-        theTVdb.getSerieInfosLight(uneSerie: serie)
         
         DispatchQueue.global(qos: .utility).async {
             
             DispatchQueue.main.async { self.roue.startAnimating() }
+            
+            theTVdb.getSerieInfosLight(uneSerie: self.serie)
             
             self.webOpinions = theMoviedb.getReviews(movieDBid: self.serie.idMoviedb)
             DispatchQueue.main.async { self.viewComments.reloadData() }
