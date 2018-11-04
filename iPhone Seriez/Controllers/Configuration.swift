@@ -14,6 +14,7 @@ class Configuration: UIViewController
     @IBOutlet weak var progresSource: UIProgressView!
     @IBOutlet weak var labelIMDB: UILabel!
     @IBOutlet weak var boutonIMDB: UIButton!
+    @IBOutlet weak var encours: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,8 +42,8 @@ class Configuration: UIViewController
             for uneSerie in db.shows
             {
                 showNum = showNum + 1
-                getImage(uneSerie.banner)
-                getImage(uneSerie.poster)
+                _ = getImage(uneSerie.banner)
+                _ = getImage(uneSerie.poster)
                 DispatchQueue.main.async { self.progresData.setProgress(Float(showNum)/nbShows, animated: true) }
             }
 
@@ -66,46 +67,17 @@ class Configuration: UIViewController
     
     
     
-    @IBAction func loadDatesSaisons(_ sender: Any) {
-        progresData.setProgress(0.0, animated: false)
-        progresData.isHidden = false
-        
-        DispatchQueue.global(qos: .utility).async {
-            
-            let nbShows : Float = Float(db.shows.count)
-            var showNum : Int = 0
-            for uneSerie in db.shows
-            {
-                showNum = showNum + 1
-                if ( (uneSerie.unfollowed == false) && (uneSerie.watchlist == false) && (uneSerie.status != "Ended") )
-                {
-                    for uneSaison in uneSerie.saisons
-                    {
-                        uneSerie.saisons[uneSaison.saison - 1].ends = betaSeries.getLastEpisodeDate(TVdbId : uneSerie.idTVdb, saison : uneSaison.saison, episode : uneSerie.saisons[uneSaison.saison - 1].nbEpisodes)
-                    }
-                    
-                }
-                DispatchQueue.main.async { self.progresData.setProgress(Float(showNum)/nbShows, animated: true) }
-            }
-            DispatchQueue.main.async {
-                self.progresData.isHidden = true
-                db.saveDB()
-                db.updateCompteurs()
-            }
-        }
-    }
-    
-    
-    
     @IBAction func loadAll(_ sender: Any) {
         
         progresData.setProgress(0.0, animated: false)
         progresData.isHidden = false
-        
+        encours.isHidden = false
+
         db.shows = trakt.getWatched()
-        for uneSerie in db.shows { trakt.getSaisons(uneSerie: uneSerie) }
         db.shows = db.merge(db.shows, adds: trakt.getStopped())
         db.shows = db.merge(db.shows, adds: trakt.getWatchlist())
+        
+        encours.isHidden = false
         
         DispatchQueue.global(qos: .utility).async {
             
@@ -115,31 +87,13 @@ class Configuration: UIViewController
             for uneSerie in db.shows
             {
                 showNum = showNum + 1
-                DispatchQueue.main.async { self.progresData.setProgress(Float(showNum)/nbShows, animated: true) }
+                DispatchQueue.main.async {
+                    self.progresData.setProgress(Float(showNum)/nbShows, animated: true)
+                    self.encours.text = uneSerie.serie
+                }
+                
+                trakt.getSaisons(uneSerie: uneSerie)
                 db.downloadGlobalInfo(serie: uneSerie)
-            }
-            
-            DispatchQueue.main.async {
-                db.saveDB()
-                db.updateCompteurs()
-                self.progresData.isHidden = true
-            }
-        }
-    }
-    
-    
-    
-    @IBAction func loadSaisonDetails(_ sender: Any) {
-        progresData.setProgress(0.0, animated: false)
-        progresData.isHidden = false
-        
-        DispatchQueue.global(qos: .utility).async {
-            
-            let nbShows : Float = Float(db.shows.count)
-            var showNum : Int = 0
-            for uneSerie in db.shows
-            {
-                showNum = showNum + 1
                 
                 if ((uneSerie.watchlist == false) && (uneSerie.unfollowed == false))
                 {
@@ -153,13 +107,14 @@ class Configuration: UIViewController
                         if (uneSerie.idTrakt != "") { trakt.getEpisodesRatings(uneSerie) }
                     }
                 }
-                
-                DispatchQueue.main.async { self.progresData.setProgress(Float(showNum)/nbShows, animated: true) }
             }
+            
             DispatchQueue.main.async {
-                self.progresData.isHidden = true
                 db.saveDB()
+                db.shows = db.shows.sorted(by: { $0.serie < $1.serie })
                 db.updateCompteurs()
+                self.progresData.isHidden = true
+                self.encours.isHidden = true
             }
         }
     }
@@ -179,7 +134,7 @@ class Configuration: UIViewController
             DispatchQueue.main.async { self.labelIMDB.text = "Lecture ..." }
             imdb.loadDataFile()
             
-            DispatchQueue.main.async { self.labelIMDB.text = "Distribution ..." }
+            DispatchQueue.main.async { self.labelIMDB.text = "Projection ..." }
             let nbShows : Float = Float(db.shows.count)
             var showNum : Int = 0
             var tmpSerie : Serie

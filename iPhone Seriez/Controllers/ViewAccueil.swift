@@ -60,10 +60,7 @@ class ViewAccueil: UIViewController  {
         arrondir(texte: cptWatchList, radius : 10.0)
         
         // Initialisation sources de données
-        if (trakt.start() == false)
-        {
-            print("Le token trakt a du être reloadé car trop vieux")
-        }
+        _ = trakt.start()
         theTVdb.initializeToken()
         imdb.loadDataFile()
         

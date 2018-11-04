@@ -16,6 +16,7 @@ class Saison : NSObject, NSCoding
     var episodes : [Episode] = [Episode]()
 
     var nbEpisodes : Int = 0
+    var nbWatchedEps : Int = 0
     var starts : Date = ZeroDate
     var ends : Date = ZeroDate
     
@@ -33,6 +34,7 @@ class Saison : NSObject, NSCoding
         self.episodes = decoder.decodeObject(forKey: "episodes") as? [Episode] ?? []
         
         self.nbEpisodes = decoder.decodeInteger(forKey: "nbEpisodes")
+        self.nbWatchedEps = decoder.decodeInteger(forKey: "nbWatchedEps")
         self.starts = decoder.decodeObject(forKey: "starts") as? Date ?? ZeroDate
         self.ends = decoder.decodeObject(forKey: "ends") as? Date ?? ZeroDate
 
@@ -45,6 +47,7 @@ class Saison : NSObject, NSCoding
         coder.encode(self.episodes, forKey: "episodes")
         
         coder.encodeCInt(Int32(self.nbEpisodes), forKey: "nbEpisodes")
+        coder.encodeCInt(Int32(self.nbWatchedEps), forKey: "nbWatchedEps")
         coder.encode(self.starts, forKey: "starts")
         coder.encode(self.ends, forKey: "ends")
 
@@ -143,7 +146,8 @@ class Saison : NSObject, NSCoding
     {
         if (uneSaison.serie != "")         { self.serie = uneSaison.serie }
         if (uneSaison.saison != 0)         { self.saison = uneSaison.saison }
-        
+        if (uneSaison.nbWatchedEps != 0)   { self.nbWatchedEps = uneSaison.nbWatchedEps }
+
         for unEpisode in uneSaison.episodes
         {
             if (unEpisode.episode <= self.episodes.count)
@@ -155,19 +159,15 @@ class Saison : NSObject, NSCoding
                 self.episodes.append(unEpisode)
             }
         }
+        if (uneSaison.nbEpisodes != 0)    { self.nbEpisodes = uneSaison.nbEpisodes }
+        if (uneSaison.starts != ZeroDate) { self.starts = uneSaison.starts }
+        if (uneSaison.ends != ZeroDate)   { self.ends = uneSaison.ends }
     }
 
     func mergeStatuses(_ updatedSaison : Saison)
     {
         self.watched = updatedSaison.watched
-        
-        for updatedEpisode in updatedSaison.episodes
-        {
-            if (updatedEpisode.episode <= self.episodes.count)
-            {
-                self.episodes[updatedEpisode.episode - 1].mergeStatuses(updatedEpisode)
-            }
-        }
+        self.nbWatchedEps = updatedSaison.nbWatchedEps
     }
 
 }

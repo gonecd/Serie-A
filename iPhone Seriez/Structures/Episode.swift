@@ -15,8 +15,6 @@ class Episode : NSObject, NSCoding
     var saison : Int = 0
     var episode : Int = 0
     
-    var watched : Bool = false
-    
     // Source TheTVdb
     var ratingTVdb : Int = 0
     var ratersTVdb : Int = 0
@@ -53,7 +51,6 @@ class Episode : NSObject, NSCoding
         self.serie = decoder.decodeObject(forKey: "serie") as? String ?? ""
         self.saison = decoder.decodeInteger(forKey: "saison")
         self.episode = decoder.decodeInteger(forKey: "episode")
-        self.watched = decoder.decodeBool(forKey: "watched")
         self.ratingTVdb = decoder.decodeInteger(forKey: "ratingTVdb")
         self.idTVdb = decoder.decodeInteger(forKey: "idTVdb")
         self.idIMdb = decoder.decodeObject(forKey: "idIMdb") as? String ?? ""
@@ -75,7 +72,6 @@ class Episode : NSObject, NSCoding
         coder.encode(self.serie, forKey: "serie")
         coder.encodeCInt(Int32(self.saison), forKey: "saison")
         coder.encodeCInt(Int32(self.episode), forKey: "episode")
-        coder.encode(self.watched, forKey: "watched")
         coder.encode(self.ratingTVdb, forKey: "ratingTVdb")
         coder.encodeCInt(Int32(self.idTVdb), forKey: "idTVdb")
         coder.encode(self.idIMdb, forKey: "idIMdb")
@@ -164,7 +160,6 @@ class Episode : NSObject, NSCoding
         if (unEpisode.serie != "")             { self.serie = unEpisode.serie }
         if (unEpisode.saison != 0)             { self.saison = unEpisode.saison }
         if (unEpisode.episode != 0)            { self.episode = unEpisode.episode }
-        if (unEpisode.watched != false)        { self.watched = unEpisode.watched }
         if (unEpisode.ratingTVdb != 0)         { self.ratingTVdb = unEpisode.ratingTVdb }
         if (unEpisode.ratersTVdb != 0)         { self.ratersTVdb = unEpisode.ratersTVdb }
         if (unEpisode.idTVdb != 0)             { self.idTVdb = unEpisode.idTVdb }
@@ -180,12 +175,6 @@ class Episode : NSObject, NSCoding
         if (unEpisode.ratersIMdb != 0)         { self.ratersIMdb = unEpisode.ratersIMdb }
         if (unEpisode.ratingMoviedb != 0)      { self.ratingMoviedb = unEpisode.ratingMoviedb }
         if (unEpisode.ratersMoviedb != 0)      { self.ratersMoviedb = unEpisode.ratersMoviedb }
-    }
-    
-    
-    func mergeStatuses(_ updatedEpisode : Episode)
-    {
-        self.watched = updatedEpisode.watched
     }
     
 }

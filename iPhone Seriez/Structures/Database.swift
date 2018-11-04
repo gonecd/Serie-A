@@ -46,16 +46,9 @@ class Database : NSObject
         
         serie.cleverMerge(TVdb: dataTVdb, Moviedb: dataMoviedb, Trakt: dataTrakt, BetaSeries: dataBetaSeries, IMDB: dataIMDB)
         
-        if (serie.unfollowed == false)
+        for numsaison in 0..<serie.saisons.count
         {
-            for numsaison in 0..<serie.saisons.count
-            {
-                //                if (saison.watched == false)
-                //                {
-                //serie.saisons[saison.saison - 1].ends = trakt.getLastEpisodeDate(traktID : serie.idTrakt, saison : saison.saison, episode : serie.saisons[saison.saison - 1].nbEpisodes)
-                serie.saisons[numsaison].ends = betaSeries.getLastEpisodeDate(TVdbId : serie.idTVdb, saison : numsaison+1, episode : serie.saisons[numsaison].nbEpisodes)
-                //                }
-            }
+            serie.saisons[numsaison].ends = betaSeries.getLastEpisodeDate(TVdbId : serie.idTVdb, saison : numsaison+1, episode : serie.saisons[numsaison].nbEpisodes)
         }
     }
     
@@ -73,7 +66,7 @@ class Database : NSObject
         if (FileManager.default.fileExists(atPath: pathToSVG.path))
         {
             shows = (NSKeyedUnarchiver.unarchiveObject(withFile: pathToSVG.path) as? [Serie])!
-            shows = shows.sorted(by:  { $0.serie < $1.serie })
+            shows = shows.sorted(by: { $0.serie < $1.serie })
             
             refreshSeasonDates()
         }

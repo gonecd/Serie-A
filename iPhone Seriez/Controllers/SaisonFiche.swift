@@ -41,7 +41,10 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         DispatchQueue.global(qos: .utility).async {
             
             DispatchQueue.main.async { self.roue.startAnimating() }
-            
+
+            self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
+            DispatchQueue.main.async { self.graphe.setNeedsDisplay() }
+
             theTVdb.getSerieInfosLight(uneSerie: self.serie)
             DispatchQueue.main.async { self.episodesList.reloadData() }
 

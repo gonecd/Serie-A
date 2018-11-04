@@ -386,9 +386,9 @@ class Serie : NSObject, NSCoding
         else if (BetaSeries.language != "") { self.language = BetaSeries.language }
         else { self.language = Moviedb.language }
         
-        if (Moviedb.nbSaisons != 0) { self.nbSaisons = Moviedb.nbSaisons }
-        else { self.nbSaisons = BetaSeries.nbSaisons }
-        
+        if (BetaSeries.nbSaisons != 0) { self.nbSaisons = BetaSeries.nbSaisons }
+        else { self.nbSaisons = Moviedb.nbSaisons }
+
         if (Trakt.nbEpisodes != 0) { self.nbEpisodes = Trakt.nbEpisodes }
         else if (Moviedb.nbEpisodes != 0) { self.nbEpisodes = Moviedb.nbEpisodes }
         else { self.nbEpisodes = BetaSeries.nbEpisodes }

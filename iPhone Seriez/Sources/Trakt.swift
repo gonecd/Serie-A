@@ -43,7 +43,7 @@ class Trakt : NSObject
         }
         else
         {
-            self.downloadToken(key: "181595F0")
+            self.downloadToken(key: "B53B0CDD")
             
             return false
         }
@@ -421,7 +421,7 @@ class Trakt : NSObject
                             let uneSaison : Saison = Saison(serie: ((fiche as AnyObject).object(forKey: "show")! as AnyObject).object(forKey: "title") as! String,
                                                             saison: (fichesaisons as AnyObject).object(forKey: "number") as! Int)
                             uneSaison.watched = true
-                            uneSaison.nbEpisodes = ((fichesaisons as AnyObject).object(forKey: "episodes") as! NSArray).count
+                            uneSaison.nbWatchedEps = ((fichesaisons as AnyObject).object(forKey: "episodes") as! NSArray).count
                             
                             serie.saisons.append(uneSaison)
                         }
@@ -491,7 +491,6 @@ class Trakt : NSObject
     {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
-        //dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
 
         var request = URLRequest(url: URL(string: "https://api.trakt.tv/shows/\(uneSerie.idTrakt)/seasons?extended=full")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -515,14 +514,19 @@ class Trakt : NSObject
                             if (saisonNum <= uneSerie.saisons.count)
                             {
                                 let nbEps : Int = ((uneSaison as! NSDictionary).object(forKey: "episode_count")) as? Int ?? 0
-                                if ( (uneSerie.saisons[saisonNum - 1].nbEpisodes < nbEps) && (uneSerie.serie != "Salem") && (uneSerie.serie != "Penny Dreadful") && (uneSerie.serie != "Seinfeld"))
-                                {
+
+                                if ( (uneSerie.serie != "Penny Dreadful") && (uneSerie.serie != "Seinfeld") && (uneSerie.serie != "Black Books") && (uneSerie.serie != "Salem") ) {
                                     uneSerie.saisons[saisonNum - 1].nbEpisodes = nbEps
+                                }
+                                else {
+                                    uneSerie.saisons[saisonNum - 1].nbEpisodes = uneSerie.saisons[saisonNum - 1].nbWatchedEps
+                                }
+                                
+                                if (uneSerie.saisons[saisonNum - 1].nbWatchedEps < uneSerie.saisons[saisonNum - 1].nbEpisodes) {
                                     uneSerie.saisons[saisonNum - 1].watched = false
                                 }
                                 
                                 let stringDate : String = ((uneSaison as! NSDictionary).object(forKey: "first_aired")) as? String ?? ""
-                                //if (stringDate !=  "") { uneSerie.saisons[saisonNum - 1].starts = dateFormatter.date(from: stringDate)! }
                                 if (stringDate !=  "") { uneSerie.saisons[saisonNum - 1].starts = dateFormatter.date(from: String(stringDate.dropLast(14)))! }
                             }
                             else
@@ -530,7 +534,6 @@ class Trakt : NSObject
                                 let ficheSaison : Saison = Saison(serie: uneSerie.serie, saison: saisonNum)
                                 ficheSaison.nbEpisodes = ((uneSaison as! NSDictionary).object(forKey: "episode_count")) as? Int ?? 0
                                 let stringDate : String = ((uneSaison as! NSDictionary).object(forKey: "first_aired")) as? String ?? ""
-                                //if (stringDate !=  "") { ficheSaison.starts = dateFormatter.date(from: stringDate)! }
                                 if (stringDate !=  "") { ficheSaison.starts = dateFormatter.date(from: String(stringDate.dropLast(14)))! }
 
                                 uneSerie.saisons.append(ficheSaison)
