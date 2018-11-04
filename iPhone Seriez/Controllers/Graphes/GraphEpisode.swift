@@ -41,7 +41,7 @@ class GraphEpisode: UIView {
     
     func background()
     {
-        let textAttributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 10), NSAttributedStringKey.foregroundColor: colorAxis]
+        let textAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 10), NSAttributedString.Key.foregroundColor: colorAxis]
         
         // Lignes
         colorAxis.setStroke()

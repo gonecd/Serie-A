@@ -55,7 +55,7 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        pageControl.addTarget(self, action: #selector(self.changePage(sender:)), for: UIControlEvents.valueChanged)
+        pageControl.addTarget(self, action: #selector(self.changePage(sender:)), for: UIControl.Event.valueChanged)
         
         titre.text = serie.serie
         annee.text = "(" + String(serie.year) + ")"

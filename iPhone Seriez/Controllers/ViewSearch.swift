@@ -142,7 +142,7 @@ class ViewSearch: UIViewController
         // Mode "Par Titre"
         if (mode == 0)
         {
-            if gesture.direction == UISwipeGestureRecognizerDirection.right {
+            if gesture.direction == UISwipeGestureRecognizer.Direction.right {
                 if (self.activeSubView == nil) {
                     if ( (gesture.location(in: self.view).y > 100.0) && (gesture.location(in: self.view).y < 200.0) )
                     {
@@ -156,7 +156,7 @@ class ViewSearch: UIViewController
                     }
                 }
             }
-            else if gesture.direction == UISwipeGestureRecognizerDirection.left {
+            else if gesture.direction == UISwipeGestureRecognizer.Direction.left {
                 if (self.activeSubView != nil) {
                     UIView.animate(withDuration: 0.7, animations: { self.activeSubView.frame.origin.x = -300 } )
                     self.activeSubView = nil
@@ -169,14 +169,14 @@ class ViewSearch: UIViewController
         // Mode "Par Critères"
         if (mode == 1)
         {
-            if gesture.direction == UISwipeGestureRecognizerDirection.right {
+            if gesture.direction == UISwipeGestureRecognizer.Direction.right {
                 if (self.activeSubView != nil) {
                     UIView.animate(withDuration: 0.7, animations: { self.activeSubView.frame.origin.x = 340 } )
                     self.activeSubView = nil
                     self.updateRecherche()
                 }
             }
-            else if gesture.direction == UISwipeGestureRecognizerDirection.left {
+            else if gesture.direction == UISwipeGestureRecognizer.Direction.left {
                 if (self.activeSubView == nil) {
                     if ( (gesture.location(in: self.view).y > 100.0) && (gesture.location(in: self.view).y < 200.0) )
                     {
@@ -436,7 +436,7 @@ class ViewSearch: UIViewController
         
         for uneSerie in seriesTrouvees
         {
-            let uneAction: UIAlertAction = UIAlertAction(title: uneSerie.serie+" ("+String(uneSerie.year)+")", style: UIAlertActionStyle.default) { action -> Void in
+            let uneAction: UIAlertAction = UIAlertAction(title: uneSerie.serie+" ("+String(uneSerie.year)+")", style: UIAlertAction.Style.default) { action -> Void in
                 if (trakt.addToWatchlist(theTVdbId: uneSerie.idTVdb))
                 {
                     db.downloadGlobalInfo(serie: uneSerie)
@@ -449,7 +449,7 @@ class ViewSearch: UIViewController
             actionSheetController.addAction(uneAction)
         }
         
-        let cancelAction: UIAlertAction = UIAlertAction(title: "Annuler", style: UIAlertActionStyle.cancel, handler: doNothing)
+        let cancelAction: UIAlertAction = UIAlertAction(title: "Annuler", style: UIAlertAction.Style.cancel, handler: doNothing)
         actionSheetController.addAction(cancelAction)
         
         present(actionSheetController, animated: true, completion: nil)

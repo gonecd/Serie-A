@@ -82,7 +82,7 @@ class GraphConseil: UIView {
         let origineY :CGFloat = self.frame.height - 30.0
         let hauteur : CGFloat = (self.frame.height - 30.0 - 10.0)
         let largeur : CGFloat = (self.frame.width - origineX - 10.0)
-        let textAttributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 10), NSAttributedStringKey.foregroundColor: colorAxis]
+        let textAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 10), NSAttributedString.Key.foregroundColor: colorAxis]
         let maxCitations : Int = maxConseils
         
         // Lignes
@@ -178,7 +178,7 @@ class GraphConseil: UIView {
         let origineX : CGFloat = 30.0
         let origineY :CGFloat = self.frame.height - 30.0
         let hauteur : CGFloat = (self.frame.height - 30.0 - 10.0)
-        let textAttributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 10), NSAttributedStringKey.foregroundColor: UIColor.black]
+        let textAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 10), NSAttributedString.Key.foregroundColor: UIColor.black]
         
         if (note == 0) { return }
         
@@ -229,7 +229,6 @@ class GraphConseil: UIView {
     
     
     @objc func buttonAction(sender: UIButton!) {
-        //self.vue.showDetails(serie: (sender.titleLabel?.text)!)
         self.vue.showDetails(serie: (sender.restorationIdentifier)!)
     }
     

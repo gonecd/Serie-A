@@ -33,7 +33,7 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        pageControl.addTarget(self, action: #selector(self.changePage(sender:)), for: UIControlEvents.valueChanged)
+        pageControl.addTarget(self, action: #selector(self.changePage(sender:)), for: UIControl.Event.valueChanged)
         webOpinions = trakt.getComments(IMDBid: self.serie.idIMdb, season: saison, episode: episode)
         
         let dateFormatter = DateFormatter()

@@ -48,13 +48,13 @@ class Database : NSObject
         
         if (serie.unfollowed == false)
         {
-            for saison in serie.saisons
+            for numsaison in 0..<serie.saisons.count
             {
-//                if (saison.watched == false)
-//                {
-                    //serie.saisons[saison.saison - 1].ends = trakt.getLastEpisodeDate(traktID : serie.idTrakt, saison : saison.saison, episode : serie.saisons[saison.saison - 1].nbEpisodes)
-                    serie.saisons[saison.saison - 1].ends = betaSeries.getLastEpisodeDate(TVdbId : serie.idTVdb, saison : saison.saison, episode : serie.saisons[saison.saison - 1].nbEpisodes)
-//                }
+                //                if (saison.watched == false)
+                //                {
+                //serie.saisons[saison.saison - 1].ends = trakt.getLastEpisodeDate(traktID : serie.idTrakt, saison : saison.saison, episode : serie.saisons[saison.saison - 1].nbEpisodes)
+                serie.saisons[numsaison].ends = betaSeries.getLastEpisodeDate(TVdbId : serie.idTVdb, saison : numsaison+1, episode : serie.saisons[numsaison].nbEpisodes)
+                //                }
             }
         }
     }

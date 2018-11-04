@@ -34,7 +34,7 @@ class GraphSaison: UIView {
         let origineY :CGFloat = self.frame.height - 30.0
         let hauteur : CGFloat = (self.frame.height - 30.0 - 10.0)
         let largeur : CGFloat = (self.frame.width - origineX - 10.0)
-        let textAttributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 10), NSAttributedStringKey.foregroundColor: colorAxis]
+        let textAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 10), NSAttributedString.Key.foregroundColor: colorAxis]
         let nbEpisodes : Int = theSaison.nbEpisodes
 
         // Lignes
