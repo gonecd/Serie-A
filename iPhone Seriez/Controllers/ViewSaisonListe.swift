@@ -34,7 +34,8 @@ class ViewSaisonListe: UITableViewController {
     var viewList: [Serie] = [Serie]()
     var allSaisons: [Int] = [Int]()
     let dateFormatter = DateFormatter()
-    
+    var grapheType : Int = 0
+
     @IBOutlet var liste: UITableView!
     
     override func viewDidLoad() {
@@ -81,71 +82,35 @@ class ViewSaisonListe: UITableViewController {
         // Affichage du status
         cell.status.layer.cornerRadius = 8
         cell.status.layer.masksToBounds = true
-        if ( (viewList[indexPath.row].status == "Ended") && (allSaisons[indexPath.row] == viewList[indexPath.row].saisons.count) )
-        {
+        if ( (viewList[indexPath.row].status == "Ended") && (allSaisons[indexPath.row] == viewList[indexPath.row].saisons.count) ) {
             cell.status.text = "FINAL"
             cell.status.isHidden = false
         }
-        else
-        {
+        else {
             cell.status.isHidden = true
         }
         
-        if  (self.title == "Saisons prêtes à voir")
-        {
+        if  (self.title == "Saisons prêtes à voir") {
             cell.viewBgd.isHidden = true
             cell.avantapres.isHidden = true
             cell.diffusion.isHidden = true
             cell.jours.isHidden = true
             
-            
-            
-            var totBetaSeriesMoy : Int = 0
-            var totTraktMoy : Int = 0
-            var totTVdbMoy : Int = 0
-            var totMoviedbMoy : Int = 0
-            var totIMdbMoy : Int = 0
-            var nbSeasons = 0
-            
-            for loopSaison in viewList[indexPath.row].saisons
-            {
-                if (loopSaison.saison < allSaisons[indexPath.row])
-                {
-                    totBetaSeriesMoy = totBetaSeriesMoy + loopSaison.getFairRatingBetaSeries()
-                    totTraktMoy = totTraktMoy + loopSaison.getFairRatingTrakt()
-                    totTVdbMoy = totTVdbMoy + loopSaison.getFairRatingTVdb()
-                    totMoviedbMoy = totMoviedbMoy + loopSaison.getFairRatingMoviedb()
-                    totIMdbMoy = totIMdbMoy + loopSaison.getFairRatingIMdb()
-                    nbSeasons = nbSeasons + 1
-                }
-            }
-            
-            cell.miniGraphe.sendNotes(rateTrakt : uneSaison.getFairRatingTrakt(),
-                                      rateTVdb: uneSaison.getFairRatingTVdb(),
-                                      rateBetaSeries: uneSaison.getFairRatingBetaSeries(),
-                                      rateMoviedb: uneSaison.getFairRatingMoviedb(),
-                                      rateIMdb: uneSaison.getFairRatingIMdb(),
-                                      seasonsAverageTrakt: computeValue(noteCurrentSeason : uneSaison.getFairRatingTrakt(), totalPrevSeasons : totTraktMoy, nbPrevSeasons : nbSeasons),
-                                      seasonsAverageTVdb: computeValue(noteCurrentSeason : uneSaison.getFairRatingTVdb(), totalPrevSeasons : totTVdbMoy, nbPrevSeasons : nbSeasons),
-                                      seasonsAverageBetaSeries: computeValue(noteCurrentSeason : uneSaison.getFairRatingBetaSeries(), totalPrevSeasons : totBetaSeriesMoy, nbPrevSeasons : nbSeasons),
-                                      seasonsAverageMoviedb: computeValue(noteCurrentSeason : uneSaison.getFairRatingMoviedb(), totalPrevSeasons : totMoviedbMoy, nbPrevSeasons : nbSeasons),
-                                      seasonsAverageIMdb: computeValue(noteCurrentSeason : uneSaison.getFairRatingIMdb(), totalPrevSeasons : totIMdbMoy, nbPrevSeasons : nbSeasons))
+            cell.miniGraphe.setSerie(serie: viewList[indexPath.row], saison: allSaisons[indexPath.row])
+            cell.miniGraphe.setType(type: grapheType)
             cell.miniGraphe.setNeedsDisplay()
         }
-        else
-        {
+        else {
             cell.miniGraphe.isHidden = true
             
-            if (self.title == "Saisons en diffusion")
-            {
+            if (self.title == "Saisons en diffusion") {
                 cell.avantapres.text = "till"
                 cell.diffusion.text = "completion"
                 let nbJours : Int = daysBetweenDates(startDate: Date(), endDate: uneSaison.ends)
                 cell.jours.text = "J - \(nbJours)"
                 cell.viewBgd.layer.borderColor = UIColor.lightGray.cgColor
             }
-            else
-            {
+            else {
                 cell.avantapres.text = "before"
                 cell.diffusion.text = "return"
                 let nbJours : Int = daysBetweenDates(startDate: Date(), endDate: uneSaison.starts)
@@ -162,17 +127,15 @@ class ViewSaisonListe: UITableViewController {
     }
     
     
-    func computeValue(noteCurrentSeason : Int, totalPrevSeasons : Int, nbPrevSeasons : Int) -> Int
-    {
-        if ((nbPrevSeasons == 0) || (totalPrevSeasons == 0) ) { return 50 }
+    @IBAction func changeGraphe(_ sender: Any) {
+        if (grapheType == 0) { grapheType = 1 }
+        else { grapheType = 0 }
         
-        let moyPrevSeasons : Int = Int( Double(totalPrevSeasons) / Double(nbPrevSeasons) )
-        let difference : Int = Int((Double((noteCurrentSeason - moyPrevSeasons)) / Double(moyPrevSeasons)) * 100 )
-        
-        return (50 + difference)
+        self.liste.reloadData()
+        self.view.setNeedsDisplay()
     }
     
-    
+
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     }
     
@@ -201,7 +164,3 @@ class ViewSaisonListe: UITableViewController {
     }
     
 }
-
-
-
-

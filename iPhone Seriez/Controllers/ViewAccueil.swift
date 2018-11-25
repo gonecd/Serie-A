@@ -202,8 +202,8 @@ class ViewAccueil: UIViewController  {
             viewController.allSaisons = buildListSaisons
             
         case "  Conseil":
-            let viewController = segue.destination as! ViewConseil
-            viewController.title = "Séries conseillées"
+            let viewController = segue.destination as! ViewPropals
+            viewController.title = "Propositions de séries"
 
         default:
             print("Passer à la fenêtre \(bouton.titleLabel?.text ?? "")")
