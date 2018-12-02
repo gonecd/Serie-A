@@ -202,6 +202,9 @@ class GraphMiniSaison: UIView {
     func traceUnTrait(index : Int, nbItem : Int,  note1 : Int, note2 : Int, color: UIColor) {
         color.setStroke()
         
+        if (note1 == 0) { return }
+        if (note2 == 0) { return }
+
         let path : UIBezierPath = UIBezierPath()
         path.lineWidth = 0.5
 
@@ -217,6 +220,8 @@ class GraphMiniSaison: UIView {
     func traceUneSaison(offsetX: CGFloat, note: Int, color: UIColor, diametre : CGFloat) {
         color.setStroke()
         color.withAlphaComponent(0.5).setFill()
+        
+        if (note == 0) { return }
         
         let path : UIBezierPath = UIBezierPath()
         path.addArc(withCenter: CGPoint(x: origineX + offsetX,

@@ -15,9 +15,9 @@ class CellPropal : UICollectionViewCell {
     @IBOutlet weak var note: UITextField!
     @IBOutlet weak var status: UIImageView!
     @IBOutlet weak var statusView: UIView!
+
+    var index: Int = 0
 }
-
-
 
 
 class ViewPropals: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate
@@ -70,8 +70,7 @@ class ViewPropals: UIViewController, UICollectionViewDataSource, UICollectionVie
         if (toggleTrakt.isOn) {
             sourceTrakt.isHidden = false
             
-            switch (critereChooser.selectedSegmentIndex)
-            {
+            switch (critereChooser.selectedSegmentIndex) {
             case 0: self.addShowsToListe(newShows : trakt.getPopularShows(), idType : "IMDB")
             case 1: self.addShowsToListe(newShows : trakt.getTrendingShows(), idType : "IMDB")
             case 2: print("Error")
@@ -85,8 +84,7 @@ class ViewPropals: UIViewController, UICollectionViewDataSource, UICollectionVie
         if (toggleMovieDB.isOn) {
             sourceMovieDB.isHidden = false
             
-            switch (critereChooser.selectedSegmentIndex)
-            {
+            switch (critereChooser.selectedSegmentIndex) {
             case 0: self.addShowsToListe(newShows : theMoviedb.getPopularShows(), idType : "MovieDB")
             case 1: self.addShowsToListe(newShows : theMoviedb.getTrendingShows(), idType : "MovieDB")
             case 2: print("Error")
@@ -100,8 +98,7 @@ class ViewPropals: UIViewController, UICollectionViewDataSource, UICollectionVie
         if (toggleBetaSeries.isOn) {
             sourceBetaSeries.isHidden = false
             
-            switch (critereChooser.selectedSegmentIndex)
-            {
+            switch (critereChooser.selectedSegmentIndex) {
             case 0: self.addShowsToListe(newShows : betaSeries.getPopularShows(), idType : "TVDB")
             case 1: self.addShowsToListe(newShows : betaSeries.getTrendingShows(), idType : "TVDB")
             case 2: print("Error")
@@ -134,6 +131,7 @@ class ViewPropals: UIViewController, UICollectionViewDataSource, UICollectionVie
         cell.poster.image = getImage(allConseils[indexPath.row].serie.poster)
         cell.note.text = String(allConseils[indexPath.row].serie.getGlobalRating()) + " %"
         arrondir(texte: cell.note, radius: 6.0)
+        cell.index = indexPath.row
         
         if (allConseils[indexPath.row].category == categSuivies) {
             if (allConseils[indexPath.row].serie.saisons.count > 0) {
@@ -162,9 +160,11 @@ class ViewPropals: UIViewController, UICollectionViewDataSource, UICollectionVie
         return cell
     }
     
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
     }
+    
     
     func addShowsToListe(newShows : (names : [String], ids : [String]), idType : String) {
         for index in 0..<newShows.names.count {
@@ -258,4 +258,10 @@ class ViewPropals: UIViewController, UICollectionViewDataSource, UICollectionVie
     }
     
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let viewController = segue.destination as! SerieFiche
+        let tableCell : CellPropal = sender as! CellPropal
+        viewController.serie = allConseils[tableCell.index].serie
+        viewController.image = getImage(allConseils[tableCell.index].serie.banner)
+    }
 }

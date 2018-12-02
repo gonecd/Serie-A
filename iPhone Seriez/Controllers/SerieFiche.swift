@@ -200,16 +200,6 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
             viewController.saison = (viewSaisons.indexPathForSelectedRow?.row)! + 1
             viewController.image = getImage(serie.banner)
         }
-        else
-        {
-            let viewController = segue.destination as! ViewConseil
-            viewController.idIMdbToSearch = serie.idIMdb
-            viewController.idMoviedbToSearch = serie.idMoviedb
-            viewController.idTVdbToSearch = serie.idTVdb
-            viewController.serieToSearch = serie.serie
-
-            viewController.title = "Séries similaires"
-        }
     }
     
     

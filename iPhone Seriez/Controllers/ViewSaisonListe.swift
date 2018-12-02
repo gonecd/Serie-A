@@ -101,16 +101,35 @@ class ViewSaisonListe: UITableViewController {
             cell.miniGraphe.setNeedsDisplay()
         }
         else {
-            cell.miniGraphe.isHidden = true
             
             if (self.title == "Saisons en diffusion") {
-                cell.avantapres.text = "till"
-                cell.diffusion.text = "completion"
-                let nbJours : Int = daysBetweenDates(startDate: Date(), endDate: uneSaison.ends)
-                cell.jours.text = "J - \(nbJours)"
-                cell.viewBgd.layer.borderColor = UIColor.lightGray.cgColor
+                if (grapheType == 0) {
+                    cell.miniGraphe.isHidden = true
+                    cell.viewBgd.isHidden = false
+                    cell.avantapres.isHidden = false
+                    cell.diffusion.isHidden = false
+                    cell.jours.isHidden = false
+
+                    cell.avantapres.text = "till"
+                    cell.diffusion.text = "completion"
+                    let nbJours : Int = daysBetweenDates(startDate: Date(), endDate: uneSaison.ends)
+                    cell.jours.text = "J - \(nbJours)"
+                    cell.viewBgd.layer.borderColor = UIColor.lightGray.cgColor
+                }
+                else {
+                    cell.miniGraphe.isHidden = false
+                    cell.viewBgd.isHidden = true
+                    cell.avantapres.isHidden = true
+                    cell.diffusion.isHidden = true
+                    cell.jours.isHidden = true
+
+                    cell.miniGraphe.setSerie(serie: viewList[indexPath.row], saison: allSaisons[indexPath.row])
+                    cell.miniGraphe.setType(type: grapheType)
+                    cell.miniGraphe.setNeedsDisplay()
+                }
             }
             else {
+                cell.miniGraphe.isHidden = true
                 cell.avantapres.text = "before"
                 cell.diffusion.text = "return"
                 let nbJours : Int = daysBetweenDates(startDate: Date(), endDate: uneSaison.starts)
