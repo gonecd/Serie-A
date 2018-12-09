@@ -43,6 +43,9 @@ class Serie : NSObject, NSCoding
     var ratersBetaSeries : Int = 0
     var ratingMovieDB : Int = 0
     var ratersMovieDB : Int = 0
+    var ratingTVmaze : Int = 0
+    var ratingRottenTomatoes : Int = 0
+
     var country : String = ""
     var language : String = ""
     var runtime : Int = 0
@@ -88,7 +91,9 @@ class Serie : NSObject, NSCoding
         self.ratersBetaSeries = decoder.decodeInteger(forKey: "ratersBetaSeries")
         self.ratingMovieDB = decoder.decodeInteger(forKey: "ratingMovieDB")
         self.ratersMovieDB = decoder.decodeInteger(forKey: "ratersMovieDB")
-        
+        self.ratingTVmaze = decoder.decodeInteger(forKey: "ratingTVmaze")
+        self.ratingRottenTomatoes = decoder.decodeInteger(forKey: "ratingRottenTomatoes")
+
         self.country = decoder.decodeObject(forKey: "country") as? String ?? ""
         self.language = decoder.decodeObject(forKey: "language") as? String ?? ""
         self.runtime = decoder.decodeInteger(forKey: "runtime")
@@ -128,7 +133,9 @@ class Serie : NSObject, NSCoding
         coder.encodeCInt(Int32(self.ratersBetaSeries), forKey: "ratersBetaSeries")
         coder.encodeCInt(Int32(self.ratingMovieDB), forKey: "ratingMovieDB")
         coder.encodeCInt(Int32(self.ratersMovieDB), forKey: "ratersMovieDB")
-        
+        coder.encodeCInt(Int32(self.ratingTVmaze), forKey: "ratingTVmaze")
+        coder.encodeCInt(Int32(self.ratingRottenTomatoes), forKey: "ratingRottenTomatoes")
+
         coder.encode(self.country, forKey: "country")
         coder.encode(self.language, forKey: "language")
         coder.encodeCInt(Int32(self.runtime), forKey: "runtime")
@@ -166,6 +173,8 @@ class Serie : NSObject, NSCoding
         if (uneSerie.ratersBetaSeries != 0) { self.ratersBetaSeries = uneSerie.ratersBetaSeries }
         if (uneSerie.ratingMovieDB != 0)    { self.ratingMovieDB = uneSerie.ratingMovieDB }
         if (uneSerie.ratersMovieDB != 0)    { self.ratersMovieDB = uneSerie.ratersMovieDB }
+        if (uneSerie.ratingTVmaze != 0)     { self.ratingTVmaze = uneSerie.ratingTVmaze }
+        if (uneSerie.ratingRottenTomatoes != 0)      { self.ratingRottenTomatoes = uneSerie.ratingRottenTomatoes }
         
         if (uneSerie.country != "")         { self.country = uneSerie.country }
         if (uneSerie.language != "")        { self.language = uneSerie.language }
@@ -235,6 +244,18 @@ class Serie : NSObject, NSCoding
         if (getFairGlobalRatingIMdb() != 0)
         {
             total = total + getFairGlobalRatingIMdb()
+            nb = nb + 1
+        }
+        
+        if (getFairGlobalRatingTVmaze() != 0)
+        {
+            total = total + getFairGlobalRatingTVmaze()
+            nb = nb + 1
+        }
+        
+        if (getFairGlobalRatingRottenTomatoes() != 0)
+        {
+            total = total + getFairGlobalRatingRottenTomatoes()
             nb = nb + 1
         }
         
@@ -333,7 +354,7 @@ class Serie : NSObject, NSCoding
         return 0
     }
     
-    func cleverMerge(TVdb : Serie, Moviedb : Serie, Trakt : Serie, BetaSeries : Serie, IMDB : Serie)
+    func cleverMerge(TVdb : Serie, Moviedb : Serie, Trakt : Serie, BetaSeries : Serie, IMDB : Serie, RottenTomatoes : Serie, TVmaze : Serie)
     {
         if (Trakt.serie != "") { self.serie = Trakt.serie }
         else if (Moviedb.serie != "") { self.serie = Moviedb.serie }
@@ -366,7 +387,10 @@ class Serie : NSObject, NSCoding
         self.ratersBetaSeries = BetaSeries.ratersBetaSeries
         self.ratersMovieDB = Moviedb.ratersMovieDB
         self.ratersIMDB = IMDB.ratersIMDB
-        
+
+        self.ratingTVmaze = TVmaze.ratingTVmaze
+        self.ratingRottenTomatoes = RottenTomatoes.ratingRottenTomatoes
+
         if (Trakt.country != "") { self.country = Trakt.country }
         else { self.country = Moviedb.country }
         
@@ -497,6 +521,24 @@ class Serie : NSObject, NSCoding
     {
         if (ratersIMDB == 0) { return 0 }
         let val : Int =  Int( notesMid + (notesRange * Double(ratingIMDB - moyenneIMDB) / ecartTypeIMDB))
+        
+        if (val < 0) { return 0}
+        else if (val > 100) { return 100 }
+        else { return val }
+    }
+    
+    func getFairGlobalRatingTVmaze() -> Int
+    {
+        let val : Int =  Int( notesMid + (notesRange * Double(ratingTVmaze - moyenneTVmaze) / ecartTypeTVmaze))
+        
+        if (val < 0) { return 0}
+        else if (val > 100) { return 100 }
+        else { return val }
+    }
+    
+    func getFairGlobalRatingRottenTomatoes() -> Int
+    {
+        let val : Int =  Int( notesMid + (notesRange * Double(ratingRottenTomatoes - moyenneRottenTomatoes) / ecartTypeRottenTomatoes))
         
         if (val < 0) { return 0}
         else if (val > 100) { return 100 }

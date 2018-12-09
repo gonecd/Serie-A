@@ -14,11 +14,14 @@ let PosterDir : URL = AppDir.appendingPathComponent("poster")
 let IMdbDir : URL = AppDir.appendingPathComponent("imdb")
 
 // Structures globales
-var trakt       : Trakt      = Trakt.init()
-var theTVdb     : TheTVdb    = TheTVdb.init()
-var betaSeries  : BetaSeries = BetaSeries.init()
-var theMoviedb  : TheMoviedb = TheMoviedb.init()
-var imdb        : IMdb       = IMdb.init()
+var trakt          : Trakt          = Trakt.init()
+var theTVdb        : TheTVdb        = TheTVdb.init()
+var betaSeries     : BetaSeries     = BetaSeries.init()
+var theMoviedb     : TheMoviedb     = TheMoviedb.init()
+var imdb           : IMdb           = IMdb.init()
+var tvMaze         : TVmaze         = TVmaze.init()
+var rottenTomatoes : RottenTomatoes = RottenTomatoes.init()
+
 var db          : Database   = Database.init()
 
 // Code des source
@@ -36,16 +39,21 @@ let correctionMoviedb       : Int = 75
 let correctionIMdb          : Int = 86
 
 // Corrections statistiques pour les séries
-var moyenneIMDB         : Int       = 85
-var ecartTypeIMDB       : Double    = 5.945
-var moyenneTVdb         : Int       = 84
-var ecartTypeTVdb       : Double    = 5.873
-var moyenneTrakt        : Int       = 84
-var ecartTypeTrakt      : Double    = 5.467
-var moyenneMovieDB      : Int       = 75
-var ecartTypeMovieDB    : Double    = 6.590
-var moyenneBetaSeries   : Int       = 88
-var ecartTypeBetaSeries : Double    = 6.199
+var moyenneIMDB         : Int       = 81
+var ecartTypeIMDB       : Double    = 6.254
+var moyenneTVdb         : Int       = 81
+var ecartTypeTVdb       : Double    = 7.829
+var moyenneTrakt        : Int       = 80
+var ecartTypeTrakt      : Double    = 6.181
+var moyenneMovieDB      : Int       = 74
+var ecartTypeMovieDB    : Double    = 6.702
+var moyenneBetaSeries   : Int       = 85
+var ecartTypeBetaSeries : Double    = 7.638
+var moyenneTVmaze       : Int       = 81
+var ecartTypeTVmaze     : Double    = 6.252
+var moyenneRottenTomatoes   : Int       = 81
+var ecartTypeRottenTomatoes : Double    = 12.323
+
 
 // Corrections statistiques pour les épisodes
 var moyenneIMDBeps         : Int       = 86
@@ -68,11 +76,13 @@ let popularShowsPerSource       : Int = 10
 
 
 // Couleurs de remplissage des sources
-let colorTrakt      : UIColor = UIColor.red
-let colorTVdb       : UIColor = UIColor.gray
-let colorBetaSeries : UIColor = UIColor.blue
-let colorIMDB       : UIColor = UIColor.orange
-let colorMoviedb    : UIColor = UIColor.green
+let colorTrakt          : UIColor = UIColor.red
+let colorTVdb           : UIColor = UIColor.gray
+let colorBetaSeries     : UIColor = UIColor.blue
+let colorIMDB           : UIColor = UIColor.orange
+let colorMoviedb        : UIColor = UIColor.green
+let colorTVmaze         : UIColor = UIColor.yellow
+let colorRottenTomatoes : UIColor = UIColor.brown
 
 let colorBackground : UIColor = UIColor.lightGray
 let colorAxis       : UIColor = UIColor.darkGray

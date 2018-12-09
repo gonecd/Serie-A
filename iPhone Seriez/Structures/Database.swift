@@ -43,8 +43,10 @@ class Database : NSObject
         let dataBetaSeries : Serie = betaSeries.getSerieGlobalInfos(idTVDB : serie.idTVdb, idIMDB : serie.idIMdb)
         let dataTrakt : Serie = trakt.getSerieGlobalInfos(idTraktOrIMDB: serie.idIMdb)
         let dataIMDB : Serie = imdb.getSerieGlobalInfos(idIMDB: serie.idIMdb)
-        
-        serie.cleverMerge(TVdb: dataTVdb, Moviedb: dataMoviedb, Trakt: dataTrakt, BetaSeries: dataBetaSeries, IMDB: dataIMDB)
+        let dataTVmaze : Serie = tvMaze.getSerieGlobalInfos(idTVDB : serie.idTVdb, idIMDB : serie.idIMdb)
+        let dataRotten : Serie = rottenTomatoes.getSerieGlobalInfos(serie : serie.serie)
+
+        serie.cleverMerge(TVdb: dataTVdb, Moviedb: dataMoviedb, Trakt: dataTrakt, BetaSeries: dataBetaSeries, IMDB: dataIMDB, RottenTomatoes: dataRotten, TVmaze: dataTVmaze)
         
         for numsaison in 0..<serie.saisons.count
         {

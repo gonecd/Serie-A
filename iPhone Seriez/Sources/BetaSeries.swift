@@ -85,7 +85,7 @@ class BetaSeries : NSObject
         let uneSerie : Serie = Serie(serie: "")
         var request : URLRequest
         
-        if (idTVDB != "")       { request = URLRequest(url: URL(string: "https://api.betaseries.com/shows/display?v=3.0&imdb_id=\(idIMDB)")!) }
+        if (idIMDB != "")       { request = URLRequest(url: URL(string: "https://api.betaseries.com/shows/display?v=3.0&imdb_id=\(idIMDB)")!) }
         else if (idTVDB != "")  { request = URLRequest(url: URL(string: "https://api.betaseries.com/shows/display?v=3.0&thetvdb_id=\(idTVDB)")!) }
         else                    { return uneSerie }
         

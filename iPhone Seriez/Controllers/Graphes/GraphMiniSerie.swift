@@ -14,6 +14,7 @@ class GraphMiniSerie: UIView {
     var noteBetaSeries : Int = 0
     var noteIMDB : Int = 0
     var noteRottenTomatoes : Int = 0
+    var noteTVmaze : Int = 0
     var noteMoviedb : Int = 0
     
     var origineX : CGFloat = 0.0
@@ -62,19 +63,20 @@ class GraphMiniSerie: UIView {
         grapheType = type
     }
     
-    func sendNotes(rateTrakt : Int, rateTVdb : Int, rateBetaSeries : Int, rateMoviedb : Int, rateIMdb : Int)
+    func sendNotes(rateTrakt : Int, rateTVdb : Int, rateBetaSeries : Int, rateMoviedb : Int, rateIMdb : Int, rateTVmaze : Int, rateRottenTomatoes : Int)
     {
         noteTrakt = rateTrakt
         noteTVdb = rateTVdb
         noteBetaSeries = rateBetaSeries
         noteIMDB = rateIMdb
-        noteRottenTomatoes = 71
+        noteRottenTomatoes = rateRottenTomatoes
+        noteTVmaze = rateTVmaze
         noteMoviedb = rateMoviedb
     }
     
     func backgroundCercles()
     {
-        let nbSource : CGFloat = 5.0
+        let nbSource : CGFloat = 7.0
 
         // Couleur des lignes
         colorAxis.setStroke()
@@ -90,7 +92,7 @@ class GraphMiniSerie: UIView {
         path.stroke()
         
         
-        for i in 1...5 {
+        for i in 1...7 {
             path.move(to: CGPoint(x: centreX + rayon*cos(2 * .pi * CGFloat(i) / nbSource), y:centreY + rayon*sin(2 * .pi * CGFloat(i) / nbSource)))
             path.addLine(to: CGPoint(x: centreX, y: centreY))
             path.stroke()
@@ -135,17 +137,19 @@ class GraphMiniSerie: UIView {
     
     func traceGrapheBarre()
     {
-        traceUneBarre(noteTVdb,       color: colorTVdb,       offset: 1)
-        traceUneBarre(noteTrakt,      color: colorTrakt,      offset: 2)
-        traceUneBarre(noteBetaSeries, color: colorBetaSeries, offset: 3)
-        traceUneBarre(noteIMDB,       color: colorIMDB,       offset: 4)
-        traceUneBarre(noteMoviedb,    color: colorMoviedb,    offset: 5)
+        traceUneBarre(noteTVdb,           color: colorTVdb,           offset: 1)
+        traceUneBarre(noteTrakt,          color: colorTrakt,          offset: 2)
+        traceUneBarre(noteBetaSeries,     color: colorBetaSeries,     offset: 3)
+        traceUneBarre(noteIMDB,           color: colorIMDB,           offset: 4)
+        traceUneBarre(noteMoviedb,        color: colorMoviedb,        offset: 5)
+        traceUneBarre(noteTVmaze,         color: colorTVmaze,         offset: 6)
+        traceUneBarre(noteRottenTomatoes, color: colorRottenTomatoes, offset: 7)
     }
     
     
     func traceUneBarre(_ noteX: Int, color: UIColor, offset: Int)
     {
-        let nbSource : CGFloat = 5.0
+        let nbSource : CGFloat = 7.0
         let col : CGFloat = largeur / (4 * nbSource)
         
         color.setStroke()
@@ -166,17 +170,19 @@ class GraphMiniSerie: UIView {
     
     func traceGrapheCercle()
     {
-        traceUnCercle(noteTVdb,       color: colorTVdb,       offset: 1)
-        traceUnCercle(noteTrakt,      color: colorTrakt,      offset: 2)
-        traceUnCercle(noteBetaSeries, color: colorBetaSeries, offset: 3)
-        traceUnCercle(noteIMDB,       color: colorIMDB,       offset: 4)
-        traceUnCercle(noteMoviedb,    color: colorMoviedb,    offset: 5)
+        traceUnCercle(noteTVdb,           color: colorTVdb,           offset: 1)
+        traceUnCercle(noteTrakt,          color: colorTrakt,          offset: 2)
+        traceUnCercle(noteBetaSeries,     color: colorBetaSeries,     offset: 3)
+        traceUnCercle(noteIMDB,           color: colorIMDB,           offset: 4)
+        traceUnCercle(noteMoviedb,        color: colorMoviedb,        offset: 5)
+        traceUnCercle(noteTVmaze,         color: colorTVmaze,         offset: 6)
+        traceUnCercle(noteRottenTomatoes, color: colorRottenTomatoes, offset: 7)
     }
     
     
     func traceUnCercle(_ noteX: Int, color: UIColor, offset: Int)
     {
-        let nbSource : CGFloat = 5.0
+        let nbSource : CGFloat = 7.0
         let taille : CGFloat = rayon * CGFloat(noteX) / 100
         
         color.setStroke()

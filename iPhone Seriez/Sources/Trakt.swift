@@ -43,7 +43,7 @@ class Trakt : NSObject
         }
         else
         {
-            self.downloadToken(key: "B53B0CDD")
+            self.downloadToken(key: "9B97024E")
             
             return false
         }

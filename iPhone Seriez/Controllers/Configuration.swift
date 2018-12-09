@@ -76,7 +76,7 @@ class Configuration: UIViewController
         db.shows = trakt.getWatched()
         db.shows = db.merge(db.shows, adds: trakt.getStopped())
         db.shows = db.merge(db.shows, adds: trakt.getWatchlist())
-        
+
         encours.isHidden = false
         
         DispatchQueue.global(qos: .utility).async {
