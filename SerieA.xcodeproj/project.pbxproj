@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2A85242E5F52E97EB7C05F39 /* Pods_SerieA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A21F0479BBD9521083FD9EAA /* Pods_SerieA.framework */; };
+		6210217521EBA91D00849E6E /* tvmaze.ico in Resources */ = {isa = PBXBuildFile; fileRef = 6210217421EBA91C00849E6E /* tvmaze.ico */; };
 		6217308221BC22C300D37350 /* Allocine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6217308121BC22C300D37350 /* Allocine.swift */; };
 		6217308421BC22DE00D37350 /* RottenTomatoes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6217308321BC22DE00D37350 /* RottenTomatoes.swift */; };
 		6217308621BC22EE00D37350 /* TVmaze.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6217308521BC22EE00D37350 /* TVmaze.swift */; };
@@ -63,6 +64,8 @@
 		62DD87B71FB8BE4F00A9B9EE /* trakt.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62DD87B41FB8BE4F00A9B9EE /* trakt.ico */; };
 		62DD87B81FB8BE4F00A9B9EE /* betaseries.png in Resources */ = {isa = PBXBuildFile; fileRef = 62DD87B51FB8BE4F00A9B9EE /* betaseries.png */; };
 		62DD87BA1FB8C15600A9B9EE /* BetaSeries.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD87B91FB8C15500A9B9EE /* BetaSeries.swift */; };
+		62F2233E21E0F40F0032A6E3 /* Eye-2-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62F2233D21E0F40F0032A6E3 /* Eye-2-icon.png */; };
+		62F2234021E120E00032A6E3 /* Refresh-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62F2233F21E120DF0032A6E3 /* Refresh-icon.png */; };
 		62F8ECF42013775800A41EF7 /* EpisodeFiche.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F8ECF32013775800A41EF7 /* EpisodeFiche.swift */; };
 		62FF97C02038C9A3007B658E /* themoviedb.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97BF2038C9A3007B658E /* themoviedb.ico */; };
 		62FF97CE2039016B007B658E /* Stop-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97CA2039016A007B658E /* Stop-icon.png */; };
@@ -91,6 +94,7 @@
 
 /* Begin PBXFileReference section */
 		4B2CE9C75E7B8A1EB0761711 /* Pods-SerieA.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SerieA.release.xcconfig"; path = "Pods/Target Support Files/Pods-SerieA/Pods-SerieA.release.xcconfig"; sourceTree = "<group>"; };
+		6210217421EBA91C00849E6E /* tvmaze.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = tvmaze.ico; sourceTree = "<group>"; };
 		6217308121BC22C300D37350 /* Allocine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Allocine.swift; sourceTree = "<group>"; };
 		6217308321BC22DE00D37350 /* RottenTomatoes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RottenTomatoes.swift; sourceTree = "<group>"; };
 		6217308521BC22EE00D37350 /* TVmaze.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVmaze.swift; sourceTree = "<group>"; };
@@ -148,6 +152,8 @@
 		62DD87B41FB8BE4F00A9B9EE /* trakt.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = trakt.ico; sourceTree = "<group>"; };
 		62DD87B51FB8BE4F00A9B9EE /* betaseries.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = betaseries.png; sourceTree = "<group>"; };
 		62DD87B91FB8C15500A9B9EE /* BetaSeries.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BetaSeries.swift; sourceTree = "<group>"; };
+		62F2233D21E0F40F0032A6E3 /* Eye-2-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Eye-2-icon.png"; sourceTree = "<group>"; };
+		62F2233F21E120DF0032A6E3 /* Refresh-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Refresh-icon.png"; sourceTree = "<group>"; };
 		62F8ECF32013775800A41EF7 /* EpisodeFiche.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeFiche.swift; sourceTree = "<group>"; };
 		62FF97BF2038C9A3007B658E /* themoviedb.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = themoviedb.ico; sourceTree = "<group>"; };
 		62FF97CA2039016A007B658E /* Stop-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Stop-icon.png"; sourceTree = "<group>"; };
@@ -265,6 +271,7 @@
 				62FF97BF2038C9A3007B658E /* themoviedb.ico */,
 				62DD87B51FB8BE4F00A9B9EE /* betaseries.png */,
 				62DD87B31FB8BE4F00A9B9EE /* thetvdb.png */,
+				6210217421EBA91C00849E6E /* tvmaze.ico */,
 				62A581E51FBC5BCB002D8FD3 /* imdb.ico */,
 				62A581E61FBC5BCB002D8FD3 /* rottentomatoes.ico */,
 				62DD87B41FB8BE4F00A9B9EE /* trakt.ico */,
@@ -349,6 +356,8 @@
 				62B087AD207A7937007703FF /* Idea-icon.png */,
 				62B087AC207A7937007703FF /* Magnifi-icon.png */,
 				62FF97CC2039016B007B658E /* Eye-icon.png */,
+				62F2233D21E0F40F0032A6E3 /* Eye-2-icon.png */,
+				62F2233F21E120DF0032A6E3 /* Refresh-icon.png */,
 				62FF97CB2039016B007B658E /* Play-icon.png */,
 				62FF97CA2039016A007B658E /* Stop-icon.png */,
 			);
@@ -427,6 +436,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6210217521EBA91D00849E6E /* tvmaze.ico in Resources */,
 				62B087CB207BEE3A007703FF /* Flag_of_the_Czech_Republic.png in Resources */,
 				62DD87B81FB8BE4F00A9B9EE /* betaseries.png in Resources */,
 				62DD877A1FB766C600A9B9EE /* LaunchScreen.storyboard in Resources */,
@@ -448,6 +458,7 @@
 				62FF97DB2039AAFC007B658E /* Trash-icon.png in Resources */,
 				62B4D8B8208CB7C0002110E8 /* Flag_of_Brazil.png in Resources */,
 				62DD87B61FB8BE4F00A9B9EE /* thetvdb.png in Resources */,
+				62F2233E21E0F40F0032A6E3 /* Eye-2-icon.png in Resources */,
 				62B087C4207BEBC6007703FF /* Flag_of_France.png in Resources */,
 				62FF97D82039076D007B658E /* TV-icon.png in Resources */,
 				624EC9A720B2DF20005ED207 /* data.tsv in Resources */,
@@ -462,6 +473,7 @@
 				62A581E71FBC5BCB002D8FD3 /* imdb.ico in Resources */,
 				62FF97D92039076D007B658E /* Air-icon.png in Resources */,
 				62B087C0207BEBC6007703FF /* Flag_of_the_United_Kingdom.png in Resources */,
+				62F2234021E120E00032A6E3 /* Refresh-icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

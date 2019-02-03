@@ -12,6 +12,8 @@ class Database : NSObject
 {
 
     var shows : [Serie] = []
+    var index : Dictionary = [String:Int]()
+    
     var valSeriesFinies : Int = 0
     var valSeriesEnCours : Int = 0
     var valSaisonsOnTheAir : Int = 0
@@ -24,35 +26,182 @@ class Database : NSObject
     {
     }
     
-    func refreshSeasonDates()
-    {
-        for uneSerie in shows
-        {
-            for uneSaison in uneSerie.saisons
-            {
-                if ((uneSaison.starts == ZeroDate) && uneSaison.episodes != []) { uneSaison.starts = uneSaison.episodes[0].date }
-                if ((uneSaison.ends == ZeroDate) && uneSaison.episodes != []) { uneSaison.ends = uneSaison.episodes[uneSaison.episodes.count-1].date }
+    func quickRefresh() {
+        // Mise à jour des épisodes vus
+        for uneSerie in trakt.getWatched() {
+            let indexDB : Int = index[uneSerie.serie] ?? -1
+            if (indexDB == -1) {
+                print("Ajout (watched) de \(uneSerie.serie)")
+                // Nouvelle série on l'ajoute telle que
+                index[uneSerie.serie] = shows.count
+                downloadGlobalInfo(serie: uneSerie)
+
+                shows.append(uneSerie)
+            }
+            else {
+                for uneSaison in uneSerie.saisons {
+                    if (uneSaison.saison-1 < shows[indexDB].saisons.count) {
+                        shows[indexDB].saisons[uneSaison.saison-1].nbWatchedEps = uneSaison.nbWatchedEps
+                    }
+                }
+            }
+        }
+
+        for uneSerie in shows {
+            uneSerie.unfollowed = false
+            uneSerie.watchlist = false
+        }
+
+        // Mise à jour des séries arrêtées
+        for uneSerie in trakt.getStopped() {
+            let indexDB : Int = index[uneSerie.serie] ?? -1
+            
+            if (indexDB == -1) {
+                // Nouvelle série on l'ajoute telle que
+                index[uneSerie.serie] = shows.count
+                downloadGlobalInfo(serie: uneSerie)
+
+                shows.append(uneSerie)
+            }
+            else {
+                shows[indexDB].unfollowed = true
+            }
+        }
+        
+        // Mise à jour de la watchlist
+        for uneSerie in trakt.getWatchlist() {
+            let indexDB : Int = index[uneSerie.serie] ?? -1
+            
+            if (indexDB == -1) {
+                // Nouvelle série on l'ajoute telle que
+                index[uneSerie.serie] = shows.count
+                downloadGlobalInfo(serie: uneSerie)
+
+                shows.append(uneSerie)
+            }
+            else {
+                shows[indexDB].watchlist = true
             }
         }
     }
     
+    
     func downloadGlobalInfo(serie : Serie)
     {
+        var timeStamp : Date = Date()
         let dataTVdb : Serie = theTVdb.getSerieGlobalInfos(idTVdb: serie.idTVdb)
+        timerTheTVdb = timerTheTVdb + Date().timeIntervalSince(timeStamp)
+        
+        timeStamp = Date()
         let dataMoviedb : Serie = theMoviedb.getSerieGlobalInfos(idMovieDB: serie.idMoviedb)
+        timerTheMovieDB = timerTheMovieDB + Date().timeIntervalSince(timeStamp)
+        
+        timeStamp = Date()
         let dataBetaSeries : Serie = betaSeries.getSerieGlobalInfos(idTVDB : serie.idTVdb, idIMDB : serie.idIMdb)
+        timerBetaSeries = timerBetaSeries + Date().timeIntervalSince(timeStamp)
+        
+        timeStamp = Date()
         let dataTrakt : Serie = trakt.getSerieGlobalInfos(idTraktOrIMDB: serie.idIMdb)
+        timerTrakt = timerTrakt + Date().timeIntervalSince(timeStamp)
+        
+        timeStamp = Date()
         let dataIMDB : Serie = imdb.getSerieGlobalInfos(idIMDB: serie.idIMdb)
+        timerIMdb = timerIMdb + Date().timeIntervalSince(timeStamp)
+        
+        timeStamp = Date()
         let dataTVmaze : Serie = tvMaze.getSerieGlobalInfos(idTVDB : serie.idTVdb, idIMDB : serie.idIMdb)
+        timerTVmaze = timerTVmaze + Date().timeIntervalSince(timeStamp)
+        
+        timeStamp = Date()
         let dataRotten : Serie = rottenTomatoes.getSerieGlobalInfos(serie : serie.serie)
+        //let dataRotten : Serie = Serie(serie: serie.serie)
+        timerRottenTom = timerRottenTom + Date().timeIntervalSince(timeStamp)
 
         serie.cleverMerge(TVdb: dataTVdb, Moviedb: dataMoviedb, Trakt: dataTrakt, BetaSeries: dataBetaSeries, IMDB: dataIMDB, RottenTomatoes: dataRotten, TVmaze: dataTVmaze)
+    }
+    
+    
+    func downloadDetailInfo(serie : Serie)
+    {
+        var timeStamp : Date = Date()
+
+        timeStamp = Date()
+        theTVdb.getSerieInfosLight(uneSerie: serie)
+        timerTheTVdb = timerTheTVdb + Date().timeIntervalSince(timeStamp)
+
+        if (serie.idTVdb != "") {
+            timeStamp = Date()
+            theTVdb.getEpisodesRatings(serie)
+            timerTheTVdb = timerTheTVdb + Date().timeIntervalSince(timeStamp)
+        }
         
-        for numsaison in 0..<serie.saisons.count
-        {
-            serie.saisons[numsaison].ends = betaSeries.getLastEpisodeDate(TVdbId : serie.idTVdb, saison : numsaison+1, episode : serie.saisons[numsaison].nbEpisodes)
+        if (serie.idTVdb != "") {
+            timeStamp = Date()
+            betaSeries.getEpisodesRatings(serie)
+            timerBetaSeries = timerBetaSeries + Date().timeIntervalSince(timeStamp)
+        }
+        
+        if (serie.idMoviedb != "") {
+            timeStamp = Date()
+            theMoviedb.getEpisodesRatings(serie)
+            timerTheMovieDB = timerTheMovieDB + Date().timeIntervalSince(timeStamp)
+        }
+        
+        timeStamp = Date()
+        imdb.getEpisodesRatings(serie)
+        timerIMdb = timerIMdb + Date().timeIntervalSince(timeStamp)
+        
+        if (serie.idTrakt != "") {
+            timeStamp = Date()
+            trakt.getEpisodesRatings(serie)
+            timerTrakt = timerTrakt + Date().timeIntervalSince(timeStamp)
         }
     }
+    
+    func downloadDates(serie : Serie)
+    {
+        let tvMazeResults : (saisons : [Int], nbEps : [Int], debuts : [Date], fins : [Date]) = tvMaze.getSeasonsDates(idTVmaze: serie.idTVmaze)
+        
+        for i:Int in 0..<tvMazeResults.saisons.count {
+            let seasonIdx : Int = tvMazeResults.saisons[i]-1
+            
+            if (seasonIdx < serie.saisons.count) {
+                if (tvMazeResults.debuts[i] != ZeroDate) { serie.saisons[seasonIdx].starts = tvMazeResults.debuts[i] }
+                if (tvMazeResults.fins[i] != ZeroDate) { serie.saisons[seasonIdx].ends = tvMazeResults.fins[i] }
+                if (tvMazeResults.nbEps[i] != 0) { serie.saisons[seasonIdx].nbEpisodes = tvMazeResults.nbEps[i] }
+            }
+            else {
+                // Ajout de la saison et de ses informations
+                let newSaison : Saison = Saison(serie: serie.serie, saison: seasonIdx+1)
+                newSaison.starts = tvMazeResults.debuts[i]
+                newSaison.ends = tvMazeResults.fins[i]
+                newSaison.nbEpisodes = tvMazeResults.nbEps[i]
+
+                serie.saisons.append(newSaison)
+            }
+        }
+    }
+
+    
+    func finaliseDB() {
+        
+        db.shows = db.shows.sorted(by: { $0.serie < $1.serie })
+        db.fillIndex()
+
+        db.shows[db.index["Absolutely Fabulous"]!].saisons[3].nbEpisodes = db.shows[db.index["Absolutely Fabulous"]!].saisons[3].nbWatchedEps
+        db.shows[db.index["Kaamelott"]!].saisons[3].nbEpisodes = db.shows[db.index["Kaamelott"]!].saisons[3].nbWatchedEps
+        db.shows[db.index["Lost"]!].saisons[0].nbEpisodes = db.shows[db.index["Lost"]!].saisons[0].nbWatchedEps
+        db.shows[db.index["Sense8"]!].saisons[1].nbEpisodes = db.shows[db.index["Sense8"]!].saisons[1].nbWatchedEps
+        db.shows[db.index["Shameless"]!].saisons[7].nbEpisodes = db.shows[db.index["Shameless"]!].saisons[7].nbWatchedEps
+        db.shows[db.index["Terra Nova"]!].saisons[0].nbEpisodes = db.shows[db.index["Terra Nova"]!].saisons[0].nbWatchedEps
+        db.shows[db.index["WorkinGirls"]!].saisons[0].nbEpisodes = db.shows[db.index["WorkinGirls"]!].saisons[0].nbWatchedEps
+        db.shows[db.index["WorkinGirls"]!].saisons[1].nbEpisodes = db.shows[db.index["WorkinGirls"]!].saisons[1].nbWatchedEps
+        db.shows[db.index["WorkinGirls"]!].saisons[2].nbEpisodes = db.shows[db.index["WorkinGirls"]!].saisons[2].nbWatchedEps
+        db.shows[db.index["WorkinGirls"]!].saisons[3].nbEpisodes = db.shows[db.index["WorkinGirls"]!].saisons[3].nbWatchedEps
+        
+        updateCompteurs()
+    }
+    
     
     func saveDB ()
     {
@@ -65,12 +214,18 @@ class Database : NSObject
     func loadDB ()
     {
         let pathToSVG = AppDir.appendingPathComponent("SerieA.db")
-        if (FileManager.default.fileExists(atPath: pathToSVG.path))
-        {
+        if (FileManager.default.fileExists(atPath: pathToSVG.path)) {
             shows = (NSKeyedUnarchiver.unarchiveObject(withFile: pathToSVG.path) as? [Serie])!
             shows = shows.sorted(by: { $0.serie < $1.serie })
-            
-            refreshSeasonDates()
+            fillIndex()
+        }
+    }
+    
+    func fillIndex() {
+        index = [String:Int]()
+        
+        for i:Int in 0..<shows.count {
+            index[shows[i].serie] = i
         }
     }
     
@@ -79,13 +234,11 @@ class Database : NSObject
         var merged : Bool = false
         var newDB : [Serie] = db
         
-        for uneSerie in adds
-        {
+        for uneSerie in adds {
             merged = false
             
             // On cherche la serie dans les series de la DB
-            for dbSerie in db
-            {
+            for dbSerie in db {
                 if (dbSerie.idTrakt == uneSerie.idTrakt) {
                     dbSerie.merge(uneSerie)
                     merged = true
@@ -98,17 +251,8 @@ class Database : NSObject
         
         return newDB
     }
-    
-    func mergeStatuses(_ db : [Serie], adds : [Serie]) -> [Serie]
-    {
-        for uneSerie in adds {
-            for dbSerie in db {
-                if (dbSerie.idIMdb == uneSerie.idIMdb) { dbSerie.mergeStatuses(uneSerie) }
-            }
-        }
-        return db
-    }
-    
+
+
     func updateCompteurs()
     {
         let today : Date = Date()
@@ -128,8 +272,8 @@ class Database : NSObject
             {
                 let lastSaison : Saison = uneSerie.saisons[uneSerie.saisons.count - 1]
                 
-                if ( (lastSaison.watched == true) && (uneSerie.status == "Ended") ) { valSeriesFinies = valSeriesFinies + 1 }
-                if ( ((lastSaison.watched == false) || (uneSerie.status != "Ended")) && (uneSerie.unfollowed == false) && (uneSerie.watchlist == false) ) { valSeriesEnCours = valSeriesEnCours + 1 }
+                if ( (lastSaison.watched() == true) && (uneSerie.status == "Ended") ) { valSeriesFinies = valSeriesFinies + 1 }
+                if ( ((lastSaison.watched() == false) || (uneSerie.status != "Ended")) && (uneSerie.unfollowed == false) && (uneSerie.watchlist == false) ) { valSeriesEnCours = valSeriesEnCours + 1 }
             }
             
             for uneSaison in uneSerie.saisons
@@ -137,7 +281,7 @@ class Database : NSObject
                 if ( (uneSaison.starts != ZeroDate) &&
                     (uneSaison.starts.compare(today) == .orderedAscending) &&
                     ((uneSaison.ends.compare(today) == .orderedDescending)  || (uneSaison.ends == ZeroDate)) &&
-                    (uneSaison.watched == false)  &&
+                    (uneSaison.watched() == false)  &&
                     (uneSerie.watchlist == false) &&
                     (uneSerie.unfollowed == false) )
                 { valSaisonsOnTheAir = valSaisonsOnTheAir + 1 }
@@ -145,7 +289,7 @@ class Database : NSObject
                 if ( (uneSaison.starts != ZeroDate) &&
                     (uneSaison.ends.compare(today) == .orderedAscending) &&
                     (uneSaison.ends != ZeroDate) &&
-                    (uneSaison.watched == false) &&
+                    (uneSaison.watched() == false) &&
                     (uneSerie.watchlist == false) &&
                     (uneSerie.unfollowed == false) )
                 { valSaisonsDiffusees = valSaisonsDiffusees + 1 }
@@ -156,9 +300,5 @@ class Database : NSObject
                 { valSaisonsAnnoncees = valSaisonsAnnoncees + 1 }
             }
         }
-        
     }
-    
-    
-
 }

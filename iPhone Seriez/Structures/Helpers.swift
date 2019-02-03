@@ -89,7 +89,11 @@ func makeGradiant(carre : UIView, couleur : String)
     //TODO : https://stackoverflow.com/questions/4754392/uiview-with-rounded-corners-and-drop-shadow
     
     let myGradient : CAGradientLayer = CAGradientLayer()
-    
+    carre.layer.shadowColor = UIColor.black.cgColor
+    carre.layer.shadowOpacity = 0.4
+    carre.layer.shadowOffset = CGSize(width: 10.0, height: 10.0)
+    carre.layer.shadowRadius = 10.0
+
     if (couleur == "Rouge")
     {
         myGradient.colors = [UIColor(red: 148.0/255.0, green: 17.0/255.0, blue: 0.0, alpha: 1.0).cgColor, UIColor.red.cgColor]
@@ -110,15 +114,22 @@ func makeGradiant(carre : UIView, couleur : String)
     myGradient.startPoint = CGPoint(x: 0, y: 0)
     myGradient.endPoint = CGPoint(x: 1, y: 1)
     myGradient.frame = carre.bounds
+    myGradient.cornerRadius = 10.0
     
-    carre.layer.cornerRadius = 10;
-    
-    carre.layer.shadowColor = UIColor.black.cgColor
-    carre.layer.shadowOpacity = 0.4
-    carre.layer.shadowOffset = CGSize(width: 10.0, height: 10.0)
-    carre.layer.shadowRadius = 10.0
-    
+//    // add the border to subview
+//    let borderView = UIView()
+//    borderView.frame = carre.bounds
+//    borderView.layer.cornerRadius = 10
+//    borderView.layer.masksToBounds = true
+//    carre.addSubview(borderView)
+
     carre.layer.insertSublayer(myGradient, at: 0)
+}
+
+func border(texte: UITextField)
+{
+    texte.layer.borderWidth = 2.0
+    texte.layer.borderColor = UIColor.black.cgColor
 }
 
 func makeMiniGradiant(carre : UIView, couleur : String)

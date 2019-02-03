@@ -13,6 +13,7 @@ class CellSaison: UITableViewCell {
     @IBOutlet weak var debut: UILabel!
     @IBOutlet weak var fin: UILabel!
     @IBOutlet weak var episodes: UILabel!
+    @IBOutlet weak var graphe: GraphMiniSaison!
 }
 
 class CellComment: UITableViewCell {
@@ -177,6 +178,11 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
             cell.debut.text = dateFormatter.string(from: serie.saisons[indexPath.row].starts)
             cell.episodes.text = String(serie.saisons[indexPath.row].nbEpisodes) + " épisodes"
             cell.fin.text = dateFormatter.string(from: serie.saisons[indexPath.row].ends)
+            
+            cell.graphe.setSerie(serie: serie, saison: indexPath.row + 1)
+            cell.graphe.setType(type: 1)
+            cell.graphe.setNeedsDisplay()
+
             return cell
         }
         else

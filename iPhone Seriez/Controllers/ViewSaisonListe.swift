@@ -96,6 +96,7 @@ class ViewSaisonListe: UITableViewController {
             cell.diffusion.isHidden = true
             cell.jours.isHidden = true
             
+            cell.saison.text = "Saison " + String(uneSaison.saison) + " - " + String(uneSaison.nbWatchedEps) + " / " + String(uneSaison.nbEpisodes) + " épisodes"
             cell.miniGraphe.setSerie(serie: viewList[indexPath.row], saison: allSaisons[indexPath.row])
             cell.miniGraphe.setType(type: grapheType)
             cell.miniGraphe.setNeedsDisplay()
@@ -110,11 +111,12 @@ class ViewSaisonListe: UITableViewController {
                     cell.diffusion.isHidden = false
                     cell.jours.isHidden = false
 
-                    cell.avantapres.text = "till"
-                    cell.diffusion.text = "completion"
-                    let nbJours : Int = daysBetweenDates(startDate: Date(), endDate: uneSaison.ends)
-                    cell.jours.text = "J - \(nbJours)"
-                    cell.viewBgd.layer.borderColor = UIColor.lightGray.cgColor
+                    cell.avantapres.text = "à"
+                    cell.diffusion.text = "venir"
+                    let nbEps : Int = uneSaison.nbEpisodes - uneSaison.nbEpisodesDiffuses()
+                    cell.jours.text = "\(nbEps) eps"
+                    let alpha : CGFloat = 1.0 - CGFloat(min(20, nbEps)) / CGFloat(20)
+                    cell.viewBgd.layer.borderColor = UIColor.blue.withAlphaComponent(alpha).cgColor
                 }
                 else {
                     cell.miniGraphe.isHidden = false
@@ -130,15 +132,16 @@ class ViewSaisonListe: UITableViewController {
             }
             else {
                 cell.miniGraphe.isHidden = true
-                cell.avantapres.text = "before"
-                cell.diffusion.text = "return"
+                cell.avantapres.text = "avant la"
+                cell.diffusion.text = "première"
                 let nbJours : Int = daysBetweenDates(startDate: Date(), endDate: uneSaison.starts)
                 cell.jours.text = "J - \(nbJours)"
-                cell.viewBgd.layer.borderColor = UIColor.darkGray.cgColor
+                let alpha : CGFloat = CGFloat(max(0, 180 - nbJours)) / CGFloat(180)
+                cell.viewBgd.layer.borderColor = UIColor.red.withAlphaComponent(alpha).cgColor
             }
             
             cell.viewBgd.layer.cornerRadius = 10.0
-            cell.viewBgd.layer.borderWidth = 10.0
+            cell.viewBgd.layer.borderWidth = 5.0
             cell.layer.masksToBounds = true
         }
         

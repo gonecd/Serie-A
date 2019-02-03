@@ -135,7 +135,7 @@ class ViewPropals: UIViewController, UICollectionViewDataSource, UICollectionVie
         
         if (allConseils[indexPath.row].category == categSuivies) {
             if (allConseils[indexPath.row].serie.saisons.count > 0) {
-                if ( (allConseils[indexPath.row].serie.saisons[allConseils[indexPath.row].serie.saisons.count - 1].watched == true) && (allConseils[indexPath.row].serie.status == "Ended") ) {
+                if ( (allConseils[indexPath.row].serie.saisons[allConseils[indexPath.row].serie.saisons.count - 1].watched() == true) && (allConseils[indexPath.row].serie.status == "Ended") ) {
                     cell.status.image = #imageLiteral(resourceName: "Stop-icon.png")
                     makeMiniGradiant(carre: cell.statusView, couleur : "Gris")
                 }
@@ -156,6 +156,8 @@ class ViewPropals: UIViewController, UICollectionViewDataSource, UICollectionVie
         else {
             cell.statusView.isHidden = true
         }
+        
+        cell.statusView.setNeedsLayout()
         
         return cell
     }

@@ -19,6 +19,7 @@ class Serie : NSObject, NSCoding
     var idTrakt : String = String()
     var idTVdb : String = String()
     var idMoviedb : String = String()
+    var idTVmaze : String = String()
     
     var unfollowed : Bool = false
     var watchlist : Bool = false
@@ -68,7 +69,8 @@ class Serie : NSObject, NSCoding
         self.idTrakt = decoder.decodeObject(forKey: "idTrakt") as? String ?? ""
         self.idTVdb = decoder.decodeObject(forKey: "idTVdb") as? String ?? ""
         self.idMoviedb = decoder.decodeObject(forKey: "idMoviedb") as? String ?? ""
-        
+        self.idTVmaze = decoder.decodeObject(forKey: "idTVmaze") as? String ?? ""
+
         self.unfollowed = decoder.decodeBool(forKey: "unfollowed")
         self.watchlist = decoder.decodeBool(forKey: "watchlist")
         
@@ -110,7 +112,8 @@ class Serie : NSObject, NSCoding
         coder.encode(self.idTrakt, forKey: "idTrakt")
         coder.encode(self.idTVdb, forKey: "idTVdb")
         coder.encode(self.idMoviedb, forKey: "idMoviedb")
-        
+        coder.encode(self.idTVmaze, forKey: "idTVmaze")
+
         coder.encode(self.unfollowed, forKey: "unfollowed")
         coder.encode(self.watchlist, forKey: "watchlist")
         
@@ -158,6 +161,7 @@ class Serie : NSObject, NSCoding
         if (uneSerie.idTrakt != "")         { self.idTrakt = uneSerie.idTrakt }
         if (uneSerie.idTVdb != "")          { self.idTVdb = uneSerie.idTVdb }
         if (uneSerie.idMoviedb != "")       { self.idMoviedb = uneSerie.idMoviedb }
+        if (uneSerie.idTVmaze != "")        { self.idTVmaze = uneSerie.idTVmaze }
         if (uneSerie.unfollowed != false)   { self.unfollowed = uneSerie.unfollowed }
         if (uneSerie.watchlist != false)    { self.watchlist = uneSerie.watchlist }
         
@@ -196,21 +200,6 @@ class Serie : NSObject, NSCoding
             }
         }
     }
-    
-    func mergeStatuses(_ updatedSerie : Serie)
-    {
-        self.unfollowed = updatedSerie.unfollowed
-        self.watchlist = updatedSerie.watchlist
-        
-        for updatedSaison in updatedSerie.saisons
-        {
-            if (updatedSaison.saison <= self.saisons.count)
-            {
-                self.saisons[updatedSaison.saison - 1].mergeStatuses(updatedSaison)
-            }
-        }
-    }
-    
     
     func getGlobalRating() -> Int
     {
@@ -375,7 +364,9 @@ class Serie : NSObject, NSCoding
         
         if (Moviedb.idMoviedb != "") { self.idMoviedb = Moviedb.idMoviedb }
         else { self.idMoviedb = Trakt.idMoviedb }
-        
+
+        if (TVmaze.idTVmaze != "") { self.idTVmaze = TVmaze.idTVmaze }
+
         self.ratingTrakt = Trakt.ratingTrakt
         self.ratingTVDB = TVdb.ratingTVDB
         self.ratingBetaSeries = BetaSeries.ratingBetaSeries
@@ -446,35 +437,26 @@ class Serie : NSObject, NSCoding
         else if (Trakt.status != "") { self.status = Trakt.status }
         else { self.status = Moviedb.status }
         
-        for uneSaison in self.saisons
-        {
-            if (Moviedb.saisons.count >= uneSaison.saison)
-            {
-                if (uneSaison.starts == ZeroDate) { uneSaison.starts = Moviedb.saisons[uneSaison.saison - 1].starts }
+//        for uneSaison in self.saisons {
+//            if (Moviedb.saisons.count >= uneSaison.saison) {
+//                if (uneSaison.starts == ZeroDate) {
+//                    uneSaison.starts = Moviedb.saisons[uneSaison.saison - 1].starts
+//                    uneSaison.nbEpisodes = Moviedb.saisons[uneSaison.saison - 1].nbEpisodes
+//                }
+//            }
+//        }
+//
+        
+        for uneSaison in Moviedb.saisons {
+            if (self.saisons.count >= uneSaison.saison) {
+                self.saisons[uneSaison.saison - 1].starts = uneSaison.starts
+                self.saisons[uneSaison.saison - 1].nbEpisodes = uneSaison.nbEpisodes
+            }
+            else {
+                self.saisons.append(uneSaison)
             }
         }
 
-//        for uneSaison in self.saisons
-//        {
-//            if (uneSaison.saison <= Moviedb.saisons.count)
-//            {
-//                if (uneSaison.nbEpisodes < Moviedb.saisons[uneSaison.saison - 1].nbEpisodes) { uneSaison.watched = false }
-//                if (Moviedb.saisons[uneSaison.saison - 1].nbEpisodes != 0) { uneSaison.nbEpisodes = Moviedb.saisons[uneSaison.saison - 1].nbEpisodes }
-//                if (Moviedb.saisons[uneSaison.saison - 1].starts != ZeroDate) { uneSaison.starts = Moviedb.saisons[uneSaison.saison - 1].starts }
-//            }
-//        }
-//        
-//        if (self.saisons.count == 0)
-//        {
-//            self.saisons = Moviedb.saisons
-//        }
-//        else if (self.saisons.count < Moviedb.saisons.count)
-//        {
-//            for idSaison in (self.saisons.count + 1)...Moviedb.saisons.count
-//            {
-//                self.saisons.append(Moviedb.saisons[idSaison - 1])
-//            }
-//        }
     }
     
     func getFairGlobalRatingTrakt() -> Int

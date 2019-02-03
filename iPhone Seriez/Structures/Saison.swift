@@ -20,8 +20,6 @@ class Saison : NSObject, NSCoding
     var starts : Date = ZeroDate
     var ends : Date = ZeroDate
     
-    var watched : Bool = false
-    
     init(serie:String, saison:Int)
     {
         self.serie = serie
@@ -37,8 +35,6 @@ class Saison : NSObject, NSCoding
         self.nbWatchedEps = decoder.decodeInteger(forKey: "nbWatchedEps")
         self.starts = decoder.decodeObject(forKey: "starts") as? Date ?? ZeroDate
         self.ends = decoder.decodeObject(forKey: "ends") as? Date ?? ZeroDate
-
-        self.watched = decoder.decodeBool(forKey: "watched")
   }
     
     func encode(with coder: NSCoder) {
@@ -50,10 +46,24 @@ class Saison : NSObject, NSCoding
         coder.encodeCInt(Int32(self.nbWatchedEps), forKey: "nbWatchedEps")
         coder.encode(self.starts, forKey: "starts")
         coder.encode(self.ends, forKey: "ends")
-
-        coder.encode(self.watched, forKey: "watched")
     }
 
+    func watched() -> Bool {
+        return ((nbWatchedEps == nbEpisodes) && (nbEpisodes != 0))
+    }
+    
+    
+    func nbEpisodesDiffuses() -> Int {
+        var cpt : Int = 0
+        let today : Date = Date()
+        
+        for unEpisode in episodes {
+            if (unEpisode.date.compare(today) == .orderedAscending) { cpt = cpt + 1 }
+        }
+        
+        return cpt
+    }
+    
     func getFairRatingTrakt() -> Int
     {
         var total : Int = 0
@@ -162,12 +172,6 @@ class Saison : NSObject, NSCoding
         if (uneSaison.nbEpisodes != 0)    { self.nbEpisodes = uneSaison.nbEpisodes }
         if (uneSaison.starts != ZeroDate) { self.starts = uneSaison.starts }
         if (uneSaison.ends != ZeroDate)   { self.ends = uneSaison.ends }
-    }
-
-    func mergeStatuses(_ updatedSaison : Saison)
-    {
-        self.watched = updatedSaison.watched
-        self.nbWatchedEps = updatedSaison.nbWatchedEps
     }
 
 }

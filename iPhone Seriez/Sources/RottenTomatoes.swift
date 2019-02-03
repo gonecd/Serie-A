@@ -12,15 +12,52 @@ import SwiftSoup
 class RottenTomatoes
 {    
     init() {
-    
     }
     
     func getSerieGlobalInfos(serie : String) -> Serie {
         let uneSerie : Serie = Serie(serie: serie)
+        var webPage : String = ""
+
+        switch serie {
+        case "The End of the F***ing World":
+            webPage = "https://www.rottentomatoes.com/tv/the_end_of_the_f_ing_world"
+            break
+            
+        case "Money Heist":
+            webPage = "https://www.rottentomatoes.com/tv/la_casa_de_papel"
+            break
+            
+        case "Mr. Robot":
+            webPage = "https://www.rottentomatoes.com/tv/mr_robot"
+            break
+            
+        case "The Marvelous Mrs. Maisel":
+            webPage = "https://www.rottentomatoes.com/tv/the_marvelous_mrs_maisel"
+            break
+            
+        case "Hero Corp",
+             "Call My Agent",
+             "Baron Noir",
+             "WorkinGirls",
+             "Guyane",
+             "Kaboul Kitchen",
+             "Hard",
+             "Glue",
+             "Kaamelott",
+             "Mafiosa",
+             "Real Humans",
+             "Braquo",
+             "XIII",
+             "Maison close":
+            return uneSerie
+            
+        default:
+            webPage = "https://www.rottentomatoes.com/tv/\(serie.lowercased().replacingOccurrences(of: "%", with: "_").replacingOccurrences(of: "'", with: "_").replacingOccurrences(of: " ", with: "_"))"
+        }
         
         do {
-            let webPage : String = try String(contentsOf: URL(string : "https://www.rottentomatoes.com/tv/\(serie.lowercased().replacingOccurrences(of: "%", with: "_").replacingOccurrences(of: "'", with: "_").replacingOccurrences(of: " ", with: "_"))")!)
-            let doc : Document = try SwiftSoup.parse(webPage)
+            let page : String = try String(contentsOf: URL(string : webPage)!)
+            let doc : Document = try SwiftSoup.parse(page)
             
             let topCritics : Elements = try doc.select("div [id='top-critics-numbers']")
             let allCritics : Elements = try doc.select("div [id='all-critics-numbers']")

@@ -19,7 +19,8 @@ class TVmaze
     {
         let uneSerie : Serie = Serie(serie: "")
         var request : URLRequest
-        
+        var ended : Bool = false
+
         if (idIMDB != "")       { request = URLRequest(url: URL(string: "http://api.tvmaze.com/lookup/shows?imdb=\(idIMDB)")!) }
         else if (idTVDB != "")  { request = URLRequest(url: URL(string: "http://api.tvmaze.com/lookup/shows?thetvdb=\(idTVDB)")!) }
         else                    { return uneSerie }
@@ -30,11 +31,12 @@ class TVmaze
         let task = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
             if let data = data, let response = response as? HTTPURLResponse {
                 do {
-                    if (response.statusCode != 200) { print("TVmaze::getSerieGlobalInfos error \(response.statusCode) received "); return; }
+                    if (response.statusCode != 200) { print("TVmaze::getSerieGlobalInfos error \(response.statusCode) received for id=\(idTVDB) / \(idIMDB)"); ended = true; return; }
                     
                     let show : NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
                     
                     uneSerie.serie = show.object(forKey: "name") as? String ?? ""
+                    uneSerie.idTVmaze = String(show.object(forKey: "id") as? Int ?? 0)
                     uneSerie.resume = show.object(forKey: "summary") as? String ?? ""
                     uneSerie.status = show.object(forKey: "status") as? String ?? ""
                     uneSerie.genres = show.object(forKey: "genres") as? [String] ?? []
@@ -43,13 +45,69 @@ class TVmaze
                     uneSerie.homepage = show.object(forKey: "url") as? String ?? ""
                     uneSerie.ratingTVmaze = Int(10 * ((show.object(forKey: "rating")! as AnyObject).object(forKey: "average") as? Double ?? 0.0))
                     
-                } catch let error as NSError { print("TVmaze::getSerieGlobalInfos failed: \(error.localizedDescription)") }
-            } else { print(error as Any) }
+                    ended = true
+                } catch let error as NSError { print("TVmaze::getSerieGlobalInfos failed: \(error.localizedDescription)"); ended = true; }
+            } else { print(error as Any); ended = true; }
         })
         
         task.resume()
-        while (task.state != URLSessionTask.State.completed) { usleep(1000) }
-        
+        while (!ended) { usleep(1000) }
+
         return uneSerie
+    }
+    
+    func getSeasonsDates(idTVmaze : String) -> (saisons : [Int], nbEps : [Int], debuts : [Date], fins : [Date]) {
+        var foundSaisons : [Int] = []
+        var foundEps : [Int] = []
+        var foundDebuts : [Date] = []
+        var foundFins : [Date] = []
+        var ended : Bool = false
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        if (idTVmaze == "") {
+            print("TVmaze::getSeasonsDates failed : no ID")
+            return (foundSaisons, foundEps, foundDebuts, foundFins)
+        }
+        
+        var request : URLRequest = URLRequest(url: URL(string: "http://api.tvmaze.com/shows/\(idTVmaze)/seasons")!)
+        request.httpMethod = "GET"
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        
+        let task = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
+            if let data = data, let response = response as? HTTPURLResponse {
+                do {
+                    if (response.statusCode != 200) { print("TVmaze::getSeasonsDates error \(response.statusCode) received for id=\(idTVmaze)"); ended = true; return }
+                    
+                    let jsonResponse : NSArray = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSArray
+                    
+                    for uneSaison in jsonResponse
+                    {
+                        let saison : Int = ((uneSaison as! NSDictionary).object(forKey: "number")) as? Int ?? 0
+                        let nbEp : Int = ((uneSaison as! NSDictionary).object(forKey: "episodeOrder")) as? Int ?? 0
+
+                        let debutStr : String = ((uneSaison as! NSDictionary).object(forKey: "premiereDate")) as? String ?? ""
+                        var debutDate : Date = ZeroDate
+                        if (debutStr !=  "") { debutDate = dateFormatter.date(from: debutStr)! }
+
+                        let finStr : String = ((uneSaison as! NSDictionary).object(forKey: "endDate")) as? String ?? ""
+                        var finDate : Date = ZeroDate
+                        if (finStr !=  "") { finDate = dateFormatter.date(from: finStr)! }
+                        
+                        foundSaisons.append(saison)
+                        foundEps.append(nbEp)
+                        foundDebuts.append(debutDate)
+                        foundFins.append(finDate)
+                    }
+
+                    ended = true
+                } catch let error as NSError { print("TVmaze::getSeasonsDates failed: \(error.localizedDescription)"); ended = true; }
+            } else { print(error as Any); ended = true; }
+        })
+        
+        task.resume()
+        while (!ended) { usleep(1000) }
+
+        return (foundSaisons, foundEps, foundDebuts, foundFins)
     }
 }

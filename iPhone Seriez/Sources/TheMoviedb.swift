@@ -26,42 +26,45 @@ class TheMoviedb : NSObject
         // Récupération des ratings
         for saison in uneSerie.saisons
         {
-            request = URLRequest(url: NSURL(string: "https://api.themoviedb.org/3/tv/\(uneSerie.idMoviedb)/season/\(saison.saison)?language=en-US&api_key=\(TheMoviedbUserkey)")! as URL)
-            request.httpMethod = "GET"
-            
-            task = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
-                if let data = data, let response = response as? HTTPURLResponse {
-                    do {
-                        if response.statusCode == 200
-                        {
-                            let jsonResponse : NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
-                            
-                            if (jsonResponse.object(forKey: "episodes") != nil)
+            if ((saison.starts.compare(today) == .orderedAscending) && (saison.starts.compare(ZeroDate) != .orderedSame) )
+            {
+                request = URLRequest(url: NSURL(string: "https://api.themoviedb.org/3/tv/\(uneSerie.idMoviedb)/season/\(saison.saison)?language=en-US&api_key=\(TheMoviedbUserkey)")! as URL)
+                request.httpMethod = "GET"
+                
+                task = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
+                    if let data = data, let response = response as? HTTPURLResponse {
+                        do {
+                            if response.statusCode == 200
                             {
-                                for unEpisode in jsonResponse.object(forKey: "episodes")! as! NSArray
+                                let jsonResponse : NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
+                                
+                                if (jsonResponse.object(forKey: "episodes") != nil)
                                 {
-                                    let cetEpisode: Int = ((unEpisode as AnyObject).object(forKey: "episode_number")! as! Int)-1
-                                    
-                                    if ( (cetEpisode < saison.episodes.count) && (cetEpisode > 0) )
+                                    for unEpisode in jsonResponse.object(forKey: "episodes")! as! NSArray
                                     {
-                                        if (saison.episodes[cetEpisode].date.compare(today) == .orderedAscending)
+                                        let cetEpisode: Int = ((unEpisode as AnyObject).object(forKey: "episode_number")! as! Int)-1
+                                        
+                                        if ( (cetEpisode < saison.episodes.count) && (cetEpisode > 0) )
                                         {
-                                            saison.episodes[cetEpisode].ratingMoviedb = Int(10 * (((unEpisode as AnyObject).object(forKey: "vote_average")! as AnyObject) as? Double ?? 0.0))
-                                            saison.episodes[cetEpisode].ratersMoviedb = ((unEpisode as AnyObject).object(forKey: "vote_count")! as AnyObject) as? Int ?? 0
+                                            if (saison.episodes[cetEpisode].date.compare(today) == .orderedAscending)
+                                            {
+                                                saison.episodes[cetEpisode].ratingMoviedb = Int(10 * (((unEpisode as AnyObject).object(forKey: "vote_average")! as AnyObject) as? Double ?? 0.0))
+                                                saison.episodes[cetEpisode].ratersMoviedb = ((unEpisode as AnyObject).object(forKey: "vote_count")! as AnyObject) as? Int ?? 0
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
-                        else
-                        {
-                            print("TheMoviedb::getSerieInfos failed for \(uneSerie.serie) saison \(saison.saison) with error code : \(response.statusCode)")
-                        }
-                    } catch let error as NSError { print("TheMoviedb::getSerieInfos failed for \(uneSerie.serie) saison \(saison.saison) : \(error.localizedDescription)") }
-                } else { print(error as Any) }
-            })
-            task.resume()
-            while (task.state != URLSessionTask.State.completed) { usleep(1000) }
+                            else
+                            {
+                                print("TheMoviedb::getSerieInfos failed for \(uneSerie.serie) saison \(saison.saison) with error code : \(response.statusCode)")
+                            }
+                        } catch let error as NSError { print("TheMoviedb::getSerieInfos failed for \(uneSerie.serie) saison \(saison.saison) : \(error.localizedDescription)") }
+                    } else { print(error as Any) }
+                })
+                task.resume()
+                while (task.state != URLSessionTask.State.completed) { usleep(1000) }
+            }
         }
     }
     
@@ -175,8 +178,12 @@ class TheMoviedb : NSObject
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         
-        if (idMovieDB != "")  { request = URLRequest(url: URL(string: "https://api.themoviedb.org/3/tv/\(idMovieDB)?api_key=e12674d4eadc7acafcbf7821bc32403b&language=en-US&append_to_response=external_ids,content_ratings")!) }
-        else                  { return uneSerie }
+        if (idMovieDB != "")  {
+            request = URLRequest(url: URL(string: "https://api.themoviedb.org/3/tv/\(idMovieDB)?api_key=e12674d4eadc7acafcbf7821bc32403b&language=en-US&append_to_response=external_ids,content_ratings")!) }
+        else {
+            print("TheMoviedb::getSerieGlobalInfos failed : no ID")
+            return uneSerie
+        }
 
         request.httpMethod = "GET"
         
@@ -191,8 +198,7 @@ class TheMoviedb : NSObject
                         uneSerie.idIMdb = (jsonResponse.object(forKey: "external_ids")! as AnyObject).object(forKey: "imdb_id") as? String ?? ""
                         uneSerie.idTVdb = String((jsonResponse.object(forKey: "external_ids")! as AnyObject).object(forKey: "tvdb_id") as? Int ?? 0)
                         uneSerie.idMoviedb = String(jsonResponse.object(forKey: "id") as? Int ?? 0)
-                        if ((jsonResponse.object(forKey: "networks") != nil) && ((jsonResponse.object(forKey: "networks") as! NSArray).count > 0) )
-                        {
+                        if ((jsonResponse.object(forKey: "networks") != nil) && ((jsonResponse.object(forKey: "networks") as! NSArray).count > 0) ) {
                             uneSerie.network = ((jsonResponse.object(forKey: "networks") as! NSArray).object(at: 0) as! NSDictionary).object(forKey: "name") as? String ?? ""
                         }
                         uneSerie.poster = jsonResponse.object(forKey: "poster_path") as? String ?? ""

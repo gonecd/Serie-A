@@ -13,6 +13,7 @@ class CellEpisode: UITableViewCell {
     @IBOutlet weak var numero: UILabel!
     @IBOutlet weak var titre: UILabel!
     @IBOutlet weak var date: UILabel!
+    @IBOutlet weak var vu: UIImageView!
 }
 
 
@@ -29,6 +30,8 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
     @IBOutlet weak var labelSerie: UILabel!
     @IBOutlet weak var labelSaison: UILabel!
     @IBOutlet weak var episodesList: UITableView!
+    @IBOutlet weak var table: UITableView!
+    @IBOutlet weak var boutonVuUnEp: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,6 +40,7 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         labelSerie.text = serie.serie
         labelSaison.text = "Saison " + String(saison)
         graphe.setNeedsDisplay()
+        makeGradiant(carre: boutonVuUnEp, couleur: "Gris")
         
         DispatchQueue.global(qos: .utility).async {
             
@@ -110,11 +114,34 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         cell.numero.text = String(indexPath.row + 1)
         cell.titre.text = serie.saisons[saison - 1].episodes[indexPath.row].titre
         cell.date.text = dateFormatter.string(from: serie.saisons[saison - 1].episodes[indexPath.row].date)
+        
+        if ( (indexPath.row + 1) > serie.saisons[saison - 1].nbWatchedEps) {
+            cell.vu.isHidden = true
+        }
+        else {
+            cell.vu.isHidden = false
+        }
 
         return cell
     }
     
     
+    @IBAction func vuUnEpisode(_ sender: Any) {
+        if (serie.saisons[saison - 1].nbWatchedEps < serie.saisons[saison - 1].nbEpisodes) {
+            
+            if (trakt.addToHistory(tvdbID: serie.saisons[saison - 1].episodes[serie.saisons[saison - 1].nbWatchedEps].idTVdb)) {
+                serie.saisons[saison - 1].nbWatchedEps = serie.saisons[saison - 1].nbWatchedEps + 1
+                if (serie.unfollowed) { serie.unfollowed = false }
+                if (serie.watchlist) { serie.watchlist = false }
+
+                table.reloadData()
+                table.setNeedsDisplay()
+                
+                db.updateCompteurs()
+                db.saveDB()
+            }
+        }
+    }
     
 }
 
