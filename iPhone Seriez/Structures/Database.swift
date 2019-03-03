@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SeriesCommon
 
 class Database : NSObject
 {
@@ -198,7 +199,8 @@ class Database : NSObject
         db.shows[db.index["WorkinGirls"]!].saisons[1].nbEpisodes = db.shows[db.index["WorkinGirls"]!].saisons[1].nbWatchedEps
         db.shows[db.index["WorkinGirls"]!].saisons[2].nbEpisodes = db.shows[db.index["WorkinGirls"]!].saisons[2].nbWatchedEps
         db.shows[db.index["WorkinGirls"]!].saisons[3].nbEpisodes = db.shows[db.index["WorkinGirls"]!].saisons[3].nbWatchedEps
-        
+        db.shows[db.index["Hero Corp"]!].saisons[2].nbEpisodes = db.shows[db.index["Hero Corp"]!].saisons[2].nbWatchedEps
+
         updateCompteurs()
     }
     
@@ -229,6 +231,42 @@ class Database : NSObject
         }
     }
     
+    
+    func shareWithWidget() {
+        var sharedInfos : [Infos] = []
+        
+        for uneSerie in db.shows {
+            if (uneSerie.watching()) {
+                for uneSaison in uneSerie.saisons {
+                    if(uneSaison.nbWatchedEps > 0) && (uneSaison.nbWatchedEps < uneSaison.nbEpisodes) {
+                        let info : Infos = Infos(serie: uneSerie.serie,
+                                                 channel: uneSerie.network,
+                                                 saison: uneSaison.saison,
+                                                 nbEps: uneSaison.nbEpisodes,
+                                                 nbWatched: uneSaison.nbWatchedEps,
+                                                 poster: uneSerie.poster,
+                                                 rateGlobal: uneSerie.getGlobalRating(),
+                                                 rateTrakt: uneSerie.getFairGlobalRatingTrakt(),
+                                                 rateTVDB: uneSerie.getFairGlobalRatingTVdb(),
+                                                 rateIMDB: uneSerie.getFairGlobalRatingIMdb(),
+                                                 rateMovieDB: uneSerie.getFairGlobalRatingMoviedb(),
+                                                 rateTVmaze: uneSerie.getFairGlobalRatingTVmaze(),
+                                                 rateRottenTomatoes: uneSerie.getFairGlobalRatingRottenTomatoes(),
+                                                 rateBetaSeries: uneSerie.getFairGlobalRatingBetaSeries())
+                        
+                        sharedInfos.append(info)
+                    }
+                }
+            }
+        }
+        
+        let sharedContainer = UserDefaults(suiteName: "group.Series")
+        sharedContainer?.set(try? PropertyListEncoder().encode(sharedInfos), forKey: "Series")
+
+        print ("Shared last infos with widget")
+    }
+    
+
     func merge(_ db : [Serie], adds : [Serie]) -> [Serie]
     {
         var merged : Bool = false

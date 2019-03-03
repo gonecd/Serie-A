@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SeriesCommon
 
 class CellSaison: UITableViewCell {
     @IBOutlet weak var saison: UILabel!

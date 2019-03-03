@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+import SeriesCommon
 
 class IMdb : NSObject
 {

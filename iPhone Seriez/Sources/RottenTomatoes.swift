@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftSoup
+import SeriesCommon
 
 class RottenTomatoes
 {    
@@ -33,6 +34,14 @@ class RottenTomatoes
             
         case "The Marvelous Mrs. Maisel":
             webPage = "https://www.rottentomatoes.com/tv/the_marvelous_mrs_maisel"
+            break
+            
+        case "Bref.":
+            webPage = "https://www.rottentomatoes.com/tv/bref"
+            break
+            
+        case "Brooklyn Nine-Nine":
+            webPage = "https://www.rottentomatoes.com/tv/brooklyn_nine_nine"
             break
             
         case "Hero Corp",

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SeriesCommon
 
 
 class CellSerieListe: UITableViewCell {
@@ -90,8 +91,6 @@ class ViewSerieListe: UITableViewController {
         cell.drapeau.image = getDrapeau(country: viewList[indexPath.row].country)
         
         // Affichage du mini graphe
-        // Couleur de fond
-        //cell.miniGraphe.backgroundColor = colorBackground
         cell.miniGraphe.sendNotes(rateTrakt: viewList[indexPath.row].getFairGlobalRatingTrakt(),
                                   rateTVdb: viewList[indexPath.row].getFairGlobalRatingTVdb(),
                                   rateBetaSeries: viewList[indexPath.row].getFairGlobalRatingBetaSeries(),

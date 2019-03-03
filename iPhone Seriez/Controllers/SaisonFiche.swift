@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SeriesCommon
 
 class CellEpisode: UITableViewCell {
     

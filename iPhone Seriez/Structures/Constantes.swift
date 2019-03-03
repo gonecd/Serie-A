@@ -47,37 +47,6 @@ let correctionTrakt         : Int = 79
 let correctionMoviedb       : Int = 75
 let correctionIMdb          : Int = 86
 
-// Corrections statistiques pour les séries
-var moyenneIMDB         : Int       = 81
-var ecartTypeIMDB       : Double    = 6.254
-var moyenneTVdb         : Int       = 81
-var ecartTypeTVdb       : Double    = 7.829
-var moyenneTrakt        : Int       = 80
-var ecartTypeTrakt      : Double    = 6.181
-var moyenneMovieDB      : Int       = 74
-var ecartTypeMovieDB    : Double    = 6.702
-var moyenneBetaSeries   : Int       = 85
-var ecartTypeBetaSeries : Double    = 7.638
-var moyenneTVmaze       : Int       = 81
-var ecartTypeTVmaze     : Double    = 6.252
-var moyenneRottenTomatoes   : Int       = 81
-var ecartTypeRottenTomatoes : Double    = 12.323
-
-
-// Corrections statistiques pour les épisodes
-var moyenneIMDBeps         : Int       = 86
-var ecartTypeIMDBeps       : Double    = 9.151
-var moyenneTVdbeps         : Int       = 76
-var ecartTypeTVdbeps       : Double    = 11.775
-var moyenneTrakteps        : Int       = 78
-var ecartTypeTrakteps      : Double    = 11.034
-var moyenneMovieDBeps      : Int       = 76
-var ecartTypeMovieDBeps    : Double    = 10.513
-var moyenneBetaSerieseps   : Int       = 85
-var ecartTypeBetaSerieseps : Double    = 10.870
-
-let notesMid    : Double = 60.0
-let notesRange  : Double = 25.0
 
 // Limitations de chargement
 let similarShowsPerSource       : Int = 8
@@ -181,10 +150,3 @@ let languesMovieDB: NSDictionary = [
     "Spanish" : "es",
     "Swedish" : "sv"
 ]
-
-
-
-
-
-
-

@@ -8,6 +8,7 @@
 
 
 import UIKit
+import SeriesCommon
 
 class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource {
     

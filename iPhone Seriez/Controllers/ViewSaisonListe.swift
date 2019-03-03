@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import SeriesCommon
 
 class CellSaisonListe: UITableViewCell {
     

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import SeriesCommon
 
 class ViewAccueil: UIViewController  {
     
@@ -77,6 +77,7 @@ class ViewAccueil: UIViewController  {
         // Chargement de la dernière sauvegarde
         db.loadDB()
         db.updateCompteurs()
+        db.shareWithWidget()
     }
     
 
@@ -222,37 +223,10 @@ class ViewAccueil: UIViewController  {
     }
     
  
-    func printRatings()
-    {
-    print("serie;saison;episode;ratingTrakt;ratersTrakt;ratingTVdb;ratersTVdb;ratingMoviedb;ratersMoviedb;ratingBetaSeries;ratersBetaSeries;ratingIMdb;ratersIMdb")
-        for uneSerie in db.shows
-        {
-            for uneSaison in uneSerie.saisons
-            {
-                for unEpisode in uneSaison.episodes
-                {
-                    print("\(unEpisode.serie);\(unEpisode.saison);\(unEpisode.episode);\(unEpisode.ratingTrakt);\(unEpisode.ratersTrakt);\(unEpisode.ratingTVdb);\(unEpisode.ratersTVdb);\(unEpisode.ratingMoviedb);\(unEpisode.ratersMoviedb);\(unEpisode.ratingBetaSeries);\(unEpisode.ratersBetaSeries);\(unEpisode.ratingIMdb);\(unEpisode.ratersIMdb)")
-                }
-            }
-        }
-        
-        print()
-        print()
-        print()
-        
-        print("source;moyenne;ecartType")
-        print("Trakt;\(moyenneTrakt);\(ecartTypeTrakt)")
-        print("TVdb;\(moyenneTVdb);\(ecartTypeTVdb)")
-        print("MovieDB;\(moyenneMovieDB);\(ecartTypeMovieDB)")
-        print("BetaSeries;\(moyenneBetaSeries);\(ecartTypeBetaSeries)")
-        print("IMDB;\(moyenneIMDB);\(ecartTypeIMDB)")
-        
-    }
-    
-    
     @IBAction func quickReload(_ sender: Any) {
         db.quickRefresh()
         db.finaliseDB()
+        db.shareWithWidget()
 
         for uneSerie in db.shows {
             if ( (uneSerie.watchlist == false) &&
