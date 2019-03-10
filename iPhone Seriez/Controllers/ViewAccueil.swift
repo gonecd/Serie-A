@@ -32,10 +32,9 @@ class ViewAccueil: UIViewController  {
     @IBOutlet weak var cadreReload: UIView!
 
     
-    override func viewDidLoad()
-    {
+    override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         checkDirectories()
         
         // Faire des jolis carrés dégradés à coins ronds
@@ -235,7 +234,7 @@ class ViewAccueil: UIViewController  {
                 db.downloadDates(serie : uneSerie)
             }
         }
-        
+
         db.finaliseDB()
         self.viewDidAppear(false)
     }

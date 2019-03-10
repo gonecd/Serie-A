@@ -67,14 +67,14 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         cleanView()
 
         for i in 0..<sharedInfos.count {
-            let labelSerie = UILabel(frame: CGRect(x: 75, y: 5+(hauteurParSaison*i), width: Int(size.width - 90) , height: 21))
+            let labelSerie = UILabel(frame: CGRect(x: 75, y: 5+(hauteurParSaison*i), width: Int(size.width - 90) , height: 25))
             labelSerie.textColor = .black
-            labelSerie.font = .systemFont(ofSize: 18.0, weight : .heavy)
+            labelSerie.font = .systemFont(ofSize: 24.0, weight : .heavy)
             labelSerie.textAlignment = .left
             labelSerie.text = sharedInfos[i].serie
             self.view.addSubview(labelSerie)
             
-            let labelSaison = UILabel(frame: CGRect(x: Int(size.width - 100), y: 40+(hauteurParSaison*i), width: 40, height: 40))
+            let labelSaison = UILabel(frame: CGRect(x: Int(size.width - 120), y: 38+(hauteurParSaison*i), width: 40, height: 40))
             labelSaison.font = .systemFont(ofSize: 18.0, weight : .bold)
             labelSaison.backgroundColor = .white
             labelSaison.textColor = .blue
@@ -109,11 +109,11 @@ class TodayViewController: UIViewController, NCWidgetProviding {
             self.view.addSubview(poster)
             
             let grapheVus : GraphViewed = GraphViewed(frame: CGRect(x: 90, y: 60+(hauteurParSaison*i), width: 20, height: 20))
-            grapheVus.sendFigures(eps: sharedInfos[i].nbEps, watched: sharedInfos[i].nbWatched)
+            grapheVus.sendFigures(eps: sharedInfos[i].nbEps, watched: sharedInfos[i].nbWatched, color : UIColor.darkGray)
             grapheVus.setNeedsDisplay()
             self.view.addSubview(grapheVus)
             
-            let grapheNotes : GraphRates = GraphRates(frame: CGRect(x: Int(size.width - 50), y: 40+(hauteurParSaison*i), width: 40, height: 40))
+            let grapheNotes : GraphRates = GraphRates(frame: CGRect(x: Int(size.width - 60), y: 38+(hauteurParSaison*i), width: 40, height: 40))
             grapheNotes.sendFigures(rateTrakt: sharedInfos[i].rateTrakt, rateTVdb: sharedInfos[i].rateTVDB, rateBetaSeries: sharedInfos[i].rateBetaSeries, rateMoviedb: sharedInfos[i].rateMovieDB, rateIMdb: sharedInfos[i].rateIMDB, rateTVmaze: sharedInfos[i].rateTVmaze, rateRottenTomatoes: sharedInfos[i].rateRottenTomatoes)
             grapheNotes.setNeedsDisplay()
             self.view.addSubview(grapheNotes)
@@ -140,8 +140,14 @@ class TodayViewController: UIViewController, NCWidgetProviding {
             rateSerie.text = String(sharedInfos[i].rateGlobal) + " %"
             rateSerie.layer.cornerRadius = 12
             rateSerie.layer.masksToBounds = true
-
             self.view.addSubview(rateSerie)
+            
+            let grapheVus : GraphViewed = GraphViewed(frame: CGRect(x: largeur+((largeur+40)*i)-5, y: 32, width: 30, height: 30))
+            grapheVus.sendFigures(eps: sharedInfos[i].nbEps, watched: sharedInfos[i].nbWatched, color : UIColor.blue)
+            grapheVus.setNeedsDisplay()
+            self.view.addSubview(grapheVus)
+            
+
         }
     }
 
@@ -165,6 +171,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 class GraphViewed: UIView {
     var nbEps : Int = 1
     var nbWatched : Int = 0
+    var couleur : UIColor = UIColor.white
     
     override init(frame:CGRect) {
         super.init(frame:frame)
@@ -178,9 +185,9 @@ class GraphViewed: UIView {
         super.draw(dirtyRect)
         
         // Couleur des lignes
-        UIColor.darkGray.setStroke()
-        UIColor.darkGray.setFill()
-
+        couleur.setStroke()
+        if (couleur == UIColor.blue) { UIColor.white.setFill() }
+        
         let centreX : CGFloat = self.frame.height / 2
         let centreY : CGFloat = self.frame.width / 2
         let rayon : CGFloat = min(centreX, centreY) - 2.0
@@ -194,7 +201,12 @@ class GraphViewed: UIView {
                     endAngle: 0,
                     clockwise: false)
         cercle.stroke()
-
+        if (couleur == UIColor.blue) {
+            UIColor.white.setFill()
+            cercle.fill()
+        }
+        
+        couleur.setFill()
         // Pie intérieure
         let pie : UIBezierPath = UIBezierPath()
         pie.lineWidth = 0.1
@@ -208,9 +220,10 @@ class GraphViewed: UIView {
         pie.fill()
     }
     
-    func sendFigures(eps: Int, watched: Int){
+    func sendFigures(eps: Int, watched: Int, color: UIColor){
         self.nbEps = eps
         self.nbWatched = watched
+        self.couleur = color
     }
 }
     
@@ -270,8 +283,10 @@ class GraphRates: UIView {
         self.layer.masksToBounds = true
         
         // Drawing code here.
-        self.traceGrapheCercle()
         self.backgroundCercles()
+        self.traceGrapheCercle()
+        self.traceRayons()
+
     }
     
         
@@ -288,21 +303,42 @@ class GraphRates: UIView {
     
     func backgroundCercles()
     {
-        let nbSource : CGFloat = 7.0
-        
         // Couleur des lignes
         colorAxis.setStroke()
-        
+        UIColor.white.setFill()
+
         // Cadre
         let path : UIBezierPath = UIBezierPath()
-        //path.lineWidth = 0.1
         path.addArc(withCenter: CGPoint(x: centreX, y: centreY),
                     radius: rayon,
                     startAngle: 2 * .pi,
                     endAngle: 0,
                     clockwise: false)
         path.stroke()
+        path.fill()
+    }
+
+    
+    func traceRayons()
+    {
+        let nbSource : CGFloat = 7.0
         
+        // Couleur des lignes
+        colorAxis.setStroke()
+        
+        // Couleur des lignes
+        colorAxis.setStroke()
+        UIColor.white.setFill()
+        
+        // Cadre
+        let path : UIBezierPath = UIBezierPath()
+        path.addArc(withCenter: CGPoint(x: centreX, y: centreY),
+                    radius: rayon,
+                    startAngle: 2 * .pi,
+                    endAngle: 0,
+                    clockwise: false)
+        path.stroke()
+
         path.lineWidth = 0.3
         for i in 1...7 {
             path.move(to: CGPoint(x: centreX + rayon*cos(2 * .pi * CGFloat(i) / nbSource), y:centreY + rayon*sin(2 * .pi * CGFloat(i) / nbSource)))

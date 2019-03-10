@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2A85242E5F52E97EB7C05F39 /* Pods_SerieA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A21F0479BBD9521083FD9EAA /* Pods_SerieA.framework */; };
+		6208D96822352ACC00FE179F /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6208D96722352ACC00FE179F /* Notification.swift */; };
 		6210217521EBA91D00849E6E /* tvmaze.ico in Resources */ = {isa = PBXBuildFile; fileRef = 6210217421EBA91C00849E6E /* tvmaze.ico */; };
 		6217308221BC22C300D37350 /* Allocine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6217308121BC22C300D37350 /* Allocine.swift */; };
 		6217308421BC22DE00D37350 /* RottenTomatoes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6217308321BC22DE00D37350 /* RottenTomatoes.swift */; };
@@ -133,6 +134,7 @@
 
 /* Begin PBXFileReference section */
 		4B2CE9C75E7B8A1EB0761711 /* Pods-SerieA.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SerieA.release.xcconfig"; path = "Pods/Target Support Files/Pods-SerieA/Pods-SerieA.release.xcconfig"; sourceTree = "<group>"; };
+		6208D96722352ACC00FE179F /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		6210217421EBA91C00849E6E /* tvmaze.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = tvmaze.ico; sourceTree = "<group>"; };
 		6217308121BC22C300D37350 /* Allocine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Allocine.swift; sourceTree = "<group>"; };
 		6217308321BC22DE00D37350 /* RottenTomatoes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RottenTomatoes.swift; sourceTree = "<group>"; };
@@ -283,6 +285,7 @@
 			children = (
 				6224A5E42042207800450812 /* Constantes.swift */,
 				6279645E2099D32400ED5578 /* Database.swift */,
+				6208D96722352ACC00FE179F /* Notification.swift */,
 				6255DBD92083780900CA9BA3 /* Helpers.swift */,
 			);
 			path = Structures;
@@ -517,6 +520,9 @@
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
 							};
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
 						};
 					};
 				};
@@ -693,6 +699,7 @@
 				62DD87A81FB76F5D00A9B9EE /* Trakt.swift in Sources */,
 				6217308421BC22DE00D37350 /* RottenTomatoes.swift in Sources */,
 				62B4716C20A88D3E0067BD34 /* ViewSearch.swift in Sources */,
+				6208D96822352ACC00FE179F /* Notification.swift in Sources */,
 				624D27491FFBD4E100B49702 /* ViewAccueil.swift in Sources */,
 				6255DBDA2083780900CA9BA3 /* Helpers.swift in Sources */,
 				62D0EBBB204C30BE009774B6 /* ViewSaisonListe.swift in Sources */,
