@@ -111,4 +111,52 @@ class TVmaze
 
         return (foundSaisons, foundEps, foundDebuts, foundFins)
     }
+    
+    
+    func rechercheParTitre(serieArechercher : String) -> [Serie]
+    {
+        var serieListe : [Serie] = []
+        var ended : Bool = false
+
+        var request : URLRequest = URLRequest(url: URL(string: "http://api.tvmaze.com/search/shows?q=\(serieArechercher.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)!)")!)
+        request.httpMethod = "GET"
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        
+        let task = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
+            if let data = data, let response = response as? HTTPURLResponse {
+                do {
+                    if (response.statusCode != 200) { print("TVmaze::rechercheParTitre error \(response.statusCode) received"); ended = true; return; }
+                    
+                    let jsonResponse : NSArray = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSArray
+                    for fiche in jsonResponse {
+                    
+                        let oneShow : AnyObject = ((fiche as AnyObject).object(forKey: "show")! as AnyObject)
+                        let newSerie : Serie = Serie(serie: oneShow.object(forKey: "name") as! String)
+
+                        newSerie.idTVmaze = String(oneShow.object(forKey: "id") as? Int ?? 0)
+                        newSerie.idIMdb = (oneShow.object(forKey: "externals")! as AnyObject).object(forKey: "imdb") as? String ?? ""
+                        newSerie.idTVdb = String((oneShow.object(forKey: "externals")! as AnyObject).object(forKey: "thetvdb") as? Int ?? 0)
+                        
+                        newSerie.resume = oneShow.object(forKey: "summary") as? String ?? ""
+                        newSerie.status = oneShow.object(forKey: "status") as? String ?? ""
+                        newSerie.genres = oneShow.object(forKey: "genres") as? [String] ?? []
+                        newSerie.language = oneShow.object(forKey: "language") as? String ?? ""
+                        newSerie.runtime = oneShow.object(forKey: "runtime") as? Int ?? 0
+                        newSerie.homepage = oneShow.object(forKey: "url") as? String ?? ""
+                        newSerie.ratingTVmaze = Int(10 * ((oneShow.object(forKey: "rating")! as AnyObject).object(forKey: "average") as? Double ?? 0.0))
+                        
+                        newSerie.watchlist = true
+                        
+                        serieListe.append(newSerie)
+                    }
+                    ended = true
+                } catch let error as NSError { print("TVmaze::rechercheParTitre failed: \(error.localizedDescription)"); ended = true; }
+            } else { print(error as Any); ended = true; }
+        })
+        
+        task.resume()
+        while (!ended) { usleep(1000) }
+        
+        return serieListe
+    }
 }

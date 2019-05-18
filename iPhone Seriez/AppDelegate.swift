@@ -62,26 +62,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // Support for background fetch
     func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        let calendar = Calendar.current
-        let hour = calendar.component(.hour, from: Date())
-        var codeReturn : Int = 9
         
-        if (hour > 2 && hour <= 6) {
-            codeReturn = loadIMDB()
+        let now : Date = Date()
+        let unJour : Double = 60.0 * 60.0 * 24.0
+        let defaults = UserDefaults.standard
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        var message : String = ""
+        
+        // Notes IMDB (une fois par jour)
+        if (now.timeIntervalSince(relodIMDB) > unJour) {
+            loadIMDB()
+            message = message + " - Notes IMDB (Succès)\n"
+            relodIMDB = now
+            defaults.set(dateFormatter.string(from: now), forKey: "RefreshIMDB")
         }
-        else if (hour > 6 && hour <= 10) {
-            codeReturn = loadDates()
+        
+        // Dates TV Maze (une fois par jour)
+        if (now.timeIntervalSince(relodDates) > unJour) {
+            loadDates()
+            message = message + " - Dates TV Maze (Succès)\n"
+            relodDates = now
+            defaults.set(dateFormatter.string(from: now), forKey: "RefreshDates")
         }
-        else {
-            codeReturn = loadStatuses()
-        }
+        
+        // Statuses Trakt
+        loadStatuses()
+        message = message + " - Status Trakt (Succès)"
 
-        switch (codeReturn) {
-        case 0 : completionHandler(.newData)
-        case 1 : completionHandler(.noData)
-
-        default : completionHandler(.failed)
-        }
+        dateFormatter.dateFormat = "HH:mm:ss"
+        let duration : String = String(format: "%.1f", arguments:[Date().timeIntervalSince(now)])
+        pushNotification(titre: "Scheduled Refresh", soustitre: "Heure: \(dateFormatter.string(from: now)) - Durée: \(duration) sec", message: message)
+        
+        completionHandler(.newData)
     }
 }
 

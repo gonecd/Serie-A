@@ -10,6 +10,7 @@
 		2A85242E5F52E97EB7C05F39 /* Pods_SerieA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A21F0479BBD9521083FD9EAA /* Pods_SerieA.framework */; };
 		6208D96822352ACC00FE179F /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6208D96722352ACC00FE179F /* Notification.swift */; };
 		6210217521EBA91D00849E6E /* tvmaze.ico in Resources */ = {isa = PBXBuildFile; fileRef = 6210217421EBA91C00849E6E /* tvmaze.ico */; };
+		6214F0FF227F12D10039F6E5 /* ViewSearchNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6214F0FE227F12D10039F6E5 /* ViewSearchNew.swift */; };
 		6217308221BC22C300D37350 /* Allocine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6217308121BC22C300D37350 /* Allocine.swift */; };
 		6217308421BC22DE00D37350 /* RottenTomatoes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6217308321BC22DE00D37350 /* RottenTomatoes.swift */; };
 		6217308621BC22EE00D37350 /* TVmaze.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6217308521BC22EE00D37350 /* TVmaze.swift */; };
@@ -18,6 +19,12 @@
 		6224A5E32041F30200450812 /* ViewSerieListe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6224A5E22041F30200450812 /* ViewSerieListe.swift */; };
 		6224A5E52042207800450812 /* Constantes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6224A5E42042207800450812 /* Constantes.swift */; };
 		6224A5E72043141800450812 /* GraphMiniSerie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6224A5E62043141800450812 /* GraphMiniSerie.swift */; };
+		6231F8E622833ACE009D0351 /* Flag_of_Finland.png in Resources */ = {isa = PBXBuildFile; fileRef = 6231F8E422833ACD009D0351 /* Flag_of_Finland.png */; };
+		6231F8E722833ACE009D0351 /* Flag_of_Sweden.png in Resources */ = {isa = PBXBuildFile; fileRef = 6231F8E522833ACE009D0351 /* Flag_of_Sweden.png */; };
+		6231F8EC22833C34009D0351 /* Flag_of_China.png in Resources */ = {isa = PBXBuildFile; fileRef = 6231F8E822833C33009D0351 /* Flag_of_China.png */; };
+		6231F8ED22833C34009D0351 /* Flag_of_Taiwan.png in Resources */ = {isa = PBXBuildFile; fileRef = 6231F8E922833C33009D0351 /* Flag_of_Taiwan.png */; };
+		6231F8EE22833C34009D0351 /* Flag_of_India.png in Resources */ = {isa = PBXBuildFile; fileRef = 6231F8EA22833C33009D0351 /* Flag_of_India.png */; };
+		6231F8EF22833C34009D0351 /* Flag_of_Israel.png in Resources */ = {isa = PBXBuildFile; fileRef = 6231F8EB22833C34009D0351 /* Flag_of_Israel.png */; };
 		624D27491FFBD4E100B49702 /* ViewAccueil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624D27481FFBD4E100B49702 /* ViewAccueil.swift */; };
 		624EC9A520B1A87E005ED207 /* Chart-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 624EC9A420B1A87E005ED207 /* Chart-icon.png */; };
 		624EC9A720B2DF20005ED207 /* data.tsv in Resources */ = {isa = PBXBuildFile; fileRef = 624EC9A620B2DF20005ED207 /* data.tsv */; };
@@ -50,7 +57,6 @@
 		62B087C6207BED6F007703FF /* Flag_of_Canada.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087C5207BED6F007703FF /* Flag_of_Canada.png */; };
 		62B087CA207BEE3A007703FF /* Flag_of_Norway.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087C7207BEE39007703FF /* Flag_of_Norway.png */; };
 		62B087CB207BEE3A007703FF /* Flag_of_the_Czech_Republic.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087C8207BEE39007703FF /* Flag_of_the_Czech_Republic.png */; };
-		62B087CC207BEE3A007703FF /* Flag_of_Sweden.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087C9207BEE3A007703FF /* Flag_of_Sweden.png */; };
 		62B4716C20A88D3E0067BD34 /* ViewSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B4716B20A88D3E0067BD34 /* ViewSearch.swift */; };
 		62B4D8B8208CB7C0002110E8 /* Flag_of_Brazil.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B4D8B7208CB7BF002110E8 /* Flag_of_Brazil.png */; };
 		62CD57C32038B87D00DE28A1 /* GraphMiniSaison.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62CD57C22038B87D00DE28A1 /* GraphMiniSaison.swift */; };
@@ -136,6 +142,7 @@
 		4B2CE9C75E7B8A1EB0761711 /* Pods-SerieA.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SerieA.release.xcconfig"; path = "Pods/Target Support Files/Pods-SerieA/Pods-SerieA.release.xcconfig"; sourceTree = "<group>"; };
 		6208D96722352ACC00FE179F /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		6210217421EBA91C00849E6E /* tvmaze.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = tvmaze.ico; sourceTree = "<group>"; };
+		6214F0FE227F12D10039F6E5 /* ViewSearchNew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewSearchNew.swift; sourceTree = "<group>"; };
 		6217308121BC22C300D37350 /* Allocine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Allocine.swift; sourceTree = "<group>"; };
 		6217308321BC22DE00D37350 /* RottenTomatoes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RottenTomatoes.swift; sourceTree = "<group>"; };
 		6217308521BC22EE00D37350 /* TVmaze.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVmaze.swift; sourceTree = "<group>"; };
@@ -144,6 +151,12 @@
 		6224A5E22041F30200450812 /* ViewSerieListe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewSerieListe.swift; sourceTree = "<group>"; };
 		6224A5E42042207800450812 /* Constantes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constantes.swift; sourceTree = "<group>"; };
 		6224A5E62043141800450812 /* GraphMiniSerie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphMiniSerie.swift; sourceTree = "<group>"; };
+		6231F8E422833ACD009D0351 /* Flag_of_Finland.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_Finland.png; sourceTree = "<group>"; };
+		6231F8E522833ACE009D0351 /* Flag_of_Sweden.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Flag_of_Sweden.png; path = ../../../../../Icones/Drapeaux/Flag_of_Sweden.png; sourceTree = "<group>"; };
+		6231F8E822833C33009D0351 /* Flag_of_China.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_China.png; sourceTree = "<group>"; };
+		6231F8E922833C33009D0351 /* Flag_of_Taiwan.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_Taiwan.png; sourceTree = "<group>"; };
+		6231F8EA22833C33009D0351 /* Flag_of_India.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_India.png; sourceTree = "<group>"; };
+		6231F8EB22833C34009D0351 /* Flag_of_Israel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_Israel.png; sourceTree = "<group>"; };
 		624D27481FFBD4E100B49702 /* ViewAccueil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewAccueil.swift; sourceTree = "<group>"; };
 		624EC9A420B1A87E005ED207 /* Chart-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Chart-icon.png"; sourceTree = "<group>"; };
 		624EC9A620B2DF20005ED207 /* data.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = data.tsv; sourceTree = "<group>"; };
@@ -178,7 +191,6 @@
 		62B087C5207BED6F007703FF /* Flag_of_Canada.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_Canada.png; sourceTree = "<group>"; };
 		62B087C7207BEE39007703FF /* Flag_of_Norway.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_Norway.png; sourceTree = "<group>"; };
 		62B087C8207BEE39007703FF /* Flag_of_the_Czech_Republic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_the_Czech_Republic.png; sourceTree = "<group>"; };
-		62B087C9207BEE3A007703FF /* Flag_of_Sweden.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_Sweden.png; sourceTree = "<group>"; };
 		62B4716B20A88D3E0067BD34 /* ViewSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewSearch.swift; sourceTree = "<group>"; };
 		62B4D8B7208CB7BF002110E8 /* Flag_of_Brazil.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_Brazil.png; sourceTree = "<group>"; };
 		62CD57C22038B87D00DE28A1 /* GraphMiniSaison.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphMiniSaison.swift; sourceTree = "<group>"; };
@@ -300,6 +312,7 @@
 				6224A5E22041F30200450812 /* ViewSerieListe.swift */,
 				625799B6219734480010144D /* ViewPropals.swift */,
 				62B4716B20A88D3E0067BD34 /* ViewSearch.swift */,
+				6214F0FE227F12D10039F6E5 /* ViewSearchNew.swift */,
 				62DD87A91FB7838400A9B9EE /* SerieFiche.swift */,
 				62AC509F200E58A200A8C841 /* SaisonFiche.swift */,
 				62F8ECF32013775800A41EF7 /* EpisodeFiche.swift */,
@@ -364,8 +377,13 @@
 		62B087B0207BEA8B007703FF /* Drapeaux */ = {
 			isa = PBXGroup;
 			children = (
+				6231F8E422833ACD009D0351 /* Flag_of_Finland.png */,
+				6231F8E522833ACE009D0351 /* Flag_of_Sweden.png */,
 				62B087C7207BEE39007703FF /* Flag_of_Norway.png */,
-				62B087C9207BEE3A007703FF /* Flag_of_Sweden.png */,
+				6231F8E822833C33009D0351 /* Flag_of_China.png */,
+				6231F8EA22833C33009D0351 /* Flag_of_India.png */,
+				6231F8EB22833C34009D0351 /* Flag_of_Israel.png */,
+				6231F8E922833C33009D0351 /* Flag_of_Taiwan.png */,
 				62B087C8207BEE39007703FF /* Flag_of_the_Czech_Republic.png */,
 				62B087C5207BED6F007703FF /* Flag_of_Canada.png */,
 				62B4D8B7208CB7BF002110E8 /* Flag_of_Brazil.png */,
@@ -580,6 +598,8 @@
 				62DD87B81FB8BE4F00A9B9EE /* betaseries.png in Resources */,
 				62DD877A1FB766C600A9B9EE /* LaunchScreen.storyboard in Resources */,
 				62DD87771FB766C600A9B9EE /* Assets.xcassets in Resources */,
+				6231F8EF22833C34009D0351 /* Flag_of_Israel.png in Resources */,
+				6231F8ED22833C34009D0351 /* Flag_of_Taiwan.png in Resources */,
 				62B087C2207BEBC6007703FF /* Flag_of_Germany.png in Resources */,
 				62FF97CE2039016B007B658E /* Stop-icon.png in Resources */,
 				62B087CA207BEE3A007703FF /* Flag_of_Norway.png in Resources */,
@@ -587,8 +607,10 @@
 				62A581E81FBC5BCB002D8FD3 /* rottentomatoes.ico in Resources */,
 				62DD87751FB766C600A9B9EE /* Main.storyboard in Resources */,
 				62796465209A15A800ED5578 /* Logo.png in Resources */,
+				6231F8EC22833C34009D0351 /* Flag_of_China.png in Resources */,
 				624EC9A520B1A87E005ED207 /* Chart-icon.png in Resources */,
 				62FF97D12039016B007B658E /* Bio-Hazard-icon.png in Resources */,
+				6231F8EE22833C34009D0351 /* Flag_of_India.png in Resources */,
 				6279645B2095D5BB00ED5578 /* Flag_of_Australia.png in Resources */,
 				62B087AE207A7938007703FF /* Magnifi-icon.png in Resources */,
 				62B087C1207BEBC6007703FF /* Flag_of_the_United_States.png in Resources */,
@@ -603,16 +625,17 @@
 				624EC9A720B2DF20005ED207 /* data.tsv in Resources */,
 				62B087C3207BEBC6007703FF /* Flag_of_Spain.png in Resources */,
 				62FF97D02039016B007B658E /* Eye-icon.png in Resources */,
-				62B087CC207BEE3A007703FF /* Flag_of_Sweden.png in Resources */,
 				62B087AF207A7938007703FF /* Idea-icon.png in Resources */,
 				6279645A2095D5BB00ED5578 /* Flag_of_Japan.png in Resources */,
 				62FF97C02038C9A3007B658E /* themoviedb.ico in Resources */,
 				62FF97CF2039016B007B658E /* Play-icon.png in Resources */,
 				62FF97D72039076D007B658E /* Calendar-icon.png in Resources */,
 				62A581E71FBC5BCB002D8FD3 /* imdb.ico in Resources */,
+				6231F8E722833ACE009D0351 /* Flag_of_Sweden.png in Resources */,
 				62FF97D92039076D007B658E /* Air-icon.png in Resources */,
 				62B087C0207BEBC6007703FF /* Flag_of_the_United_Kingdom.png in Resources */,
 				62F2234021E120E00032A6E3 /* Refresh-icon.png in Resources */,
+				6231F8E622833ACE009D0351 /* Flag_of_Finland.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -705,6 +728,7 @@
 				62D0EBBB204C30BE009774B6 /* ViewSaisonListe.swift in Sources */,
 				6279645F2099D32400ED5578 /* Database.swift in Sources */,
 				62AC50A0200E58A200A8C841 /* SaisonFiche.swift in Sources */,
+				6214F0FF227F12D10039F6E5 /* ViewSearchNew.swift in Sources */,
 				62DD87701FB766C600A9B9EE /* AppDelegate.swift in Sources */,
 				6217308621BC22EE00D37350 /* TVmaze.swift in Sources */,
 			);

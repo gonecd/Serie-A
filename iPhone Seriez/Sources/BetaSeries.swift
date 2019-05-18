@@ -59,7 +59,7 @@ class BetaSeries : NSObject
                                 for unEpisode in jsonResponse.object(forKey: "episodes")! as! NSArray
                                 {
                                     let cetEpisode: Int = ((unEpisode as AnyObject).object(forKey: "episode")! as! Int)-1
-                                    
+
                                     if (cetEpisode < saison.episodes.count)
                                     {
                                         if (saison.episodes[cetEpisode].date.compare(today) == .orderedAscending)
@@ -80,6 +80,63 @@ class BetaSeries : NSObject
         }
     }
     
+    func getEpisodesRatingsBis(_ uneSerie: Serie)
+    {
+        var url : URL
+        var request : URLRequest
+        var task : URLSessionDataTask
+        let today : Date = Date()
+        var listeEpisodes: String = ""
+
+        // Création de la liste de tous les épisodes
+        for saison in uneSerie.saisons {
+            for episode in saison.episodes {
+                if (episode.idTVdb != 0) {
+                    if (listeEpisodes != "") { listeEpisodes = listeEpisodes+"," }
+                    listeEpisodes = listeEpisodes+String(episode.idTVdb)
+                }
+            }
+        }
+        
+        url = URL(string: "https://api.betaseries.com/episodes/display?thetvdb_id=\(listeEpisodes)")!
+        request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue("\(BetaSeriesUserkey)", forHTTPHeaderField: "X-BetaSeries-Key")
+        request.addValue("2.4", forHTTPHeaderField: "X-BetaSeries-Version")
+        
+        task = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
+            if let data = data, let response = response as? HTTPURLResponse {
+                do {
+                    if response.statusCode == 200 {
+                        let jsonResponse : NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
+                        
+                        if (jsonResponse.object(forKey: "episodes") != nil) {
+                            for unEpisode in jsonResponse.object(forKey: "episodes")! as! NSArray {
+                                let cetteSaison: Int = ((unEpisode as AnyObject).object(forKey: "season")! as! Int)-1
+                                let cetEpisode: Int = ((unEpisode as AnyObject).object(forKey: "episode")! as! Int)-1
+                                
+                                if (cetteSaison < uneSerie.saisons.count) {
+                                    if (cetEpisode < uneSerie.saisons[cetteSaison].episodes.count) {
+                                        if (uneSerie.saisons[cetteSaison].episodes[cetEpisode].date.compare(today) == .orderedAscending) {
+                                            uneSerie.saisons[cetteSaison].episodes[cetEpisode].ratingBetaSeries = Int(20 * (((unEpisode as AnyObject).object(forKey: "note")! as AnyObject).object(forKey: "mean") as? Double ?? 0.0))
+                                            uneSerie.saisons[cetteSaison].episodes[cetEpisode].ratersBetaSeries = ((unEpisode as AnyObject).object(forKey: "note")! as AnyObject).object(forKey: "total") as? Int ?? 0
+                                        }
+                                        
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } catch let error as NSError { print("BetaSeries::getSerieInfos failed: \(error.localizedDescription)") }
+            } else { print(error as Any) }
+        })
+        
+        task.resume()
+        while (task.state != URLSessionTask.State.completed) { usleep(1000) }
+        
+    }
+
     
     func getSerieGlobalInfos(idTVDB : String, idIMDB : String) -> Serie
     {
@@ -298,4 +355,63 @@ class BetaSeries : NSObject
         return (uneDate)
     }
     
+    
+    func rechercheParTitre(serieArechercher : String) -> [Serie]
+    {
+        var serieListe : [Serie] = []
+        var ended : Bool = false
+        
+        var request : URLRequest = URLRequest(url: URL(string: "https://api.betaseries.com/shows/search?title=\(serieArechercher.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)!)&v=3.0&order=popularity")!)
+        request.httpMethod = "GET"
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue("\(BetaSeriesUserkey)", forHTTPHeaderField: "X-BetaSeries-Key")
+        
+        let task = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
+            if let data = data, let response = response as? HTTPURLResponse {
+                do {
+                    if (response.statusCode != 200) { print("BetaSeries::rechercheParTitre error \(response.statusCode) received "); return; }
+                    
+                    let jsonResponse : NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
+                    
+                    for oneItem in (jsonResponse.object(forKey: "shows") as! NSArray)
+                    {
+                        let oneShow : NSDictionary = oneItem as! NSDictionary
+                        let newSerie : Serie = Serie(serie: oneShow.object(forKey: "title") as! String)
+
+                        newSerie.idIMdb = oneShow.object(forKey: "imdb_id") as? String ?? ""
+                        newSerie.idTVdb = String(oneShow.object(forKey: "thetvdb_id") as? Int ?? 0)
+                        newSerie.resume = oneShow.object(forKey: "description") as? String ?? ""
+                        newSerie.network = oneShow.object(forKey: "network") as? String ?? ""
+                        newSerie.banner = (oneShow.object(forKey: "images")! as AnyObject).object(forKey: "banner") as? String ?? ""
+                        newSerie.poster = (oneShow.object(forKey: "images")! as AnyObject).object(forKey: "poster") as? String ?? ""
+                        newSerie.status = oneShow.object(forKey: "status") as? String ?? ""
+                        newSerie.genres = oneShow.object(forKey: "genres") as? [String] ?? []
+                        newSerie.year = Int(oneShow.object(forKey: "creation") as? String ?? "0")!
+                        newSerie.ratingBetaSeries = Int(20 * ((oneShow.object(forKey: "notes")! as AnyObject).object(forKey: "mean") as? Double ?? 0.0))
+                        newSerie.ratersBetaSeries = (oneShow.object(forKey: "notes")! as AnyObject).object(forKey: "total") as? Int ?? 0
+                        newSerie.language = oneShow.object(forKey: "language") as? String ?? ""
+                        newSerie.runtime = Int(oneShow.object(forKey: "length") as? String ?? "0")!
+                        newSerie.nbEpisodes = Int(oneShow.object(forKey: "episodes") as? String ?? "0")!
+                        newSerie.nbSaisons = Int(oneShow.object(forKey: "seasons") as? String ?? "0")!
+                        newSerie.certification = oneShow.object(forKey: "rating") as? String ?? ""
+
+                        newSerie.watchlist = true
+                        
+                        serieListe.append(newSerie)
+                    }
+
+                    ended = true
+                    
+                } catch let error as NSError { print("BetaSeries::rechercheParTitre failed: \(error.localizedDescription)"); ended = true; }
+            } else { print(error as Any); ended = true; }
+        })
+        
+        task.resume()
+        while (!ended) { usleep(1000) }
+        
+        return serieListe
+    }
+    
+    
+
 }

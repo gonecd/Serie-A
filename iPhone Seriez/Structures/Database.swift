@@ -23,8 +23,7 @@ class Database : NSObject
     var valWatchList : Int = 0
     var valSeriesAbandonnees : Int = 0
 
-    override init()
-    {
+    override init() {
     }
     
     func quickRefresh() {
@@ -36,7 +35,6 @@ class Database : NSObject
                 // Nouvelle série on l'ajoute telle que
                 index[uneSerie.serie] = shows.count
                 downloadGlobalInfo(serie: uneSerie)
-
                 shows.append(uneSerie)
             }
             else {
@@ -61,7 +59,6 @@ class Database : NSObject
                 // Nouvelle série on l'ajoute telle que
                 index[uneSerie.serie] = shows.count
                 downloadGlobalInfo(serie: uneSerie)
-
                 shows.append(uneSerie)
             }
             else {
@@ -77,7 +74,6 @@ class Database : NSObject
                 // Nouvelle série on l'ajoute telle que
                 index[uneSerie.serie] = shows.count
                 downloadGlobalInfo(serie: uneSerie)
-
                 shows.append(uneSerie)
             }
             else {
@@ -115,7 +111,6 @@ class Database : NSObject
         
         timeStamp = Date()
         let dataRotten : Serie = rottenTomatoes.getSerieGlobalInfos(serie : serie.serie)
-        //let dataRotten : Serie = Serie(serie: serie.serie)
         timerRottenTom = timerRottenTom + Date().timeIntervalSince(timeStamp)
 
         serie.cleverMerge(TVdb: dataTVdb, Moviedb: dataMoviedb, Trakt: dataTrakt, BetaSeries: dataBetaSeries, IMDB: dataIMDB, RottenTomatoes: dataRotten, TVmaze: dataTVmaze)
@@ -138,7 +133,8 @@ class Database : NSObject
         
         if (serie.idTVdb != "") {
             timeStamp = Date()
-            betaSeries.getEpisodesRatings(serie)
+            //betaSeries.getEpisodesRatings(serie)
+            betaSeries.getEpisodesRatingsBis(serie)
             timerBetaSeries = timerBetaSeries + Date().timeIntervalSince(timeStamp)
         }
         
@@ -158,6 +154,7 @@ class Database : NSObject
             timerTrakt = timerTrakt + Date().timeIntervalSince(timeStamp)
         }
     }
+    
     
     func downloadDates(serie : Serie)
     {
@@ -207,9 +204,13 @@ class Database : NSObject
     
     func saveDB ()
     {
-        let pathToSVG = AppDir.appendingPathComponent("SerieA.db")
-        if (NSKeyedArchiver.archiveRootObject(shows, toFile: pathToSVG.path) == false) {
-            print ("Echec de la sauvegarde")
+        // https://stackoverflow.com/questions/53347426/ios-editor-bug-archiveddata-renamed
+        
+        if (db.shows.count > 0) {
+            let pathToSVG = AppDir.appendingPathComponent("SerieA.db")
+            if (NSKeyedArchiver.archiveRootObject(shows, toFile: pathToSVG.path) == false) {
+                print ("Echec de la sauvegarde")
+            }
         }
     }
     
@@ -267,8 +268,7 @@ class Database : NSObject
     }
     
 
-    func merge(_ db : [Serie], adds : [Serie]) -> [Serie]
-    {
+    func merge(_ db : [Serie], adds : [Serie]) -> [Serie] {
         var merged : Bool = false
         var newDB : [Serie] = db
         
@@ -291,8 +291,7 @@ class Database : NSObject
     }
 
 
-    func updateCompteurs()
-    {
+    func updateCompteurs() {
         let today : Date = Date()
         valSeriesFinies = 0
         valSeriesEnCours = 0
@@ -306,35 +305,26 @@ class Database : NSObject
         {
             if (uneSerie.unfollowed) { valSeriesAbandonnees = valSeriesAbandonnees + 1 }
             if (uneSerie.watchlist) { valWatchList = valWatchList + 1 }
-            if (uneSerie.saisons.count > 0)
-            {
+            if (uneSerie.saisons.count > 0) {
                 let lastSaison : Saison = uneSerie.saisons[uneSerie.saisons.count - 1]
                 
                 if ( (lastSaison.watched() == true) && (uneSerie.status == "Ended") ) { valSeriesFinies = valSeriesFinies + 1 }
                 if ( ((lastSaison.watched() == false) || (uneSerie.status != "Ended")) && (uneSerie.unfollowed == false) && (uneSerie.watchlist == false) ) { valSeriesEnCours = valSeriesEnCours + 1 }
             }
             
-            for uneSaison in uneSerie.saisons
-            {
-                if ( (uneSaison.starts != ZeroDate) &&
-                    (uneSaison.starts.compare(today) == .orderedAscending) &&
-                    ((uneSaison.ends.compare(today) == .orderedDescending)  || (uneSaison.ends == ZeroDate)) &&
-                    (uneSaison.watched() == false)  &&
-                    (uneSerie.watchlist == false) &&
-                    (uneSerie.unfollowed == false) )
+            for uneSaison in uneSerie.saisons {
+                if ( (uneSaison.starts != ZeroDate) && (uneSaison.starts.compare(today) == .orderedAscending) &&
+                    ((uneSaison.ends.compare(today) == .orderedDescending) || (uneSaison.ends == ZeroDate)) &&
+                    (uneSaison.watched() == false)  && (uneSerie.watchlist == false) && (uneSerie.unfollowed == false) )
                 { valSaisonsOnTheAir = valSaisonsOnTheAir + 1 }
                 
                 if ( (uneSaison.starts != ZeroDate) &&
-                    (uneSaison.ends.compare(today) == .orderedAscending) &&
-                    (uneSaison.ends != ZeroDate) &&
-                    (uneSaison.watched() == false) &&
-                    (uneSerie.watchlist == false) &&
-                    (uneSerie.unfollowed == false) )
+                    (uneSaison.ends.compare(today) == .orderedAscending) && (uneSaison.ends != ZeroDate) &&
+                    (uneSaison.watched() == false) && (uneSerie.watchlist == false) && (uneSerie.unfollowed == false) )
                 { valSaisonsDiffusees = valSaisonsDiffusees + 1 }
                 
                 if ( (uneSaison.starts.compare(today) == .orderedDescending) &&
-                    (uneSerie.watchlist == false) &&
-                    (uneSerie.unfollowed == false) )
+                    (uneSerie.watchlist == false) && (uneSerie.unfollowed == false) )
                 { valSaisonsAnnoncees = valSaisonsAnnoncees + 1 }
             }
         }

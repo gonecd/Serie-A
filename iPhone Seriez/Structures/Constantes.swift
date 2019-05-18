@@ -23,6 +23,9 @@ var tvMaze         : TVmaze         = TVmaze.init()
 var rottenTomatoes : RottenTomatoes = RottenTomatoes.init()
 
 var db          : Database   = Database.init()
+var relodDates  : Date = Date.init(timeIntervalSince1970: 0)
+var relodIMDB   : Date = Date.init(timeIntervalSince1970: 0)
+
 
 // Loading timers
 var timerTrakt      : TimeInterval = 0

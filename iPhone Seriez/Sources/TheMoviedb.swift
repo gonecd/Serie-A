@@ -463,5 +463,59 @@ class TheMoviedb : NSObject
         
         return (foundComments, foundLikes, foundDates, foundSource)
     }
+    
+    func rechercheParTitre(serieArechercher : String) -> [Serie]
+    {
+        var serieListe : [Serie] = []
+        var ended : Bool = false
+
+        var request : URLRequest =  URLRequest(url: URL(string: "https://api.themoviedb.org/3/search/tv?api_key=\(TheMoviedbUserkey)&query=\(serieArechercher.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)!)&page=1")!)
+        request.httpMethod = "GET"
+        
+        let task : URLSessionDataTask = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
+            if let data = data, let response = response as? HTTPURLResponse {
+                do {
+                    if response.statusCode == 200
+                    {
+                        let jsonResponse : NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
+                        
+                        for oneItem in (jsonResponse.object(forKey: "results") as! NSArray)
+                        {
+                            let oneShow : NSDictionary = oneItem as! NSDictionary
+                            let newSerie : Serie = Serie(serie: oneShow.object(forKey: "name") as! String)
+                            
+                            newSerie.idMoviedb = String(oneShow.object(forKey: "id") as? Int ?? 0)
+                            newSerie.ratingMovieDB = Int(10 * (oneShow.object(forKey: "vote_average") as? Double ?? 0.0))
+                            newSerie.ratersMovieDB = oneShow.object(forKey: "vote_count") as? Int ?? 0
+                            newSerie.resume = oneShow.object(forKey: "overview") as? String ?? ""
+                            newSerie.language = oneShow.object(forKey: "original_language") as? String ?? ""
+                            
+                            if ((oneShow.object(forKey: "origin_country") != nil) && ((oneShow.object(forKey: "origin_country") as! NSArray).count > 0) ) {
+                                newSerie.country = (oneShow.object(forKey: "origin_country") as! NSArray).object(at: 0) as? String ?? ""
+                            }
+
+                            newSerie.poster = oneShow.object(forKey: "poster_path") as? String ?? ""
+                            if (newSerie.poster != "") { newSerie.poster = "https://image.tmdb.org/t/p/w92" + newSerie.poster }
+
+                            newSerie.watchlist = true
+                            
+                            serieListe.append(newSerie)
+                        }
+                        
+                        ended = true
+                    }
+                    else
+                    {
+                        print("TheMoviedb::getSerieGlobalInfos failed")
+                    }
+                } catch let error as NSError { print("TheMoviedb::rechercheParTitre failed : \(error.localizedDescription)") }
+            } else { print(error as Any) }
+        })
+        
+        task.resume()
+        while (!ended) { usleep(1000) }
+        
+        return serieListe
+    }
 }
 

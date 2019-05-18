@@ -73,6 +73,19 @@ class ViewAccueil: UIViewController  {
         theTVdb.initializeToken()
         imdb.loadDataFile()
         
+        // Chargement des dates de refresh
+        let defaults = UserDefaults.standard
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+
+        if ((defaults.object(forKey: "RefreshDates")) != nil) {
+            relodDates = dateFormatter.date(from: defaults.string(forKey: "RefreshDates")!)!
+        }
+        
+        if ((defaults.object(forKey: "RefreshIMDB")) != nil) {
+            relodIMDB = dateFormatter.date(from: defaults.string(forKey: "RefreshIMDB")!)!
+        }
+
         // Chargement de la dernière sauvegarde
         db.loadDB()
         db.updateCompteurs()
@@ -100,9 +113,6 @@ class ViewAccueil: UIViewController  {
         var buildList = [Serie]()
         var buildListSaisons = [Int]()
         let today : Date = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale.current
-        dateFormatter.dateFormat = "dd MMM yy"
         
         switch (bouton.restorationIdentifier ?? "") {
         case "Watchlist":
@@ -121,12 +131,9 @@ class ViewAccueil: UIViewController  {
         case "Finies":
             let viewController = segue.destination as! ViewSerieListe
             viewController.title = "Séries anciennes et finies"
-            for uneSerie in db.shows
-            {
-                if (uneSerie.saisons.count > 0)
-                {
-                    if ( (uneSerie.saisons[uneSerie.saisons.count - 1].watched() == true) && (uneSerie.status == "Ended") )
-                    {
+            for uneSerie in db.shows {
+                if (uneSerie.saisons.count > 0) {
+                    if ( (uneSerie.saisons[uneSerie.saisons.count - 1].watched() == true) && (uneSerie.status == "Ended") ) {
                         buildList.append(uneSerie)
                     }
                 }
@@ -136,12 +143,9 @@ class ViewAccueil: UIViewController  {
         case "En cours":
             let viewController = segue.destination as! ViewSerieListe
             viewController.title = "Séries en cours"
-            for uneSerie in db.shows
-            {
-                if (uneSerie.saisons.count > 0)
-                {
-                    if ( ((uneSerie.saisons[uneSerie.saisons.count - 1].watched() == false) || (uneSerie.status != "Ended")) && (uneSerie.unfollowed == false) && (uneSerie.watchlist == false) )
-                    {
+            for uneSerie in db.shows {
+                if (uneSerie.saisons.count > 0) {
+                    if ( ((uneSerie.saisons[uneSerie.saisons.count - 1].watched() == false) || (uneSerie.status != "Ended")) && (uneSerie.unfollowed == false) && (uneSerie.watchlist == false) ) {
                         buildList.append(uneSerie)
                     }
                 }
@@ -151,17 +155,11 @@ class ViewAccueil: UIViewController  {
         case "On the air":
             let viewController = segue.destination as! ViewSaisonListe
             viewController.title = "Saisons en diffusion"
-            for uneSerie in db.shows
-            {
-                for uneSaison in uneSerie.saisons
-                {
-                    if ( (uneSaison.starts != ZeroDate) &&
-                        (uneSaison.starts.compare(today) == .orderedAscending) &&
+            for uneSerie in db.shows {
+                for uneSaison in uneSerie.saisons {
+                    if ( (uneSaison.starts != ZeroDate) && (uneSaison.starts.compare(today) == .orderedAscending) &&
                         ((uneSaison.ends.compare(today) == .orderedDescending)  || (uneSaison.ends == ZeroDate)) &&
-                        (uneSaison.watched() == false)  &&
-                        (uneSerie.watchlist == false) &&
-                        (uneSerie.unfollowed == false) )
-                    {
+                        (uneSaison.watched() == false)  && (uneSerie.watchlist == false) && (uneSerie.unfollowed == false) ) {
                         buildList.append(uneSerie)
                         buildListSaisons.append(uneSaison.saison)
                     }
@@ -173,17 +171,11 @@ class ViewAccueil: UIViewController  {
         case "Diffusées":
             let viewController = segue.destination as! ViewSaisonListe
             viewController.title = "Saisons prêtes à voir"
-            for uneSerie in db.shows
-            {
-                for uneSaison in uneSerie.saisons
-                {
+            for uneSerie in db.shows {
+                for uneSaison in uneSerie.saisons {
                     if ( (uneSaison.starts != ZeroDate) &&
-                        (uneSaison.ends.compare(today) == .orderedAscending ) &&
-                        (uneSaison.ends != ZeroDate) &&
-                        (uneSaison.watched() == false) &&
-                        (uneSerie.watchlist == false) &&
-                        (uneSerie.unfollowed == false) )
-                    {
+                        (uneSaison.ends.compare(today) == .orderedAscending ) && (uneSaison.ends != ZeroDate) &&
+                        (uneSaison.watched() == false) && (uneSerie.watchlist == false) && (uneSerie.unfollowed == false) ) {
                         buildList.append(uneSerie)
                         buildListSaisons.append(uneSaison.saison)
                     }
@@ -195,14 +187,9 @@ class ViewAccueil: UIViewController  {
         case "Annoncées":
             let viewController = segue.destination as! ViewSaisonListe
             viewController.title = "Nouvelles saisons annoncées"
-            for uneSerie in db.shows
-            {
-                for uneSaison in uneSerie.saisons
-                {
-                    if ( (uneSaison.starts.compare(today) == .orderedDescending) &&
-                        (uneSerie.watchlist == false) &&
-                        (uneSerie.unfollowed == false) )
-                    {
+            for uneSerie in db.shows {
+                for uneSaison in uneSerie.saisons {
+                    if ( (uneSaison.starts.compare(today) == .orderedDescending) && (uneSerie.watchlist == false) && (uneSerie.unfollowed == false) ) {
                         buildList.append(uneSerie)
                         buildListSaisons.append(uneSaison.saison)
                     }
@@ -228,9 +215,7 @@ class ViewAccueil: UIViewController  {
         db.shareWithWidget()
 
         for uneSerie in db.shows {
-            if ( (uneSerie.watchlist == false) &&
-                 (uneSerie.unfollowed == false) &&
-                 (uneSerie.status != "Ended") ){
+            if ( (uneSerie.watchlist == false) && (uneSerie.unfollowed == false) && (uneSerie.status != "Ended") ) {
                 db.downloadDates(serie : uneSerie)
             }
         }

@@ -44,7 +44,7 @@ class Trakt : NSObject
         }
         else
         {
-            self.downloadToken(key: "53369173")
+            self.downloadToken(key: "DAD64729")
             
             return false
         }
@@ -173,6 +173,66 @@ class Trakt : NSObject
         task.resume()
         while (task.state != URLSessionTask.State.completed) { sleep(1) }
         
+        return serieListe
+    }
+    
+    
+    func rechercheParTitre(serieArechercher : String) -> [Serie]
+    {
+        var serieListe : [Serie] = []
+        var ended : Bool = false
+
+        var request = URLRequest(url: URL(string: "https://api.trakt.tv/search/show?extended=full,fields=title,translations&query=\(serieArechercher.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)!)")!)
+        
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("Bearer \(self.Token)", forHTTPHeaderField: "Authorization")
+        request.addValue("2", forHTTPHeaderField: "trakt-api-version")
+        request.addValue("\(self.TraktClientID)", forHTTPHeaderField: "trakt-api-key")
+        
+        let task = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
+            if let data = data, let response = response as? HTTPURLResponse {
+                do {
+                    
+                    if (response.statusCode != 200) { print("Trakt::rechercheParTitre error \(response.statusCode) received "); return; }
+                    
+                    let jsonResponse : NSArray = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSArray
+                    
+                    for fiche in jsonResponse {
+                        
+                        let oneShow : AnyObject = ((fiche as AnyObject).object(forKey: "show")! as AnyObject)
+                        let newSerie : Serie = Serie(serie: oneShow.object(forKey: "title") as! String)
+                        
+                        newSerie.year = oneShow.object(forKey: "year") as? Int ?? 0
+                        newSerie.idIMdb = (oneShow.object(forKey: "ids")! as AnyObject).object(forKey: "imdb") as? String ?? ""
+                        newSerie.idTVdb = String((oneShow.object(forKey: "ids")! as AnyObject).object(forKey: "tvdb") as? Int ?? 0)
+                        newSerie.idTrakt = String((oneShow.object(forKey: "ids")! as AnyObject).object(forKey: "trakt") as? Int ?? 0)
+                        newSerie.idMoviedb = String((oneShow.object(forKey: "ids")! as AnyObject).object(forKey: "tmdb") as? Int ?? 0)
+                        newSerie.network = oneShow.object(forKey: "network") as? String ?? ""
+                        newSerie.status = oneShow.object(forKey: "status") as? String ?? ""
+                        newSerie.resume = oneShow.object(forKey: "overview") as? String ?? ""
+                        newSerie.genres = oneShow.object(forKey: "genres") as? [String] ?? []
+                        newSerie.ratingTrakt = Int(10 * (oneShow.object(forKey: "rating") as? Double ?? 0.0))
+                        newSerie.ratersTrakt = oneShow.object(forKey: "votes") as? Int ?? 0
+                        newSerie.country = (oneShow.object(forKey: "country") as? String ?? "").uppercased()
+                        newSerie.language = oneShow.object(forKey: "language") as? String ?? ""
+                        newSerie.runtime = oneShow.object(forKey: "runtime") as? Int ?? 0
+                        newSerie.homepage = oneShow.object(forKey: "homepage") as? String ?? ""
+                        newSerie.nbEpisodes = oneShow.object(forKey: "aired_episodes") as? Int ?? 0
+                        newSerie.certification = oneShow.object(forKey: "certification") as? String ?? ""
+
+                        newSerie.watchlist = true
+                        
+                        serieListe.append(newSerie)
+                    }
+                    
+                    ended = true
+                } catch let error as NSError { print("Trakt::rechercheParTitre failed: \(error.localizedDescription)"); ended = true;  }
+            } else { print(error as Any); ended = true;  }
+        })
+        
+        task.resume()
+        while (!ended) { usleep(1000) }
+
         return serieListe
     }
     

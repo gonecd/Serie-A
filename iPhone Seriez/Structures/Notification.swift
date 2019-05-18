@@ -11,8 +11,6 @@ import UserNotifications
 import SeriesCommon
 
 func pushNotification(titre :String, soustitre :String, message :String) {
-    let now : Date = Date()
-    
     //Notification Content
     let content = UNMutableNotificationContent()
     content.title = titre
@@ -22,10 +20,10 @@ func pushNotification(titre :String, soustitre :String, message :String) {
     content.sound = UNNotificationSound.default
     
     //Notification Trigger - when the notification should be fired
-    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
     
     //Notification Request
-    let request = UNNotificationRequest(identifier: "Serie \(now)", content: content, trigger: trigger)
+    let request = UNNotificationRequest(identifier: "Serie \(Date().timeIntervalSince1970)", content: content, trigger: trigger)
     
     //Scheduling the Notification
     let center = UNUserNotificationCenter.current()
@@ -36,14 +34,7 @@ func pushNotification(titre :String, soustitre :String, message :String) {
     }
 }
 
-func loadIMDB() -> Int {
-    
-    let start : Date = Date()
-    let dateFormatter = DateFormatter()
-    dateFormatter.locale = Locale.current
-    dateFormatter.dateFormat = "HH:mm:ss"
-    
-    let avant : Int = imdb.IMDBrates.count
+func loadIMDB() {
     imdb.downloadData()
     imdb.loadDataFile()
     
@@ -53,49 +44,43 @@ func loadIMDB() -> Int {
         uneSerie.ratersIMDB = tmpSerie.ratersIMDB
         uneSerie.ratingIMDB = tmpSerie.ratingIMDB
     }
-    db.saveDB()
-    
-    pushNotification(titre: "IMDB notes", soustitre: "\(dateFormatter.string(from: start)) - \(dateFormatter.string(from: Date()))", message: "Notes IMDB récupérées")
-    
-    return 0
 }
 
 
-func loadDates() -> Int {
-    let start : Date = Date()
+func loadDates() {
     let dateFormatter = DateFormatter()
-    dateFormatter.locale = Locale.current
-    dateFormatter.dateFormat = "HH:mm:ss"
+    dateFormatter.dateFormat = "dd MMMM yyyy"
+    let today : Date = dateFormatter.date(from: dateFormatter.string(from: Date()))!
     
     for uneSerie in db.shows {
         if ( (uneSerie.watchlist == false) &&
             (uneSerie.unfollowed == false) &&
             (uneSerie.status != "Ended") ){
+            let svgSerie : Serie = uneSerie
             db.downloadDates(serie : uneSerie)
+            
+            for uneSaison in uneSerie.saisons {
+                if (uneSaison.starts == today) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) commence aujourd'hui") }
+                if (uneSaison.ends == today) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) finit aujourd'hui") }
+                
+                if (uneSaison.saison <= svgSerie.saisons.count) {
+                    if ( (uneSaison.starts != svgSerie.saisons[uneSaison.saison-1].starts) && (uneSaison.starts != ZeroDate) ) {
+                        pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) commencera le \(dateFormatter.string(from: uneSaison.starts))")
+                    }
+                    if ( (uneSaison.ends != svgSerie.saisons[uneSaison.saison-1].ends) && (uneSaison.starts != ZeroDate) ) {
+                        pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) finira le \(dateFormatter.string(from: uneSaison.ends))")
+                    }
+                }
+            }
         }
     }
-    db.saveDB()
-
-    pushNotification(titre: "TVmaze dates", soustitre: "\(dateFormatter.string(from: start)) - \(dateFormatter.string(from: Date()))", message: "Dates mises à jour")
-    
-    return 0
 }
 
 
-func loadStatuses() -> Int {
-    let start : Date = Date()
-    let dateFormatter = DateFormatter()
-    dateFormatter.locale = Locale.current
-    dateFormatter.dateFormat = "HH:mm:ss"
-    
+func loadStatuses() {
     db.quickRefresh()
     db.finaliseDB()
     db.shareWithWidget()
     db.saveDB()
-
-    pushNotification(titre: "Trakt statuses", soustitre: "\(dateFormatter.string(from: start)) - \(dateFormatter.string(from: Date()))", message: "Status de visionnage mis à jour")
-    
-    return 0
-    
 }
 
