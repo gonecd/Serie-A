@@ -204,12 +204,14 @@ class Database : NSObject
     
     func saveDB ()
     {
-        // https://stackoverflow.com/questions/53347426/ios-editor-bug-archiveddata-renamed
-        
         if (db.shows.count > 0) {
             let pathToSVG = AppDir.appendingPathComponent("SerieA.db")
-            if (NSKeyedArchiver.archiveRootObject(shows, toFile: pathToSVG.path) == false) {
-                print ("Echec de la sauvegarde")
+            
+            do {
+                let data = try NSKeyedArchiver.archivedData(withRootObject: shows, requiringSecureCoding: false)
+                try data.write(to: pathToSVG)
+            } catch {
+                print ("Echec de la sauvegarde de la DB")
             }
         }
     }
@@ -217,10 +219,17 @@ class Database : NSObject
     func loadDB ()
     {
         let pathToSVG = AppDir.appendingPathComponent("SerieA.db")
-        if (FileManager.default.fileExists(atPath: pathToSVG.path)) {
-            shows = (NSKeyedUnarchiver.unarchiveObject(withFile: pathToSVG.path) as? [Serie])!
-            shows = shows.sorted(by: { $0.serie < $1.serie })
-            fillIndex()
+        
+        if let nsData = NSData(contentsOf: pathToSVG) {
+            do {
+                let data = Data(referencing:nsData)
+                
+                shows = try (NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as? [Serie])!
+                shows = shows.sorted(by: { $0.serie < $1.serie })
+                fillIndex()
+            } catch {
+                print("Echec de la lecture de la DB")
+            }
         }
     }
     

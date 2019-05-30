@@ -17,32 +17,86 @@ class RottenTomatoes
     
     func getSerieGlobalInfos(serie : String) -> Serie {
         let uneSerie : Serie = Serie(serie: serie)
-        var webPage : String = ""
-
+        let webPage : String = getPath(serie: serie)
+        
+        if (webPage == "Serie non disponible sur RottenTomatoes") { return uneSerie }
+        
+        do {
+            let page : String = try String(contentsOf: URL(string : webPage)!)
+            let doc : Document = try SwiftSoup.parse(page)
+            
+            let topCritics : Elements = try doc.select("div [id='top-critics-numbers']")
+            let allCritics : Elements = try doc.select("div [id='all-critics-numbers']")
+            let audienceScore : Elements = try doc.select("div [class='audience-score meter']")
+            
+            let textTop : String = try topCritics.text()
+            let textAll : String = try allCritics.text()
+            let textAudience : String = try audienceScore.text()
+            
+            let ratingRottenTopCritics = Int(textTop.components(separatedBy: CharacterSet.decimalDigits.inverted).first!) ?? 0
+            let ratingRottenAllCritics = Int(textAll.components(separatedBy: CharacterSet.decimalDigits.inverted).first!) ?? 0
+            let ratingRottenAudience = Int(textAudience.components(separatedBy: CharacterSet.decimalDigits.inverted).first!) ?? 0
+            
+            var nbValidValues : Int = 0
+            var total : Int = 0
+            
+            if ((ratingRottenTopCritics != 0) && (ratingRottenTopCritics != 100)) { nbValidValues = nbValidValues + 1; total = total + ratingRottenTopCritics }
+            if ((ratingRottenAllCritics != 0) && (ratingRottenAllCritics != 100)) { nbValidValues = nbValidValues + 1; total = total + ratingRottenAllCritics }
+            if ((ratingRottenAudience != 0) && (ratingRottenAudience != 100)) { nbValidValues = nbValidValues + 1; total = total + ratingRottenAudience }
+            
+            if (nbValidValues != 0) { uneSerie.ratingRottenTomatoes = Int(Double(total)/Double(nbValidValues)) }
+        }
+        catch let error as NSError { print("RottenTomatoes failed: \(error.localizedDescription)") }
+        
+        return uneSerie
+    }
+    
+        
+    func getEpisodesRatings(_ uneSerie: Serie) {
+        let webPage : String = getPath(serie: uneSerie.serie)
+        if (webPage == "Serie non disponible sur RottenTomatoes") { return }
+        
+        for uneSaison in uneSerie.saisons {
+            var notes : [String] = []
+            
+            do {
+                let page : String = try String(contentsOf: URL(string : webPage+"/s0"+String(uneSaison.saison))!)
+                let doc : Document = try SwiftSoup.parse(page)
+                notes = try doc.select("div [class='pull-left tomatometer']").text().components(separatedBy: " ")
+            }
+            catch let error as NSError { print("RottenTomatoes failed: \(error.localizedDescription)") }
+            
+            for unEpisode in uneSaison.episodes {
+                if (unEpisode.episode<notes.count) {
+                    //unEpisode.ratingRottenTomatoes = Int(notes[unEpisode.episode-1].components(separatedBy: CharacterSet.decimalDigits.inverted).first!) ?? 0
+                }
+                else {
+                    print("RottenTomatoes.getEpisodesRatings::Not found for \(unEpisode.serie) S\(unEpisode.saison)E\(unEpisode.episode)")
+                }
+            }
+        }
+    }
+    
+    
+    func getPath(serie : String) -> String {
         switch serie {
         case "The End of the F***ing World":
-            webPage = "https://www.rottentomatoes.com/tv/the_end_of_the_f_ing_world"
-            break
+            return "https://www.rottentomatoes.com/tv/the_end_of_the_f_ing_world"
             
         case "Money Heist":
-            webPage = "https://www.rottentomatoes.com/tv/la_casa_de_papel"
-            break
+            return "https://www.rottentomatoes.com/tv/la_casa_de_papel"
             
         case "Mr. Robot":
-            webPage = "https://www.rottentomatoes.com/tv/mr_robot"
-            break
+            return "https://www.rottentomatoes.com/tv/mr_robot"
             
         case "The Marvelous Mrs. Maisel":
-            webPage = "https://www.rottentomatoes.com/tv/the_marvelous_mrs_maisel"
-            break
+            return "https://www.rottentomatoes.com/tv/the_marvelous_mrs_maisel"
             
         case "Bref.":
-            webPage = "https://www.rottentomatoes.com/tv/bref"
-            break
+            return "https://www.rottentomatoes.com/tv/bref"
             
         case "Brooklyn Nine-Nine":
-            webPage = "https://www.rottentomatoes.com/tv/brooklyn_nine_nine"
-            break
+            return "https://www.rottentomatoes.com/tv/brooklyn_nine_nine"
             
         case "Hero Corp",
              "Call My Agent",
@@ -58,40 +112,10 @@ class RottenTomatoes
              "Braquo",
              "XIII",
              "Maison close":
-            return uneSerie
+            return "Serie non disponible sur RottenTomatoes"
             
         default:
-            webPage = "https://www.rottentomatoes.com/tv/\(serie.lowercased().replacingOccurrences(of: "%", with: "_").replacingOccurrences(of: "'", with: "_").replacingOccurrences(of: " ", with: "_"))"
+            return "https://www.rottentomatoes.com/tv/\(serie.lowercased().replacingOccurrences(of: "%", with: "_").replacingOccurrences(of: "'", with: "_").replacingOccurrences(of: " ", with: "_"))"
         }
-        
-        do {
-            let page : String = try String(contentsOf: URL(string : webPage)!)
-            let doc : Document = try SwiftSoup.parse(page)
-            
-            let topCritics : Elements = try doc.select("div [id='top-critics-numbers']")
-            let allCritics : Elements = try doc.select("div [id='all-critics-numbers']")
-            let audienceScore : Elements = try doc.select("div [class='audience-score meter']")
-
-            let textTop : String = try topCritics.text()
-            let textAll : String = try allCritics.text()
-            let textAudience : String = try audienceScore.text()
-
-            let ratingRottenTopCritics = Int(textTop.components(separatedBy: CharacterSet.decimalDigits.inverted).first!) ?? 0
-            let ratingRottenAllCritics = Int(textAll.components(separatedBy: CharacterSet.decimalDigits.inverted).first!) ?? 0
-            let ratingRottenAudience = Int(textAudience.components(separatedBy: CharacterSet.decimalDigits.inverted).first!) ?? 0
-            
-            var nbValidValues : Int = 0
-            var total : Int = 0
-            
-            if ((ratingRottenTopCritics != 0) && (ratingRottenTopCritics != 100)) { nbValidValues = nbValidValues + 1; total = total + ratingRottenTopCritics }
-            if ((ratingRottenAllCritics != 0) && (ratingRottenAllCritics != 100)) { nbValidValues = nbValidValues + 1; total = total + ratingRottenAllCritics }
-            if ((ratingRottenAudience != 0) && (ratingRottenAudience != 100)) { nbValidValues = nbValidValues + 1; total = total + ratingRottenAudience }
-
-            if (nbValidValues != 0) { uneSerie.ratingRottenTomatoes = Int(Double(total)/Double(nbValidValues)) }
-        }
-        catch let error as NSError { print("RottenTomatoes failed: \(error.localizedDescription)") }
-        
-        return uneSerie
     }
-    
 }

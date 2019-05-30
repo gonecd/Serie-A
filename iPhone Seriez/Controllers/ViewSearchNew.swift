@@ -24,7 +24,7 @@ class ViewSearchNew: UIViewController
         
         makeGradiant(carre: advanced, couleur : "Gris")
     }
-    
+
     
     @IBAction func chercher(_ sender: Any) {
         // https://medium.com/@garg.vivek/primary-action-event-of-uitextfield-87fdac46b648
@@ -49,7 +49,7 @@ class ViewSearchNew: UIViewController
         
         // Merge series found by Trakt
         for uneSerieTrakt in dataTrakt {
-            var uneSerie : Serie = Serie(serie: "")
+            let uneSerie : Serie = Serie(serie: "")
             
             let emptySerie :Serie = Serie(serie:uneSerieTrakt.serie)
             var uneSerieBetaSeries : Serie = emptySerie
@@ -73,7 +73,7 @@ class ViewSearchNew: UIViewController
         for uneSerieBetaSeries in dataBetaSeries {
             if traitees.contains(uneSerieBetaSeries.serie) { continue }
             
-            var uneSerie : Serie = Serie(serie: "")
+            let uneSerie : Serie = Serie(serie: "")
             
             let emptySerie :Serie = Serie(serie:uneSerieBetaSeries.serie)
             var uneSerieMovieDB : Serie = emptySerie
@@ -95,7 +95,7 @@ class ViewSearchNew: UIViewController
         for uneSerieTVMaze in dataTVMaze {
             if traitees.contains(uneSerieTVMaze.serie) { continue }
             
-            var uneSerie : Serie = Serie(serie: "")
+            let uneSerie : Serie = Serie(serie: "")
             
             let emptySerie :Serie = Serie(serie:uneSerieTVMaze.serie)
             var uneSerieMovieDB : Serie = emptySerie

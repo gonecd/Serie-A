@@ -425,7 +425,7 @@
                     </tableView>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="Amb-VJ-nfZ">
-                        <barButtonItem key="rightBarButtonItem" title="Item" image="Chart-icon.png" style="plain" id="HeW-XI-bHT">
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="Chart-icon.png" id="HeW-XI-bHT">
                             <connections>
                                 <action selector="changeGraphe:" destination="g0p-Qf-KTM" id="s8z-k5-bCS"/>
                             </connections>
@@ -1204,7 +1204,7 @@
                         <viewLayoutGuide key="safeArea" id="xVv-Ir-JgY"/>
                     </view>
                     <navigationItem key="navigationItem" title="Serie" id="hWZ-Qk-JNc">
-                        <barButtonItem key="rightBarButtonItem" image="Chart-icon.png" style="plain" id="QTx-Pc-nhu">
+                        <barButtonItem key="rightBarButtonItem" image="Chart-icon.png" id="QTx-Pc-nhu">
                             <connections>
                                 <action selector="graphe:" destination="shf-Lk-5bU" id="LrJ-e4-aef"/>
                             </connections>
@@ -1612,7 +1612,7 @@
                         </barButtonItem>
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="Series TableView" id="grz-03-VM5">
-                        <barButtonItem key="rightBarButtonItem" image="Chart-icon.png" style="plain" id="yll-Dt-cir">
+                        <barButtonItem key="rightBarButtonItem" image="Chart-icon.png" id="yll-Dt-cir">
                             <connections>
                                 <action selector="changeGraphe:" destination="fqA-tO-WRq" id="IHQ-Ie-ppb"/>
                             </connections>
@@ -1636,7 +1636,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Search" textAlignment="natural" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="Zbb-HL-J8f">
-                                <rect key="frame" x="67" y="89" width="257" height="30"/>
+                                <rect key="frame" x="67" y="100" width="257" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -1672,6 +1672,20 @@
                                     </imageView>
                                 </subviews>
                             </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Recherche textuelle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="067-Q7-5Ei">
+                                <rect key="frame" x="22" y="36" width="292" height="36"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="30"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Recherche par critères" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wUq-hi-WaP">
+                                <rect key="frame" x="16" y="296" width="331" height="36"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="30"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="Jv9-IQ-AAL"/>

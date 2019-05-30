@@ -57,6 +57,7 @@ class TVmaze
         return uneSerie
     }
     
+    
     func getSeasonsDates(idTVmaze : String) -> (saisons : [Int], nbEps : [Int], debuts : [Date], fins : [Date]) {
         var foundSaisons : [Int] = []
         var foundEps : [Int] = []
