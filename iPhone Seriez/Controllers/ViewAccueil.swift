@@ -210,6 +210,12 @@ class ViewAccueil: UIViewController  {
     
  
     @IBAction func quickReload(_ sender: Any) {
+//        for uneSerie in db.shows {
+//            print("\(uneSerie.serie);\(uneSerie.status);\(uneSerie.nbSaisons);\(uneSerie.saisons.count);\(uneSerie.saisons[uneSerie.saisons.count - 1].nbEpisodes);\(uneSerie.saisons[uneSerie.saisons.count - 1].episodes.count);")
+////                    \(uneSerie.saisons[uneSerie.saisons.count - 1].episodes[uneSerie.saisons[uneSerie.saisons.count - 1].episodes.count - 1].date);")
+//        }
+//
+//
         db.quickRefresh()
         db.finaliseDB()
         db.shareWithWidget()

@@ -21,6 +21,7 @@ var theMoviedb     : TheMoviedb     = TheMoviedb.init()
 var imdb           : IMdb           = IMdb.init()
 var tvMaze         : TVmaze         = TVmaze.init()
 var rottenTomatoes : RottenTomatoes = RottenTomatoes.init()
+var metaCritic     : MetaCritic     = MetaCritic.init()
 
 var db          : Database   = Database.init()
 var relodDates  : Date = Date.init(timeIntervalSince1970: 0)
@@ -35,6 +36,7 @@ var timerTheMovieDB : TimeInterval = 0
 var timerIMdb       : TimeInterval = 0
 var timerTVmaze     : TimeInterval = 0
 var timerRottenTom  : TimeInterval = 0
+var timerMetaCritic : TimeInterval = 0
 
 // Code des source
 let sourceTrakt         : Int = 0
@@ -44,11 +46,11 @@ let sourceMovieDB       : Int = 3
 let sourceIMdb          : Int = 4
 
 // Correction des notes pour homogénéisation
-let correctionTVdb          : Int = 77
-let correctionBetaSeries    : Int = 86
-let correctionTrakt         : Int = 79
-let correctionMoviedb       : Int = 75
-let correctionIMdb          : Int = 86
+//let correctionTVdb          : Int = 77
+//let correctionBetaSeries    : Int = 86
+//let correctionTrakt         : Int = 79
+//let correctionMoviedb       : Int = 75
+//let correctionIMdb          : Int = 86
 
 
 // Limitations de chargement
@@ -58,12 +60,22 @@ let popularShowsPerSource       : Int = 10
 
 // Couleurs de remplissage des sources
 let colorTrakt          : UIColor = UIColor.red
-let colorTVdb           : UIColor = UIColor.gray
+let colorTVdb           : UIColor = UIColor.lightGray
 let colorBetaSeries     : UIColor = UIColor.blue
 let colorIMDB           : UIColor = UIColor.orange
 let colorMoviedb        : UIColor = UIColor.green
 let colorTVmaze         : UIColor = UIColor.magenta
 let colorRottenTomatoes : UIColor = UIColor.purple
+let colorMetaCritic     : UIColor = UIColor.black
+
+
+//class var black: NSColor
+//class var brown: NSColor
+//class var darkGray: NSColor
+//class var gray: NSColor
+//class var lightGray: NSColor
+//class var yellow: NSColor
+
 
 let colorBackground : UIColor = UIColor.lightGray
 let colorAxis       : UIColor = UIColor.darkGray

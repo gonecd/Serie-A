@@ -97,7 +97,8 @@ class ViewSerieListe: UITableViewController {
                                   rateMoviedb: viewList[indexPath.row].getFairGlobalRatingMoviedb(),
                                   rateIMdb: viewList[indexPath.row].getFairGlobalRatingIMdb(),
                                   rateTVmaze: viewList[indexPath.row].getFairGlobalRatingTVmaze(),
-                                  rateRottenTomatoes: viewList[indexPath.row].getFairGlobalRatingRottenTomatoes() )
+                                  rateRottenTomatoes: viewList[indexPath.row].getFairGlobalRatingRottenTomatoes(),
+                                  rateMetaCritic: viewList[indexPath.row].getFairGlobalRatingMetaCritic() )
         cell.miniGraphe.setType(type: grapheType)
         cell.miniGraphe.setNeedsDisplay()
         
@@ -181,9 +182,4 @@ class ViewSerieListe: UITableViewController {
         return false
     }
     
-    
 }
-
-
-
-

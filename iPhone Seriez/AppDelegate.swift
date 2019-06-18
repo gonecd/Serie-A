@@ -70,6 +70,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         var message : String = ""
         
+        pushNotification(titre: "Starting", soustitre: "Heure: \(dateFormatter.string(from: now))", message: message)
+        
         // Notes IMDB (une fois par jour)
         if (now.timeIntervalSince(relodIMDB) > unJour) {
             loadIMDB()

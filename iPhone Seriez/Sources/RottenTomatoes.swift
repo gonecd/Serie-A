@@ -19,7 +19,7 @@ class RottenTomatoes
         let uneSerie : Serie = Serie(serie: serie)
         let webPage : String = getPath(serie: serie)
         
-        if (webPage == "Serie non disponible sur RottenTomatoes") { return uneSerie }
+        if (webPage == "") { return uneSerie }
         
         do {
             let page : String = try String(contentsOf: URL(string : webPage)!)
@@ -54,7 +54,7 @@ class RottenTomatoes
         
     func getEpisodesRatings(_ uneSerie: Serie) {
         let webPage : String = getPath(serie: uneSerie.serie)
-        if (webPage == "Serie non disponible sur RottenTomatoes") { return }
+        if (webPage == "") { return }
         
         for uneSaison in uneSerie.saisons {
             var notes : [String] = []
@@ -78,6 +78,31 @@ class RottenTomatoes
     }
     
     
+    func getEpisodeDetails(_ uneSerie: Serie, saison: Int, episode: Int) -> Int {
+        let webPage : String = getPath(serie: uneSerie.serie)
+        if (webPage == "") { return 0 }
+        
+        let labelEps = String(format: "/s%02d/e%02d", saison, episode)
+        var note : String = ""
+        var critic : String = ""
+        
+        do {
+            print("URL = \(webPage+labelEps)")
+            let page : String = try String(contentsOf: URL(string : webPage+labelEps)!)
+            let doc : Document = try SwiftSoup.parse(page)
+            //note = try doc.select("div [id='scoreStats'] div").first()?.text() ?? ""
+            note = try (doc.select("div [id='scoreStats'] div").first()?.text().components(separatedBy: " ")[2].components(separatedBy: "/")[0])!
+            critic = try doc.select("div [class='col-sm-12 tomato-info hidden-xs pad-left']").text()
+        }
+        catch let error as NSError { print("RottenTomatoes failed: \(error.localizedDescription)") }
+
+        print("Note = \(note)")
+        print("Avis = \(critic)")
+
+        return 0
+    }
+    
+    
     func getPath(serie : String) -> String {
         switch serie {
         case "The End of the F***ing World":
@@ -94,6 +119,9 @@ class RottenTomatoes
             
         case "Bref.":
             return "https://www.rottentomatoes.com/tv/bref"
+            
+        case "The Haunting":
+            return "https://www.rottentomatoes.com/tv/the_haunting_of_hill_house"
             
         case "Brooklyn Nine-Nine":
             return "https://www.rottentomatoes.com/tv/brooklyn_nine_nine"
@@ -112,7 +140,7 @@ class RottenTomatoes
              "Braquo",
              "XIII",
              "Maison close":
-            return "Serie non disponible sur RottenTomatoes"
+            return ""
             
         default:
             return "https://www.rottentomatoes.com/tv/\(serie.lowercased().replacingOccurrences(of: "%", with: "_").replacingOccurrences(of: "'", with: "_").replacingOccurrences(of: " ", with: "_"))"

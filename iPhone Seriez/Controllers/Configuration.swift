@@ -23,7 +23,8 @@ class Configuration: UIViewController
     @IBOutlet weak var colIMDB: UIView!
     @IBOutlet weak var colRottenTom: UIView!
     @IBOutlet weak var colTVmaze: UIView!
-    
+    @IBOutlet weak var colMetaCritic: UIView!
+
     @IBOutlet weak var chronoTrakt: UILabel!
     @IBOutlet weak var chronoTVdb: UILabel!
     @IBOutlet weak var chronoBetaSeries: UILabel!
@@ -31,7 +32,8 @@ class Configuration: UIViewController
     @IBOutlet weak var chronoIMdb: UILabel!
     @IBOutlet weak var chronoRottenTom: UILabel!
     @IBOutlet weak var chronoTVmaze: UILabel!
-    
+    @IBOutlet weak var chronoMetaCritic: UILabel!
+
     @IBOutlet weak var viewReload: UIView!
     @IBOutlet weak var viewConnect: UIView!
     
@@ -53,6 +55,7 @@ class Configuration: UIViewController
         makePrettyColorViews(view: colIMDB, couleur: colorIMDB)
         makePrettyColorViews(view: colRottenTom, couleur: colorRottenTomatoes)
         makePrettyColorViews(view: colTVmaze, couleur: colorTVmaze)
+        makePrettyColorViews(view: colMetaCritic, couleur: colorMetaCritic)
     }
     
     func makePrettyColorViews(view : UIView, couleur : UIColor) {
@@ -76,7 +79,8 @@ class Configuration: UIViewController
         timerIMdb = 0
         timerRottenTom = 0
         timerTVmaze = 0
-        
+        timerMetaCritic = 0
+
         DispatchQueue.global(qos: .utility).async {
             
             DispatchQueue.main.async {
@@ -142,6 +146,7 @@ class Configuration: UIViewController
         chronoIMdb.text = String(format: "%0.3f sec", timerIMdb)
         chronoRottenTom.text = String(format: "%0.3f sec", timerRottenTom)
         chronoTVmaze.text = String(format: "%0.3f sec", timerTVmaze)
+        chronoMetaCritic.text = String(format: "%0.3f sec", timerMetaCritic)
     }
     
     

@@ -113,7 +113,11 @@ class Database : NSObject
         let dataRotten : Serie = rottenTomatoes.getSerieGlobalInfos(serie : serie.serie)
         timerRottenTom = timerRottenTom + Date().timeIntervalSince(timeStamp)
 
-        serie.cleverMerge(TVdb: dataTVdb, Moviedb: dataMoviedb, Trakt: dataTrakt, BetaSeries: dataBetaSeries, IMDB: dataIMDB, RottenTomatoes: dataRotten, TVmaze: dataTVmaze)
+        timeStamp = Date()
+        let dataMetaCritic : Serie = metaCritic.getSerieGlobalInfos(serie: serie.serie)
+        timerMetaCritic = timerMetaCritic + Date().timeIntervalSince(timeStamp)
+        
+        serie.cleverMerge(TVdb: dataTVdb, Moviedb: dataMoviedb, Trakt: dataTrakt, BetaSeries: dataBetaSeries, IMDB: dataIMDB, RottenTomatoes: dataRotten, TVmaze: dataTVmaze, MetaCritic: dataMetaCritic)
     }
     
     

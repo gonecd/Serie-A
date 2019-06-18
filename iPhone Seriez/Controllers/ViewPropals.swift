@@ -235,6 +235,7 @@ class ViewPropals: UIViewController, UICollectionViewDataSource, UICollectionVie
         var dataIMDB : Serie = Serie(serie: "")
         var dataRotten : Serie = Serie(serie: "")
         var dataTVmaze : Serie = Serie(serie: "")
+        var dataMetaCritic : Serie = Serie(serie: "")
 
         if (uneSerie.idIMdb != "") {
             dataTrakt = trakt.getSerieGlobalInfos(idTraktOrIMDB: uneSerie.idIMdb)
@@ -244,6 +245,7 @@ class ViewPropals: UIViewController, UICollectionViewDataSource, UICollectionVie
             dataIMDB = imdb.getSerieGlobalInfos(idIMDB: uneSerie.idIMdb)
             dataTVmaze = tvMaze.getSerieGlobalInfos(idTVDB : dataTrakt.idTVdb, idIMDB : uneSerie.idIMdb)
             dataRotten = rottenTomatoes.getSerieGlobalInfos(serie : uneSerie.serie)
+            dataMetaCritic = metaCritic.getSerieGlobalInfos(serie : uneSerie.serie)
         }
         else if (uneSerie.idMoviedb != "") {
             dataMoviedb = theMoviedb.getSerieGlobalInfos(idMovieDB: uneSerie.idMoviedb)
@@ -253,6 +255,7 @@ class ViewPropals: UIViewController, UICollectionViewDataSource, UICollectionVie
             dataIMDB = imdb.getSerieGlobalInfos(idIMDB: dataMoviedb.idIMdb)
             dataTVmaze = tvMaze.getSerieGlobalInfos(idTVDB : dataMoviedb.idTVdb, idIMDB : dataMoviedb.idIMdb)
             dataRotten = rottenTomatoes.getSerieGlobalInfos(serie : uneSerie.serie)
+            dataMetaCritic = metaCritic.getSerieGlobalInfos(serie : uneSerie.serie)
         }
         else if (uneSerie.idTVdb != "") {
             dataTVdb = theTVdb.getSerieGlobalInfos(idTVdb : uneSerie.idTVdb)
@@ -263,9 +266,10 @@ class ViewPropals: UIViewController, UICollectionViewDataSource, UICollectionVie
             dataIMDB = imdb.getSerieGlobalInfos(idIMDB: dataTVdb.idIMdb)
             dataTVmaze = tvMaze.getSerieGlobalInfos(idTVDB : uneSerie.idTVdb, idIMDB : dataTVdb.idIMdb)
             dataRotten = rottenTomatoes.getSerieGlobalInfos(serie : uneSerie.serie)
+            dataMetaCritic = metaCritic.getSerieGlobalInfos(serie : uneSerie.serie)
         }
         
-        uneSerie.cleverMerge(TVdb: dataTVdb, Moviedb: dataMoviedb, Trakt: dataTrakt, BetaSeries: dataBetaSeries, IMDB: dataIMDB, RottenTomatoes: dataRotten, TVmaze: dataTVmaze)
+        uneSerie.cleverMerge(TVdb: dataTVdb, Moviedb: dataMoviedb, Trakt: dataTrakt, BetaSeries: dataBetaSeries, IMDB: dataIMDB, RottenTomatoes: dataRotten, TVmaze: dataTVmaze, MetaCritic: dataMetaCritic)
     }
     
     

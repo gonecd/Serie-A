@@ -35,8 +35,6 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
     @IBOutlet weak var banniere: UIImageView!
     @IBOutlet weak var graphe: Graph!
     @IBOutlet weak var roue: UIActivityIndicatorView!
-    @IBOutlet weak var titre: UILabel!
-    @IBOutlet weak var annee: UILabel!
     
     @IBOutlet weak var pageControl: UIPageControl!
     @IBOutlet weak var viewResume: UIView!
@@ -52,44 +50,53 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
     @IBOutlet weak var langue: UILabel!
     @IBOutlet weak var drapeau: UIImageView!
     @IBOutlet weak var drapeauBgd: UILabel!
-    
+    @IBOutlet weak var annee: UILabel!
+    @IBOutlet weak var note: UILabel!
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleGesture))
+        swipeLeft.direction = .left
+        self.view.addGestureRecognizer(swipeLeft)
+
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(handleGesture))
+        swipeRight.direction = .right
+        self.view.addGestureRecognizer(swipeRight)
+
         pageControl.addTarget(self, action: #selector(self.changePage(sender:)), for: UIControl.Event.valueChanged)
         
-        titre.text = serie.serie
-        annee.text = "(" + String(serie.year) + ")"
+        annee.text = String(serie.year)
         resume.text = serie.resume
         banniere.image = image
         graphe.sendSerie(serie)
+        note.text = String(serie.getGlobalRating()) + " %"
         
         // Affichage des genres
         var allGenres : String = ""
-        for unGenre in serie.genres
-        {
+        for unGenre in serie.genres {
             allGenres = allGenres + unGenre + " "
         }
         genre.text = allGenres
         
         // Arrondir les labels
         arrondirLabel(texte: status, radius: 10)
-        arrondirLabel(texte: network, radius: 10)
+        arrondirLabel(texte: network, radius: 8)
         arrondirLabel(texte: duree, radius: 8)
         arrondirLabel(texte: certif, radius: 8)
         arrondirLabel(texte: langue, radius: 8)
         arrondirLabel(texte: drapeauBgd, radius: 8)
         arrondirLabel(texte: genre, radius: 8)
+        arrondirLabel(texte: annee, radius: 8)
+        arrondirLabel(texte: note, radius: 10)
 
         // Affichage du status
-        if (serie.status == "Ended")
-        {
+        if (serie.status == "Ended") {
             status.text = "FINIE"
             status.textColor = UIColor.black
         }
-        else
-        {
+        else {
             status.text = "EN COURS"
             status.textColor = UIColor.blue
         }
@@ -162,13 +169,11 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         if (tableView == viewSaisons) { return serie.saisons.count }
         else { return webOpinions.comments.count }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale.current
         dateFormatter.dateFormat = "dd MMM yy"
@@ -186,8 +191,7 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
 
             return cell
         }
-        else
-        {
+        else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "CellComment", for: indexPath) as! CellComment
             cell.comment.text = webOpinions.comments[indexPath.row]
             if (webOpinions.likes[indexPath.row] > 0) { cell.likes.text = String(webOpinions.likes[indexPath.row]) + " likes" }
@@ -199,8 +203,7 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if (segue.identifier == "ShowSaison")
-        {
+        if (segue.identifier == "ShowSaison") {
             let viewController = segue.destination as! SaisonFiche
             
             viewController.serie = serie
@@ -209,41 +212,54 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
         }
     }
     
+    @objc func handleGesture(gesture: UISwipeGestureRecognizer) -> Void {
+        if gesture.direction == UISwipeGestureRecognizer.Direction.right {
+            pageControl.currentPage = pageControl.currentPage - 1
+        }
+        else {
+            pageControl.currentPage = pageControl.currentPage + 1
+        }
+        
+        self.changePage(sender: self)
+    }
     
     @objc func changePage(sender: AnyObject) -> () {
         switch (pageControl.currentPage) {
         case 0:
             viewResume.isHidden = false
-            viewInfos.isHidden = true
+            viewInfos.isHidden = false
             viewSaisons.isHidden = true
             viewComments.isHidden = true
+            graphe.isHidden = true
             
         case 1:
             viewResume.isHidden = true
             viewInfos.isHidden = false
             viewSaisons.isHidden = true
             viewComments.isHidden = true
-            
+            graphe.isHidden = false
+
         case 2:
             viewResume.isHidden = true
             viewInfos.isHidden = true
             viewSaisons.isHidden = false
             viewComments.isHidden = true
-            
+            graphe.isHidden = true
+
         case 3:
             viewResume.isHidden = true
             viewInfos.isHidden = true
             viewSaisons.isHidden = true
             viewComments.isHidden = false
-            
+            graphe.isHidden = true
+
         default:
             viewResume.isHidden = false
             viewInfos.isHidden = true
             viewSaisons.isHidden = true
             viewComments.isHidden = true
-            
+            graphe.isHidden = true
         }
-        
     }
     
     
@@ -262,8 +278,9 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
     }
     
     @IBAction func webRottenTomatoes(_ sender: AnyObject) {
-        let myURL : String = "http://www.rottentomatoes.com/tv/\(serie.serie.lowercased().replacingOccurrences(of: "'", with: "_").replacingOccurrences(of: " ", with: "_"))"
-        UIApplication.shared.open(URL(string: myURL)!)
+        if (rottenTomatoes.getPath(serie: serie.serie) != "") {
+            UIApplication.shared.open(URL(string: rottenTomatoes.getPath(serie: serie.serie))!)
+        }
     }
     
     @IBAction func webIMdb(_ sender: AnyObject) {
@@ -276,9 +293,14 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
         UIApplication.shared.open(URL(string: myURL)!)
     }
     
+    @IBAction func webMetaCritic(_ sender: AnyObject) {
+        if (metaCritic.getPath(serie: serie.serie) != "") {
+            UIApplication.shared.open(URL(string: metaCritic.getPath(serie: serie.serie))!)
+        }
+    }
+    
     @IBAction func webHomepage(_ sender: Any) {
-        if (serie.homepage != "")
-        {
+        if (serie.homepage != "") {
             UIApplication.shared.open(URL(string: serie.homepage)!)
         }
     }

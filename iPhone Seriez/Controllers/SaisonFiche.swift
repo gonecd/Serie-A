@@ -28,7 +28,6 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
     @IBOutlet weak var banniere: UIImageView!
     @IBOutlet weak var graphe: GraphSaison!
     @IBOutlet weak var roue: UIActivityIndicatorView!
-    @IBOutlet weak var labelSerie: UILabel!
     @IBOutlet weak var labelSaison: UILabel!
     @IBOutlet weak var episodesList: UITableView!
     @IBOutlet weak var table: UITableView!
@@ -38,7 +37,6 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         super.viewDidLoad()
         
         banniere.image = image
-        labelSerie.text = serie.serie
         labelSaison.text = "Saison " + String(saison)
         graphe.setNeedsDisplay()
         makeGradiant(carre: boutonVuUnEp, couleur: "Gris")
@@ -81,8 +79,7 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
-        if (segue.identifier == "showEpisode")
-        {
+        if (segue.identifier == "showEpisode") {
             let viewController = segue.destination as! EpisodeFiche
             let collectionCell : CellEpisode = sender as! CellEpisode
             viewController.serie = serie
@@ -90,8 +87,7 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
             viewController.image = image
             viewController.episode = Int(collectionCell.numero.text!)!
         }
-        else
-        {
+        else {
             let viewController = segue.destination as! SerieFiche
             viewController.serie = serie
             viewController.image = image
