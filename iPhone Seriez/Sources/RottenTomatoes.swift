@@ -25,26 +25,29 @@ class RottenTomatoes
             let page : String = try String(contentsOf: URL(string : webPage)!)
             let doc : Document = try SwiftSoup.parse(page)
             
-            let topCritics : Elements = try doc.select("div [id='top-critics-numbers']")
-            let allCritics : Elements = try doc.select("div [id='all-critics-numbers']")
-            let audienceScore : Elements = try doc.select("div [class='audience-score meter']")
+            let audience : String = try doc.select("div [class='mop-ratings-wrap__half audience-score']").text()
+            uneSerie.ratingRottenTomatoes = Int(audience.components(separatedBy: CharacterSet.decimalDigits.inverted).first!) ?? 0
             
-            let textTop : String = try topCritics.text()
-            let textAll : String = try allCritics.text()
-            let textAudience : String = try audienceScore.text()
-            
-            let ratingRottenTopCritics = Int(textTop.components(separatedBy: CharacterSet.decimalDigits.inverted).first!) ?? 0
-            let ratingRottenAllCritics = Int(textAll.components(separatedBy: CharacterSet.decimalDigits.inverted).first!) ?? 0
-            let ratingRottenAudience = Int(textAudience.components(separatedBy: CharacterSet.decimalDigits.inverted).first!) ?? 0
-            
-            var nbValidValues : Int = 0
-            var total : Int = 0
-            
-            if ((ratingRottenTopCritics != 0) && (ratingRottenTopCritics != 100)) { nbValidValues = nbValidValues + 1; total = total + ratingRottenTopCritics }
-            if ((ratingRottenAllCritics != 0) && (ratingRottenAllCritics != 100)) { nbValidValues = nbValidValues + 1; total = total + ratingRottenAllCritics }
-            if ((ratingRottenAudience != 0) && (ratingRottenAudience != 100)) { nbValidValues = nbValidValues + 1; total = total + ratingRottenAudience }
-            
-            if (nbValidValues != 0) { uneSerie.ratingRottenTomatoes = Int(Double(total)/Double(nbValidValues)) }
+//            let topCritics : Elements = try doc.select("div [id='top-critics-numbers']")
+//            let allCritics : Elements = try doc.select("div [id='all-critics-numbers']")
+//            let audienceScore : Elements = try doc.select("div [class='audience-score meter']")
+//
+//            let textTop : String = try topCritics.text()
+//            let textAll : String = try allCritics.text()
+//            let textAudience : String = try audienceScore.text()
+//
+//            let ratingRottenTopCritics = Int(textTop.components(separatedBy: CharacterSet.decimalDigits.inverted).first!) ?? 0
+//            let ratingRottenAllCritics = Int(textAll.components(separatedBy: CharacterSet.decimalDigits.inverted).first!) ?? 0
+//            let ratingRottenAudience = Int(textAudience.components(separatedBy: CharacterSet.decimalDigits.inverted).first!) ?? 0
+//
+//            var nbValidValues : Int = 0
+//            var total : Int = 0
+//
+//            if ((ratingRottenTopCritics != 0) && (ratingRottenTopCritics != 100)) { nbValidValues = nbValidValues + 1; total = total + ratingRottenTopCritics }
+//            if ((ratingRottenAllCritics != 0) && (ratingRottenAllCritics != 100)) { nbValidValues = nbValidValues + 1; total = total + ratingRottenAllCritics }
+//            if ((ratingRottenAudience != 0) && (ratingRottenAudience != 100)) { nbValidValues = nbValidValues + 1; total = total + ratingRottenAudience }
+//
+//            if (nbValidValues != 0) { uneSerie.ratingRottenTomatoes = Int(Double(total)/Double(nbValidValues)) }
         }
         catch let error as NSError { print("RottenTomatoes failed: \(error.localizedDescription)") }
         
@@ -126,9 +129,16 @@ class RottenTomatoes
         case "Brooklyn Nine-Nine":
             return "https://www.rottentomatoes.com/tv/brooklyn_nine_nine"
             
+        case "How to Sell Drugs Online (Fast)":
+            return "https://www.rottentomatoes.com/tv/how_to_sell_drugs_online_fast"
+            
+        case "Catch-22":
+            return "https://www.rottentomatoes.com/tv/catch_22"
+            
         case "Hero Corp",
              "Call My Agent",
              "Baron Noir",
+             "Republican Gangsters",
              "WorkinGirls",
              "Guyane",
              "Kaboul Kitchen",

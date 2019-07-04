@@ -24,6 +24,7 @@ class Configuration: UIViewController
     @IBOutlet weak var colRottenTom: UIView!
     @IBOutlet weak var colTVmaze: UIView!
     @IBOutlet weak var colMetaCritic: UIView!
+    @IBOutlet weak var colAlloCine: UIView!
 
     @IBOutlet weak var chronoTrakt: UILabel!
     @IBOutlet weak var chronoTVdb: UILabel!
@@ -33,7 +34,8 @@ class Configuration: UIViewController
     @IBOutlet weak var chronoRottenTom: UILabel!
     @IBOutlet weak var chronoTVmaze: UILabel!
     @IBOutlet weak var chronoMetaCritic: UILabel!
-
+    @IBOutlet weak var chronoAlloCine: UILabel!
+    
     @IBOutlet weak var viewReload: UIView!
     @IBOutlet weak var viewConnect: UIView!
     
@@ -56,6 +58,7 @@ class Configuration: UIViewController
         makePrettyColorViews(view: colRottenTom, couleur: colorRottenTomatoes)
         makePrettyColorViews(view: colTVmaze, couleur: colorTVmaze)
         makePrettyColorViews(view: colMetaCritic, couleur: colorMetaCritic)
+        makePrettyColorViews(view: colAlloCine, couleur: colorAlloCine)
     }
     
     func makePrettyColorViews(view : UIView, couleur : UIColor) {
@@ -147,6 +150,7 @@ class Configuration: UIViewController
         chronoRottenTom.text = String(format: "%0.3f sec", timerRottenTom)
         chronoTVmaze.text = String(format: "%0.3f sec", timerTVmaze)
         chronoMetaCritic.text = String(format: "%0.3f sec", timerMetaCritic)
+        chronoAlloCine.text = String(format: "%0.3f sec", timerAlloCine)
     }
     
     

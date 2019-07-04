@@ -17,7 +17,8 @@ class GraphMiniSerie: UIView {
     var noteTVmaze : Int = 0
     var noteMoviedb : Int = 0
     var noteMetaCritic : Int = 0
-    
+    var noteAlloCine : Int = 0
+
     var nbNotes : Int = 0
     
     var origineX : CGFloat = 0.0
@@ -63,7 +64,7 @@ class GraphMiniSerie: UIView {
         grapheType = type
     }
     
-    func sendNotes(rateTrakt : Int, rateTVdb : Int, rateBetaSeries : Int, rateMoviedb : Int, rateIMdb : Int, rateTVmaze : Int, rateRottenTomatoes : Int, rateMetaCritic : Int) {
+    func sendNotes(rateTrakt : Int, rateTVdb : Int, rateBetaSeries : Int, rateMoviedb : Int, rateIMdb : Int, rateTVmaze : Int, rateRottenTomatoes : Int, rateMetaCritic : Int, rateAlloCine : Int) {
         nbNotes = 0
         
         if (rateTrakt > 0) { nbNotes = nbNotes + 1 }
@@ -74,6 +75,7 @@ class GraphMiniSerie: UIView {
         if (rateTVmaze > 0) { nbNotes = nbNotes + 1 }
         if (rateMoviedb > 0) { nbNotes = nbNotes + 1 }
         if (rateMetaCritic > 0) { nbNotes = nbNotes + 1 }
+        if (rateAlloCine > 0) { nbNotes = nbNotes + 1 }
         if (nbNotes == 0) { nbNotes = 1 }
 
         noteTrakt = rateTrakt
@@ -83,7 +85,8 @@ class GraphMiniSerie: UIView {
         noteRottenTomatoes = rateRottenTomatoes
         noteTVmaze = rateTVmaze
         noteMoviedb = rateMoviedb
-        noteMetaCritic = rateMetaCritic        
+        noteMetaCritic = rateMetaCritic
+        noteAlloCine = rateAlloCine
     }
     
     func backgroundCercles() {
@@ -186,6 +189,10 @@ class GraphMiniSerie: UIView {
             offset = offset + 1
             traceUneBarre(noteMetaCritic, color: colorMetaCritic, offset: offset)
         }
+        if (noteAlloCine > 0) {
+            offset = offset + 1
+            traceUneBarre(noteAlloCine, color: colorAlloCine, offset: offset)
+        }
     }
     
     
@@ -249,6 +256,10 @@ class GraphMiniSerie: UIView {
         if (noteMetaCritic > 0) {
             offset = offset + 1
             traceUnCercle(noteMetaCritic, color: colorMetaCritic, offset: offset)
+        }
+        if (noteAlloCine > 0) {
+            offset = offset + 1
+            traceUnCercle(noteAlloCine, color: colorAlloCine, offset: offset)
         }
     }
     

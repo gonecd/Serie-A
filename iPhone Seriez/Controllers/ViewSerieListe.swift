@@ -98,7 +98,8 @@ class ViewSerieListe: UITableViewController {
                                   rateIMdb: viewList[indexPath.row].getFairGlobalRatingIMdb(),
                                   rateTVmaze: viewList[indexPath.row].getFairGlobalRatingTVmaze(),
                                   rateRottenTomatoes: viewList[indexPath.row].getFairGlobalRatingRottenTomatoes(),
-                                  rateMetaCritic: viewList[indexPath.row].getFairGlobalRatingMetaCritic() )
+                                  rateMetaCritic: viewList[indexPath.row].getFairGlobalRatingMetaCritic(),
+                                  rateAlloCine: viewList[indexPath.row].getFairGlobalRatingAlloCine() )
         cell.miniGraphe.setType(type: grapheType)
         cell.miniGraphe.setNeedsDisplay()
         

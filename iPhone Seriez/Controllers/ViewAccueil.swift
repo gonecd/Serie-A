@@ -78,13 +78,15 @@ class ViewAccueil: UIViewController  {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
 
+        //defaults.set(dateFormatter.string(from: Date()), forKey: "RefreshDates")
+        
         if ((defaults.object(forKey: "RefreshDates")) != nil) {
             relodDates = dateFormatter.date(from: defaults.string(forKey: "RefreshDates")!)!
         }
         
-        if ((defaults.object(forKey: "RefreshIMDB")) != nil) {
-            relodIMDB = dateFormatter.date(from: defaults.string(forKey: "RefreshIMDB")!)!
-        }
+//        if ((defaults.object(forKey: "RefreshIMDB")) != nil) {
+//            relodIMDB = dateFormatter.date(from: defaults.string(forKey: "RefreshIMDB")!)!
+//        }
 
         // Chargement de la dernière sauvegarde
         db.loadDB()
@@ -210,12 +212,13 @@ class ViewAccueil: UIViewController  {
     
  
     @IBAction func quickReload(_ sender: Any) {
+//        print("serie;IMDB;TVDB;Trakt;BetaSeries;MovieDB;TVmaze;RottenTomatoes;MetaCritic;AlloCine;")
+//
 //        for uneSerie in db.shows {
-//            print("\(uneSerie.serie);\(uneSerie.status);\(uneSerie.nbSaisons);\(uneSerie.saisons.count);\(uneSerie.saisons[uneSerie.saisons.count - 1].nbEpisodes);\(uneSerie.saisons[uneSerie.saisons.count - 1].episodes.count);")
-////                    \(uneSerie.saisons[uneSerie.saisons.count - 1].episodes[uneSerie.saisons[uneSerie.saisons.count - 1].episodes.count - 1].date);")
+//            print("\(uneSerie.serie);\(uneSerie.ratingIMDB);\(uneSerie.ratingTVDB);\(uneSerie.ratingTrakt);\(uneSerie.ratingBetaSeries);\(uneSerie.ratingMovieDB);\(uneSerie.ratingTVmaze);\(uneSerie.ratingRottenTomatoes);\(uneSerie.ratingMetaCritic);\(uneSerie.ratingAlloCine);")
 //        }
 //
-//
+
         db.quickRefresh()
         db.finaliseDB()
         db.shareWithWidget()

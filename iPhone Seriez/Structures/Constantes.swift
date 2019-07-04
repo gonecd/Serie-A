@@ -22,6 +22,7 @@ var imdb           : IMdb           = IMdb.init()
 var tvMaze         : TVmaze         = TVmaze.init()
 var rottenTomatoes : RottenTomatoes = RottenTomatoes.init()
 var metaCritic     : MetaCritic     = MetaCritic.init()
+var alloCine       : AlloCine       = AlloCine.init()
 
 var db          : Database   = Database.init()
 var relodDates  : Date = Date.init(timeIntervalSince1970: 0)
@@ -37,6 +38,7 @@ var timerIMdb       : TimeInterval = 0
 var timerTVmaze     : TimeInterval = 0
 var timerRottenTom  : TimeInterval = 0
 var timerMetaCritic : TimeInterval = 0
+var timerAlloCine   : TimeInterval = 0
 
 // Code des source
 let sourceTrakt         : Int = 0
@@ -44,14 +46,6 @@ let sourceTVdb          : Int = 1
 let sourceBetaSeries    : Int = 2
 let sourceMovieDB       : Int = 3
 let sourceIMdb          : Int = 4
-
-// Correction des notes pour homogénéisation
-//let correctionTVdb          : Int = 77
-//let correctionBetaSeries    : Int = 86
-//let correctionTrakt         : Int = 79
-//let correctionMoviedb       : Int = 75
-//let correctionIMdb          : Int = 86
-
 
 // Limitations de chargement
 let similarShowsPerSource       : Int = 8
@@ -67,6 +61,7 @@ let colorMoviedb        : UIColor = UIColor.green
 let colorTVmaze         : UIColor = UIColor.magenta
 let colorRottenTomatoes : UIColor = UIColor.purple
 let colorMetaCritic     : UIColor = UIColor.black
+let colorAlloCine       : UIColor = UIColor.brown
 
 
 //class var black: NSColor

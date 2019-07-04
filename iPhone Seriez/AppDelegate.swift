@@ -68,34 +68,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let defaults = UserDefaults.standard
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        var message : String = ""
         
-        pushNotification(titre: "Starting", soustitre: "Heure: \(dateFormatter.string(from: now))", message: message)
-        
-        // Notes IMDB (une fois par jour)
-        if (now.timeIntervalSince(relodIMDB) > unJour) {
-            loadIMDB()
-            message = message + " - Notes IMDB (Succès)\n"
-            relodIMDB = now
-            defaults.set(dateFormatter.string(from: now), forKey: "RefreshIMDB")
-        }
-        
+        pushNotification(titre: "Starting", soustitre: "Heure: \(dateFormatter.string(from: Date()))", message: "")
+
         // Dates TV Maze (une fois par jour)
         if (now.timeIntervalSince(relodDates) > unJour) {
             loadDates()
-            message = message + " - Dates TV Maze (Succès)\n"
             relodDates = now
             defaults.set(dateFormatter.string(from: now), forKey: "RefreshDates")
+            pushNotification(titre: "Dates loaded", soustitre: "Heure: \(dateFormatter.string(from: Date()))", message: "")
         }
         
         // Statuses Trakt
         loadStatuses()
-        message = message + " - Status Trakt (Succès)"
+        pushNotification(titre: "Statuses loaded", soustitre: "Heure: \(dateFormatter.string(from: Date()))", message: "")
 
-        dateFormatter.dateFormat = "HH:mm:ss"
-        let duration : String = String(format: "%.1f", arguments:[Date().timeIntervalSince(now)])
-        pushNotification(titre: "Scheduled Refresh", soustitre: "Heure: \(dateFormatter.string(from: now)) - Durée: \(duration) sec", message: message)
-        
         completionHandler(.newData)
     }
 }
