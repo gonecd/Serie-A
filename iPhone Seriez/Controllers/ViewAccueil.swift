@@ -212,10 +212,20 @@ class ViewAccueil: UIViewController  {
     
  
     @IBAction func quickReload(_ sender: Any) {
-//        print("serie;IMDB;TVDB;Trakt;BetaSeries;MovieDB;TVmaze;RottenTomatoes;MetaCritic;AlloCine;")
+        //        print("serie;IMDB;TVDB;Trakt;BetaSeries;MovieDB;TVmaze;RottenTomatoes;MetaCritic;AlloCine;")
+        //
+        //        for uneSerie in db.shows {
+        //            print("\(uneSerie.serie);\(uneSerie.ratingIMDB);\(uneSerie.ratingTVDB);\(uneSerie.ratingTrakt);\(uneSerie.ratingBetaSeries);\(uneSerie.ratingMovieDB);\(uneSerie.ratingTVmaze);\(uneSerie.ratingRottenTomatoes);\(uneSerie.ratingMetaCritic);\(uneSerie.ratingAlloCine);")
+        //        }
+        
+//                print("serie;saison;episode;ratingTVdb;ratersTVdb;ratingTrakt;ratersTrakt;ratingBetaSeries;ratersBetaSeries;ratingIMdb;ratersIMdb;ratingMoviedb;ratersMoviedb;")
 //
 //        for uneSerie in db.shows {
-//            print("\(uneSerie.serie);\(uneSerie.ratingIMDB);\(uneSerie.ratingTVDB);\(uneSerie.ratingTrakt);\(uneSerie.ratingBetaSeries);\(uneSerie.ratingMovieDB);\(uneSerie.ratingTVmaze);\(uneSerie.ratingRottenTomatoes);\(uneSerie.ratingMetaCritic);\(uneSerie.ratingAlloCine);")
+//            for uneSaison in uneSerie.saisons {
+//                for unEpisode in uneSaison.episodes {
+//                    print("\(unEpisode.serie);\(unEpisode.saison);\(unEpisode.episode);\(unEpisode.ratingTVdb);\(unEpisode.ratersTVdb);\(unEpisode.ratingTrakt);\(unEpisode.ratersTrakt);\(unEpisode.ratingBetaSeries);\(unEpisode.ratersBetaSeries);\(unEpisode.ratingIMdb);\(unEpisode.ratersIMdb);\(unEpisode.ratingMoviedb);\(unEpisode.ratersMoviedb);")
+//                }
+//            }
 //        }
 //
 

@@ -30,6 +30,7 @@ class Database : NSObject
         // Mise à jour des épisodes vus
         for uneSerie in trakt.getWatched() {
             let indexDB : Int = index[uneSerie.serie] ?? -1
+            
             if (indexDB == -1) {
                 print("Ajout (watched) de \(uneSerie.serie)")
                 // Nouvelle série on l'ajoute telle que
