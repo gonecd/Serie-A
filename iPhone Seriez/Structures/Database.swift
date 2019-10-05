@@ -167,6 +167,9 @@ class Database : NSObject
     
     func downloadDates(serie : Serie)
     {
+        // TV Maze est buggué pour Mpney Heist : il compte une saison en trop
+        if (serie.serie == "Death Note") { return }
+
         let tvMazeResults : (saisons : [Int], nbEps : [Int], debuts : [Date], fins : [Date]) = tvMaze.getSeasonsDates(idTVmaze: serie.idTVmaze)
         
         for i:Int in 0..<tvMazeResults.saisons.count {
@@ -178,6 +181,9 @@ class Database : NSObject
                 if (tvMazeResults.nbEps[i] != 0) { serie.saisons[seasonIdx].nbEpisodes = tvMazeResults.nbEps[i] }
             }
             else {
+                // TV Maze est buggué pour Mpney Heist : il compte une saison en trop
+                if (serie.serie == "Money Heist") { return }
+                
                 // Ajout de la saison et de ses informations
                 let newSaison : Saison = Saison(serie: serie.serie, saison: seasonIdx+1)
                 newSaison.starts = tvMazeResults.debuts[i]
@@ -206,7 +212,7 @@ class Database : NSObject
         db.shows[db.index["WorkinGirls"]!].saisons[2].nbEpisodes = db.shows[db.index["WorkinGirls"]!].saisons[2].nbWatchedEps
         db.shows[db.index["WorkinGirls"]!].saisons[3].nbEpisodes = db.shows[db.index["WorkinGirls"]!].saisons[3].nbWatchedEps
         db.shows[db.index["Hero Corp"]!].saisons[2].nbEpisodes = db.shows[db.index["Hero Corp"]!].saisons[2].nbWatchedEps
-
+        
         updateCompteurs()
     }
     

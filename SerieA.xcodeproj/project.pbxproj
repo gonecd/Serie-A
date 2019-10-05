@@ -29,7 +29,6 @@
 		6231F8EF22833C34009D0351 /* Flag_of_Israel.png in Resources */ = {isa = PBXBuildFile; fileRef = 6231F8EB22833C34009D0351 /* Flag_of_Israel.png */; };
 		624D27491FFBD4E100B49702 /* ViewAccueil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624D27481FFBD4E100B49702 /* ViewAccueil.swift */; };
 		624EC9A520B1A87E005ED207 /* Chart-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 624EC9A420B1A87E005ED207 /* Chart-icon.png */; };
-		624EC9A720B2DF20005ED207 /* data.tsv in Resources */ = {isa = PBXBuildFile; fileRef = 624EC9A620B2DF20005ED207 /* data.tsv */; };
 		6255DBDA2083780900CA9BA3 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6255DBD92083780900CA9BA3 /* Helpers.swift */; };
 		625799B7219734480010144D /* ViewPropals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625799B6219734480010144D /* ViewPropals.swift */; };
 		625F4AFE2214859600FE5A5C /* SeriesCommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 625F4AFD221484F200FE5A5C /* SeriesCommon.framework */; };
@@ -46,6 +45,8 @@
 		62796465209A15A800ED5578 /* Logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 62796464209A15A800ED5578 /* Logo.png */; };
 		627A0E2820139E8300FE1777 /* GraphSaison.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627A0E2720139E8300FE1777 /* GraphSaison.swift */; };
 		627A0E2A20139E9900FE1777 /* GraphEpisode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627A0E2920139E9900FE1777 /* GraphEpisode.swift */; };
+		62921B5522BEBEFE00A2BE94 /* Sandbox.xml in Resources */ = {isa = PBXBuildFile; fileRef = 62921B5422BEBEFE00A2BE94 /* Sandbox.xml */; };
+		62921B5722BFE2F900A2BE94 /* allocine.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62921B5622BFE2F800A2BE94 /* allocine.ico */; };
 		62A581E71FBC5BCB002D8FD3 /* imdb.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62A581E51FBC5BCB002D8FD3 /* imdb.ico */; };
 		62A581E81FBC5BCB002D8FD3 /* rottentomatoes.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62A581E61FBC5BCB002D8FD3 /* rottentomatoes.ico */; };
 		62AC50A0200E58A200A8C841 /* SaisonFiche.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62AC509F200E58A200A8C841 /* SaisonFiche.swift */; };
@@ -163,7 +164,6 @@
 		6231F8EB22833C34009D0351 /* Flag_of_Israel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_Israel.png; sourceTree = "<group>"; };
 		624D27481FFBD4E100B49702 /* ViewAccueil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewAccueil.swift; sourceTree = "<group>"; };
 		624EC9A420B1A87E005ED207 /* Chart-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Chart-icon.png"; sourceTree = "<group>"; };
-		624EC9A620B2DF20005ED207 /* data.tsv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = data.tsv; sourceTree = "<group>"; };
 		6255DBD92083780900CA9BA3 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		625799B6219734480010144D /* ViewPropals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewPropals.swift; sourceTree = "<group>"; };
 		625F4AF8221484F200FE5A5C /* SeriesCommon.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SeriesCommon.xcodeproj; path = ../SeriesCommon/SeriesCommon.xcodeproj; sourceTree = "<group>"; };
@@ -182,6 +182,8 @@
 		62796464209A15A800ED5578 /* Logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Logo.png; sourceTree = "<group>"; };
 		627A0E2720139E8300FE1777 /* GraphSaison.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphSaison.swift; sourceTree = "<group>"; };
 		627A0E2920139E9900FE1777 /* GraphEpisode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphEpisode.swift; sourceTree = "<group>"; };
+		62921B5422BEBEFE00A2BE94 /* Sandbox.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Sandbox.xml; sourceTree = "<group>"; };
+		62921B5622BFE2F800A2BE94 /* allocine.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = allocine.ico; sourceTree = "<group>"; };
 		62A581E51FBC5BCB002D8FD3 /* imdb.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = imdb.ico; sourceTree = "<group>"; };
 		62A581E61FBC5BCB002D8FD3 /* rottentomatoes.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = rottentomatoes.ico; sourceTree = "<group>"; };
 		62AC509F200E58A200A8C841 /* SaisonFiche.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaisonFiche.swift; sourceTree = "<group>"; };
@@ -272,15 +274,15 @@
 		624D87492043323A00AFDA06 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				62DD87A31FB76F5D00A9B9EE /* Trakt.swift */,
-				626D4728204C6DE900B1A64D /* IMdb.swift */,
-				62DD879F1FB76F5D00A9B9EE /* TheTVdb.swift */,
-				62DD87B91FB8C15500A9B9EE /* BetaSeries.swift */,
-				62D0EBBC204C374B009774B6 /* TheMoviedb.swift */,
 				6217308121BC22C300D37350 /* Allocine.swift */,
-				6217308321BC22DE00D37350 /* RottenTomatoes.swift */,
-				6217308521BC22EE00D37350 /* TVmaze.swift */,
+				62DD87B91FB8C15500A9B9EE /* BetaSeries.swift */,
+				626D4728204C6DE900B1A64D /* IMdb.swift */,
 				620B22FD22A304FD0027DCF6 /* MetaCritic.swift */,
+				6217308321BC22DE00D37350 /* RottenTomatoes.swift */,
+				62D0EBBC204C374B009774B6 /* TheMoviedb.swift */,
+				62DD879F1FB76F5D00A9B9EE /* TheTVdb.swift */,
+				62DD87A31FB76F5D00A9B9EE /* Trakt.swift */,
+				6217308521BC22EE00D37350 /* TVmaze.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -312,16 +314,16 @@
 			isa = PBXGroup;
 			children = (
 				624D874A2043325600AFDA06 /* Graphes */,
+				621B1D9C20D665B800F4F3BD /* Configuration.swift */,
+				62F8ECF32013775800A41EF7 /* EpisodeFiche.swift */,
+				62AC509F200E58A200A8C841 /* SaisonFiche.swift */,
+				62DD87A91FB7838400A9B9EE /* SerieFiche.swift */,
 				624D27481FFBD4E100B49702 /* ViewAccueil.swift */,
-				62D0EBBA204C30BE009774B6 /* ViewSaisonListe.swift */,
-				6224A5E22041F30200450812 /* ViewSerieListe.swift */,
 				625799B6219734480010144D /* ViewPropals.swift */,
+				62D0EBBA204C30BE009774B6 /* ViewSaisonListe.swift */,
 				62B4716B20A88D3E0067BD34 /* ViewSearch.swift */,
 				6214F0FE227F12D10039F6E5 /* ViewSearchNew.swift */,
-				62DD87A91FB7838400A9B9EE /* SerieFiche.swift */,
-				62AC509F200E58A200A8C841 /* SaisonFiche.swift */,
-				62F8ECF32013775800A41EF7 /* EpisodeFiche.swift */,
-				621B1D9C20D665B800F4F3BD /* Configuration.swift */,
+				6224A5E22041F30200450812 /* ViewSerieListe.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -344,6 +346,7 @@
 				6218303D22AD73BE003243B9 /* metacritic.png */,
 				62DD87B51FB8BE4F00A9B9EE /* betaseries.png */,
 				62DD87B31FB8BE4F00A9B9EE /* thetvdb.png */,
+				62921B5622BFE2F800A2BE94 /* allocine.ico */,
 				6210217421EBA91C00849E6E /* tvmaze.ico */,
 				62A581E51FBC5BCB002D8FD3 /* imdb.ico */,
 				62A581E61FBC5BCB002D8FD3 /* rottentomatoes.ico */,
@@ -364,7 +367,7 @@
 			isa = PBXGroup;
 			children = (
 				626D4726204C624500B1A64D /* Notes.swift */,
-				624EC9A620B2DF20005ED207 /* data.tsv */,
+				62921B5422BEBEFE00A2BE94 /* Sandbox.xml */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -629,10 +632,10 @@
 				62F2233E21E0F40F0032A6E3 /* Eye-2-icon.png in Resources */,
 				62B087C4207BEBC6007703FF /* Flag_of_France.png in Resources */,
 				62FF97D82039076D007B658E /* TV-icon.png in Resources */,
-				624EC9A720B2DF20005ED207 /* data.tsv in Resources */,
 				62B087C3207BEBC6007703FF /* Flag_of_Spain.png in Resources */,
 				62FF97D02039016B007B658E /* Eye-icon.png in Resources */,
 				62B087AF207A7938007703FF /* Idea-icon.png in Resources */,
+				62921B5522BEBEFE00A2BE94 /* Sandbox.xml in Resources */,
 				6279645A2095D5BB00ED5578 /* Flag_of_Japan.png in Resources */,
 				62FF97C02038C9A3007B658E /* themoviedb.ico in Resources */,
 				62FF97CF2039016B007B658E /* Play-icon.png in Resources */,
@@ -643,6 +646,7 @@
 				62B087C0207BEBC6007703FF /* Flag_of_the_United_Kingdom.png in Resources */,
 				62F2234021E120E00032A6E3 /* Refresh-icon.png in Resources */,
 				6231F8E622833ACE009D0351 /* Flag_of_Finland.png in Resources */,
+				62921B5722BFE2F900A2BE94 /* allocine.ico in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

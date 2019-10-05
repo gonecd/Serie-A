@@ -170,6 +170,13 @@ class AlloCine : NSObject
         "What We Do in the Shadows" : 23200,
         "Chernobyl" : 22429,
         "Crashing" : 20473,
+        "After Life" : 23630,
+        "Call My Agent!" : 5019,
+        "Jett" : 23569,
+        "Years and Years" : 23707,
+        "Deutschland 83" : 18781,
+        "Vernon Subutex" : 20413,
+        "Mindhunter" : 20143,
         "The Haunting" : 21978
     ]
     
@@ -194,7 +201,7 @@ class AlloCine : NSObject
             
             for i in 0..<mots.count {
                 if (mots[i] == "Spectateurs") {
-                    let uneNote : Double = Double(mots[i+1].replacingOccurrences(of: ",", with: ".")) as! Double
+                    let uneNote : Double = Double(mots[i+1].replacingOccurrences(of: ",", with: "."))!
                     uneSerie.ratingAlloCine = Int(uneNote * 20.0)
                 }
             }

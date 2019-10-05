@@ -24,23 +24,20 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
     @IBOutlet weak var banniere: UIImageView!
     
     @IBOutlet weak var viewComments: UITableView!
-    @IBOutlet weak var viewResume: UIView!
-    @IBOutlet weak var pageControl: UIPageControl!
-    
     @IBOutlet weak var graphe: GraphEpisode!
+    
+    @IBOutlet weak var labelNotes: UILabel!
+    @IBOutlet weak var labelResume: UILabel!
+    @IBOutlet weak var labelcommentaires: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleGesture))
-        swipeLeft.direction = .left
-        self.view.addGestureRecognizer(swipeLeft)
+        arrondirLabel(texte: labelNotes, radius: 10)
+        arrondirLabel(texte: labelResume, radius: 10)
+        arrondirLabel(texte: labelcommentaires, radius: 10)
+
         
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(handleGesture))
-        swipeRight.direction = .right
-        self.view.addGestureRecognizer(swipeRight)
-        
-        pageControl.addTarget(self, action: #selector(self.changePage(sender:)), for: UIControl.Event.valueChanged)
         webOpinions = trakt.getComments(IMDBid: self.serie.idIMdb, season: saison, episode: episode)
         
         let dateFormatter = DateFormatter()
@@ -51,7 +48,16 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
         titre.text = serie.saisons[saison - 1].episodes[episode - 1].titre
         date.text = dateFormatter.string(from: serie.saisons[saison - 1].episodes[episode - 1].date)
         banniere.image = image
-        graphe.sendEpisode(serie.saisons[saison - 1].episodes[episode - 1])
+        
+        graphe.sendEpisode(nTrakt: serie.saisons[saison - 1].episodes[episode - 1].ratingTrakt,
+                           nTVdb: serie.saisons[saison - 1].episodes[episode - 1].ratingTVdb,
+                           nBetaSeries: serie.saisons[saison - 1].episodes[episode - 1].ratingBetaSeries,
+                           nMovieDB: serie.saisons[saison - 1].episodes[episode - 1].ratingMoviedb,
+                           nIMDB: serie.saisons[saison - 1].episodes[episode - 1].ratingIMdb,
+                           nRottenTomatoes: 0,
+                           nTVMaze: 0,
+                           nMetaCritic: 0,
+                           nAlloCine: 0 )
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -76,33 +82,6 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
         if (webOpinions.source[indexPath.row] == sourceTrakt) { cell.logo.image = #imageLiteral(resourceName: "trakt.ico") }
         if (webOpinions.source[indexPath.row] == sourceMovieDB) { cell.logo.image = #imageLiteral(resourceName: "themoviedb.ico") }
         return cell
-    }
-    
-    @objc func handleGesture(gesture: UISwipeGestureRecognizer) -> Void {
-        if gesture.direction == UISwipeGestureRecognizer.Direction.right {
-            pageControl.currentPage = pageControl.currentPage - 1
-        }
-        else {
-            pageControl.currentPage = pageControl.currentPage + 1
-        }
-        
-        self.changePage(sender: self)
-    }
-
-    @objc func changePage(sender: AnyObject) -> () {
-        switch (pageControl.currentPage) {
-        case 0:
-            viewResume.isHidden = false
-            viewComments.isHidden = true
-            
-        case 1:
-            viewResume.isHidden = true
-            viewComments.isHidden = false
-            
-        default:
-            viewResume.isHidden = false
-            viewComments.isHidden = true
-        }
     }
     
     @IBAction func webIMdb(_ sender: AnyObject) {

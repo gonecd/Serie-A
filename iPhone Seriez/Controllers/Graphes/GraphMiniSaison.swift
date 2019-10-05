@@ -178,24 +178,24 @@ class GraphMiniSaison: UIView {
         
         for i in 0..<theSaison-1 {
             offset = (largeur * (CGFloat(i)+0.5) / CGFloat(theSaison))
-            traceUneSaison(offsetX: offset, note: theSerie.saisons[i].getFairRatingTVdb(), color: colorTVdb, diametre : 3.0)
+            //traceUneSaison(offsetX: offset, note: theSerie.saisons[i].getFairRatingTVdb(), color: colorTVdb, diametre : 3.0)
             traceUneSaison(offsetX: offset, note: theSerie.saisons[i].getFairRatingTrakt(), color: colorTrakt, diametre : 3.0)
             traceUneSaison(offsetX: offset, note: theSerie.saisons[i].getFairRatingBetaSeries(), color: colorBetaSeries, diametre : 3.0)
-            traceUneSaison(offsetX: offset, note: theSerie.saisons[i].getFairRatingMoviedb(), color: colorMoviedb, diametre : 3.0)
+            //traceUneSaison(offsetX: offset, note: theSerie.saisons[i].getFairRatingMoviedb(), color: colorMoviedb, diametre : 3.0)
             traceUneSaison(offsetX: offset, note: theSerie.saisons[i].getFairRatingIMdb(), color: colorIMDB, diametre : 3.0)
             
-            traceUnTrait(index : i, nbItem : theSaison, note1 : theSerie.saisons[i].getFairRatingTVdb(), note2 : theSerie.saisons[i+1].getFairRatingTVdb(), color: colorTVdb)
+            //traceUnTrait(index : i, nbItem : theSaison, note1 : theSerie.saisons[i].getFairRatingTVdb(), note2 : theSerie.saisons[i+1].getFairRatingTVdb(), color: colorTVdb)
             traceUnTrait(index : i, nbItem : theSaison, note1 : theSerie.saisons[i].getFairRatingTrakt(), note2 : theSerie.saisons[i+1].getFairRatingTrakt(), color: colorTrakt)
             traceUnTrait(index : i, nbItem : theSaison, note1 : theSerie.saisons[i].getFairRatingBetaSeries(), note2 : theSerie.saisons[i+1].getFairRatingBetaSeries(), color: colorBetaSeries)
-            traceUnTrait(index : i, nbItem : theSaison, note1 : theSerie.saisons[i].getFairRatingMoviedb(), note2 : theSerie.saisons[i+1].getFairRatingMoviedb(), color: colorMoviedb)
+            //traceUnTrait(index : i, nbItem : theSaison, note1 : theSerie.saisons[i].getFairRatingMoviedb(), note2 : theSerie.saisons[i+1].getFairRatingMoviedb(), color: colorMoviedb)
             traceUnTrait(index : i, nbItem : theSaison, note1 : theSerie.saisons[i].getFairRatingIMdb(), note2 : theSerie.saisons[i+1].getFairRatingIMdb(), color: colorIMDB)
         }
         
         offset = (largeur * (CGFloat(theSaison-1)+0.5) / CGFloat(theSaison))
-        traceUneSaison(offsetX: offset, note: theSerie.saisons[theSaison-1].getFairRatingTVdb(), color: colorTVdb, diametre : 8.0)
+        //traceUneSaison(offsetX: offset, note: theSerie.saisons[theSaison-1].getFairRatingTVdb(), color: colorTVdb, diametre : 8.0)
         traceUneSaison(offsetX: offset, note: theSerie.saisons[theSaison-1].getFairRatingTrakt(), color: colorTrakt, diametre : 8.0)
         traceUneSaison(offsetX: offset, note: theSerie.saisons[theSaison-1].getFairRatingBetaSeries(), color: colorBetaSeries, diametre : 8.0)
-        traceUneSaison(offsetX: offset, note: theSerie.saisons[theSaison-1].getFairRatingMoviedb(), color: colorMoviedb, diametre : 8.0)
+        //traceUneSaison(offsetX: offset, note: theSerie.saisons[theSaison-1].getFairRatingMoviedb(), color: colorMoviedb, diametre : 8.0)
         traceUneSaison(offsetX: offset, note: theSerie.saisons[theSaison-1].getFairRatingIMdb(), color: colorIMDB, diametre : 8.0)
     }
     
@@ -238,10 +238,10 @@ class GraphMiniSaison: UIView {
     
     
     func traceGraphePoints() {
-        traceUnPoint(noteX: noteTVdb,           noteY: moyTVdb,        color: colorTVdb)
+        //traceUnPoint(noteX: noteTVdb,           noteY: moyTVdb,        color: colorTVdb)
         traceUnPoint(noteX: noteTrakt,          noteY: moyTrakt,       color: colorTrakt)
         traceUnPoint(noteX: noteBetaSeries,     noteY: moyBetaSeries,  color: colorBetaSeries)
-        traceUnPoint(noteX: noteMoviedb,        noteY: moyMoviedb,     color: colorMoviedb)
+        //traceUnPoint(noteX: noteMoviedb,        noteY: moyMoviedb,     color: colorMoviedb)
         traceUnPoint(noteX: noteIMdb,           noteY: moyIMdb,        color: colorIMDB)
     }
     

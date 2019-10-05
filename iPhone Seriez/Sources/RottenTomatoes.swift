@@ -137,6 +137,7 @@ class RottenTomatoes
             
         case "Hero Corp",
              "Call My Agent",
+             "Call My Agent!",
              "Baron Noir",
              "Republican Gangsters",
              "WorkinGirls",
@@ -149,6 +150,7 @@ class RottenTomatoes
              "Real Humans",
              "Braquo",
              "XIII",
+             "Vernon Subutex",
              "Maison close":
             return ""
             

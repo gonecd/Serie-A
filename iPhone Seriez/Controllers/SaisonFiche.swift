@@ -38,43 +38,68 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         
         banniere.image = image
         labelSaison.text = "Saison " + String(saison)
+        self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
         graphe.setNeedsDisplay()
         makeGradiant(carre: boutonVuUnEp, couleur: "Gris")
+        self.roue.startAnimating()
         
-        DispatchQueue.global(qos: .utility).async {
-            
-            DispatchQueue.main.async { self.roue.startAnimating() }
+    
+        let queue : OperationQueue = OperationQueue()
 
-            self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
-            DispatchQueue.main.async { self.graphe.setNeedsDisplay() }
-
+        let opeSaisonStructure = BlockOperation(block: {
             theTVdb.getSerieInfosLight(uneSerie: self.serie)
-            DispatchQueue.main.async { self.episodesList.reloadData() }
+            OperationQueue.main.addOperation({ self.episodesList.reloadData() } )
+        } )
+        queue.addOperation(opeSaisonStructure)
 
+        let opeLoadTVdb = BlockOperation(block: {
             if (self.serie.idTVdb != "") { theTVdb.getEpisodesRatings(self.serie) }
             self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
-            DispatchQueue.main.async { self.graphe.setNeedsDisplay() }
-            
+            OperationQueue.main.addOperation({ self.graphe.setNeedsDisplay() } )
+        } )
+        queue.addOperation(opeLoadTVdb)
+
+        let opeLoadBetaSeries = BlockOperation(block: {
             if (self.serie.idTVdb != "") { betaSeries.getEpisodesRatings(self.serie) }
             self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
-            DispatchQueue.main.async { self.graphe.setNeedsDisplay() }
-            
+            OperationQueue.main.addOperation({ self.graphe.setNeedsDisplay() } )
+        } )
+        queue.addOperation(opeLoadBetaSeries)
+
+        let opeLoadMovieDB = BlockOperation(block: {
             if (self.serie.idMoviedb != "") { theMoviedb.getEpisodesRatings(self.serie) }
             self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
-            DispatchQueue.main.async { self.graphe.setNeedsDisplay() }
-            
+            OperationQueue.main.addOperation({ self.graphe.setNeedsDisplay() } )
+        } )
+        queue.addOperation(opeLoadMovieDB)
+
+        let opeLoadIMDB = BlockOperation(block: {
             imdb.getEpisodesRatings(self.serie)
             self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
-            DispatchQueue.main.async { self.graphe.setNeedsDisplay() }
+            OperationQueue.main.addOperation({ self.graphe.setNeedsDisplay() } )
+        } )
+        queue.addOperation(opeLoadIMDB)
 
+        let opeLoadTrakt = BlockOperation(block: {
             if (self.serie.idTrakt != "") { trakt.getEpisodesRatings(self.serie) }
             self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
-            DispatchQueue.main.async { self.graphe.setNeedsDisplay() }
-            
+            OperationQueue.main.addOperation({ self.graphe.setNeedsDisplay() } )
+        } )
+        queue.addOperation(opeLoadTrakt)
+        
+
+        let opeFinalise = BlockOperation(block: {
             db.saveDB()
-            
-            DispatchQueue.main.async { self.roue.stopAnimating() }
-        }
+            OperationQueue.main.addOperation({ self.roue.stopAnimating() } )
+        } )
+        opeFinalise.addDependency(opeSaisonStructure)
+        opeFinalise.addDependency(opeLoadTVdb)
+        opeFinalise.addDependency(opeLoadBetaSeries)
+        opeFinalise.addDependency(opeLoadMovieDB)
+        opeFinalise.addDependency(opeLoadIMDB)
+        opeFinalise.addDependency(opeLoadTrakt)
+        queue.addOperation(opeFinalise)
+
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

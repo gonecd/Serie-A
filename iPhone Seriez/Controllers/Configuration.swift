@@ -120,10 +120,12 @@ class Configuration: UIViewController
                 timeStamp = Date()
                 db.downloadDates(serie: uneSerie)
                 timerTVmaze = timerTVmaze + Date().timeIntervalSince(timeStamp)
+                
+                if (uneSerie.saisons[uneSerie.saisons.count - 1].watched() == false) {
+                    db.downloadDetailInfo(serie: uneSerie)
+                }
 
-                db.downloadDetailInfo(serie: uneSerie)
-
-//                if ((uneSerie.watchlist == false) && (uneSerie.unfollowed == false)) {
+//                if ( (uneSerie.watchlist == false) && (uneSerie.unfollowed == false) ) {
 //                    if (uneSerie.saisons[uneSerie.saisons.count - 1].watched() == false) {
 //                        db.downloadDetailInfo(serie: uneSerie)
 //                    }

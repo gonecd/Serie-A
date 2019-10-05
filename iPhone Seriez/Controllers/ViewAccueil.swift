@@ -229,6 +229,37 @@ class ViewAccueil: UIViewController  {
 //        }
 //
 
+        
+//        let uneSerie : Serie = Serie(serie: "Death Note")
+//        let refSerie : Serie = db.shows[db.index[uneSerie.serie] ?? 1]
+//
+//        uneSerie.idIMdb = refSerie.idIMdb
+//        uneSerie.idTVdb = refSerie.idTVdb
+//        uneSerie.idTrakt = refSerie.idTrakt
+//        uneSerie.idMoviedb = refSerie.idMoviedb
+//        uneSerie.idTVmaze = refSerie.idTVmaze
+//
+//        db.downloadGlobalInfo(serie : uneSerie)
+//
+//        print("Serie : \(uneSerie.serie)")
+//        print(" NbEpisodes : \(uneSerie.nbEpisodes)")
+//        print(" NbSaisons : \(uneSerie.nbSaisons)")
+//        print(" Saisons count : \(uneSerie.saisons.count)")
+//        for uneSaison in uneSerie.saisons {
+//            print(" Saisons[\(uneSaison.saison)] = \(uneSaison.episodes.count) épisodes comptés et \(uneSaison.nbEpisodes) déclarés, \(uneSaison.nbWatchedEps) vus")
+//        }
+//
+//        db.downloadDates(serie: uneSerie)
+//
+//        print("Serie : \(uneSerie.serie)")
+//        print(" NbEpisodes : \(uneSerie.nbEpisodes)")
+//        print(" NbSaisons : \(uneSerie.nbSaisons)")
+//        print(" Saisons count : \(uneSerie.saisons.count)")
+//        for uneSaison in uneSerie.saisons {
+//            print(" Saisons[\(uneSaison.saison)] = \(uneSaison.episodes.count) épisodes comptés et \(uneSaison.nbEpisodes) déclarés, \(uneSaison.nbWatchedEps) vus")
+//        }
+
+
         db.quickRefresh()
         db.finaliseDB()
         db.shareWithWidget()

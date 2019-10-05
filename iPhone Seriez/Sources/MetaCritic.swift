@@ -87,6 +87,7 @@ class MetaCritic
             
         case "Hero Corp",
              "Call My Agent",
+             "Call My Agent!",
              "3%",
              "A Very Secret Service",
              "Baron Noir",
