@@ -169,18 +169,20 @@ class ViewSaisonListe: UITableViewController {
         viewController.image = getImage(viewList[tableCell.index].banner)
     }
     
-    override func tableView(_ tableView: UITableView, editActionsForRowAt: IndexPath) -> [UITableViewRowAction]? {
-        let reload = UITableViewRowAction(style: .normal, title: "Reload") { action, index in
-            db.downloadGlobalInfo(serie: self.viewList[index.row])
+    
+    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let reload = UIContextualAction(style: .destructive, title: "Reload") {  (contextualAction, view, boolValue) in
+            db.downloadGlobalInfo(serie: self.viewList[indexPath.row])
             db.saveDB()
             self.liste.reloadData()
             self.view.setNeedsDisplay()
         }
         reload.backgroundColor = .green
         
-        return [reload]
+        return UISwipeActionsConfiguration(actions: [reload])
     }
-    
+
+        
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }

@@ -8,6 +8,7 @@
 
 import Foundation
 import SeriesCommon
+import Gzip
 
 class IMdb : NSObject {
     var IMDBrates : NSMutableDictionary = NSMutableDictionary()

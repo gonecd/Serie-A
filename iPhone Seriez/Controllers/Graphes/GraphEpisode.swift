@@ -16,7 +16,7 @@ class GraphEpisode: UIView {
     var largeur  : CGFloat = 0.0
     var bordure  : CGFloat = 10.0
     
-    let colW : CGFloat = 120.0
+    let colW : CGFloat = 130.0
     let linH : CGFloat = 30.0
     
     var noteTrakt : Int = 0

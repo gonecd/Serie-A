@@ -68,21 +68,18 @@ class ViewSerieListe: UITableViewController {
         
         // Affichage des genres
         var allGenres : String = ""
-        for unGenre in viewList[indexPath.row].genres
-        {
+        for unGenre in viewList[indexPath.row].genres {
             allGenres = allGenres + unGenre + " "
         }
         cell.genres.text = allGenres
         
         // Affichage du status
         arrondir(texte: cell.status, radius: 8.0)
-        if (viewList[indexPath.row].status == "Ended")
-        {
+        if (viewList[indexPath.row].status == "Ended") {
             cell.status.text = "FINIE"
             cell.status.textColor = UIColor.black
         }
-        else
-        {
+        else {
             cell.status.text = "EN COURS"
             cell.status.textColor = UIColor.blue
         }
@@ -118,44 +115,40 @@ class ViewSerieListe: UITableViewController {
         viewController.image = getImage(viewList[tableCell.index].banner)
     }
     
-    override func tableView(_ tableView: UITableView, editActionsForRowAt: IndexPath) -> [UITableViewRowAction]? {
-        // Function Reload Data
-        let reload = UITableViewRowAction(style: .normal, title: "Reload") { action, index in
-
-            db.downloadGlobalInfo(serie: self.viewList[index.row])
+    
+    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let reload = UIContextualAction(style: .destructive, title: "Reload") {  (contextualAction, view, boolValue) in
+            db.downloadGlobalInfo(serie: self.viewList[indexPath.row])
             db.saveDB()
             self.liste.reloadData()
             self.view.setNeedsDisplay()
         }
         reload.backgroundColor = .green
         
-        // Function Remove from watchlist
-        let remove = UITableViewRowAction(style: .destructive, title: "Remove") { action, index in
-            if (self.supprimerUneSerieDansLaWatchlistTrakt(uneSerie: self.viewList[index.row]))
-            {
-                self.viewList.remove(at: index.row)
+        let remove = UIContextualAction(style: .destructive, title: "Remove") {  (contextualAction, view, boolValue) in
+            if (self.supprimerUneSerieDansLaWatchlistTrakt(uneSerie: self.viewList[indexPath.row])) {
+                self.viewList.remove(at: indexPath.row)
                 self.liste.reloadData()
                 self.view.setNeedsDisplay()
             }
         }
         remove.backgroundColor = .red
-        
-        // Function Add to watclist
-        let addWatchlist = UITableViewRowAction(style: .destructive, title: "Add to watchlist") { action, index in
-            if (trakt.addToWatchlist(theTVdbId: self.viewList[index.row].idTVdb))
-            {
-                db.downloadGlobalInfo(serie: self.viewList[index.row])
-                self.viewList[index.row].watchlist = true
-                db.shows.append(self.viewList[index.row])
+
+        let addWatchlist = UIContextualAction(style: .destructive, title: "Add to watchlist") {  (contextualAction, view, boolValue) in
+            if (trakt.addToWatchlist(theTVdbId: self.viewList[indexPath.row].idTVdb)) {
+                db.downloadGlobalInfo(serie: self.viewList[indexPath.row])
+                self.viewList[indexPath.row].watchlist = true
+                db.shows.append(self.viewList[indexPath.row])
                 db.saveDB()
             }
         }
         addWatchlist.backgroundColor = .purple
-        
-        if (self.isWatchlist) { return [reload, remove] }
-        else if (self.isPropositions) { return [addWatchlist] }
-        else { return [reload] }
+
+        if (self.isWatchlist) { return UISwipeActionsConfiguration(actions: [reload, remove]) }
+        else if (self.isPropositions) { return UISwipeActionsConfiguration(actions: [addWatchlist]) }
+        else { return UISwipeActionsConfiguration(actions: [reload]) }
     }
+    
     
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
@@ -170,11 +163,9 @@ class ViewSerieListe: UITableViewController {
         self.view.setNeedsDisplay()
     }
     
-    func supprimerUneSerieDansLaWatchlistTrakt(uneSerie: Serie) -> Bool
-    {
-        if (trakt.removeFromWatchlist(theTVdbId: uneSerie.idTVdb))
-        {
-            db.shows.remove(at: db.shows.index(of: uneSerie)!)
+    func supprimerUneSerieDansLaWatchlistTrakt(uneSerie: Serie) -> Bool {
+        if (trakt.removeFromWatchlist(theTVdbId: uneSerie.idTVdb)) {
+            db.shows.remove(at: db.shows.firstIndex(of: uneSerie)!)
             db.saveDB()
             //TODO : updateCompteurs()
             

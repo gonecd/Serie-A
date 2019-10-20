@@ -17,7 +17,6 @@
 		6217308621BC22EE00D37350 /* TVmaze.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6217308521BC22EE00D37350 /* TVmaze.swift */; };
 		6218303E22AD73BE003243B9 /* metacritic.png in Resources */ = {isa = PBXBuildFile; fileRef = 6218303D22AD73BE003243B9 /* metacritic.png */; };
 		621B1D9D20D665B800F4F3BD /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 621B1D9C20D665B800F4F3BD /* Configuration.swift */; };
-		621B1DB020D6998200F4F3BD /* Data+Gzip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 621B1DAF20D6998200F4F3BD /* Data+Gzip.swift */; };
 		6224A5E32041F30200450812 /* ViewSerieListe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6224A5E22041F30200450812 /* ViewSerieListe.swift */; };
 		6224A5E52042207800450812 /* Constantes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6224A5E42042207800450812 /* Constantes.swift */; };
 		6224A5E72043141800450812 /* GraphMiniSerie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6224A5E62043141800450812 /* GraphMiniSerie.swift */; };
@@ -47,6 +46,8 @@
 		627A0E2A20139E9900FE1777 /* GraphEpisode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627A0E2920139E9900FE1777 /* GraphEpisode.swift */; };
 		62921B5522BEBEFE00A2BE94 /* Sandbox.xml in Resources */ = {isa = PBXBuildFile; fileRef = 62921B5422BEBEFE00A2BE94 /* Sandbox.xml */; };
 		62921B5722BFE2F900A2BE94 /* allocine.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62921B5622BFE2F800A2BE94 /* allocine.ico */; };
+		62A28DF8235C91C300EC13F0 /* SeriesCommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 625F4AFD221484F200FE5A5C /* SeriesCommon.framework */; };
+		62A28DF9235C91C300EC13F0 /* SeriesCommon.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 625F4AFD221484F200FE5A5C /* SeriesCommon.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		62A581E71FBC5BCB002D8FD3 /* imdb.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62A581E51FBC5BCB002D8FD3 /* imdb.ico */; };
 		62A581E81FBC5BCB002D8FD3 /* rottentomatoes.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62A581E61FBC5BCB002D8FD3 /* rottentomatoes.ico */; };
 		62AC50A0200E58A200A8C841 /* SaisonFiche.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62AC509F200E58A200A8C841 /* SaisonFiche.swift */; };
@@ -139,6 +140,17 @@
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		62A28DFA235C91C300EC13F0 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				62A28DF9235C91C300EC13F0 /* SeriesCommon.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -152,7 +164,6 @@
 		6217308521BC22EE00D37350 /* TVmaze.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVmaze.swift; sourceTree = "<group>"; };
 		6218303D22AD73BE003243B9 /* metacritic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = metacritic.png; sourceTree = "<group>"; };
 		621B1D9C20D665B800F4F3BD /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
-		621B1DAF20D6998200F4F3BD /* Data+Gzip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+Gzip.swift"; sourceTree = "<group>"; };
 		6224A5E22041F30200450812 /* ViewSerieListe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewSerieListe.swift; sourceTree = "<group>"; };
 		6224A5E42042207800450812 /* Constantes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constantes.swift; sourceTree = "<group>"; };
 		6224A5E62043141800450812 /* GraphMiniSerie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphMiniSerie.swift; sourceTree = "<group>"; };
@@ -238,6 +249,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				62A28DF8235C91C300EC13F0 /* SeriesCommon.framework in Frameworks */,
 				626F88C72210939300E5A132 /* NotificationCenter.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -261,14 +273,6 @@
 				626F88C62210939300E5A132 /* NotificationCenter.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		621B1DAA20D6945A00F4F3BD /* External */ = {
-			isa = PBXGroup;
-			children = (
-				621B1DAF20D6998200F4F3BD /* Data+Gzip.swift */,
-			);
-			path = External;
 			sourceTree = "<group>";
 		};
 		624D87492043323A00AFDA06 /* Sources */ = {
@@ -433,7 +437,6 @@
 			isa = PBXGroup;
 			children = (
 				62DD876F1FB766C600A9B9EE /* AppDelegate.swift */,
-				621B1DAA20D6945A00F4F3BD /* External */,
 				626D472A204C6EB700B1A64D /* Data */,
 				624D874D204332BC00AFDA06 /* Images */,
 				624D87492043323A00AFDA06 /* Sources */,
@@ -487,6 +490,7 @@
 				626F88C12210939300E5A132 /* Sources */,
 				626F88C22210939300E5A132 /* Frameworks */,
 				626F88C32210939300E5A132 /* Resources */,
+				62A28DFA235C91C300EC13F0 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -532,6 +536,7 @@
 				TargetAttributes = {
 					626F88C42210939300E5A132 = {
 						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1100;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
@@ -541,7 +546,7 @@
 					};
 					62DD876B1FB766C600A9B9EE = {
 						CreatedOnToolsVersion = 9.1;
-						LastSwiftMigration = 1010;
+						LastSwiftMigration = 1100;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
@@ -658,21 +663,19 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-SerieA/Pods-SerieA-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-SerieA/Pods-SerieA-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/GzipSwift/Gzip.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftSoup/SwiftSoup.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-			);
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Gzip.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftSoup.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SerieA/Pods-SerieA-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SerieA/Pods-SerieA-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		B99A62C8F3D29E7475400EC2 /* [CP] Check Pods Manifest.lock */ = {
@@ -724,7 +727,6 @@
 				626D4727204C624500B1A64D /* Notes.swift in Sources */,
 				62DD87BA1FB8C15600A9B9EE /* BetaSeries.swift in Sources */,
 				62DD87B21FB8A2E000A9B9EE /* Graph.swift in Sources */,
-				621B1DB020D6998200F4F3BD /* Data+Gzip.swift in Sources */,
 				627A0E2820139E8300FE1777 /* GraphSaison.swift in Sources */,
 				6217308221BC22C300D37350 /* Allocine.swift in Sources */,
 				627A0E2A20139E9900FE1777 /* GraphEpisode.swift in Sources */,
@@ -792,6 +794,7 @@
 		626F88D22210939300E5A132 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = NO;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "En cours/En cours.entitlements";
 				CODE_SIGN_STYLE = Automatic;
@@ -804,7 +807,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "Home.SerieA.En-cours";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -812,6 +815,7 @@
 		626F88D32210939300E5A132 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = NO;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "En cours/En cours.entitlements";
 				CODE_SIGN_STYLE = Automatic;
@@ -823,7 +827,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "Home.SerieA.En-cours";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -958,13 +962,13 @@
 					"$(PROJECT_DIR)/iPhone\\ Seriez/Controllers",
 				);
 				INFOPLIST_FILE = "iPhone Seriez/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Home.SerieA;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = 1;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -987,13 +991,13 @@
 					"$(PROJECT_DIR)/iPhone\\ Seriez/Controllers",
 				);
 				INFOPLIST_FILE = "iPhone Seriez/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Home.SerieA;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = 1;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

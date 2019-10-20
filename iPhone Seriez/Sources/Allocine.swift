@@ -12,7 +12,7 @@ import SeriesCommon
 
 class AlloCine : NSObject
 {
-    let indexWebPAge: Dictionary = [
+    let indexWebPage: Dictionary = [
         "Fargo" : 11042,
         "Breaking Bad" : 3517,
         "Better Call Saul" : 16950,
@@ -177,6 +177,7 @@ class AlloCine : NSObject
         "Deutschland 83" : 18781,
         "Vernon Subutex" : 20413,
         "Mindhunter" : 20143,
+        "When They See Us" : 23908,
         "The Haunting" : 21978
     ]
     
@@ -196,25 +197,27 @@ class AlloCine : NSObject
             let page : String = try String(contentsOf: URL(string : webPage)!)
             let doc : Document = try SwiftSoup.parse(page)
             
-            let textRatings : String = try doc.select("div [class='rating-holder']").text()
+            let textRatings : String = try doc.select("div [class^='rating-holder rating-holder-']").text()
             let mots : [String] = textRatings.components(separatedBy: " ")
             
             for i in 0..<mots.count {
                 if (mots[i] == "Spectateurs") {
                     let uneNote : Double = Double(mots[i+1].replacingOccurrences(of: ",", with: "."))!
                     uneSerie.ratingAlloCine = Int(uneNote * 20.0)
+                    return uneSerie
                 }
             }
         }
         catch let error as NSError { print("AlloCine scrapping failed for \(serie): \(error.localizedDescription)") }
         
+        print("==> AlloCine - Note non trouvée : \(serie)")
         return uneSerie
     }
     
     
     func getPath(serie : String) -> String {
         
-        let indexDB : Int = indexWebPAge[serie] ?? -1
+        let indexDB : Int = indexWebPage[serie] ?? -1
 
         if (indexDB == 0) {
             // Série indexée mais page web non définie

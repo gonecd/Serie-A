@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftSoup
 import SeriesCommon
 
 class TVmaze
@@ -57,6 +58,50 @@ class TVmaze
         return uneSerie
     }
     
+    
+    func getEpisodesRatings(_ uneSerie: Serie) {
+        let webPage : String = getPath(serie: uneSerie.serie)
+        
+        if (webPage == "") {
+            return
+        }
+        
+        do {
+            let page : String = try String(contentsOf: URL(string : webPage)!)
+            let doc : Document = try SwiftSoup.parse(page)
+            
+            let textRatings : String = try doc.select("div [class='stareval stareval-medium stareval-theme-default']").text()
+            let mots : [String] = textRatings.components(separatedBy: " ")
+            if (mots.count > 2) {
+                let uneNote : Double = Double(mots[3].replacingOccurrences(of: ",", with: "."))!
+                uneSerie.ratingAlloCine = Int(uneNote * 20.0)
+            }
+        }
+        catch let error as NSError { print("AlloCine scrapping failed for \(uneSerie.serie): \(error.localizedDescription)") }
+        
+        print("AlloCine(\(uneSerie.serie)) = \(uneSerie.ratingAlloCine)")
+        
+    }
+    
+
+    func getPath(serie : String) -> String {
+  
+        return ""
+        
+//        let indexDB : Int = indexWebPAge[serie] ?? -1
+//
+//        if (indexDB == 0) {
+//            // Série indexée mais page web non définie
+//            return ""
+//        } else if (indexDB == -1) {
+//            // Série non indexée
+//            print("==> AlloCine - Série inconnue : \(serie)")
+//            return ""
+//        } else {
+//            return "http://www.allocine.fr/series/ficheserie_gen_cserie=" + String(indexDB) + ".html"
+//        }
+    }
+
     
     func getSeasonsDates(idTVmaze : String) -> (saisons : [Int], nbEps : [Int], debuts : [Date], fins : [Date]) {
         var foundSaisons : [Int] = []

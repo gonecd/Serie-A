@@ -21,6 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Intervalle de réveil pour les jobs schédulés
         UIApplication.shared.setMinimumBackgroundFetchInterval(7200)
         
+        
         // Demande d'uthorization de notifier
         let center = UNUserNotificationCenter.current()
         center.delegate = self
