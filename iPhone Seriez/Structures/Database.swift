@@ -11,7 +11,7 @@ import SeriesCommon
 
 class Database : NSObject
 {
-
+    
     var shows : [Serie] = []
     var index : Dictionary = [String:Int]()
     
@@ -22,7 +22,7 @@ class Database : NSObject
     var valSaisonsAnnoncees : Int = 0
     var valWatchList : Int = 0
     var valSeriesAbandonnees : Int = 0
-
+    
     override init() {
     }
     
@@ -46,12 +46,12 @@ class Database : NSObject
                 }
             }
         }
-
+        
         for uneSerie in shows {
             uneSerie.unfollowed = false
             uneSerie.watchlist = false
         }
-
+        
         // Mise à jour des séries arrêtées
         for uneSerie in trakt.getStopped() {
             let indexDB : Int = index[uneSerie.serie] ?? -1
@@ -113,7 +113,7 @@ class Database : NSObject
         timeStamp = Date()
         let dataRotten : Serie = rottenTomatoes.getSerieGlobalInfos(serie : serie.serie)
         timerRottenTom = timerRottenTom + Date().timeIntervalSince(timeStamp)
-
+        
         timeStamp = Date()
         let dataMetaCritic : Serie = metaCritic.getSerieGlobalInfos(serie: serie.serie)
         timerMetaCritic = timerMetaCritic + Date().timeIntervalSince(timeStamp)
@@ -129,11 +129,11 @@ class Database : NSObject
     func downloadDetailInfo(serie : Serie)
     {
         var timeStamp : Date = Date()
-
+        
         timeStamp = Date()
         theTVdb.getSerieInfosLight(uneSerie: serie)
         timerTheTVdb = timerTheTVdb + Date().timeIntervalSince(timeStamp)
-
+        
         if (serie.idTVdb != "") {
             timeStamp = Date()
             theTVdb.getEpisodesRatings(serie)
@@ -165,11 +165,10 @@ class Database : NSObject
     }
     
     
-    func downloadDates(serie : Serie)
-    {
-        // TV Maze est buggué pour Mpney Heist : il compte une saison en trop
+    func downloadDates(serie : Serie) {
+        // TV Maze est buggué pour Death Note
         if (serie.serie == "Death Note") { return }
-
+        
         let tvMazeResults : (saisons : [Int], nbEps : [Int], debuts : [Date], fins : [Date]) = tvMaze.getSeasonsDates(idTVmaze: serie.idTVmaze)
         
         for i:Int in 0..<tvMazeResults.saisons.count {
@@ -189,18 +188,17 @@ class Database : NSObject
                 newSaison.starts = tvMazeResults.debuts[i]
                 newSaison.ends = tvMazeResults.fins[i]
                 newSaison.nbEpisodes = tvMazeResults.nbEps[i]
-
+                
                 serie.saisons.append(newSaison)
             }
         }
     }
-
+    
     
     func finaliseDB() {
-        
         db.shows = db.shows.sorted(by: { $0.serie < $1.serie })
         db.fillIndex()
-
+        
         db.shows[db.index["Absolutely Fabulous"]!].saisons[3].nbEpisodes = db.shows[db.index["Absolutely Fabulous"]!].saisons[3].nbWatchedEps
         db.shows[db.index["Kaamelott"]!].saisons[3].nbEpisodes = db.shows[db.index["Kaamelott"]!].saisons[3].nbWatchedEps
         db.shows[db.index["Lost"]!].saisons[0].nbEpisodes = db.shows[db.index["Lost"]!].saisons[0].nbWatchedEps
@@ -217,8 +215,7 @@ class Database : NSObject
     }
     
     
-    func saveDB ()
-    {
+    func saveDB () {
         if (db.shows.count > 0) {
             let pathToSVG = AppDir.appendingPathComponent("SerieA.db")
             
@@ -231,8 +228,7 @@ class Database : NSObject
         }
     }
     
-    func loadDB ()
-    {
+    func loadDB () {
         let pathToSVG = AppDir.appendingPathComponent("SerieA.db")
         
         if let nsData = NSData(contentsOf: pathToSVG) {
@@ -258,26 +254,26 @@ class Database : NSObject
     
     
     func shareWithWidget() {
-        var sharedInfos : [Infos] = []
+        var sharedInfos : [InfosEnCours] = []
         
         for uneSerie in db.shows {
             if (uneSerie.watching()) {
                 for uneSaison in uneSerie.saisons {
                     if(uneSaison.nbWatchedEps > 0) && (uneSaison.nbWatchedEps < uneSaison.nbEpisodes) {
-                        let info : Infos = Infos(serie: uneSerie.serie,
-                                                 channel: uneSerie.network,
-                                                 saison: uneSaison.saison,
-                                                 nbEps: uneSaison.nbEpisodes,
-                                                 nbWatched: uneSaison.nbWatchedEps,
-                                                 poster: uneSerie.poster,
-                                                 rateGlobal: uneSerie.getGlobalRating(),
-                                                 rateTrakt: uneSerie.getFairGlobalRatingTrakt(),
-                                                 rateTVDB: uneSerie.getFairGlobalRatingTVdb(),
-                                                 rateIMDB: uneSerie.getFairGlobalRatingIMdb(),
-                                                 rateMovieDB: uneSerie.getFairGlobalRatingMoviedb(),
-                                                 rateTVmaze: uneSerie.getFairGlobalRatingTVmaze(),
-                                                 rateRottenTomatoes: uneSerie.getFairGlobalRatingRottenTomatoes(),
-                                                 rateBetaSeries: uneSerie.getFairGlobalRatingBetaSeries())
+                        let info : InfosEnCours = InfosEnCours(serie: uneSerie.serie,
+                                                               channel: uneSerie.network,
+                                                               saison: uneSaison.saison,
+                                                               nbEps: uneSaison.nbEpisodes,
+                                                               nbWatched: uneSaison.nbWatchedEps,
+                                                               poster: uneSerie.poster,
+                                                               rateGlobal: uneSerie.getGlobalRating(),
+                                                               rateTrakt: uneSerie.getFairGlobalRatingTrakt(),
+                                                               rateTVDB: uneSerie.getFairGlobalRatingTVdb(),
+                                                               rateIMDB: uneSerie.getFairGlobalRatingIMdb(),
+                                                               rateMovieDB: uneSerie.getFairGlobalRatingMoviedb(),
+                                                               rateTVmaze: uneSerie.getFairGlobalRatingTVmaze(),
+                                                               rateRottenTomatoes: uneSerie.getFairGlobalRatingRottenTomatoes(),
+                                                               rateBetaSeries: uneSerie.getFairGlobalRatingBetaSeries())
                         
                         sharedInfos.append(info)
                     }
@@ -287,11 +283,43 @@ class Database : NSObject
         
         let sharedContainer = UserDefaults(suiteName: "group.Series")
         sharedContainer?.set(try? PropertyListEncoder().encode(sharedInfos), forKey: "Series")
-
+        
         print ("Shared last infos with widget")
     }
     
+    
+    func shareRefreshWithWidget(newInfo : InfosRefresh) {
+        var sharedInfos : [InfosRefresh] = []
+        
+        if let data = UserDefaults(suiteName: "group.Series")!.value(forKey:"Refresh") as? Data {
+            sharedInfos = try! PropertyListDecoder().decode(Array<InfosRefresh>.self, from: data)
+        }
 
+        if (sharedInfos.count == 0) {
+            sharedInfos.append(newInfo)
+        }
+        else {
+            let lastInfo : InfosRefresh = sharedInfos[sharedInfos.count - 1]
+            
+            if (lastInfo.timestamp == newInfo.timestamp) {
+                sharedInfos[sharedInfos.count - 1] = newInfo
+            }
+            else {
+                sharedInfos.append(newInfo)
+            }
+        }
+        
+        if (sharedInfos.count > 10) {
+            sharedInfos.removeFirst()
+        }
+
+        let sharedContainer = UserDefaults(suiteName: "group.Series")
+        sharedContainer?.set(try? PropertyListEncoder().encode(sharedInfos), forKey: "Refresh")
+        
+        print ("Shared last refresh with widget")
+    }
+    
+    
     func merge(_ db : [Serie], adds : [Serie]) -> [Serie] {
         var merged : Bool = false
         var newDB : [Serie] = db
@@ -313,8 +341,8 @@ class Database : NSObject
         
         return newDB
     }
-
-
+    
+    
     func updateCompteurs() {
         let today : Date = Date()
         valSeriesFinies = 0
@@ -324,7 +352,7 @@ class Database : NSObject
         valSaisonsAnnoncees = 0
         valWatchList = 0
         valSeriesAbandonnees = 0
-
+        
         for uneSerie in db.shows
         {
             if (uneSerie.unfollowed) { valSeriesAbandonnees = valSeriesAbandonnees + 1 }

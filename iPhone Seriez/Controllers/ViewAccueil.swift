@@ -31,7 +31,6 @@ class ViewAccueil: UIViewController  {
     @IBOutlet weak var cadreConfiguration: UIView!
     @IBOutlet weak var cadreReload: UIView!
 
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -76,17 +75,15 @@ class ViewAccueil: UIViewController  {
         // Chargement des dates de refresh
         let defaults = UserDefaults.standard
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        dateFormatter.dateFormat = "dd/MM HH:mm"
 
-        //defaults.set(dateFormatter.string(from: Date()), forKey: "RefreshDates")
-        
-        if ((defaults.object(forKey: "RefreshDates")) != nil) {
-            relodDates = dateFormatter.date(from: defaults.string(forKey: "RefreshDates")!)!
+        if (defaults.object(forKey: "RefreshDates") != nil) {
+            reloadDates = dateFormatter.date(from: defaults.string(forKey: "RefreshDates")!)!
         }
-        
-//        if ((defaults.object(forKey: "RefreshIMDB")) != nil) {
-//            relodIMDB = dateFormatter.date(from: defaults.string(forKey: "RefreshIMDB")!)!
-//        }
+
+        if (defaults.object(forKey: "RefreshIMDB") != nil) {
+            reloadIMDB = dateFormatter.date(from: defaults.string(forKey: "RefreshIMDB")!)!
+        }
 
         // Chargement de la dernière sauvegarde
         db.loadDB()
@@ -259,7 +256,8 @@ class ViewAccueil: UIViewController  {
 //            print(" Saisons[\(uneSaison.saison)] = \(uneSaison.episodes.count) épisodes comptés et \(uneSaison.nbEpisodes) déclarés, \(uneSaison.nbWatchedEps) vus")
 //        }
 
-
+        
+        
         db.quickRefresh()
         db.finaliseDB()
         db.shareWithWidget()
@@ -272,6 +270,8 @@ class ViewAccueil: UIViewController  {
 
         db.finaliseDB()
         self.viewDidAppear(false)
+        
     }
     
+        
 }

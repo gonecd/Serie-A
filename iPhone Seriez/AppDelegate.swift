@@ -8,6 +8,7 @@
 
 import UIKit
 import UserNotifications
+import SeriesCommon
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -64,25 +65,52 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // Support for background fetch
     func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         
-        let now : Date = Date()
-        let unJour : Double = 60.0 * 60.0 * 24.0
+        var start : Date = Date()
         let defaults = UserDefaults.standard
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        
-        pushNotification(titre: "Starting", soustitre: "Heure: \(dateFormatter.string(from: Date()))", message: "")
+        dateFormatter.dateFormat = "dd/MM HH:mm"
 
+        var info : InfosRefresh = InfosRefresh(timestamp: dateFormatter.string(from: start),
+                                               network: getNetWork(),
+                                               wifi: "Undef",
+                                               refreshDates: "No",
+                                               refreshIMDB: "No",
+                                               refreshViewed: "No")
+        db.shareRefreshWithWidget(newInfo: info)
+        
         // Dates TV Maze (une fois par jour)
-        if (now.timeIntervalSince(relodDates) > unJour) {
+        if (Calendar.current.isDateInToday(reloadDates) == false) {
             loadDates()
-            relodDates = now
-            defaults.set(dateFormatter.string(from: now), forKey: "RefreshDates")
-            pushNotification(titre: "Dates loaded", soustitre: "Heure: \(dateFormatter.string(from: Date()))", message: "")
+            let end : Date = Date()
+
+            defaults.set(dateFormatter.string(from: start), forKey: "RefreshDates")
+            //pushNotification(titre: "Dates des saisons rafraîchies", soustitre: "", message: "\(dateFormatter.string(from: start))")
+            info.refreshDates = String(format : "%.2f s", end.timeIntervalSince(start))
+            db.shareRefreshWithWidget(newInfo: info)
+            
+            reloadDates = start
+            start = end
+        }
+        
+        // Ratings IMDB (une fois par jpur)
+        if ( (Calendar.current.isDateInToday(reloadIMDB) == false) && (info.network == "WiFi") ) {
+            loadIMDB()
+            let end : Date = Date()
+
+            defaults.set(dateFormatter.string(from: start), forKey: "RefreshIMDB")
+            //pushNotification(titre: "Notes IMDB mises à jour", soustitre: "", message: "\(dateFormatter.string(from: start))")
+            info.refreshIMDB = String(format : "%.2f s", end.timeIntervalSince(start))
+            db.shareRefreshWithWidget(newInfo: info)
+
+            reloadIMDB = start
+            start = end
         }
         
         // Statuses Trakt
         loadStatuses()
-        pushNotification(titre: "Statuses loaded", soustitre: "Heure: \(dateFormatter.string(from: Date()))", message: "")
+        let end : Date = Date()
+        info.refreshViewed = String(format : "%.2f s", end.timeIntervalSince(start))
+        db.shareRefreshWithWidget(newInfo: info)
 
         completionHandler(.newData)
     }
@@ -92,6 +120,6 @@ extension AppDelegate: UNUserNotificationCenterDelegate
 {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.alert, .sound])
-        // Ca permet d'afficher l'alerte meme si l'application est en train de trourner (ou de la gérer depuis l'appli le cas échéant)
+        // Ca permet d'afficher l'alerte meme si l'application est en train de tourner (ou de la gérer depuis l'appli le cas échéant)
     }
 }

@@ -25,8 +25,8 @@ var metaCritic     : MetaCritic     = MetaCritic.init()
 var alloCine       : AlloCine       = AlloCine.init()
 
 var db          : Database   = Database.init()
-var relodDates  : Date = Date.init(timeIntervalSince1970: 0)
-var relodIMDB   : Date = Date.init(timeIntervalSince1970: 0)
+var reloadDates : Date = Date.init(timeIntervalSince1970: 0)
+var reloadIMDB  : Date = Date.init(timeIntervalSince1970: 0)
 
 
 // Loading timers

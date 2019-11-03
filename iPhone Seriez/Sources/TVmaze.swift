@@ -12,17 +12,15 @@ import SeriesCommon
 
 class TVmaze
 {
-    init()
-    {
+    init() {
         
     }
     
-    func getSerieGlobalInfos(idTVDB : String, idIMDB : String) -> Serie
-    {
+    func getSerieGlobalInfos(idTVDB : String, idIMDB : String) -> Serie {
         let uneSerie : Serie = Serie(serie: "")
         var request : URLRequest
         var ended : Bool = false
-
+        
         if (idIMDB != "")       { request = URLRequest(url: URL(string: "http://api.tvmaze.com/lookup/shows?imdb=\(idIMDB)")!) }
         else if (idTVDB != "")  { request = URLRequest(url: URL(string: "http://api.tvmaze.com/lookup/shows?thetvdb=\(idTVDB)")!) }
         else                    { return uneSerie }
@@ -54,13 +52,13 @@ class TVmaze
         
         task.resume()
         while (!ended) { usleep(1000) }
-
+        
         return uneSerie
     }
     
     
     func getEpisodesRatings(_ uneSerie: Serie) {
-        let webPage : String = getPath(serie: uneSerie.serie)
+        let webPage : String = getPath(serie: uneSerie.serie, id: uneSerie.idTVmaze)
         
         if (webPage == "") {
             return
@@ -69,39 +67,38 @@ class TVmaze
         do {
             let page : String = try String(contentsOf: URL(string : webPage)!)
             let doc : Document = try SwiftSoup.parse(page)
+            let regex = try! NSRegularExpression(pattern: ".*([0-9]{1,2})x([0-9]{1,2}).*?", options: NSRegularExpression.Options.caseInsensitive)
+            let epidodeList : Array<Element> = try doc.select("article [class='grid-x episode-row']").array()
             
-            let textRatings : String = try doc.select("div [class='stareval stareval-medium stareval-theme-default']").text()
-            let mots : [String] = textRatings.components(separatedBy: " ")
-            if (mots.count > 2) {
-                let uneNote : Double = Double(mots[3].replacingOccurrences(of: ",", with: "."))!
-                uneSerie.ratingAlloCine = Int(uneNote * 20.0)
+            for oneEpisode in epidodeList {
+                let lienEpisode : String = try! oneEpisode.select("[class='small-4 medium-6 cell']").select("a").attr("href")
+                let result = regex.firstMatch(in: lienEpisode, options: [], range: NSMakeRange(0, lienEpisode.count))
+                
+                if (result != nil) {
+                    let numSais : Int = Int(lienEpisode[Range(result!.range(at: 1), in: lienEpisode)!]) ?? 0
+                    let numEps : Int = Int(lienEpisode[Range(result!.range(at: 2), in: lienEpisode)!]) ?? 0
+                    
+                    if ( (numSais > 0) && (numSais < uneSerie.saisons.count+1) ) {
+                        if ( (numEps > 0) && (numEps < uneSerie.saisons[numSais-1].episodes.count+1) ) {
+                            if (try! oneEpisode.select("div [class='dropdown-pane small']").text() != "(waiting for more votes)") {
+                                uneSerie.saisons[numSais-1].episodes[numEps-1].ratingTVMaze = Int(10.0*(Double(try! oneEpisode.select("div [class='dropdown-pane small']").text().components(separatedBy: " ")[0]) ?? 0.0))
+                                uneSerie.saisons[numSais-1].episodes[numEps-1].ratersTVMaze  = Int(try! oneEpisode.select("div [class='dropdown-pane small']").text().components(separatedBy: " ")[1].replacingOccurrences(of: "(", with: "")) ?? 0
+                            }
+                        }
+                    }
+                }
             }
         }
-        catch let error as NSError { print("AlloCine scrapping failed for \(uneSerie.serie): \(error.localizedDescription)") }
-        
-        print("AlloCine(\(uneSerie.serie)) = \(uneSerie.ratingAlloCine)")
-        
+        catch let error as NSError { print("TVmaze scrapping failed for \(uneSerie.serie): \(error.localizedDescription)") }
     }
     
-
-    func getPath(serie : String) -> String {
-  
-        return ""
+    
+    func getPath(serie : String, id : String) -> String {
+        if (id == "") { return ""}
         
-//        let indexDB : Int = indexWebPAge[serie] ?? -1
-//
-//        if (indexDB == 0) {
-//            // Série indexée mais page web non définie
-//            return ""
-//        } else if (indexDB == -1) {
-//            // Série non indexée
-//            print("==> AlloCine - Série inconnue : \(serie)")
-//            return ""
-//        } else {
-//            return "http://www.allocine.fr/series/ficheserie_gen_cserie=" + String(indexDB) + ".html"
-//        }
+        return "https://www.tvmaze.com/shows/" + id + "/Hello/episodes?all=1"
     }
-
+    
     
     func getSeasonsDates(idTVmaze : String) -> (saisons : [Int], nbEps : [Int], debuts : [Date], fins : [Date]) {
         var foundSaisons : [Int] = []
@@ -132,11 +129,11 @@ class TVmaze
                     {
                         let saison : Int = ((uneSaison as! NSDictionary).object(forKey: "number")) as? Int ?? 0
                         let nbEp : Int = ((uneSaison as! NSDictionary).object(forKey: "episodeOrder")) as? Int ?? 0
-
+                        
                         let debutStr : String = ((uneSaison as! NSDictionary).object(forKey: "premiereDate")) as? String ?? ""
                         var debutDate : Date = ZeroDate
                         if (debutStr !=  "") { debutDate = dateFormatter.date(from: debutStr)! }
-
+                        
                         let finStr : String = ((uneSaison as! NSDictionary).object(forKey: "endDate")) as? String ?? ""
                         var finDate : Date = ZeroDate
                         if (finStr !=  "") { finDate = dateFormatter.date(from: finStr)! }
@@ -146,7 +143,7 @@ class TVmaze
                         foundDebuts.append(debutDate)
                         foundFins.append(finDate)
                     }
-
+                    
                     ended = true
                 } catch let error as NSError { print("TVmaze::getSeasonsDates failed: \(error.localizedDescription)"); ended = true; }
             } else { print(error as Any); ended = true; }
@@ -154,7 +151,7 @@ class TVmaze
         
         task.resume()
         while (!ended) { usleep(1000) }
-
+        
         return (foundSaisons, foundEps, foundDebuts, foundFins)
     }
     
@@ -163,7 +160,7 @@ class TVmaze
     {
         var serieListe : [Serie] = []
         var ended : Bool = false
-
+        
         var request : URLRequest = URLRequest(url: URL(string: "http://api.tvmaze.com/search/shows?q=\(serieArechercher.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)!)")!)
         request.httpMethod = "GET"
         request.addValue("application/json", forHTTPHeaderField: "Accept")
@@ -175,10 +172,10 @@ class TVmaze
                     
                     let jsonResponse : NSArray = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSArray
                     for fiche in jsonResponse {
-                    
+                        
                         let oneShow : AnyObject = ((fiche as AnyObject).object(forKey: "show")! as AnyObject)
                         let newSerie : Serie = Serie(serie: oneShow.object(forKey: "name") as! String)
-
+                        
                         newSerie.idTVmaze = String(oneShow.object(forKey: "id") as? Int ?? 0)
                         newSerie.idIMdb = (oneShow.object(forKey: "externals")! as AnyObject).object(forKey: "imdb") as? String ?? ""
                         newSerie.idTVdb = String((oneShow.object(forKey: "externals")! as AnyObject).object(forKey: "thetvdb") as? Int ?? 0)

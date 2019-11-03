@@ -28,55 +28,54 @@ class RottenTomatoes
             let audience : String = try doc.select("div [class='mop-ratings-wrap__half audience-score']").text()
             uneSerie.ratingRottenTomatoes = Int(audience.components(separatedBy: CharacterSet.decimalDigits.inverted).first!) ?? 0
             
-//            let topCritics : Elements = try doc.select("div [id='top-critics-numbers']")
-//            let allCritics : Elements = try doc.select("div [id='all-critics-numbers']")
-//            let audienceScore : Elements = try doc.select("div [class='audience-score meter']")
-//
-//            let textTop : String = try topCritics.text()
-//            let textAll : String = try allCritics.text()
-//            let textAudience : String = try audienceScore.text()
-//
-//            let ratingRottenTopCritics = Int(textTop.components(separatedBy: CharacterSet.decimalDigits.inverted).first!) ?? 0
-//            let ratingRottenAllCritics = Int(textAll.components(separatedBy: CharacterSet.decimalDigits.inverted).first!) ?? 0
-//            let ratingRottenAudience = Int(textAudience.components(separatedBy: CharacterSet.decimalDigits.inverted).first!) ?? 0
-//
-//            var nbValidValues : Int = 0
-//            var total : Int = 0
-//
-//            if ((ratingRottenTopCritics != 0) && (ratingRottenTopCritics != 100)) { nbValidValues = nbValidValues + 1; total = total + ratingRottenTopCritics }
-//            if ((ratingRottenAllCritics != 0) && (ratingRottenAllCritics != 100)) { nbValidValues = nbValidValues + 1; total = total + ratingRottenAllCritics }
-//            if ((ratingRottenAudience != 0) && (ratingRottenAudience != 100)) { nbValidValues = nbValidValues + 1; total = total + ratingRottenAudience }
-//
-//            if (nbValidValues != 0) { uneSerie.ratingRottenTomatoes = Int(Double(total)/Double(nbValidValues)) }
+            //            let topCritics : Elements = try doc.select("div [id='top-critics-numbers']")
+            //            let allCritics : Elements = try doc.select("div [id='all-critics-numbers']")
+            //            let audienceScore : Elements = try doc.select("div [class='audience-score meter']")
+            //
+            //            let textTop : String = try topCritics.text()
+            //            let textAll : String = try allCritics.text()
+            //            let textAudience : String = try audienceScore.text()
+            //
+            //            let ratingRottenTopCritics = Int(textTop.components(separatedBy: CharacterSet.decimalDigits.inverted).first!) ?? 0
+            //            let ratingRottenAllCritics = Int(textAll.components(separatedBy: CharacterSet.decimalDigits.inverted).first!) ?? 0
+            //            let ratingRottenAudience = Int(textAudience.components(separatedBy: CharacterSet.decimalDigits.inverted).first!) ?? 0
+            //
+            //            var nbValidValues : Int = 0
+            //            var total : Int = 0
+            //
+            //            if ((ratingRottenTopCritics != 0) && (ratingRottenTopCritics != 100)) { nbValidValues = nbValidValues + 1; total = total + ratingRottenTopCritics }
+            //            if ((ratingRottenAllCritics != 0) && (ratingRottenAllCritics != 100)) { nbValidValues = nbValidValues + 1; total = total + ratingRottenAllCritics }
+            //            if ((ratingRottenAudience != 0) && (ratingRottenAudience != 100)) { nbValidValues = nbValidValues + 1; total = total + ratingRottenAudience }
+            //
+            //            if (nbValidValues != 0) { uneSerie.ratingRottenTomatoes = Int(Double(total)/Double(nbValidValues)) }
         }
         catch let error as NSError { print("RottenTomatoes failed: \(error.localizedDescription)") }
         
         return uneSerie
     }
     
-        
+    
     func getEpisodesRatings(_ uneSerie: Serie) {
         let webPage : String = getPath(serie: uneSerie.serie)
         if (webPage == "") { return }
         
         for uneSaison in uneSerie.saisons {
-            var notes : [String] = []
-            
             do {
                 let page : String = try String(contentsOf: URL(string : webPage+"/s0"+String(uneSaison.saison))!)
                 let doc : Document = try SwiftSoup.parse(page)
-                notes = try doc.select("div [class='pull-left tomatometer']").text().components(separatedBy: " ")
-            }
-            catch let error as NSError { print("RottenTomatoes failed: \(error.localizedDescription)") }
-            
-            for unEpisode in uneSaison.episodes {
-                if (unEpisode.episode<notes.count) {
-                    //unEpisode.ratingRottenTomatoes = Int(notes[unEpisode.episode-1].components(separatedBy: CharacterSet.decimalDigits.inverted).first!) ?? 0
+                let allNotes = try doc.select("div [class='media episodeItem']")
+                
+                for oneNote in allNotes {
+                    let episode : Int = Int(try oneNote.select("div [class='pull-left episodeItem-num']").text()) ?? 0
+                    let rate : String = try oneNote.select("div [class='pull-left tomatometer']").text()
+                    let note = Int(rate.components(separatedBy: CharacterSet.decimalDigits.inverted).first!) ?? 0
+                    
+                    if ( (episode < uneSaison.episodes.count+1) && (note != 0) ) {
+                        uneSaison.episodes[episode-1].ratingRottenTomatoes = note
+                    }
                 }
-                else {
-                    print("RottenTomatoes.getEpisodesRatings::Not found for \(unEpisode.serie) S\(unEpisode.saison)E\(unEpisode.episode)")
-                }
             }
+            catch let error as NSError { print("RottenTomatoes failed for \(uneSerie.serie) saison \(uneSaison.saison): \(error.localizedDescription)") }
         }
     }
     
@@ -98,10 +97,10 @@ class RottenTomatoes
             critic = try doc.select("div [class='col-sm-12 tomato-info hidden-xs pad-left']").text()
         }
         catch let error as NSError { print("RottenTomatoes failed: \(error.localizedDescription)") }
-
+        
         print("Note = \(note)")
         print("Avis = \(critic)")
-
+        
         return 0
     }
     

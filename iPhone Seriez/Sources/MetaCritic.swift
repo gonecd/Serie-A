@@ -40,6 +40,37 @@ class MetaCritic
     }
 
     
+    func getEpisodesRatings(_ uneSerie: Serie) {
+        let webPage : String = getPath(serie: uneSerie.serie)
+        if (webPage == "") { return }
+        
+        for uneSaison in uneSerie.saisons {
+            do {
+                let page : String = try String(contentsOf: URL(string : webPage+"/season-"+String(uneSaison.saison))!)
+                let doc : Document = try SwiftSoup.parse(page)
+                let allNotes = try doc.select("li [class^='ep_guide_item']")
+                
+                for oneNote in allNotes {
+                    let rate : String = try oneNote.select("div").text()
+                    let note = Int(10.0 * (Double(rate) ?? 0.0))
+                    //let note = Int(10.0 * (Double(rate.components(separatedBy: CharacterSet.decimalDigits.inverted).first!) ?? 0.0))
+                    let episodeString : String = try oneNote.select("a").text()
+                    var episode : Int = 0
+                    if (episodeString.components(separatedBy: ":E").count > 1) {
+                        episode = Int(String(episodeString.components(separatedBy: ":E")[1].components(separatedBy: CharacterSet.decimalDigits.inverted).first!)) ?? 0
+                    }
+                    
+                    if ( (episode < uneSaison.episodes.count+1) && (note != 0) && (episode != 0)) {
+                        uneSaison.episodes[episode-1].ratingMetaCritic = note
+                    }
+                    
+                }
+            }
+            catch let error as NSError { print("MetaCritic failed for \(uneSerie.serie) saison \(uneSaison.saison) : \(error.localizedDescription)") }
+        }
+    }
+
+        
     func getPath(serie : String) -> String {
         switch serie {
             

@@ -87,6 +87,20 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         } )
         queue.addOperation(opeLoadTrakt)
         
+        let opeLoadTVmaze = BlockOperation(block: {
+            tvMaze.getEpisodesRatings(self.serie)
+        } )
+        queue.addOperation(opeLoadTVmaze)
+        
+        let opeLoadRottenT = BlockOperation(block: {
+            rottenTomatoes.getEpisodesRatings(self.serie)
+        } )
+        queue.addOperation(opeLoadRottenT)
+
+        let opeLoadMetaCritic = BlockOperation(block: {
+            metaCritic.getEpisodesRatings(self.serie)
+        } )
+        queue.addOperation(opeLoadMetaCritic)
 
         let opeFinalise = BlockOperation(block: {
             db.saveDB()
@@ -98,6 +112,9 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         opeFinalise.addDependency(opeLoadMovieDB)
         opeFinalise.addDependency(opeLoadIMDB)
         opeFinalise.addDependency(opeLoadTrakt)
+        opeFinalise.addDependency(opeLoadTVmaze)
+        opeFinalise.addDependency(opeLoadRottenT)
+        opeFinalise.addDependency(opeLoadMetaCritic)
         queue.addOperation(opeFinalise)
 
     }

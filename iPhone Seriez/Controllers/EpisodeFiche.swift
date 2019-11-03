@@ -54,9 +54,9 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
                            nBetaSeries: serie.saisons[saison - 1].episodes[episode - 1].ratingBetaSeries,
                            nMovieDB: serie.saisons[saison - 1].episodes[episode - 1].ratingMoviedb,
                            nIMDB: serie.saisons[saison - 1].episodes[episode - 1].ratingIMdb,
-                           nRottenTomatoes: 0,
-                           nTVMaze: 0,
-                           nMetaCritic: 0,
+                           nRottenTomatoes: serie.saisons[saison - 1].episodes[episode - 1].ratingRottenTomatoes,
+                           nTVMaze: serie.saisons[saison - 1].episodes[episode - 1].ratingTVMaze,
+                           nMetaCritic: serie.saisons[saison - 1].episodes[episode - 1].ratingMetaCritic,
                            nAlloCine: 0 )
     }
     

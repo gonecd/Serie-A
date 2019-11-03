@@ -50,25 +50,31 @@ func loadIMDB() {
 func loadDates() {
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "dd MMMM yyyy"
-    let today : Date = dateFormatter.date(from: dateFormatter.string(from: Date()))!
     
     for uneSerie in db.shows {
-        if ( (uneSerie.watchlist == false) &&
-            (uneSerie.unfollowed == false) &&
-            (uneSerie.status != "Ended") ){
+        if ( (uneSerie.watchlist == false) && (uneSerie.unfollowed == false) && (uneSerie.status != "Ended") ){
             let svgSerie : Serie = uneSerie
             db.downloadDates(serie : uneSerie)
             
             for uneSaison in uneSerie.saisons {
-                if (uneSaison.starts == today) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) commence aujourd'hui") }
-                if (uneSaison.ends == today) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) finit aujourd'hui") }
+                if (Calendar.current.isDateInToday(uneSaison.starts)) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) commence aujourd'hui") }
+                if (Calendar.current.isDateInToday(uneSaison.ends)) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) finit aujourd'hui") }
                 
-                if (uneSaison.saison <= svgSerie.saisons.count) {
-                    if ( (uneSaison.starts != svgSerie.saisons[uneSaison.saison-1].starts) && (uneSaison.starts != ZeroDate) ) {
-                        pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) commencera le \(dateFormatter.string(from: uneSaison.starts))")
+                if (Calendar.current.isDateInTomorrow(uneSaison.starts)) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) commence demain") }
+                if (Calendar.current.isDateInTomorrow(uneSaison.ends)) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) finit demain") }
+                
+                // La saison n'existait pas
+                if (uneSaison.saison > svgSerie.saisons.count) {
+                    if (uneSaison.starts.compare(Date()) == .orderedDescending) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) commencera le \(dateFormatter.string(from: uneSaison.starts))") }
+                    if (uneSaison.ends.compare(Date()) == .orderedDescending) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) finira le \(dateFormatter.string(from: uneSaison.ends))") }
+                }
+                else {
+                    // La saison existait et les dates ont changé
+                    if (uneSaison.starts != svgSerie.saisons[uneSaison.saison-1].starts) {
+                        if (uneSaison.starts.compare(Date()) == .orderedDescending) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) commencera le \(dateFormatter.string(from: uneSaison.starts))") }
                     }
-                    if ( (uneSaison.ends != svgSerie.saisons[uneSaison.saison-1].ends) && (uneSaison.starts != ZeroDate) ) {
-                        pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) finira le \(dateFormatter.string(from: uneSaison.ends))")
+                    if (uneSaison.ends != svgSerie.saisons[uneSaison.saison-1].ends) {
+                        if (uneSaison.ends.compare(Date()) == .orderedDescending) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) finira le \(dateFormatter.string(from: uneSaison.ends))") }
                     }
                 }
             }

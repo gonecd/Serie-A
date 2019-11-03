@@ -35,16 +35,14 @@ class Trakt : NSObject
             self.TokenExpiration = Date.init(timeIntervalSince1970: (expiration))
             
             // On refresh le token s'il expire dans moins de 2 mois
-            if (self.TokenExpiration.timeIntervalSinceNow < 5000000)
-            {
+            if (self.TokenExpiration.timeIntervalSinceNow < 5000000) {
                 self.refreshToken(self.RefreshToken)
             }
             
             return true
         }
-        else
-        {
-            self.downloadToken(key: "2B015625")
+        else {
+            self.downloadToken(key: "1E713070")
             
             return false
         }

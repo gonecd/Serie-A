@@ -12,7 +12,7 @@ import SeriesCommon
 
 class TodayViewController: UIViewController, NCWidgetProviding {
 
-    var sharedInfos :[Infos] = []
+    var sharedInfos :[InfosEnCours] = []
     let hauteurParSaison : Int = 100
     
     override func viewDidLoad() {
@@ -20,9 +20,6 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         // Do any additional setup after loading the view from its nib.
         
         extensionContext?.widgetLargestAvailableDisplayMode = .expanded
-        
-        print("ViewDidLoad")
-
     }
     
     
@@ -46,20 +43,17 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         // If there's an update, use NCUpdateResult.NewData
         
         
-        print("widgetPerformUpdate")
         loadInfos()
         lightView(size: (extensionContext?.widgetMaximumSize(for: .compact))!)
 
-        print ("Ayé")
         completionHandler(NCUpdateResult.newData)
     }
     
 
     func loadInfos() {
         if let data = UserDefaults(suiteName: "group.Series")!.value(forKey:"Series") as? Data {
-            sharedInfos = try! PropertyListDecoder().decode(Array<Infos>.self, from: data)
+            sharedInfos = try! PropertyListDecoder().decode(Array<InfosEnCours>.self, from: data)
         }
-        print ("Loaded")
     }
     
 
