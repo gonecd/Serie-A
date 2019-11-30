@@ -1,0 +1,60 @@
+<section class="season medium-12 cell card zebra-stripes clearfix">
+    <header class="grid-x">
+        <div class="small-1 cell">
+            <span class="show-for-medium">Number</span><span class="hide-for-medium">#</span>
+        </div>
+        <div class="small-3 medium-2 cell">Date</div>
+        <div class="small-4 medium-6 cell">Name</div>
+        <div class="small-2 medium-1 cell">Score</div>
+        <div class="small-2 medium-2 cell">Status</div>
+    </header>
+    
+    <article class="grid-x episode-row">
+        <div class="small-1 cell center">
+            
+            13            </div>
+        <div class="small-3 medium-2 cell">Sep 22, 2014</div>
+        <div class="small-4 medium-6 cell"><a href="/episodes/26/under-the-dome-2x13-go-now">Go Now</a> </div>
+        
+        <div class="small-2 medium-1 cell rate">
+            <a class="dropdown-action" data-toggle="rate-26">
+                <i class="fa fa-star fa-lg "></i>
+                <span>8.7</span>
+            </a>
+            
+            <div class="dropdown-pane small" id="rate-26" data-dropdown data-alignment="auto" data-hover="true" data-hover-pane="true" data-close-on-click="true">
+                <ul class="no-bullet">
+                    <li>
+                        <span class="rateit-onload js-needlogin" data-rateit-resetable="" data-rateit-min="0" data-rateit-max="10" data-rateit-step="1" data-rateit-value="8.7" data-url="/vote/vote?episode_id=26"></span> <b itemprop="ratingValue">8.7</b>  (<span itemprop="ratingCount">6</span> votes)                        </li>
+                </ul>
+            </div>
+        </div>
+        
+        
+        <div class="small-2 cell hide-for-medium center  active triwatch-column">
+            <span class="fa-stack fa-lg toggle-watch-icon" style="cursor: pointer;">
+                <i class="far fa-eye-slash fa-stack-1x watchtype-icon"></i>
+                
+                <i class="fa fa-chevron-down fa-stack-1x"></i>
+            </span>
+        </div>
+        
+        <div class="small-12 medium-2 show-for-medium cell js-fulltriwatch">
+            
+            <div class="tributton-watch grid-x " data-episode="26">
+                <div title="Acquired" class="js-needlogin button auto cell acquired middle " data-watchtype="1">
+                    <i class="fa fa-cloud" aria-hidden="true"></i>
+                </div>
+                
+                <div title="Watched" class="js-needlogin button auto cell watched " data-watchtype="0">
+                    <i class="far fa-eye" aria-hidden="true"></i>
+                </div>
+                
+                <div title="Skipped" class="js-needlogin button auto cell skipped " data-watchtype="2">
+                    <i class="fa fa-ban" aria-hidden="true"></i>
+                </div>
+            </div>            </div>
+    </article>
+
+
+</section><h2 data-magellan-target='S01' id='S01'><a href="/seasons/1/under-the-dome-season-1">Season 1</a></h2>

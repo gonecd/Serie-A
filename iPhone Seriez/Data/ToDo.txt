@@ -1,0 +1,28 @@
+
+Bug
+  -- Refresh date / IMDB unique par jour
+  -- Analyse des dates de début / fins de saison
+  Rafraîchir le nb d’episode par saison
+  Night mode
+  Rating des épisodes > 10 sur RottenTomatoes
+  Widget EnCours par défaut en mode compact
+ 
+ 
+Enhancement
+  Paralléliser les reload Alls
+  Recalculer les FairRates
+  Revisiter les conseils
+  Recherche auto des ID AlloCine
+  -- Download IMDB en Wifi
+  Download IMDB en Wifi @ Home only
+  Weblinks des sources pour les épisodes
+  Chronos source par type de (Serie / Episode)
+  OAuth routing pour Trakt
+  New critics sources
+ 
+ 
+New feature
+  -- Widget de suivi des Refresh batch
+  Mainboard iPad
+
+
