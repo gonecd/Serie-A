@@ -72,19 +72,6 @@ class ViewAccueil: UIViewController  {
         theTVdb.initializeToken()
         imdb.loadDataFile()
         
-        // Chargement des dates de refresh
-        let defaults = UserDefaults.standard
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd/MM HH:mm"
-
-        if (defaults.object(forKey: "RefreshDates") != nil) {
-            reloadDates = dateFormatter.date(from: defaults.string(forKey: "RefreshDates")!)!
-        }
-
-        if (defaults.object(forKey: "RefreshIMDB") != nil) {
-            reloadIMDB = dateFormatter.date(from: defaults.string(forKey: "RefreshIMDB")!)!
-        }
-
         // Chargement de la dernière sauvegarde
         db.loadDB()
         db.updateCompteurs()
@@ -112,23 +99,32 @@ class ViewAccueil: UIViewController  {
         var buildList = [Serie]()
         var buildListSaisons = [Int]()
         let today : Date = Date()
+        let targetController : UIViewController
+        
+        if (UIDevice.current.userInterfaceIdiom == .pad) {
+            targetController = segue.destination.children[0]
+        }
+        else {
+            targetController = segue.destination
+        }
+
         
         switch (bouton.restorationIdentifier ?? "") {
         case "Watchlist":
-            let viewController = segue.destination as! ViewSerieListe
+            let viewController = targetController as! ViewSerieListe
             viewController.title = "Watchlist"
             viewController.isWatchlist = true
             for uneSerie in db.shows { if (uneSerie.watchlist) { buildList.append(uneSerie) } }
             viewController.viewList = buildList
             
         case "Abandonnées":
-            let viewController = segue.destination as! ViewSerieListe
+            let viewController = targetController as! ViewSerieListe
             viewController.title = "Séries abandonnées"
             for uneSerie in db.shows { if (uneSerie.unfollowed) { buildList.append(uneSerie) } }
             viewController.viewList = buildList
             
         case "Finies":
-            let viewController = segue.destination as! ViewSerieListe
+            let viewController = targetController as! ViewSerieListe
             viewController.title = "Séries anciennes et finies"
             for uneSerie in db.shows {
                 if (uneSerie.saisons.count > 0) {
@@ -140,7 +136,7 @@ class ViewAccueil: UIViewController  {
             viewController.viewList = buildList
             
         case "En cours":
-            let viewController = segue.destination as! ViewSerieListe
+            let viewController = targetController as! ViewSerieListe
             viewController.title = "Séries en cours"
             for uneSerie in db.shows {
                 if (uneSerie.saisons.count > 0) {
@@ -152,7 +148,7 @@ class ViewAccueil: UIViewController  {
             viewController.viewList = buildList
             
         case "On the air":
-            let viewController = segue.destination as! ViewSaisonListe
+            let viewController = targetController as! ViewSaisonListe
             viewController.title = "Saisons en diffusion"
             for uneSerie in db.shows {
                 for uneSaison in uneSerie.saisons {
@@ -168,7 +164,7 @@ class ViewAccueil: UIViewController  {
             viewController.allSaisons = buildListSaisons
             
         case "Diffusées":
-            let viewController = segue.destination as! ViewSaisonListe
+            let viewController = targetController as! ViewSaisonListe
             viewController.title = "Saisons prêtes à voir"
             for uneSerie in db.shows {
                 for uneSaison in uneSerie.saisons {
@@ -184,7 +180,7 @@ class ViewAccueil: UIViewController  {
             viewController.allSaisons = buildListSaisons
             
         case "Annoncées":
-            let viewController = segue.destination as! ViewSaisonListe
+            let viewController = targetController as! ViewSaisonListe
             viewController.title = "Nouvelles saisons annoncées"
             for uneSerie in db.shows {
                 for uneSaison in uneSerie.saisons {
@@ -198,7 +194,7 @@ class ViewAccueil: UIViewController  {
             viewController.allSaisons = buildListSaisons
             
         case "Conseil":
-            let viewController = segue.destination as! ViewPropals
+            let viewController = targetController as! ViewPropals
             viewController.title = "Propositions de séries"
 
         default:
@@ -273,5 +269,6 @@ class ViewAccueil: UIViewController  {
         
     }
     
+
         
 }

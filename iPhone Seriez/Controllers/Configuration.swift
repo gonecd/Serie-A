@@ -60,6 +60,7 @@ class Configuration: UIViewController
         makePrettyColorViews(view: colMetaCritic, couleur: colorMetaCritic)
         makePrettyColorViews(view: colAlloCine, couleur: colorAlloCine)
     }
+
     
     func makePrettyColorViews(view : UIView, couleur : UIColor) {
         view.layer.borderColor = couleur.cgColor
@@ -74,16 +75,6 @@ class Configuration: UIViewController
         progresData.isHidden = false
         encours.isHidden = false
         
-        // RAZ des compteurs
-        timerTrakt = 0
-        timerTheTVdb = 0
-        timerBetaSeries = 0
-        timerTheMovieDB = 0
-        timerIMdb = 0
-        timerRottenTom = 0
-        timerTVmaze = 0
-        timerMetaCritic = 0
-
         DispatchQueue.global(qos: .utility).async {
             
             DispatchQueue.main.async {
@@ -99,10 +90,8 @@ class Configuration: UIViewController
             db.shows = db.merge(db.shows, adds: trakt.getWatchlist())
 
             DispatchQueue.main.async { self.encours.text = "Loading IMDB rates ..." }
-            var timeStamp : Date = Date()
             imdb.downloadData()
             imdb.loadDataFile()
-            timerIMdb = timerIMdb + Date().timeIntervalSince(timeStamp)
             
             let nbShows : Float = Float(db.shows.count)
             var showNum : Int = 0
@@ -116,20 +105,13 @@ class Configuration: UIViewController
                 }
                 
                 db.downloadGlobalInfo(serie: uneSerie)
-                
-                timeStamp = Date()
                 db.downloadDates(serie: uneSerie)
-                timerTVmaze = timerTVmaze + Date().timeIntervalSince(timeStamp)
                 
-                if (uneSerie.saisons[uneSerie.saisons.count - 1].watched() == false) {
-                    db.downloadDetailInfo(serie: uneSerie)
+                if ( (uneSerie.watchlist == false) && (uneSerie.unfollowed == false) ) {
+                    if (uneSerie.saisons[uneSerie.saisons.count - 1].watched() == false) {
+                        db.downloadDetailInfo(serie: uneSerie)
+                    }
                 }
-
-//                if ( (uneSerie.watchlist == false) && (uneSerie.unfollowed == false) ) {
-//                    if (uneSerie.saisons[uneSerie.saisons.count - 1].watched() == false) {
-//                        db.downloadDetailInfo(serie: uneSerie)
-//                    }
-//                }
             }
             
             DispatchQueue.main.async {
@@ -142,19 +124,20 @@ class Configuration: UIViewController
                 self.encours.isHidden = true
             }
         }
+        
     }
     
     
     func updateChronos() {
-        chronoTrakt.text = String(format: "%0.3f sec", timerTrakt)
-        chronoTVdb.text = String(format: "%0.3f sec", timerTheTVdb)
-        chronoBetaSeries.text = String(format: "%0.3f sec", timerBetaSeries)
-        chronoMovieDB.text = String(format: "%0.3f sec", timerTheMovieDB)
-        chronoIMdb.text = String(format: "%0.3f sec", timerIMdb)
-        chronoRottenTom.text = String(format: "%0.3f sec", timerRottenTom)
-        chronoTVmaze.text = String(format: "%0.3f sec", timerTVmaze)
-        chronoMetaCritic.text = String(format: "%0.3f sec", timerMetaCritic)
-        chronoAlloCine.text = String(format: "%0.3f sec", timerAlloCine)
+        chronoTrakt.text = String(format: "%0.3f sec", trakt.getChrono())
+        chronoTVdb.text = String(format: "%0.3f sec", theTVdb.getChrono())
+        chronoBetaSeries.text = String(format: "%0.3f sec", betaSeries.getChrono())
+        chronoMovieDB.text = String(format: "%0.3f sec", theMoviedb.getChrono())
+        chronoIMdb.text = String(format: "%0.3f sec", imdb.getChrono())
+        chronoRottenTom.text = String(format: "%0.3f sec", rottenTomatoes.getChrono())
+        chronoTVmaze.text = String(format: "%0.3f sec", tvMaze.getChrono())
+        chronoMetaCritic.text = String(format: "%0.3f sec", metaCritic.getChrono())
+        chronoAlloCine.text = String(format: "%0.3f sec", alloCine.getChrono())
     }
     
     

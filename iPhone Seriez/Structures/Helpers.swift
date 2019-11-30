@@ -172,23 +172,23 @@ func getNetWork() -> String {
 
 
 func getCellType() -> String {
-  guard let currentRadioAccessTechnology = CTTelephonyNetworkInfo().currentRadioAccessTechnology else { return "Undef" }
-  switch currentRadioAccessTechnology {
-  case CTRadioAccessTechnologyGPRS,
-       CTRadioAccessTechnologyEdge,
-       CTRadioAccessTechnologyCDMA1x:
-    return "2G"
-  case CTRadioAccessTechnologyWCDMA,
-       CTRadioAccessTechnologyHSDPA,
-       CTRadioAccessTechnologyHSUPA,
-       CTRadioAccessTechnologyCDMAEVDORev0,
-       CTRadioAccessTechnologyCDMAEVDORevA,
-       CTRadioAccessTechnologyCDMAEVDORevB,
-       CTRadioAccessTechnologyeHRPD:
-    return "3G"
-  case CTRadioAccessTechnologyLTE:
-    return "4G"
-  default:
-    return "Undef"
-  }
+    guard let currentRadioAccessTechnology = CTTelephonyNetworkInfo().currentRadioAccessTechnology else { return "Undef" }
+    switch currentRadioAccessTechnology {
+    case CTRadioAccessTechnologyGPRS,
+         CTRadioAccessTechnologyEdge,
+         CTRadioAccessTechnologyCDMA1x:
+        return "2G"
+    case CTRadioAccessTechnologyWCDMA,
+         CTRadioAccessTechnologyHSDPA,
+         CTRadioAccessTechnologyHSUPA,
+         CTRadioAccessTechnologyCDMAEVDORev0,
+         CTRadioAccessTechnologyCDMAEVDORevA,
+         CTRadioAccessTechnologyCDMAEVDORevB,
+         CTRadioAccessTechnologyeHRPD:
+        return "3G"
+    case CTRadioAccessTechnologyLTE:
+        return "4G"
+    default:
+        return "Undef"
+    }
 }

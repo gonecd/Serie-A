@@ -17,7 +17,8 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
     var saison : Int = 0
     var episode : Int = 0
     var webOpinions : (comments : [String], likes : [Int], dates : [Date], source : [Int]) = ([], [], [], [])
-    
+    @IBOutlet weak var boutonVuUnEp: UIView!
+
     @IBOutlet weak var resume: UITextView!
     @IBOutlet weak var titre: UILabel!
     @IBOutlet weak var date: UILabel!
@@ -33,9 +34,16 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        title = "Episode " + String(episode)
+        
         arrondirLabel(texte: labelNotes, radius: 10)
         arrondirLabel(texte: labelResume, radius: 10)
         arrondirLabel(texte: labelcommentaires, radius: 10)
+        
+        makeGradiant(carre: boutonVuUnEp, couleur: "Rouge")
+        if (episode <= serie.saisons[saison - 1].nbWatchedEps) {
+            boutonVuUnEp.isHidden = true
+        }
 
         
         webOpinions = trakt.getComments(IMDBid: self.serie.idIMdb, season: saison, episode: episode)
@@ -91,4 +99,62 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
         }
     }
     
+    @IBAction func webTrakt(_ sender: AnyObject) {
+        let myURL : String = "http://trakt.tv/shows/\(serie.serie.lowercased().replacingOccurrences(of: " ", with: "-").replacingOccurrences(of: "'", with: "-"))/seasons/\(saison)/episodes/\(episode)"
+        UIApplication.shared.open(URL(string: myURL)!)
+    }
+    
+    @IBAction func webTheTVdb(_ sender: AnyObject) {
+        let myURL : String = "https://www.thetvdb.com/?tab=series&id=\(serie.idTVdb)"
+        UIApplication.shared.open(URL(string: myURL)!)
+    }
+    
+    @IBAction func webRottenTomatoes(_ sender: AnyObject) {
+        if (rottenTomatoes.getPath(serie: serie.serie) != "") {
+            let myURL : String = rottenTomatoes.getPath(serie: serie.serie) + String(format: "/s%02d/e%02d", saison, episode)
+            UIApplication.shared.open(URL(string: myURL)!)
+        }
+    }
+    
+    @IBAction func webBetaSeries(_ sender: AnyObject) {
+        let myURL : String = "https://www.betaseries.com/episode/\(serie.serie.lowercased().replacingOccurrences(of: "'", with: "").replacingOccurrences(of: " ", with: "-"))" + String(format: "/s%02de%02d", saison, episode)
+        UIApplication.shared.open(URL(string: myURL)!)
+    }
+    
+    @IBAction func webMetaCritic(_ sender: AnyObject) {
+        if (metaCritic.getPath(serie: serie.serie) != "") {
+            UIApplication.shared.open(URL(string: metaCritic.getPath(serie: serie.serie) + String(format: "/season-%d", saison))!)
+        }
+    }
+    
+    @IBAction func webTheMovieDB(_ sender: Any) {
+
+    }
+    
+    @IBAction func webAlloCine(_ sender: Any) {
+        if (alloCine.getPath(serie: serie.serie) != "") {
+            UIApplication.shared.open(URL(string: alloCine.getPath(serie: serie.serie))!)
+        }
+
+    }
+
+    @IBAction func webTVMaze(_ sender: Any) {
+
+    }
+
+    @IBAction func vuUnEpisode(_ sender: Any) {
+        if (episode <= serie.saisons[saison - 1].nbEpisodes) {
+            
+            if (trakt.addToHistory(tvdbID: serie.saisons[saison - 1].episodes[episode - 1].idTVdb)) {
+                serie.saisons[saison - 1].nbWatchedEps = serie.saisons[saison - 1].nbWatchedEps + 1
+                if (serie.unfollowed) { serie.unfollowed = false }
+                if (serie.watchlist) { serie.watchlist = false }
+                
+                boutonVuUnEp.isHidden = true
+
+                db.updateCompteurs()
+                db.saveDB()
+            }
+        }
+    }
 }

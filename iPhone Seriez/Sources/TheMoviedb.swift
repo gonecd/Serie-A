@@ -9,46 +9,45 @@
 import Foundation
 import SeriesCommon
 
-class TheMoviedb : NSObject
-{
+class TheMoviedb : NSObject {
+    var chronoGlobal : TimeInterval = 0
+    var chronoRatings : TimeInterval = 0
+    var chronoOther : TimeInterval = 0
+
     let TheMoviedbUserkey : String = "e12674d4eadc7acafcbf7821bc32403b"
     
-    override init()
-    {
+    override init() {
         super.init()
     }
     
-    func getEpisodesRatings(_ uneSerie: Serie)
-    {
+    func getChrono() -> TimeInterval {
+        return chronoGlobal+chronoRatings+chronoOther
+    }
+    
+    func getEpisodesRatings(_ uneSerie: Serie) {
+        let startChrono : Date = Date()
         var request : URLRequest
         var task : URLSessionDataTask
         let today : Date = Date()
         
         // Récupération des ratings
-        for saison in uneSerie.saisons
-        {
-            if ((saison.starts.compare(today) == .orderedAscending) && (saison.starts.compare(ZeroDate) != .orderedSame) )
-            {
+        for saison in uneSerie.saisons {
+            if ((saison.starts.compare(today) == .orderedAscending) && (saison.starts.compare(ZeroDate) != .orderedSame) ) {
                 request = URLRequest(url: NSURL(string: "https://api.themoviedb.org/3/tv/\(uneSerie.idMoviedb)/season/\(saison.saison)?language=en-US&api_key=\(TheMoviedbUserkey)")! as URL)
                 request.httpMethod = "GET"
                 
                 task = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
                     if let data = data, let response = response as? HTTPURLResponse {
                         do {
-                            if response.statusCode == 200
-                            {
+                            if response.statusCode == 200 {
                                 let jsonResponse : NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
                                 
-                                if (jsonResponse.object(forKey: "episodes") != nil)
-                                {
-                                    for unEpisode in jsonResponse.object(forKey: "episodes")! as! NSArray
-                                    {
+                                if (jsonResponse.object(forKey: "episodes") != nil) {
+                                    for unEpisode in jsonResponse.object(forKey: "episodes")! as! NSArray {
                                         let cetEpisode: Int = ((unEpisode as AnyObject).object(forKey: "episode_number")! as! Int)-1
                                         
-                                        if ( (cetEpisode < saison.episodes.count) && (cetEpisode > 0) )
-                                        {
-                                            if (saison.episodes[cetEpisode].date.compare(today) == .orderedAscending)
-                                            {
+                                        if ( (cetEpisode < saison.episodes.count) && (cetEpisode > 0) ) {
+                                            if (saison.episodes[cetEpisode].date.compare(today) == .orderedAscending) {
                                                 saison.episodes[cetEpisode].ratingMoviedb = Int(10 * (((unEpisode as AnyObject).object(forKey: "vote_average")! as AnyObject) as? Double ?? 0.0))
                                                 saison.episodes[cetEpisode].ratersMoviedb = ((unEpisode as AnyObject).object(forKey: "vote_count")! as AnyObject) as? Int ?? 0
                                             }
@@ -56,8 +55,7 @@ class TheMoviedb : NSObject
                                     }
                                 }
                             }
-                            else
-                            {
+                            else {
                                 print("TheMoviedb::getSerieInfos failed for \(uneSerie.serie) saison \(saison.saison) with error code : \(response.statusCode)")
                             }
                         } catch let error as NSError { print("TheMoviedb::getSerieInfos failed for \(uneSerie.serie) saison \(saison.saison) : \(error.localizedDescription)") }
@@ -67,18 +65,19 @@ class TheMoviedb : NSObject
                 while (task.state != URLSessionTask.State.completed) { usleep(1000) }
             }
         }
+
+        chronoRatings = chronoRatings + Date().timeIntervalSince(startChrono)
     }
     
     
-    func chercher(genreIncl: String, genreExcl: String, anneeBeg: String, anneeEnd: String, langue: String, network: String) -> ([Serie], Int)
-    {
+    func chercher(genreIncl: String, genreExcl: String, anneeBeg: String, anneeEnd: String, langue: String, network: String) -> ([Serie], Int) {
+        let startChrono : Date = Date()
         var listeSeries : [Serie] = []
         var cpt : Int = 0
         
         var buildURL : String = "https://api.themoviedb.org/3/discover/tv?api_key=\(TheMoviedbUserkey)&language=en-US&sort_by=popularity.desc"
         
-        if (genreIncl != "")
-        {
+        if (genreIncl != "") {
             buildURL = buildURL + "&with_genres="
             for unGenre in genreIncl.split(separator: ",") { buildURL = buildURL + String(genresMovieDB[unGenre] as? Int ?? 0) + "," }
             buildURL.removeLast()
@@ -141,12 +140,15 @@ class TheMoviedb : NSObject
 
         usleep(5000)
         
+        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
+
         return (listeSeries, cpt)
     }
     
     
     func getIDs(serie: Serie)
     {
+        let startChrono : Date = Date()
         var request : URLRequest = URLRequest(url: NSURL(string: "https://api.themoviedb.org/3/tv/\(serie.idMoviedb)/external_ids?api_key=\(TheMoviedbUserkey)&language=en-US")! as URL)
         request.httpMethod = "GET"
         
@@ -170,10 +172,13 @@ class TheMoviedb : NSObject
         })
         task.resume()
         while (task.state != URLSessionTask.State.completed) { usleep(1000) }
+        
+        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
     }
     
     func getSerieGlobalInfos(idMovieDB : String) -> Serie
     {
+        let startChrono : Date = Date()
         let uneSerie : Serie = Serie(serie: "")
         var request : URLRequest
         let dateFormatter = DateFormatter()
@@ -242,9 +247,8 @@ class TheMoviedb : NSObject
                             }
                         }
                     }
-                    else
-                    {
-                        print("TheMoviedb::getSerieGlobalInfos failed for \(idMovieDB)")
+                    else {
+                        print("TheMoviedb::getSerieGlobalInfos failed for \(idMovieDB) with response code \(response.statusCode)")
                     }
                 } catch let error as NSError { print("TheMoviedb::getSerieGlobalInfos failed for \(idMovieDB) : \(error.localizedDescription)") }
             } else { print(error as Any) }
@@ -252,12 +256,14 @@ class TheMoviedb : NSObject
         task.resume()
         while (task.state != URLSessionTask.State.completed) { usleep(1000) }
         
+        chronoGlobal = chronoGlobal + Date().timeIntervalSince(startChrono)
         return uneSerie
     }
     
     
     func getSimilarShows(movieDBid : String) -> (names : [String], ids : [String])
     {
+        let startChrono : Date = Date()
         var showNames : [String] = []
         var showIds : [String] = []
         var ended : Bool = false
@@ -308,11 +314,13 @@ class TheMoviedb : NSObject
         task.resume()
         while (!ended) { usleep(1000) }
         
+        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
         return (showNames, showIds)
     }
     
     func getTrendingShows() -> (names : [String], ids : [String])
     {
+        let startChrono : Date = Date()
         var showNames : [String] = []
         var showIds : [String] = []
         var ended : Bool = false
@@ -361,11 +369,13 @@ class TheMoviedb : NSObject
         task.resume()
         while (!ended) { usleep(1000) }
         
+        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
         return (showNames, showIds)
     }
     
     func getPopularShows() -> (names : [String], ids : [String])
     {
+        let startChrono : Date = Date()
         var showNames : [String] = []
         var showIds : [String] = []
         var ended : Bool = false
@@ -415,12 +425,14 @@ class TheMoviedb : NSObject
         task.resume()
         while (!ended) { usleep(1000) }
         
+        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
         return (showNames, showIds)
     }
     
     
     func getReviews(movieDBid : String) -> (comments : [String], likes : [Int], dates : [Date], source : [Int])
     {
+        let startChrono : Date = Date()
         var ended : Bool = false
         var foundComments : [String] = []
         var foundLikes : [Int] = []
@@ -461,11 +473,13 @@ class TheMoviedb : NSObject
         task.resume()
         while (!ended) { usleep(1000) }
         
+        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
         return (foundComments, foundLikes, foundDates, foundSource)
     }
     
     func rechercheParTitre(serieArechercher : String) -> [Serie]
     {
+        let startChrono : Date = Date()
         var serieListe : [Serie] = []
         var ended : Bool = false
 
@@ -515,6 +529,7 @@ class TheMoviedb : NSObject
         task.resume()
         while (!ended) { usleep(1000) }
         
+        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
         return serieListe
     }
 }

@@ -10,8 +10,9 @@ import Foundation
 import SwiftSoup
 import SeriesCommon
 
-class AlloCine : NSObject
-{
+class AlloCine : NSObject {
+    var chronoGlobal : TimeInterval = 0
+
     let indexWebPage: Dictionary = [
         "Fargo" : 11042,
         "Breaking Bad" : 3517,
@@ -178,14 +179,21 @@ class AlloCine : NSObject
         "Vernon Subutex" : 20413,
         "Mindhunter" : 20143,
         "When They See Us" : 23908,
+        "The Collapse" : 25687,
+        "Savages" : 24290,
+        "Undone" : 23387,
         "The Haunting" : 21978
     ]
     
     override init() {
     }
     
-    
+    func getChrono() -> TimeInterval {
+        return chronoGlobal
+    }
+
     func getSerieGlobalInfos(serie : String) -> Serie {
+        let startChrono : Date = Date()
         let uneSerie : Serie = Serie(serie: serie)
         let webPage : String = getPath(serie: serie)
         
@@ -204,6 +212,8 @@ class AlloCine : NSObject
                 if (mots[i] == "Spectateurs") {
                     let uneNote : Double = Double(mots[i+1].replacingOccurrences(of: ",", with: "."))!
                     uneSerie.ratingAlloCine = Int(uneNote * 20.0)
+
+                    chronoGlobal = chronoGlobal + Date().timeIntervalSince(startChrono)
                     return uneSerie
                 }
             }
@@ -211,6 +221,7 @@ class AlloCine : NSObject
         catch let error as NSError { print("AlloCine scrapping failed for \(serie): \(error.localizedDescription)") }
         
         print("==> AlloCine - Note non trouvée : \(serie)")
+        chronoGlobal = chronoGlobal + Date().timeIntervalSince(startChrono)
         return uneSerie
     }
     
@@ -229,5 +240,28 @@ class AlloCine : NSObject
         } else {
             return "http://www.allocine.fr/series/ficheserie_gen_cserie=" + String(indexDB) + ".html"
         }
+    }
+    
+    func getID(serie: String) -> Int {
+        
+        print("Recherche de l'ID AlloCine pour \(serie) : ")
+        print("  ... je dois trouver \(indexWebPage[serie] ?? -1)")
+        
+        let webPage : String = "http://www.allocine.fr/recherche/6/?q=" + serie.lowercased().replacingOccurrences(of: "%", with: "+").replacingOccurrences(of: "'", with: "+").replacingOccurrences(of: " ", with: "+")
+        
+        do {
+            let page : String = try String(contentsOf: URL(string : webPage)!)
+            let doc : Document = try SwiftSoup.parse(page)
+            
+            let href : String = try doc.select("div [class='vmargin10t']").select("a").attr("href")
+            let name : String = try doc.select("div [class='vmargin10t']").select("a").text()
+            
+             print("  ... je trouve \(name) - \(href)")
+        }
+        catch let error as NSError { print("AlloCine getID failed for \(serie): \(error.localizedDescription)") }
+
+        print()
+        
+        return -1
     }
 }

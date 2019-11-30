@@ -10,13 +10,20 @@ import Foundation
 import SwiftSoup
 import SeriesCommon
 
-class TVmaze
-{
+class TVmaze {
+    var chronoGlobal : TimeInterval = 0
+    var chronoRatings : TimeInterval = 0
+    var chronoOther : TimeInterval = 0
+
     init() {
-        
     }
     
+    func getChrono() -> TimeInterval {
+        return chronoGlobal+chronoRatings+chronoOther
+    }
+
     func getSerieGlobalInfos(idTVDB : String, idIMDB : String) -> Serie {
+        let startChrono : Date = Date()
         let uneSerie : Serie = Serie(serie: "")
         var request : URLRequest
         var ended : Bool = false
@@ -53,11 +60,13 @@ class TVmaze
         task.resume()
         while (!ended) { usleep(1000) }
         
+        chronoGlobal = chronoGlobal + Date().timeIntervalSince(startChrono)
         return uneSerie
     }
     
     
     func getEpisodesRatings(_ uneSerie: Serie) {
+        let startChrono : Date = Date()
         let webPage : String = getPath(serie: uneSerie.serie, id: uneSerie.idTVmaze)
         
         if (webPage == "") {
@@ -90,6 +99,8 @@ class TVmaze
             }
         }
         catch let error as NSError { print("TVmaze scrapping failed for \(uneSerie.serie): \(error.localizedDescription)") }
+
+        chronoRatings = chronoRatings + Date().timeIntervalSince(startChrono)
     }
     
     
@@ -101,6 +112,7 @@ class TVmaze
     
     
     func getSeasonsDates(idTVmaze : String) -> (saisons : [Int], nbEps : [Int], debuts : [Date], fins : [Date]) {
+        let startChrono : Date = Date()
         var foundSaisons : [Int] = []
         var foundEps : [Int] = []
         var foundDebuts : [Date] = []
@@ -152,12 +164,14 @@ class TVmaze
         task.resume()
         while (!ended) { usleep(1000) }
         
+        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
         return (foundSaisons, foundEps, foundDebuts, foundFins)
     }
     
     
     func rechercheParTitre(serieArechercher : String) -> [Serie]
     {
+        let startChrono : Date = Date()
         var serieListe : [Serie] = []
         var ended : Bool = false
         
@@ -200,6 +214,7 @@ class TVmaze
         task.resume()
         while (!ended) { usleep(1000) }
         
+        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
         return serieListe
     }
 }

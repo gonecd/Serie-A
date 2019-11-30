@@ -32,7 +32,6 @@ class Database : NSObject
             let indexDB : Int = index[uneSerie.serie] ?? -1
             
             if (indexDB == -1) {
-                print("Ajout (watched) de \(uneSerie.serie)")
                 // Nouvelle série on l'ajoute telle que
                 index[uneSerie.serie] = shows.count
                 downloadGlobalInfo(serie: uneSerie)
@@ -84,84 +83,95 @@ class Database : NSObject
     }
     
     
-    func downloadGlobalInfo(serie : Serie)
-    {
-        var timeStamp : Date = Date()
-        let dataTVdb : Serie = theTVdb.getSerieGlobalInfos(idTVdb: serie.idTVdb)
-        timerTheTVdb = timerTheTVdb + Date().timeIntervalSince(timeStamp)
+    func downloadGlobalInfo(serie : Serie) {
+        let queue : OperationQueue = OperationQueue()
         
-        timeStamp = Date()
-        let dataMoviedb : Serie = theMoviedb.getSerieGlobalInfos(idMovieDB: serie.idMoviedb)
-        timerTheMovieDB = timerTheMovieDB + Date().timeIntervalSince(timeStamp)
+        var dataTVdb : Serie = Serie(serie: "")
+        var dataBetaSeries : Serie = Serie(serie: "")
+        var dataMoviedb : Serie = Serie(serie: "")
+        var dataTrakt : Serie = Serie(serie: "")
+        var dataTVmaze : Serie = Serie(serie: "")
+        var dataRotten : Serie = Serie(serie: "")
+        var dataMetaCritic : Serie = Serie(serie: "")
+        var dataAlloCine : Serie = Serie(serie: "")
+        var dataIMDB : Serie = Serie(serie: "")
+
+        let opeLoadTVdb = BlockOperation(block: {
+            dataTVdb = theTVdb.getSerieGlobalInfos(idTVdb: serie.idTVdb)
+        } )
+        queue.addOperation(opeLoadTVdb)
+
+        let opeLoadBetaSeries = BlockOperation(block: {
+            dataBetaSeries = betaSeries.getSerieGlobalInfos(idTVDB : serie.idTVdb, idIMDB : serie.idIMdb)
+        } )
+        queue.addOperation(opeLoadBetaSeries)
+
+        let opeLoadMovieDB = BlockOperation(block: {
+            dataMoviedb = theMoviedb.getSerieGlobalInfos(idMovieDB: serie.idMoviedb)
+        } )
+        queue.addOperation(opeLoadMovieDB)
+
+        let opeLoadIMDB = BlockOperation(block: {
+            dataIMDB = imdb.getSerieGlobalInfos(idIMDB: serie.idIMdb)
+        } )
+        queue.addOperation(opeLoadIMDB)
+
+        let opeLoadTrakt = BlockOperation(block: {
+            dataTrakt = trakt.getSerieGlobalInfos(idTraktOrIMDB: serie.idIMdb)
+        } )
+        queue.addOperation(opeLoadTrakt)
         
-        timeStamp = Date()
-        let dataBetaSeries : Serie = betaSeries.getSerieGlobalInfos(idTVDB : serie.idTVdb, idIMDB : serie.idIMdb)
-        timerBetaSeries = timerBetaSeries + Date().timeIntervalSince(timeStamp)
+        let opeLoadTVmaze = BlockOperation(block: {
+            dataTVmaze = tvMaze.getSerieGlobalInfos(idTVDB : serie.idTVdb, idIMDB : serie.idIMdb)
+        } )
+        queue.addOperation(opeLoadTVmaze)
         
-        timeStamp = Date()
-        let dataTrakt : Serie = trakt.getSerieGlobalInfos(idTraktOrIMDB: serie.idIMdb)
-        timerTrakt = timerTrakt + Date().timeIntervalSince(timeStamp)
-        
-        timeStamp = Date()
-        let dataIMDB : Serie = imdb.getSerieGlobalInfos(idIMDB: serie.idIMdb)
-        timerIMdb = timerIMdb + Date().timeIntervalSince(timeStamp)
-        
-        timeStamp = Date()
-        let dataTVmaze : Serie = tvMaze.getSerieGlobalInfos(idTVDB : serie.idTVdb, idIMDB : serie.idIMdb)
-        timerTVmaze = timerTVmaze + Date().timeIntervalSince(timeStamp)
-        
-        timeStamp = Date()
-        let dataRotten : Serie = rottenTomatoes.getSerieGlobalInfos(serie : serie.serie)
-        timerRottenTom = timerRottenTom + Date().timeIntervalSince(timeStamp)
-        
-        timeStamp = Date()
-        let dataMetaCritic : Serie = metaCritic.getSerieGlobalInfos(serie: serie.serie)
-        timerMetaCritic = timerMetaCritic + Date().timeIntervalSince(timeStamp)
-        
-        timeStamp = Date()
-        let dataAlloCine : Serie = alloCine.getSerieGlobalInfos(serie: serie.serie)
-        timerAlloCine = timerAlloCine + Date().timeIntervalSince(timeStamp)
-        
+        let opeLoadRottenT = BlockOperation(block: {
+            dataRotten = rottenTomatoes.getSerieGlobalInfos(serie : serie.serie)
+        } )
+        queue.addOperation(opeLoadRottenT)
+
+        let opeLoadMetaCritic = BlockOperation(block: {
+            dataMetaCritic = metaCritic.getSerieGlobalInfos(serie: serie.serie)
+        } )
+        queue.addOperation(opeLoadMetaCritic)
+
+        let opeLoadAlloCine = BlockOperation(block: {
+            dataAlloCine = alloCine.getSerieGlobalInfos(serie: serie.serie)
+        } )
+        queue.addOperation(opeLoadAlloCine)
+
+        queue.waitUntilAllOperationsAreFinished()
         serie.cleverMerge(TVdb: dataTVdb, Moviedb: dataMoviedb, Trakt: dataTrakt, BetaSeries: dataBetaSeries, IMDB: dataIMDB, RottenTomatoes: dataRotten, TVmaze: dataTVmaze, MetaCritic: dataMetaCritic, AlloCine: dataAlloCine)
     }
     
     
-    func downloadDetailInfo(serie : Serie)
-    {
-        var timeStamp : Date = Date()
+    func downloadDetailInfo(serie : Serie) {
+        theTVdb.getEpisodesDetailsAndRating(uneSerie: serie)
         
-        timeStamp = Date()
-        theTVdb.getSerieInfosLight(uneSerie: serie)
-        timerTheTVdb = timerTheTVdb + Date().timeIntervalSince(timeStamp)
+        let queue : OperationQueue = OperationQueue()
         
-        if (serie.idTVdb != "") {
-            timeStamp = Date()
-            theTVdb.getEpisodesRatings(serie)
-            timerTheTVdb = timerTheTVdb + Date().timeIntervalSince(timeStamp)
-        }
+        let opeLoadBetaSeries = BlockOperation(block: {
+            if (serie.idTVdb != "") { betaSeries.getEpisodesRatingsBis(serie) }
+        } )
+        queue.addOperation(opeLoadBetaSeries)
+
+        let opeLoadMovieDB = BlockOperation(block: {
+            if (serie.idMoviedb != "") { theMoviedb.getEpisodesRatings(serie) }
+        } )
+        queue.addOperation(opeLoadMovieDB)
+
+        let opeLoadIMDB = BlockOperation(block: {
+            imdb.getEpisodesRatings(serie)
+        } )
+        queue.addOperation(opeLoadIMDB)
+
+        let opeLoadTrakt = BlockOperation(block: {
+            if (serie.idTrakt != "") { trakt.getEpisodesRatings(serie) }
+        } )
+        queue.addOperation(opeLoadTrakt)
         
-        if (serie.idTVdb != "") {
-            timeStamp = Date()
-            //betaSeries.getEpisodesRatings(serie)
-            betaSeries.getEpisodesRatingsBis(serie)
-            timerBetaSeries = timerBetaSeries + Date().timeIntervalSince(timeStamp)
-        }
-        
-        if (serie.idMoviedb != "") {
-            timeStamp = Date()
-            theMoviedb.getEpisodesRatings(serie)
-            timerTheMovieDB = timerTheMovieDB + Date().timeIntervalSince(timeStamp)
-        }
-        
-        timeStamp = Date()
-        imdb.getEpisodesRatings(serie)
-        timerIMdb = timerIMdb + Date().timeIntervalSince(timeStamp)
-        
-        if (serie.idTrakt != "") {
-            timeStamp = Date()
-            trakt.getEpisodesRatings(serie)
-            timerTrakt = timerTrakt + Date().timeIntervalSince(timeStamp)
-        }
+        queue.waitUntilAllOperationsAreFinished()
     }
     
     

@@ -10,12 +10,20 @@ import Foundation
 import SwiftSoup
 import SeriesCommon
 
-class RottenTomatoes
-{    
+class RottenTomatoes {
+    var chronoGlobal : TimeInterval = 0
+    var chronoRatings : TimeInterval = 0
+    var chronoOther : TimeInterval = 0
+
     init() {
     }
     
+    func getChrono() -> TimeInterval {
+        return chronoGlobal+chronoRatings
+    }
+    
     func getSerieGlobalInfos(serie : String) -> Serie {
+        let startChrono : Date = Date()
         let uneSerie : Serie = Serie(serie: serie)
         let webPage : String = getPath(serie: serie)
         
@@ -27,35 +35,16 @@ class RottenTomatoes
             
             let audience : String = try doc.select("div [class='mop-ratings-wrap__half audience-score']").text()
             uneSerie.ratingRottenTomatoes = Int(audience.components(separatedBy: CharacterSet.decimalDigits.inverted).first!) ?? 0
-            
-            //            let topCritics : Elements = try doc.select("div [id='top-critics-numbers']")
-            //            let allCritics : Elements = try doc.select("div [id='all-critics-numbers']")
-            //            let audienceScore : Elements = try doc.select("div [class='audience-score meter']")
-            //
-            //            let textTop : String = try topCritics.text()
-            //            let textAll : String = try allCritics.text()
-            //            let textAudience : String = try audienceScore.text()
-            //
-            //            let ratingRottenTopCritics = Int(textTop.components(separatedBy: CharacterSet.decimalDigits.inverted).first!) ?? 0
-            //            let ratingRottenAllCritics = Int(textAll.components(separatedBy: CharacterSet.decimalDigits.inverted).first!) ?? 0
-            //            let ratingRottenAudience = Int(textAudience.components(separatedBy: CharacterSet.decimalDigits.inverted).first!) ?? 0
-            //
-            //            var nbValidValues : Int = 0
-            //            var total : Int = 0
-            //
-            //            if ((ratingRottenTopCritics != 0) && (ratingRottenTopCritics != 100)) { nbValidValues = nbValidValues + 1; total = total + ratingRottenTopCritics }
-            //            if ((ratingRottenAllCritics != 0) && (ratingRottenAllCritics != 100)) { nbValidValues = nbValidValues + 1; total = total + ratingRottenAllCritics }
-            //            if ((ratingRottenAudience != 0) && (ratingRottenAudience != 100)) { nbValidValues = nbValidValues + 1; total = total + ratingRottenAudience }
-            //
-            //            if (nbValidValues != 0) { uneSerie.ratingRottenTomatoes = Int(Double(total)/Double(nbValidValues)) }
         }
         catch let error as NSError { print("RottenTomatoes failed: \(error.localizedDescription)") }
         
+        chronoGlobal = chronoGlobal + Date().timeIntervalSince(startChrono)
         return uneSerie
     }
     
     
     func getEpisodesRatings(_ uneSerie: Serie) {
+        let startChrono : Date = Date()
         let webPage : String = getPath(serie: uneSerie.serie)
         if (webPage == "") { return }
         
@@ -77,10 +66,13 @@ class RottenTomatoes
             }
             catch let error as NSError { print("RottenTomatoes failed for \(uneSerie.serie) saison \(uneSaison.saison): \(error.localizedDescription)") }
         }
+
+        chronoRatings = chronoRatings + Date().timeIntervalSince(startChrono)
     }
     
     
     func getEpisodeDetails(_ uneSerie: Serie, saison: Int, episode: Int) -> Int {
+        let startChrono : Date = Date()
         let webPage : String = getPath(serie: uneSerie.serie)
         if (webPage == "") { return 0 }
         
@@ -101,6 +93,8 @@ class RottenTomatoes
         print("Note = \(note)")
         print("Avis = \(critic)")
         
+        
+        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
         return 0
     }
     
@@ -150,6 +144,7 @@ class RottenTomatoes
              "Braquo",
              "XIII",
              "Vernon Subutex",
+             "The Collapse",
              "Maison close":
             return ""
             

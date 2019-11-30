@@ -13,12 +13,19 @@ import Foundation
 import SwiftSoup
 import SeriesCommon
 
-class MetaCritic
-{
+class MetaCritic {
+    var chronoGlobal : TimeInterval = 0
+    var chronoRatings : TimeInterval = 0
+
     init() {
     }
     
+    func getChrono() -> TimeInterval {
+        return chronoGlobal+chronoRatings
+    }
+
     func getSerieGlobalInfos(serie : String) -> Serie {
+        let startChrono : Date = Date()
         let uneSerie : Serie = Serie(serie: serie)
         let webPage : String = getPath(serie: serie)
         
@@ -36,11 +43,13 @@ class MetaCritic
         }
         catch let error as NSError { print("MetaCritic failed: \(error.localizedDescription)") }
         
+        chronoGlobal = chronoGlobal + Date().timeIntervalSince(startChrono)
         return uneSerie
     }
 
     
     func getEpisodesRatings(_ uneSerie: Serie) {
+        let startChrono : Date = Date()
         let webPage : String = getPath(serie: uneSerie.serie)
         if (webPage == "") { return }
         
@@ -63,11 +72,12 @@ class MetaCritic
                     if ( (episode < uneSaison.episodes.count+1) && (note != 0) && (episode != 0)) {
                         uneSaison.episodes[episode-1].ratingMetaCritic = note
                     }
-                    
                 }
             }
             catch let error as NSError { print("MetaCritic failed for \(uneSerie.serie) saison \(uneSaison.saison) : \(error.localizedDescription)") }
         }
+
+        chronoRatings = chronoRatings + Date().timeIntervalSince(startChrono)
     }
 
         
@@ -142,6 +152,9 @@ class MetaCritic
              "Utopia",
              "Wentworth",
              "WorkinGirls",
+             "Savages",
+             "The Collapse",
+             "Vernon Subutex",
              "How to Sell Drugs Online (Fast)":
             return ""
             

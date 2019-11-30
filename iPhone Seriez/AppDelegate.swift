@@ -68,9 +68,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         var start : Date = Date()
         let defaults = UserDefaults.standard
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd/MM HH:mm"
+        dateFormatter.dateFormat = "dd/MM/yyyy HH:mm"
+        let dateFormatter2 = DateFormatter()
+        dateFormatter2.dateFormat = "dd/MM HH:mm"
 
-        var info : InfosRefresh = InfosRefresh(timestamp: dateFormatter.string(from: start),
+        var reloadDates : Date = Date.init(timeIntervalSince1970: 0)
+        var reloadIMDB  : Date = Date.init(timeIntervalSince1970: 0)
+
+        if (defaults.object(forKey: "RefreshDates") != nil) { reloadDates = dateFormatter.date(from: defaults.string(forKey: "RefreshDates")!)! }
+        if (defaults.object(forKey: "RefreshIMDB") != nil) { reloadIMDB = dateFormatter.date(from: defaults.string(forKey: "RefreshIMDB")!)! }
+        
+        var info : InfosRefresh = InfosRefresh(timestamp: dateFormatter2.string(from: start),
                                                network: getNetWork(),
                                                wifi: "Undef",
                                                refreshDates: "No",
@@ -84,11 +92,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let end : Date = Date()
 
             defaults.set(dateFormatter.string(from: start), forKey: "RefreshDates")
-            //pushNotification(titre: "Dates des saisons rafraîchies", soustitre: "", message: "\(dateFormatter.string(from: start))")
             info.refreshDates = String(format : "%.2f s", end.timeIntervalSince(start))
             db.shareRefreshWithWidget(newInfo: info)
             
-            reloadDates = start
             start = end
         }
         
@@ -98,17 +104,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let end : Date = Date()
 
             defaults.set(dateFormatter.string(from: start), forKey: "RefreshIMDB")
-            //pushNotification(titre: "Notes IMDB mises à jour", soustitre: "", message: "\(dateFormatter.string(from: start))")
             info.refreshIMDB = String(format : "%.2f s", end.timeIntervalSince(start))
             db.shareRefreshWithWidget(newInfo: info)
 
-            reloadIMDB = start
             start = end
         }
         
         // Statuses Trakt
         loadStatuses()
         let end : Date = Date()
+        
         info.refreshViewed = String(format : "%.2f s", end.timeIntervalSince(start))
         db.shareRefreshWithWidget(newInfo: info)
 

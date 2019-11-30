@@ -9,8 +9,11 @@
 import Foundation
 import SeriesCommon
 
-class Trakt : NSObject
-{
+class Trakt : NSObject {
+    var chronoGlobal : TimeInterval = 0
+    var chronoRatings : TimeInterval = 0
+    var chronoOther : TimeInterval = 0
+
     let TraktURL : String = "https://api.trakt.tv/oauth/token"
     let TraktClientID : String = "44e9b9a92278adc49099f599d6b2a5be19b63e4812dbb7b335b459f8d0eb195c"
     let TraktClientSecret : String = "b085eac8d1ada5758f4edaa36290c06e131d33f0ce5c8aeb1f81e802b3818bd2"
@@ -18,14 +21,15 @@ class Trakt : NSObject
     var RefreshToken : String = ""
     var TokenExpiration : Date!
     
-    override init()
-    {
+    override init() {
         super.init()
     }
     
-    
-    func start() -> Bool
-    {
+    func getChrono() -> TimeInterval {
+        return chronoGlobal+chronoRatings+chronoOther
+    }
+
+    func start() -> Bool {
         let defaults = UserDefaults.standard
         
         if ((defaults.object(forKey: "TraktToken")) != nil) {
@@ -42,7 +46,7 @@ class Trakt : NSObject
             return true
         }
         else {
-            self.downloadToken(key: "1E713070")
+            self.downloadToken(key: "02FA9441")
             
             return false
         }
@@ -132,6 +136,7 @@ class Trakt : NSObject
     
     func recherche(serieArechercher : String, aChercherDans : String) -> [Serie]
     {
+        let startChrono : Date = Date()
         var serieListe : [Serie] = []
         
         if (aChercherDans == "") { return serieListe }
@@ -171,12 +176,15 @@ class Trakt : NSObject
         task.resume()
         while (task.state != URLSessionTask.State.completed) { sleep(1) }
         
+        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
+
         return serieListe
     }
     
     
     func rechercheParTitre(serieArechercher : String) -> [Serie]
     {
+        let startChrono : Date = Date()
         var serieListe : [Serie] = []
         var ended : Bool = false
 
@@ -191,7 +199,7 @@ class Trakt : NSObject
             if let data = data, let response = response as? HTTPURLResponse {
                 do {
                     
-                    if (response.statusCode != 200) { print("Trakt::rechercheParTitre error \(response.statusCode) received "); return; }
+                    if (response.statusCode != 200) { print("Trakt::rechercheParTitre error \(response.statusCode) received "); ended = true; return; }
                     
                     let jsonResponse : NSArray = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSArray
                     
@@ -231,12 +239,15 @@ class Trakt : NSObject
         task.resume()
         while (!ended) { usleep(1000) }
 
+        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
+
         return serieListe
     }
     
     
     func addToHistory(tvdbID : Int) -> Bool
     {
+        let startChrono : Date = Date()
         var success : Bool = false
         var request = URLRequest(url: URL(string: "https://api.trakt.tv/sync/history")!)
         request.httpMethod = "POST"
@@ -265,12 +276,15 @@ class Trakt : NSObject
         task.resume()
         while (task.state != URLSessionTask.State.completed) { usleep(1000) }
         
+        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
+
         return success
     }
     
     
     func addToWatchlist(theTVdbId : String) -> Bool
     {
+        let startChrono : Date = Date()
         var success : Bool = false
         var request = URLRequest(url: URL(string: "https://api.trakt.tv/sync/watchlist")!)
         request.httpMethod = "POST"
@@ -299,12 +313,15 @@ class Trakt : NSObject
         task.resume()
         while (task.state != URLSessionTask.State.completed) { usleep(1000) }
         
+        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
+
         return success
     }
     
     
     func removeFromWatchlist(theTVdbId : String) -> Bool
     {
+        let startChrono : Date = Date()
         var success : Bool = false
         var request = URLRequest(url: URL(string: "https://api.trakt.tv/sync/watchlist/remove")!)
         request.httpMethod = "POST"
@@ -333,12 +350,15 @@ class Trakt : NSObject
         task.resume()
         while (task.state != URLSessionTask.State.completed) { usleep(1000) }
         
+        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
+
         return success
     }
     
     
     func getWatchlist() -> [Serie]
     {
+        let startChrono : Date = Date()
         var ended : Bool = false
         var request = URLRequest(url: URL(string: "https://api.trakt.tv/users/gonecd/watchlist/shows")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -353,7 +373,7 @@ class Trakt : NSObject
             if let data = data, let response = response as? HTTPURLResponse {
                 do {
                     
-                    if (response.statusCode != 200) { print("Trakt::getWatchlist error \(response.statusCode) received "); return; }
+                    if (response.statusCode != 200) { print("Trakt::getWatchlist error \(response.statusCode) received "); ended = true; return; }
                     
                     let jsonResponse : NSArray = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSArray
                     
@@ -377,12 +397,15 @@ class Trakt : NSObject
         task.resume()
         while (!ended) { usleep(1000) }
 
+        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
+
         return returnSeries
     }
     
     
     func getEpisodesRatings(_ uneSerie: Serie)
     {
+        let startChrono : Date = Date()
         let today : Date = Date()
         
         for uneSaison in uneSerie.saisons
@@ -411,14 +434,12 @@ class Trakt : NSObject
                                 var totRating : Int = 0
                                 var totRaters : Int = 0
                                 
-                                for i:Int in 1..<11
-                                {
+                                for i:Int in 1..<11 {
                                     totRating = totRating + ( ((jsonResponse.object(forKey: "distribution")! as AnyObject).object(forKey: String(i)) as? Int ?? 0) * i )
                                     totRaters = totRaters + ((jsonResponse.object(forKey: "distribution")! as AnyObject).object(forKey: String(i)) as? Int ?? 0)
                                 }
                                 
-                                if (totRaters > 0)
-                                {
+                                if (totRaters > 0) {
                                     unEpisode.ratersTrakt = totRaters
                                     unEpisode.ratingTrakt = Int(10 * Double(totRating) / Double(totRaters))
                                 }
@@ -435,22 +456,23 @@ class Trakt : NSObject
                 }
             }
             
-            while (globalStatus == URLSessionTask.State.running)
-            {
+            while (globalStatus == URLSessionTask.State.running) {
                 globalStatus = URLSessionTask.State.completed
                 
-                for uneTache in tableauDeTaches
-                {
+                for uneTache in tableauDeTaches {
                     if (uneTache.state == URLSessionTask.State.running) { globalStatus = URLSessionTask.State.running }
                 }
                 
                 usleep(1000)
             }
         }
+
+        chronoRatings = chronoRatings + Date().timeIntervalSince(startChrono)
     }
     
     func getStopped() -> [Serie]
     {
+        let startChrono : Date = Date()
         var ended : Bool = false
         var request = URLRequest(url: URL(string: "https://api.trakt.tv/users/gonecd/lists/Abandon/items/shows")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -465,7 +487,7 @@ class Trakt : NSObject
             if let data = data, let response = response as? HTTPURLResponse {
                 do {
                     
-                    if (response.statusCode != 200) { print("Trakt::getStopped error \(response.statusCode) received "); return; }
+                    if (response.statusCode != 200) { print("Trakt::getStopped error \(response.statusCode) received "); ended = true; return; }
                     
                     let jsonResponse : NSArray = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSArray
                     
@@ -489,12 +511,15 @@ class Trakt : NSObject
         task.resume()
         while (!ended) { usleep(1000) }
         
+        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
+
         return returnSeries
     }
     
     
     func getWatched() -> [Serie]
     {
+        let startChrono : Date = Date()
         var ended : Bool = false
         var request = URLRequest(url: URL(string: "https://api.trakt.tv/sync/watched/shows")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -538,12 +563,15 @@ class Trakt : NSObject
         task.resume()
         while (!ended) { usleep(1000) }
 
+        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
+
         return returnSeries
     }
     
     
     func getSerieGlobalInfos(idTraktOrIMDB : String) -> Serie
     {
+        let startChrono : Date = Date()
         let uneSerie : Serie = Serie(serie: "")
         var request : URLRequest
         
@@ -588,11 +616,14 @@ class Trakt : NSObject
         task.resume()
         while (task.state != URLSessionTask.State.completed) { usleep(1000) }
         
+        chronoGlobal = chronoGlobal + Date().timeIntervalSince(startChrono)
+
         return uneSerie
     }
     
     func getSaisons(uneSerie : Serie)
     {
+        let startChrono : Date = Date()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
 
@@ -647,44 +678,14 @@ class Trakt : NSObject
         task.resume()
         while (task.state != URLSessionTask.State.completed) { usleep(1000) }
         
+        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
     }
     
     
-    func getLastEpisodeDate(traktID : String, saison : Int, episode : Int) -> Date
-    {
-        var diffDate : Date = ZeroDate
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-        
-        var request = URLRequest(url: URL(string: "https://api.trakt.tv/shows/\(traktID)/seasons/\(saison)/episodes/\(episode)?extended=full")!)
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("Bearer \(self.Token)", forHTTPHeaderField: "Authorization")
-        request.addValue("2", forHTTPHeaderField: "trakt-api-version")
-        request.addValue("\(self.TraktClientID)", forHTTPHeaderField: "trakt-api-key")
-        
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let data = data, let response = response as? HTTPURLResponse {
-                do {
-                    if (response.statusCode != 200) { print("Trakt::getLastEpisodeDate for \(traktID) \(saison) \(episode) : error \(response.statusCode) received "); return; }
-                    
-                    let jsonResponse : NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
-                    
-                    let stringDate : String = (jsonResponse.object(forKey: "first_aired")) as? String ?? ""
-                    if (stringDate !=  "") { diffDate = dateFormatter.date(from: stringDate)! }
-                    
-                    
-                } catch let error as NSError { print("Trakt::getLastEpisodeDate failed for \(traktID) \(saison) \(episode): \(error.localizedDescription)") }
-            } else { print(error as Any) }
-        }
-        
-        task.resume()
-        while (task.state != URLSessionTask.State.completed) { usleep(1000) }
-        
-        return diffDate
-    }
     
     func getSimilarShows(IMDBid : String) -> (names : [String], ids : [String])
     {
+        let startChrono : Date = Date()
         var showNames : [String] = []
         var showIds : [String] = []
         var ended : Bool = false
@@ -699,7 +700,7 @@ class Trakt : NSObject
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if let data = data, let response = response as? HTTPURLResponse {
                 do {
-                    if (response.statusCode != 200) { print("Trakt::getSimilarShows for \(IMDBid) : error \(response.statusCode) received "); return; }
+                    if (response.statusCode != 200) { print("Trakt::getSimilarShows for \(IMDBid) : error \(response.statusCode) received "); ended = true; return; }
                     
                     let jsonResponse : NSArray = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSArray
                     
@@ -725,11 +726,14 @@ class Trakt : NSObject
         task.resume()
         while (!ended) { usleep(1000) }
         
+        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
+
         return (showNames, showIds)
     }
     
     func getPopularShows() -> (names : [String], ids : [String])
     {
+        let startChrono : Date = Date()
         var showNames : [String] = []
         var showIds : [String] = []
         var ended : Bool = false
@@ -744,7 +748,7 @@ class Trakt : NSObject
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if let data = data, let response = response as? HTTPURLResponse {
                 do {
-                    if (response.statusCode != 200) { print("Trakt::getPopularShows : error \(response.statusCode) received "); return; }
+                    if (response.statusCode != 200) { print("Trakt::getPopularShows : error \(response.statusCode) received "); ended = true; return; }
                     
                     let jsonResponse : NSArray = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSArray
                     
@@ -770,11 +774,14 @@ class Trakt : NSObject
         task.resume()
         while (!ended) { usleep(1000) }
         
+        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
+
         return (showNames, showIds)
     }
     
     func getTrendingShows() -> (names : [String], ids : [String])
     {
+        let startChrono : Date = Date()
         var showNames : [String] = []
         var showIds : [String] = []
         var ended : Bool = false
@@ -789,7 +796,7 @@ class Trakt : NSObject
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if let data = data, let response = response as? HTTPURLResponse {
                 do {
-                    if (response.statusCode != 200) { print("Trakt::getTrendingShows : error \(response.statusCode) received "); return; }
+                    if (response.statusCode != 200) { print("Trakt::getTrendingShows : error \(response.statusCode) received "); ended = true; return; }
                     
                     let jsonResponse : NSArray = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSArray
                     
@@ -815,12 +822,14 @@ class Trakt : NSObject
         task.resume()
         while (!ended) { usleep(1000) }
         
+        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
+
         return (showNames, showIds)
     }
     
     
-    func getComments(IMDBid : String, season : Int, episode : Int) -> (comments : [String], likes : [Int], dates : [Date], source : [Int])
-    {
+    func getComments(IMDBid : String, season : Int, episode : Int) -> (comments : [String], likes : [Int], dates : [Date], source : [Int]) {
+        let startChrono : Date = Date()
         var stringURL : String = ""
         var ended : Bool = false
         let dateFormatter = DateFormatter()
@@ -831,19 +840,14 @@ class Trakt : NSObject
         var foundDates : [Date] = []
         var foundSource : [Int] = []
         
-        if (episode == 0)
-        {
-            if (season == 0)
-            {
+        if (episode == 0) {
+            if (season == 0) {
                 stringURL = "https://api.trakt.tv/shows/\(IMDBid)/comments/likes"
             }
-            else
-            {
+            else {
                 stringURL = "https://api.trakt.tv/shows/\(IMDBid)/seasons/\(season)/comments/likes"
             }
-        }
-        else
-        {
+        } else {
             stringURL = "https://api.trakt.tv/shows/\(IMDBid)/seasons/\(season)/episodes/\(episode)/comments/likes"
         }
         
@@ -857,7 +861,7 @@ class Trakt : NSObject
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if let data = data, let response = response as? HTTPURLResponse {
                 do {
-                    if (response.statusCode != 200) { print("Trakt::getComments : error \(response.statusCode) received "); return; }
+                    if (response.statusCode != 200) { print("Trakt::getComments : error \(response.statusCode) received "); ended = true; return; }
                     
                     let jsonResponse : NSArray = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSArray
                     
@@ -886,12 +890,9 @@ class Trakt : NSObject
         task.resume()
         while (!ended) { usleep(1000) }
         
+        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
+
         return (foundComments, foundLikes, foundDates, foundSource)
     }
     
 }
-
-
-
-
-

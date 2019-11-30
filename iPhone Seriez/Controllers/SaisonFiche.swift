@@ -10,7 +10,6 @@ import UIKit
 import SeriesCommon
 
 class CellEpisode: UITableViewCell {
-    
     @IBOutlet weak var numero: UILabel!
     @IBOutlet weak var titre: UILabel!
     @IBOutlet weak var date: UILabel!
@@ -20,44 +19,27 @@ class CellEpisode: UITableViewCell {
 
 
 class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    
     var serie : Serie = Serie(serie: "")
     var image : UIImage = UIImage()
     var saison : Int = 0
 
     @IBOutlet weak var banniere: UIImageView!
     @IBOutlet weak var graphe: GraphSaison!
-    @IBOutlet weak var roue: UIActivityIndicatorView!
-    @IBOutlet weak var labelSaison: UILabel!
     @IBOutlet weak var episodesList: UITableView!
     @IBOutlet weak var table: UITableView!
-    @IBOutlet weak var boutonVuUnEp: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        title = "Saison " + String(saison)
+        
         banniere.image = image
-        labelSaison.text = "Saison " + String(saison)
         self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
         graphe.setNeedsDisplay()
-        makeGradiant(carre: boutonVuUnEp, couleur: "Gris")
-        self.roue.startAnimating()
+        theTVdb.getEpisodesDetailsAndRating(uneSerie: self.serie)
+
         
-    
         let queue : OperationQueue = OperationQueue()
-
-        let opeSaisonStructure = BlockOperation(block: {
-            theTVdb.getSerieInfosLight(uneSerie: self.serie)
-            OperationQueue.main.addOperation({ self.episodesList.reloadData() } )
-        } )
-        queue.addOperation(opeSaisonStructure)
-
-        let opeLoadTVdb = BlockOperation(block: {
-            if (self.serie.idTVdb != "") { theTVdb.getEpisodesRatings(self.serie) }
-            self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
-            OperationQueue.main.addOperation({ self.graphe.setNeedsDisplay() } )
-        } )
-        queue.addOperation(opeLoadTVdb)
 
         let opeLoadBetaSeries = BlockOperation(block: {
             if (self.serie.idTVdb != "") { betaSeries.getEpisodesRatings(self.serie) }
@@ -104,10 +86,7 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
 
         let opeFinalise = BlockOperation(block: {
             db.saveDB()
-            OperationQueue.main.addOperation({ self.roue.stopAnimating() } )
         } )
-        opeFinalise.addDependency(opeSaisonStructure)
-        opeFinalise.addDependency(opeLoadTVdb)
         opeFinalise.addDependency(opeLoadBetaSeries)
         opeFinalise.addDependency(opeLoadMovieDB)
         opeFinalise.addDependency(opeLoadIMDB)
@@ -152,34 +131,14 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         
         cell.numero.text = String(indexPath.row + 1)
         cell.titre.text = serie.saisons[saison - 1].episodes[indexPath.row].titre
-        cell.date.text = dateFormatter.string(from: serie.saisons[saison - 1].episodes[indexPath.row].date)
         
-        if ( (indexPath.row + 1) > serie.saisons[saison - 1].nbWatchedEps) {
-            cell.vu.isHidden = true
-        }
-        else {
-            cell.vu.isHidden = false
-        }
+        if (serie.saisons[saison - 1].episodes[indexPath.row].date == ZeroDate) { cell.date.text = "TBD" }
+        else { cell.date.text = dateFormatter.string(from: serie.saisons[saison - 1].episodes[indexPath.row].date) }
+        
+        if ( (indexPath.row + 1) > serie.saisons[saison - 1].nbWatchedEps) { cell.vu.isHidden = true }
+        else { cell.vu.isHidden = false }
 
         return cell
-    }
-    
-    
-    @IBAction func vuUnEpisode(_ sender: Any) {
-        if (serie.saisons[saison - 1].nbWatchedEps < serie.saisons[saison - 1].nbEpisodes) {
-            
-            if (trakt.addToHistory(tvdbID: serie.saisons[saison - 1].episodes[serie.saisons[saison - 1].nbWatchedEps].idTVdb)) {
-                serie.saisons[saison - 1].nbWatchedEps = serie.saisons[saison - 1].nbWatchedEps + 1
-                if (serie.unfollowed) { serie.unfollowed = false }
-                if (serie.watchlist) { serie.watchlist = false }
-
-                table.reloadData()
-                table.setNeedsDisplay()
-                
-                db.updateCompteurs()
-                db.saveDB()
-            }
-        }
     }
     
 }

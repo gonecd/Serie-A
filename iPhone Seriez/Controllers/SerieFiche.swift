@@ -34,7 +34,6 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
     @IBOutlet weak var resume: UITextView!
     @IBOutlet weak var banniere: UIImageView!
     @IBOutlet weak var graphe: Graph!
-    @IBOutlet weak var roue: UIActivityIndicatorView!
     
     @IBOutlet weak var pageControl: UIPageControl!
     @IBOutlet weak var viewResume: UIView!
@@ -57,6 +56,10 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        title = serie.serie
+        
+        //alloCine.getID(serie: serie.serie)
+        
         let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleGesture))
         swipeLeft.direction = .left
         self.view.addGestureRecognizer(swipeLeft)
@@ -70,7 +73,6 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
         annee.text = String(serie.year)
         resume.text = serie.resume
         banniere.image = image
-        graphe.sendSerie(serie)
         note.text = String(serie.getGlobalRating()) + " %"
         
         // Affichage des genres
@@ -108,60 +110,68 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
         langue.text? = serie.language
         drapeau.image = getDrapeau(country: serie.country)
         
-        self.graphe.sendSerie(self.serie)
-        self.graphe.setNeedsDisplay()
-        
-        
-        DispatchQueue.global(qos: .utility).async {
-            
-            DispatchQueue.main.async { self.roue.startAnimating() }
-            
-            theTVdb.getSerieInfosLight(uneSerie: self.serie)
-            
+        theTVdb.getEpisodesDetailsAndRating(uneSerie: self.serie)
+
+        let queue : OperationQueue = OperationQueue()
+
+        let opeReviews = BlockOperation(block: {
             self.webOpinions = theMoviedb.getReviews(movieDBid: self.serie.idMoviedb)
-            DispatchQueue.main.async { self.viewComments.reloadData() }
-            
-            let webOpinions2 : (comments : [String], likes : [Int], dates : [Date], source : [Int]) = trakt.getComments(IMDBid: self.serie.idIMdb, season: 0, episode: 0)
-            self.webOpinions.comments.append(contentsOf: webOpinions2.comments)
-            self.webOpinions.likes.append(contentsOf: webOpinions2.likes)
-            self.webOpinions.dates.append(contentsOf: webOpinions2.dates)
-            self.webOpinions.source.append(contentsOf: webOpinions2.source)
-            DispatchQueue.main.async { self.viewComments.reloadData() }
-            
-            if (self.serie.idTVdb != "") { theTVdb.getEpisodesRatings(self.serie) }
-            self.graphe.sendSerie(self.serie)
-            DispatchQueue.main.async { self.graphe.setNeedsDisplay() }
-            
-            if (self.serie.idTrakt != "") { trakt.getEpisodesRatings(self.serie) }
-            self.graphe.sendSerie(self.serie)
-            DispatchQueue.main.async { self.graphe.setNeedsDisplay() }
-            
-            if (self.serie.idTVdb != "") { betaSeries.getEpisodesRatings(self.serie) }
-            self.graphe.sendSerie(self.serie)
-            DispatchQueue.main.async { self.graphe.setNeedsDisplay() }
-            
-            if (self.serie.idMoviedb != "") { theMoviedb.getEpisodesRatings(self.serie) }
-            self.graphe.sendSerie(self.serie)
-            DispatchQueue.main.async { self.graphe.setNeedsDisplay() }
-            
-            imdb.getEpisodesRatings(self.serie)
-            self.graphe.sendSerie(self.serie)
-            DispatchQueue.main.async { self.graphe.setNeedsDisplay() }
-            
-            for saison in self.serie.saisons {
-                self.serie.saisons[saison.saison - 1].ends = betaSeries.getLastEpisodeDate(TVdbId : self.serie.idTVdb, saison : saison.saison, episode : self.serie.saisons[saison.saison - 1].nbEpisodes)
-            }
-            
-            db.saveDB()
-            
-            DispatchQueue.main.async {
-                self.roue.stopAnimating()
+            OperationQueue.main.addOperation({
                 self.viewComments.reloadData()
                 self.viewComments.setNeedsLayout()
+            } )
+
+            let webOpinionsTmp : (comments : [String], likes : [Int], dates : [Date], source : [Int]) = trakt.getComments(IMDBid: self.serie.idIMdb, season: 0, episode: 0)
+            self.webOpinions.comments.append(contentsOf: webOpinionsTmp.comments)
+            self.webOpinions.likes.append(contentsOf: webOpinionsTmp.likes)
+            self.webOpinions.dates.append(contentsOf: webOpinionsTmp.dates)
+            self.webOpinions.source.append(contentsOf: webOpinionsTmp.source)
+            OperationQueue.main.addOperation({
+                self.viewComments.reloadData()
+                self.viewComments.setNeedsLayout()
+            } )
+        } )
+        queue.addOperation(opeReviews)
+
+        let opRates = BlockOperation(block: {
+            if (self.serie.idTVdb != "") { betaSeries.getEpisodesRatings(self.serie) }
+            OperationQueue.main.addOperation({
+                self.graphe.sendSerie(self.serie)
+                self.graphe.setNeedsDisplay()
+            } )
+
+            if (self.serie.idMoviedb != "") { theMoviedb.getEpisodesRatings(self.serie) }
+            OperationQueue.main.addOperation({
+                self.graphe.sendSerie(self.serie)
+                self.graphe.setNeedsDisplay()
+            } )
+
+            imdb.getEpisodesRatings(self.serie)
+            OperationQueue.main.addOperation({
+                self.graphe.sendSerie(self.serie)
+                self.graphe.setNeedsDisplay()
+            } )
+
+            if (self.serie.idTrakt != "") { trakt.getEpisodesRatings(self.serie) }
+            OperationQueue.main.addOperation({
+                self.graphe.sendSerie(self.serie)
+                self.graphe.setNeedsDisplay()
+            } )
+        } )
+        queue.addOperation(opRates)
+        
+        let opeFinalise = BlockOperation(block: {
+            db.saveDB()
+
+            OperationQueue.main.addOperation({
                 self.viewSaisons.reloadData()
                 self.viewSaisons.setNeedsLayout()
-            }
-        }
+            } )
+        } )
+        opeFinalise.addDependency(opRates)
+        opeFinalise.addDependency(opeReviews)
+        queue.addOperation(opeFinalise)
+
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -181,9 +191,13 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
         if (tableView == viewSaisons) {
             let cell = tableView.dequeueReusableCell(withIdentifier: "CellSaison", for: indexPath) as! CellSaison
             cell.saison.text = "Saison " + String(indexPath.row + 1)
-            cell.debut.text = dateFormatter.string(from: serie.saisons[indexPath.row].starts)
             cell.episodes.text = String(serie.saisons[indexPath.row].nbEpisodes) + " épisodes"
-            cell.fin.text = dateFormatter.string(from: serie.saisons[indexPath.row].ends)
+            
+            if (serie.saisons[indexPath.row].starts == ZeroDate) { cell.debut.text = "TBD" }
+            else { cell.debut.text = dateFormatter.string(from: serie.saisons[indexPath.row].starts) }
+
+            if (serie.saisons[indexPath.row].ends == ZeroDate) { cell.fin.text = "TBD" }
+            else { cell.fin.text = dateFormatter.string(from: serie.saisons[indexPath.row].ends) }
             
             cell.graphe.setSerie(serie: serie, saison: indexPath.row + 1)
             cell.graphe.setType(type: 1)
@@ -213,14 +227,17 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
     }
     
     @objc func handleGesture(gesture: UISwipeGestureRecognizer) -> Void {
-        if gesture.direction == UISwipeGestureRecognizer.Direction.right {
-            pageControl.currentPage = pageControl.currentPage - 1
-        }
-        else {
-            pageControl.currentPage = pageControl.currentPage + 1
-        }
         
-        self.changePage(sender: self)
+        if (UIDevice.current.userInterfaceIdiom == .phone) {
+            if gesture.direction == UISwipeGestureRecognizer.Direction.right {
+                pageControl.currentPage = pageControl.currentPage - 1
+            }
+            else {
+                pageControl.currentPage = pageControl.currentPage + 1
+            }
+            
+            self.changePage(sender: self)
+        }
     }
     
     @objc func changePage(sender: AnyObject) -> () {

@@ -25,20 +25,6 @@ var metaCritic     : MetaCritic     = MetaCritic.init()
 var alloCine       : AlloCine       = AlloCine.init()
 
 var db          : Database   = Database.init()
-var reloadDates : Date = Date.init(timeIntervalSince1970: 0)
-var reloadIMDB  : Date = Date.init(timeIntervalSince1970: 0)
-
-
-// Loading timers
-var timerTrakt      : TimeInterval = 0
-var timerTheTVdb    : TimeInterval = 0
-var timerBetaSeries : TimeInterval = 0
-var timerTheMovieDB : TimeInterval = 0
-var timerIMdb       : TimeInterval = 0
-var timerTVmaze     : TimeInterval = 0
-var timerRottenTom  : TimeInterval = 0
-var timerMetaCritic : TimeInterval = 0
-var timerAlloCine   : TimeInterval = 0
 
 // Code des source
 let sourceTrakt         : Int = 0

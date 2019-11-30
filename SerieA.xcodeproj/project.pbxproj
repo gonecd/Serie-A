@@ -56,9 +56,91 @@
 		62896035236DD6DE00699D17 /* tvmaze.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62896032236DD6DE00699D17 /* tvmaze.ico */; };
 		62896038236DDBD500699D17 /* ko.png in Resources */ = {isa = PBXBuildFile; fileRef = 62896036236DDBD500699D17 /* ko.png */; };
 		62896039236DDBD500699D17 /* ok.png in Resources */ = {isa = PBXBuildFile; fileRef = 62896037236DDBD500699D17 /* ok.png */; };
+		628A1313236F353B006B2AD4 /* iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 628A1311236F353B006B2AD4 /* iPad.storyboard */; };
+		628A1382236F38E8006B2AD4 /* SerieFiche.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD87A91FB7838400A9B9EE /* SerieFiche.swift */; };
+		628A1383236F38E8006B2AD4 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 621B1D9C20D665B800F4F3BD /* Configuration.swift */; };
+		628A1384236F38E8006B2AD4 /* TheMoviedb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D0EBBC204C374B009774B6 /* TheMoviedb.swift */; };
+		628A1385236F38E8006B2AD4 /* Constantes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6224A5E42042207800450812 /* Constantes.swift */; };
+		628A1386236F38E8006B2AD4 /* IMdb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626D4728204C6DE900B1A64D /* IMdb.swift */; };
+		628A1387236F38E8006B2AD4 /* EpisodeFiche.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F8ECF32013775800A41EF7 /* EpisodeFiche.swift */; };
+		628A1388236F38E8006B2AD4 /* GraphMiniSerie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6224A5E62043141800450812 /* GraphMiniSerie.swift */; };
+		628A1389236F38E8006B2AD4 /* GraphMiniSaison.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62CD57C22038B87D00DE28A1 /* GraphMiniSaison.swift */; };
+		628A138A236F38E8006B2AD4 /* MetaCritic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620B22FD22A304FD0027DCF6 /* MetaCritic.swift */; };
+		628A138B236F38E8006B2AD4 /* Notes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626D4726204C624500B1A64D /* Notes.swift */; };
+		628A138C236F38E8006B2AD4 /* BetaSeries.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD87B91FB8C15500A9B9EE /* BetaSeries.swift */; };
+		628A138D236F38E8006B2AD4 /* Graph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD87B11FB8A2E000A9B9EE /* Graph.swift */; };
+		628A138E236F38E8006B2AD4 /* GraphSaison.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627A0E2720139E8300FE1777 /* GraphSaison.swift */; };
+		628A138F236F38E8006B2AD4 /* Allocine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6217308121BC22C300D37350 /* Allocine.swift */; };
+		628A1390236F38E8006B2AD4 /* GraphEpisode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627A0E2920139E9900FE1777 /* GraphEpisode.swift */; };
+		628A1391236F38E8006B2AD4 /* TheTVdb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD879F1FB76F5D00A9B9EE /* TheTVdb.swift */; };
+		628A1392236F38E8006B2AD4 /* ViewSerieListe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6224A5E22041F30200450812 /* ViewSerieListe.swift */; };
+		628A1393236F38E8006B2AD4 /* ViewPropals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625799B6219734480010144D /* ViewPropals.swift */; };
+		628A1394236F38E8006B2AD4 /* Trakt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD87A31FB76F5D00A9B9EE /* Trakt.swift */; };
+		628A1395236F38E8006B2AD4 /* RottenTomatoes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6217308321BC22DE00D37350 /* RottenTomatoes.swift */; };
+		628A1396236F38E8006B2AD4 /* ViewSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B4716B20A88D3E0067BD34 /* ViewSearch.swift */; };
+		628A1397236F38E8006B2AD4 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6208D96722352ACC00FE179F /* Notification.swift */; };
+		628A1398236F38E8006B2AD4 /* ViewAccueil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624D27481FFBD4E100B49702 /* ViewAccueil.swift */; };
+		628A1399236F38E8006B2AD4 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6255DBD92083780900CA9BA3 /* Helpers.swift */; };
+		628A139A236F38E8006B2AD4 /* ViewSaisonListe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D0EBBA204C30BE009774B6 /* ViewSaisonListe.swift */; };
+		628A139B236F38E8006B2AD4 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6279645E2099D32400ED5578 /* Database.swift */; };
+		628A139C236F38E8006B2AD4 /* SaisonFiche.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62AC509F200E58A200A8C841 /* SaisonFiche.swift */; };
+		628A139D236F38E8006B2AD4 /* ViewSearchNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6214F0FE227F12D10039F6E5 /* ViewSearchNew.swift */; };
+		628A139E236F38E8006B2AD4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD876F1FB766C600A9B9EE /* AppDelegate.swift */; };
+		628A139F236F38E8006B2AD4 /* TVmaze.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6217308521BC22EE00D37350 /* TVmaze.swift */; };
+		628A13A1236F38E8006B2AD4 /* SeriesCommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 625F4AFD221484F200FE5A5C /* SeriesCommon.framework */; };
+		628A13A2236F38E8006B2AD4 /* Pods_SerieA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A21F0479BBD9521083FD9EAA /* Pods_SerieA.framework */; };
+		628A13A4236F38E8006B2AD4 /* tvmaze.ico in Resources */ = {isa = PBXBuildFile; fileRef = 6210217421EBA91C00849E6E /* tvmaze.ico */; };
+		628A13A5236F38E8006B2AD4 /* Flag_of_the_Czech_Republic.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087C8207BEE39007703FF /* Flag_of_the_Czech_Republic.png */; };
+		628A13A6236F38E8006B2AD4 /* betaseries.png in Resources */ = {isa = PBXBuildFile; fileRef = 62DD87B51FB8BE4F00A9B9EE /* betaseries.png */; };
+		628A13A7236F38E8006B2AD4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 62DD87781FB766C600A9B9EE /* LaunchScreen.storyboard */; };
+		628A13A8236F38E8006B2AD4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 62DD87761FB766C600A9B9EE /* Assets.xcassets */; };
+		628A13A9236F38E8006B2AD4 /* Flag_of_Israel.png in Resources */ = {isa = PBXBuildFile; fileRef = 6231F8EB22833C34009D0351 /* Flag_of_Israel.png */; };
+		628A13AA236F38E8006B2AD4 /* Flag_of_Taiwan.png in Resources */ = {isa = PBXBuildFile; fileRef = 6231F8E922833C33009D0351 /* Flag_of_Taiwan.png */; };
+		628A13AB236F38E8006B2AD4 /* Flag_of_Germany.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087BD207BEBC5007703FF /* Flag_of_Germany.png */; };
+		628A13AC236F38E8006B2AD4 /* Stop-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97CA2039016A007B658E /* Stop-icon.png */; };
+		628A13AD236F38E8006B2AD4 /* Flag_of_Norway.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087C7207BEE39007703FF /* Flag_of_Norway.png */; };
+		628A13AE236F38E8006B2AD4 /* Flag_of_Canada.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087C5207BED6F007703FF /* Flag_of_Canada.png */; };
+		628A13AF236F38E8006B2AD4 /* rottentomatoes.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62A581E61FBC5BCB002D8FD3 /* rottentomatoes.ico */; };
+		628A13B0236F38E8006B2AD4 /* ToDo.txt in Resources */ = {isa = PBXBuildFile; fileRef = 62896015236C89D600699D17 /* ToDo.txt */; };
+		628A13B1236F38E8006B2AD4 /* Logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 62796464209A15A800ED5578 /* Logo.png */; };
+		628A13B2236F38E8006B2AD4 /* Flag_of_China.png in Resources */ = {isa = PBXBuildFile; fileRef = 6231F8E822833C33009D0351 /* Flag_of_China.png */; };
+		628A13B3236F38E8006B2AD4 /* Chart-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 624EC9A420B1A87E005ED207 /* Chart-icon.png */; };
+		628A13B4236F38E8006B2AD4 /* Bio-Hazard-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97CD2039016B007B658E /* Bio-Hazard-icon.png */; };
+		628A13B5236F38E8006B2AD4 /* Flag_of_India.png in Resources */ = {isa = PBXBuildFile; fileRef = 6231F8EA22833C33009D0351 /* Flag_of_India.png */; };
+		628A13B6236F38E8006B2AD4 /* Flag_of_Australia.png in Resources */ = {isa = PBXBuildFile; fileRef = 627964592095D5BB00ED5578 /* Flag_of_Australia.png */; };
+		628A13B7236F38E8006B2AD4 /* Magnifi-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087AC207A7937007703FF /* Magnifi-icon.png */; };
+		628A13B8236F38E8006B2AD4 /* Flag_of_the_United_States.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087BC207BEBC5007703FF /* Flag_of_the_United_States.png */; };
+		628A13B9236F38E8006B2AD4 /* List-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97D220390305007B658E /* List-icon.png */; };
+		628A13BA236F38E8006B2AD4 /* trakt.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62DD87B41FB8BE4F00A9B9EE /* trakt.ico */; };
+		628A13BB236F38E8006B2AD4 /* Trash-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97DA2039AAFC007B658E /* Trash-icon.png */; };
+		628A13BC236F38E8006B2AD4 /* Flag_of_Brazil.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B4D8B7208CB7BF002110E8 /* Flag_of_Brazil.png */; };
+		628A13BD236F38E8006B2AD4 /* thetvdb.png in Resources */ = {isa = PBXBuildFile; fileRef = 62DD87B31FB8BE4F00A9B9EE /* thetvdb.png */; };
+		628A13BE236F38E8006B2AD4 /* metacritic.png in Resources */ = {isa = PBXBuildFile; fileRef = 6218303D22AD73BE003243B9 /* metacritic.png */; };
+		628A13BF236F38E8006B2AD4 /* Eye-2-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62F2233D21E0F40F0032A6E3 /* Eye-2-icon.png */; };
+		628A13C0236F38E8006B2AD4 /* Flag_of_France.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087BF207BEBC5007703FF /* Flag_of_France.png */; };
+		628A13C1236F38E8006B2AD4 /* TV-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97D52039076C007B658E /* TV-icon.png */; };
+		628A13C2236F38E8006B2AD4 /* Flag_of_Spain.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087BE207BEBC5007703FF /* Flag_of_Spain.png */; };
+		628A13C3236F38E8006B2AD4 /* iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 62BB4F34236F32640095DE4B /* iPhone.storyboard */; };
+		628A13C4236F38E8006B2AD4 /* Eye-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97CC2039016B007B658E /* Eye-icon.png */; };
+		628A13C5236F38E8006B2AD4 /* Idea-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087AD207A7937007703FF /* Idea-icon.png */; };
+		628A13C6236F38E8006B2AD4 /* Sandbox.xml in Resources */ = {isa = PBXBuildFile; fileRef = 62921B5422BEBEFE00A2BE94 /* Sandbox.xml */; };
+		628A13C7236F38E8006B2AD4 /* Flag_of_Japan.png in Resources */ = {isa = PBXBuildFile; fileRef = 627964582095D5BB00ED5578 /* Flag_of_Japan.png */; };
+		628A13C8236F38E8006B2AD4 /* themoviedb.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97BF2038C9A3007B658E /* themoviedb.ico */; };
+		628A13C9236F38E8006B2AD4 /* Play-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97CB2039016B007B658E /* Play-icon.png */; };
+		628A13CA236F38E8006B2AD4 /* Calendar-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97D42039076C007B658E /* Calendar-icon.png */; };
+		628A13CB236F38E8006B2AD4 /* imdb.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62A581E51FBC5BCB002D8FD3 /* imdb.ico */; };
+		628A13CC236F38E8006B2AD4 /* Flag_of_Sweden.png in Resources */ = {isa = PBXBuildFile; fileRef = 6231F8E522833ACE009D0351 /* Flag_of_Sweden.png */; };
+		628A13CD236F38E8006B2AD4 /* Air-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97D62039076D007B658E /* Air-icon.png */; };
+		628A13CE236F38E8006B2AD4 /* Flag_of_the_United_Kingdom.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087BB207BEBC5007703FF /* Flag_of_the_United_Kingdom.png */; };
+		628A13CF236F38E8006B2AD4 /* Refresh-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62F2233F21E120DF0032A6E3 /* Refresh-icon.png */; };
+		628A13D0236F38E8006B2AD4 /* iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 628A1311236F353B006B2AD4 /* iPad.storyboard */; };
+		628A13D1236F38E8006B2AD4 /* Flag_of_Finland.png in Resources */ = {isa = PBXBuildFile; fileRef = 6231F8E422833ACD009D0351 /* Flag_of_Finland.png */; };
+		628A13D2236F38E8006B2AD4 /* allocine.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62921B5622BFE2F800A2BE94 /* allocine.ico */; };
+		628A13D4236F38E8006B2AD4 /* SeriesCommon.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 625F4AFD221484F200FE5A5C /* SeriesCommon.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		628A13D7236F38E8006B2AD4 /* En cours.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 626F88C52210939300E5A132 /* En cours.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		628A13D8236F38E8006B2AD4 /* Updates.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 6289601B236CA3BA00699D17 /* Updates.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		62921B5522BEBEFE00A2BE94 /* Sandbox.xml in Resources */ = {isa = PBXBuildFile; fileRef = 62921B5422BEBEFE00A2BE94 /* Sandbox.xml */; };
 		62921B5722BFE2F900A2BE94 /* allocine.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62921B5622BFE2F800A2BE94 /* allocine.ico */; };
-		629E6FDE2366036F00A4D634 /* iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 629E6FDD2366036F00A4D634 /* iPad.storyboard */; };
 		62A28DF8235C91C300EC13F0 /* SeriesCommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 625F4AFD221484F200FE5A5C /* SeriesCommon.framework */; };
 		62A28DF9235C91C300EC13F0 /* SeriesCommon.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 625F4AFD221484F200FE5A5C /* SeriesCommon.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		62A581E71FBC5BCB002D8FD3 /* imdb.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62A581E51FBC5BCB002D8FD3 /* imdb.ico */; };
@@ -76,11 +158,11 @@
 		62B087CB207BEE3A007703FF /* Flag_of_the_Czech_Republic.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087C8207BEE39007703FF /* Flag_of_the_Czech_Republic.png */; };
 		62B4716C20A88D3E0067BD34 /* ViewSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B4716B20A88D3E0067BD34 /* ViewSearch.swift */; };
 		62B4D8B8208CB7C0002110E8 /* Flag_of_Brazil.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B4D8B7208CB7BF002110E8 /* Flag_of_Brazil.png */; };
+		62BB4F37236F32640095DE4B /* iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 62BB4F34236F32640095DE4B /* iPhone.storyboard */; };
 		62CD57C32038B87D00DE28A1 /* GraphMiniSaison.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62CD57C22038B87D00DE28A1 /* GraphMiniSaison.swift */; };
 		62D0EBBB204C30BE009774B6 /* ViewSaisonListe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D0EBBA204C30BE009774B6 /* ViewSaisonListe.swift */; };
 		62D0EBBD204C374B009774B6 /* TheMoviedb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D0EBBC204C374B009774B6 /* TheMoviedb.swift */; };
 		62DD87701FB766C600A9B9EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD876F1FB766C600A9B9EE /* AppDelegate.swift */; };
-		62DD87751FB766C600A9B9EE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 62DD87731FB766C600A9B9EE /* Main.storyboard */; };
 		62DD87771FB766C600A9B9EE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 62DD87761FB766C600A9B9EE /* Assets.xcassets */; };
 		62DD877A1FB766C600A9B9EE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 62DD87781FB766C600A9B9EE /* LaunchScreen.storyboard */; };
 		62DD87A41FB76F5D00A9B9EE /* TheTVdb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD879F1FB76F5D00A9B9EE /* TheTVdb.swift */; };
@@ -135,6 +217,27 @@
 			remoteGlobalIDString = 6289601A236CA3BA00699D17;
 			remoteInfo = Updates;
 		};
+		628A137B236F38E8006B2AD4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 62DD87641FB766C600A9B9EE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 626F88C42210939300E5A132;
+			remoteInfo = "En cours";
+		};
+		628A137D236F38E8006B2AD4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 625F4AF8221484F200FE5A5C /* SeriesCommon.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 625F4AE4221481AF00FE5A5C;
+			remoteInfo = SeriesCommon;
+		};
+		628A137F236F38E8006B2AD4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 62DD87641FB766C600A9B9EE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6289601A236CA3BA00699D17;
+			remoteInfo = Updates;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -170,6 +273,29 @@
 				6289602C236CA7A400699D17 /* SeriesCommon.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		628A13D3236F38E8006B2AD4 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				628A13D4236F38E8006B2AD4 /* SeriesCommon.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		628A13D6236F38E8006B2AD4 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				628A13D7236F38E8006B2AD4 /* En cours.appex in Embed App Extensions */,
+				628A13D8236F38E8006B2AD4 /* Updates.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		62A28DFA235C91C300EC13F0 /* Embed Frameworks */ = {
@@ -236,9 +362,13 @@
 		62896032236DD6DE00699D17 /* tvmaze.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = tvmaze.ico; sourceTree = "<group>"; };
 		62896036236DDBD500699D17 /* ko.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ko.png; sourceTree = "<group>"; };
 		62896037236DDBD500699D17 /* ok.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ok.png; sourceTree = "<group>"; };
+		628960A0236F2D2600699D17 /* SerieA copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "SerieA copy-Info.plist"; path = "/Users/cd/Coding/Projets/SerieA/SerieA copy-Info.plist"; sourceTree = "<absolute>"; };
+		628A1312236F353B006B2AD4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/iPad.storyboard; sourceTree = "<group>"; };
+		628A1378236F3572006B2AD4 /* SerieA copy2-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "SerieA copy2-Info.plist"; path = "/Users/cd/Coding/Projets/SerieA/SerieA copy2-Info.plist"; sourceTree = "<absolute>"; };
+		628A13DC236F38E8006B2AD4 /* SerieA-iPad.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SerieA-iPad.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		628A13DD236F38E9006B2AD4 /* SerieA copy3-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "SerieA copy3-Info.plist"; path = "/Users/cd/Coding/Projets/SerieA/SerieA copy3-Info.plist"; sourceTree = "<absolute>"; };
 		62921B5422BEBEFE00A2BE94 /* Sandbox.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Sandbox.xml; sourceTree = "<group>"; };
 		62921B5622BFE2F800A2BE94 /* allocine.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = allocine.ico; sourceTree = "<group>"; };
-		629E6FDD2366036F00A4D634 /* iPad.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = iPad.storyboard; sourceTree = "<group>"; };
 		62A581E51FBC5BCB002D8FD3 /* imdb.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = imdb.ico; sourceTree = "<group>"; };
 		62A581E61FBC5BCB002D8FD3 /* rottentomatoes.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = rottentomatoes.ico; sourceTree = "<group>"; };
 		62AC509F200E58A200A8C841 /* SaisonFiche.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaisonFiche.swift; sourceTree = "<group>"; };
@@ -254,12 +384,12 @@
 		62B087C8207BEE39007703FF /* Flag_of_the_Czech_Republic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_the_Czech_Republic.png; sourceTree = "<group>"; };
 		62B4716B20A88D3E0067BD34 /* ViewSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewSearch.swift; sourceTree = "<group>"; };
 		62B4D8B7208CB7BF002110E8 /* Flag_of_Brazil.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_Brazil.png; sourceTree = "<group>"; };
+		62BB4F35236F32640095DE4B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/iPhone.storyboard; sourceTree = "<group>"; };
 		62CD57C22038B87D00DE28A1 /* GraphMiniSaison.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphMiniSaison.swift; sourceTree = "<group>"; };
 		62D0EBBA204C30BE009774B6 /* ViewSaisonListe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewSaisonListe.swift; sourceTree = "<group>"; };
 		62D0EBBC204C374B009774B6 /* TheMoviedb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TheMoviedb.swift; sourceTree = "<group>"; };
 		62DD876C1FB766C600A9B9EE /* SerieA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SerieA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		62DD876F1FB766C600A9B9EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		62DD87741FB766C600A9B9EE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		62DD87761FB766C600A9B9EE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		62DD87791FB766C600A9B9EE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		62DD877B1FB766C600A9B9EE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -304,6 +434,15 @@
 			files = (
 				6289602B236CA7A400699D17 /* SeriesCommon.framework in Frameworks */,
 				6289601C236CA3BA00699D17 /* NotificationCenter.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		628A13A0236F38E8006B2AD4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				628A13A1236F38E8006B2AD4 /* SeriesCommon.framework in Frameworks */,
+				628A13A2236F38E8006B2AD4 /* Pods_SerieA.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -465,6 +604,13 @@
 			path = Images;
 			sourceTree = "<group>";
 		};
+		6289609F236F2D2600699D17 /* Resources-iPad */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "Resources-iPad";
+			sourceTree = "<group>";
+		};
 		62B087B0207BEA8B007703FF /* Drapeaux */ = {
 			isa = PBXGroup;
 			children = (
@@ -492,6 +638,7 @@
 		62DD87631FB766C600A9B9EE = {
 			isa = PBXGroup;
 			children = (
+				6289609F236F2D2600699D17 /* Resources-iPad */,
 				625F4B022214B05100FE5A5C /* SerieA.entitlements */,
 				625F4AF8221484F200FE5A5C /* SeriesCommon.xcodeproj */,
 				62DD876E1FB766C600A9B9EE /* iPhone Seriez */,
@@ -500,6 +647,9 @@
 				62DD876D1FB766C600A9B9EE /* Products */,
 				A8D0FF75432B397DCE10E570 /* Pods */,
 				0A631D6EDA1ECD3F1B0500DA /* Frameworks */,
+				628960A0236F2D2600699D17 /* SerieA copy-Info.plist */,
+				628A1378236F3572006B2AD4 /* SerieA copy2-Info.plist */,
+				628A13DD236F38E9006B2AD4 /* SerieA copy3-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -509,6 +659,7 @@
 				62DD876C1FB766C600A9B9EE /* SerieA.app */,
 				626F88C52210939300E5A132 /* En cours.appex */,
 				6289601B236CA3BA00699D17 /* Updates.appex */,
+				628A13DC236F38E8006B2AD4 /* SerieA-iPad.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -522,8 +673,8 @@
 				624D87492043323A00AFDA06 /* Sources */,
 				624D874B2043327B00AFDA06 /* Structures */,
 				624D874C2043329200AFDA06 /* Controllers */,
-				62DD87731FB766C600A9B9EE /* Main.storyboard */,
-				629E6FDD2366036F00A4D634 /* iPad.storyboard */,
+				62BB4F34236F32640095DE4B /* iPhone.storyboard */,
+				628A1311236F353B006B2AD4 /* iPad.storyboard */,
 				62DD87761FB766C600A9B9EE /* Assets.xcassets */,
 				62DD87781FB766C600A9B9EE /* LaunchScreen.storyboard */,
 				62DD877B1FB766C600A9B9EE /* Info.plist */,
@@ -599,6 +750,30 @@
 			productName = Updates;
 			productReference = 6289601B236CA3BA00699D17 /* Updates.appex */;
 			productType = "com.apple.product-type.app-extension";
+		};
+		628A1379236F38E8006B2AD4 /* SerieA-iPad */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 628A13D9236F38E8006B2AD4 /* Build configuration list for PBXNativeTarget "SerieA-iPad" */;
+			buildPhases = (
+				628A1380236F38E8006B2AD4 /* [CP] Check Pods Manifest.lock */,
+				628A1381236F38E8006B2AD4 /* Sources */,
+				628A13A0236F38E8006B2AD4 /* Frameworks */,
+				628A13A3236F38E8006B2AD4 /* Resources */,
+				628A13D3236F38E8006B2AD4 /* Embed Frameworks */,
+				628A13D5236F38E8006B2AD4 /* [CP] Embed Pods Frameworks */,
+				628A13D6236F38E8006B2AD4 /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				628A137A236F38E8006B2AD4 /* PBXTargetDependency */,
+				628A137C236F38E8006B2AD4 /* PBXTargetDependency */,
+				628A137E236F38E8006B2AD4 /* PBXTargetDependency */,
+			);
+			name = "SerieA-iPad";
+			productName = "iPhone Seriez";
+			productReference = 628A13DC236F38E8006B2AD4 /* SerieA-iPad.app */;
+			productType = "com.apple.product-type.application";
 		};
 		62DD876B1FB766C600A9B9EE /* SerieA */ = {
 			isa = PBXNativeTarget;
@@ -682,6 +857,7 @@
 			projectRoot = "";
 			targets = (
 				62DD876B1FB766C600A9B9EE /* SerieA */,
+				628A1379236F38E8006B2AD4 /* SerieA-iPad */,
 				626F88C42210939300E5A132 /* En cours */,
 				6289601A236CA3BA00699D17 /* Updates */,
 			);
@@ -720,6 +896,60 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		628A13A3236F38E8006B2AD4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				628A13A4236F38E8006B2AD4 /* tvmaze.ico in Resources */,
+				628A13A5236F38E8006B2AD4 /* Flag_of_the_Czech_Republic.png in Resources */,
+				628A13A6236F38E8006B2AD4 /* betaseries.png in Resources */,
+				628A13A7236F38E8006B2AD4 /* LaunchScreen.storyboard in Resources */,
+				628A13A8236F38E8006B2AD4 /* Assets.xcassets in Resources */,
+				628A13A9236F38E8006B2AD4 /* Flag_of_Israel.png in Resources */,
+				628A13AA236F38E8006B2AD4 /* Flag_of_Taiwan.png in Resources */,
+				628A13AB236F38E8006B2AD4 /* Flag_of_Germany.png in Resources */,
+				628A13AC236F38E8006B2AD4 /* Stop-icon.png in Resources */,
+				628A13AD236F38E8006B2AD4 /* Flag_of_Norway.png in Resources */,
+				628A13AE236F38E8006B2AD4 /* Flag_of_Canada.png in Resources */,
+				628A13AF236F38E8006B2AD4 /* rottentomatoes.ico in Resources */,
+				628A13B0236F38E8006B2AD4 /* ToDo.txt in Resources */,
+				628A13B1236F38E8006B2AD4 /* Logo.png in Resources */,
+				628A13B2236F38E8006B2AD4 /* Flag_of_China.png in Resources */,
+				628A13B3236F38E8006B2AD4 /* Chart-icon.png in Resources */,
+				628A13B4236F38E8006B2AD4 /* Bio-Hazard-icon.png in Resources */,
+				628A13B5236F38E8006B2AD4 /* Flag_of_India.png in Resources */,
+				628A13B6236F38E8006B2AD4 /* Flag_of_Australia.png in Resources */,
+				628A13B7236F38E8006B2AD4 /* Magnifi-icon.png in Resources */,
+				628A13B8236F38E8006B2AD4 /* Flag_of_the_United_States.png in Resources */,
+				628A13B9236F38E8006B2AD4 /* List-icon.png in Resources */,
+				628A13BA236F38E8006B2AD4 /* trakt.ico in Resources */,
+				628A13BB236F38E8006B2AD4 /* Trash-icon.png in Resources */,
+				628A13BC236F38E8006B2AD4 /* Flag_of_Brazil.png in Resources */,
+				628A13BD236F38E8006B2AD4 /* thetvdb.png in Resources */,
+				628A13BE236F38E8006B2AD4 /* metacritic.png in Resources */,
+				628A13BF236F38E8006B2AD4 /* Eye-2-icon.png in Resources */,
+				628A13C0236F38E8006B2AD4 /* Flag_of_France.png in Resources */,
+				628A13C1236F38E8006B2AD4 /* TV-icon.png in Resources */,
+				628A13C2236F38E8006B2AD4 /* Flag_of_Spain.png in Resources */,
+				628A13C3236F38E8006B2AD4 /* iPhone.storyboard in Resources */,
+				628A13C4236F38E8006B2AD4 /* Eye-icon.png in Resources */,
+				628A13C5236F38E8006B2AD4 /* Idea-icon.png in Resources */,
+				628A13C6236F38E8006B2AD4 /* Sandbox.xml in Resources */,
+				628A13C7236F38E8006B2AD4 /* Flag_of_Japan.png in Resources */,
+				628A13C8236F38E8006B2AD4 /* themoviedb.ico in Resources */,
+				628A13C9236F38E8006B2AD4 /* Play-icon.png in Resources */,
+				628A13CA236F38E8006B2AD4 /* Calendar-icon.png in Resources */,
+				628A13CB236F38E8006B2AD4 /* imdb.ico in Resources */,
+				628A13CC236F38E8006B2AD4 /* Flag_of_Sweden.png in Resources */,
+				628A13CD236F38E8006B2AD4 /* Air-icon.png in Resources */,
+				628A13CE236F38E8006B2AD4 /* Flag_of_the_United_Kingdom.png in Resources */,
+				628A13CF236F38E8006B2AD4 /* Refresh-icon.png in Resources */,
+				628A13D0236F38E8006B2AD4 /* iPad.storyboard in Resources */,
+				628A13D1236F38E8006B2AD4 /* Flag_of_Finland.png in Resources */,
+				628A13D2236F38E8006B2AD4 /* allocine.ico in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		62DD876A1FB766C600A9B9EE /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -737,7 +967,6 @@
 				62B087C6207BED6F007703FF /* Flag_of_Canada.png in Resources */,
 				62A581E81FBC5BCB002D8FD3 /* rottentomatoes.ico in Resources */,
 				62896016236C89D600699D17 /* ToDo.txt in Resources */,
-				62DD87751FB766C600A9B9EE /* Main.storyboard in Resources */,
 				62796465209A15A800ED5578 /* Logo.png in Resources */,
 				6231F8EC22833C34009D0351 /* Flag_of_China.png in Resources */,
 				624EC9A520B1A87E005ED207 /* Chart-icon.png in Resources */,
@@ -747,7 +976,6 @@
 				62B087AE207A7938007703FF /* Magnifi-icon.png in Resources */,
 				62B087C1207BEBC6007703FF /* Flag_of_the_United_States.png in Resources */,
 				62FF97D320390305007B658E /* List-icon.png in Resources */,
-				629E6FDE2366036F00A4D634 /* iPad.storyboard in Resources */,
 				62DD87B71FB8BE4F00A9B9EE /* trakt.ico in Resources */,
 				62FF97DB2039AAFC007B658E /* Trash-icon.png in Resources */,
 				62B4D8B8208CB7C0002110E8 /* Flag_of_Brazil.png in Resources */,
@@ -757,6 +985,7 @@
 				62B087C4207BEBC6007703FF /* Flag_of_France.png in Resources */,
 				62FF97D82039076D007B658E /* TV-icon.png in Resources */,
 				62B087C3207BEBC6007703FF /* Flag_of_Spain.png in Resources */,
+				62BB4F37236F32640095DE4B /* iPhone.storyboard in Resources */,
 				62FF97D02039016B007B658E /* Eye-icon.png in Resources */,
 				62B087AF207A7938007703FF /* Idea-icon.png in Resources */,
 				62921B5522BEBEFE00A2BE94 /* Sandbox.xml in Resources */,
@@ -769,6 +998,7 @@
 				62FF97D92039076D007B658E /* Air-icon.png in Resources */,
 				62B087C0207BEBC6007703FF /* Flag_of_the_United_Kingdom.png in Resources */,
 				62F2234021E120E00032A6E3 /* Refresh-icon.png in Resources */,
+				628A1313236F353B006B2AD4 /* iPad.storyboard in Resources */,
 				6231F8E622833ACE009D0351 /* Flag_of_Finland.png in Resources */,
 				62921B5722BFE2F900A2BE94 /* allocine.ico in Resources */,
 			);
@@ -778,6 +1008,45 @@
 
 /* Begin PBXShellScriptBuildPhase section */
 		336C3BDA93DDD2C034789A22 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SerieA/Pods-SerieA-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SerieA/Pods-SerieA-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SerieA/Pods-SerieA-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		628A1380236F38E8006B2AD4 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SerieA-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		628A13D5236F38E8006B2AD4 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -832,6 +1101,43 @@
 			buildActionMask = 2147483647;
 			files = (
 				6289601F236CA3BA00699D17 /* TodayViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		628A1381236F38E8006B2AD4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				628A1382236F38E8006B2AD4 /* SerieFiche.swift in Sources */,
+				628A1383236F38E8006B2AD4 /* Configuration.swift in Sources */,
+				628A1384236F38E8006B2AD4 /* TheMoviedb.swift in Sources */,
+				628A1385236F38E8006B2AD4 /* Constantes.swift in Sources */,
+				628A1386236F38E8006B2AD4 /* IMdb.swift in Sources */,
+				628A1387236F38E8006B2AD4 /* EpisodeFiche.swift in Sources */,
+				628A1388236F38E8006B2AD4 /* GraphMiniSerie.swift in Sources */,
+				628A1389236F38E8006B2AD4 /* GraphMiniSaison.swift in Sources */,
+				628A138A236F38E8006B2AD4 /* MetaCritic.swift in Sources */,
+				628A138B236F38E8006B2AD4 /* Notes.swift in Sources */,
+				628A138C236F38E8006B2AD4 /* BetaSeries.swift in Sources */,
+				628A138D236F38E8006B2AD4 /* Graph.swift in Sources */,
+				628A138E236F38E8006B2AD4 /* GraphSaison.swift in Sources */,
+				628A138F236F38E8006B2AD4 /* Allocine.swift in Sources */,
+				628A1390236F38E8006B2AD4 /* GraphEpisode.swift in Sources */,
+				628A1391236F38E8006B2AD4 /* TheTVdb.swift in Sources */,
+				628A1392236F38E8006B2AD4 /* ViewSerieListe.swift in Sources */,
+				628A1393236F38E8006B2AD4 /* ViewPropals.swift in Sources */,
+				628A1394236F38E8006B2AD4 /* Trakt.swift in Sources */,
+				628A1395236F38E8006B2AD4 /* RottenTomatoes.swift in Sources */,
+				628A1396236F38E8006B2AD4 /* ViewSearch.swift in Sources */,
+				628A1397236F38E8006B2AD4 /* Notification.swift in Sources */,
+				628A1398236F38E8006B2AD4 /* ViewAccueil.swift in Sources */,
+				628A1399236F38E8006B2AD4 /* Helpers.swift in Sources */,
+				628A139A236F38E8006B2AD4 /* ViewSaisonListe.swift in Sources */,
+				628A139B236F38E8006B2AD4 /* Database.swift in Sources */,
+				628A139C236F38E8006B2AD4 /* SaisonFiche.swift in Sources */,
+				628A139D236F38E8006B2AD4 /* ViewSearchNew.swift in Sources */,
+				628A139E236F38E8006B2AD4 /* AppDelegate.swift in Sources */,
+				628A139F236F38E8006B2AD4 /* TVmaze.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -891,6 +1197,22 @@
 			target = 6289601A236CA3BA00699D17 /* Updates */;
 			targetProxy = 62896024236CA3BA00699D17 /* PBXContainerItemProxy */;
 		};
+		628A137A236F38E8006B2AD4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			platformFilter = ios;
+			target = 626F88C42210939300E5A132 /* En cours */;
+			targetProxy = 628A137B236F38E8006B2AD4 /* PBXContainerItemProxy */;
+		};
+		628A137C236F38E8006B2AD4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = SeriesCommon;
+			targetProxy = 628A137D236F38E8006B2AD4 /* PBXContainerItemProxy */;
+		};
+		628A137E236F38E8006B2AD4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6289601A236CA3BA00699D17 /* Updates */;
+			targetProxy = 628A137F236F38E8006B2AD4 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
@@ -910,12 +1232,20 @@
 			name = MainInterface.storyboard;
 			sourceTree = "<group>";
 		};
-		62DD87731FB766C600A9B9EE /* Main.storyboard */ = {
+		628A1311236F353B006B2AD4 /* iPad.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				62DD87741FB766C600A9B9EE /* Base */,
+				628A1312236F353B006B2AD4 /* Base */,
 			);
-			name = Main.storyboard;
+			name = iPad.storyboard;
+			sourceTree = "<group>";
+		};
+		62BB4F34236F32640095DE4B /* iPhone.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				62BB4F35236F32640095DE4B /* Base */,
+			);
+			name = iPhone.storyboard;
 			sourceTree = "<group>";
 		};
 		62DD87781FB766C600A9B9EE /* LaunchScreen.storyboard */ = {
@@ -1024,6 +1354,72 @@
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		628A13DA236F38E8006B2AD4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9EAC8F8F20DFA5D9B6C6AC79 /* Pods-SerieA.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = SerieA.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = MXLKZ7P9DM;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/iPhone\\ Seriez",
+					"$(PROJECT_DIR)/iPhone\\ Seriez",
+					"$(PROJECT_DIR)/iPhone\\ Seriez",
+					"$(PROJECT_DIR)/iPhone\\ Seriez/Controllers",
+					"$(PROJECT_DIR)/iPhone\\ Seriez/Controllers",
+				);
+				INFOPLIST_FILE = "SerieA copy3-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = Home.SerieA;
+				PRODUCT_NAME = "SerieA-iPad";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Debug;
+		};
+		628A13DB236F38E8006B2AD4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4B2CE9C75E7B8A1EB0761711 /* Pods-SerieA.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = SerieA.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = MXLKZ7P9DM;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/iPhone\\ Seriez",
+					"$(PROJECT_DIR)/iPhone\\ Seriez",
+					"$(PROJECT_DIR)/iPhone\\ Seriez",
+					"$(PROJECT_DIR)/iPhone\\ Seriez/Controllers",
+					"$(PROJECT_DIR)/iPhone\\ Seriez/Controllers",
+				);
+				INFOPLIST_FILE = "SerieA copy3-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = Home.SerieA;
+				PRODUCT_NAME = "SerieA-iPad";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Release;
 		};
@@ -1224,6 +1620,15 @@
 			buildConfigurations = (
 				62896028236CA3BA00699D17 /* Debug */,
 				62896029236CA3BA00699D17 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		628A13D9236F38E8006B2AD4 /* Build configuration list for PBXNativeTarget "SerieA-iPad" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				628A13DA236F38E8006B2AD4 /* Debug */,
+				628A13DB236F38E8006B2AD4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

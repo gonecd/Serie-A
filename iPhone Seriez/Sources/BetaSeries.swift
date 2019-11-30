@@ -9,26 +9,30 @@
 import Foundation
 import SeriesCommon
 
-class BetaSeries : NSObject
-{
+class BetaSeries : NSObject {
+    var chronoGlobal : TimeInterval = 0
+    var chronoRatings : TimeInterval = 0
+    var chronoOther : TimeInterval = 0
+
     let BetaSeriesUserkey : String = "aa6120d2cf7e"
     
-    override init()
-    {
+    override init() {
         super.init()
     }
     
-    
-    func getEpisodesRatings(_ uneSerie: Serie)
-    {
+    func getChrono() -> TimeInterval {
+        return chronoGlobal+chronoRatings+chronoOther
+    }
+
+    func getEpisodesRatings(_ uneSerie: Serie) {
+        let startChrono : Date = Date()
         var url : URL
         var request : URLRequest
         var task : URLSessionDataTask
         let today : Date = Date()
 
         // Récupération des ratings
-        for saison in uneSerie.saisons
-        {
+        for saison in uneSerie.saisons {
             // Création de la liste de tous les épisodes d'une saison
             var listeEpisodes: String = ""
             for episode in saison.episodes
@@ -77,11 +81,12 @@ class BetaSeries : NSObject
             })
             task.resume()
             while (task.state != URLSessionTask.State.completed) { usleep(1000) }
+            chronoRatings = chronoRatings + Date().timeIntervalSince(startChrono)
         }
     }
     
-    func getEpisodesRatingsBis(_ uneSerie: Serie)
-    {
+    func getEpisodesRatingsBis(_ uneSerie: Serie) {
+        let startChrono : Date = Date()
         var url : URL
         var request : URLRequest
         var task : URLSessionDataTask
@@ -134,12 +139,12 @@ class BetaSeries : NSObject
         
         task.resume()
         while (task.state != URLSessionTask.State.completed) { usleep(1000) }
-        
+        chronoRatings = chronoRatings + Date().timeIntervalSince(startChrono)
     }
 
     
-    func getSerieGlobalInfos(idTVDB : String, idIMDB : String) -> Serie
-    {
+    func getSerieGlobalInfos(idTVDB : String, idIMDB : String) -> Serie {
+        let startChrono : Date = Date()
         let uneSerie : Serie = Serie(serie: "")
         var request : URLRequest
         
@@ -184,11 +189,12 @@ class BetaSeries : NSObject
         task.resume()
         while (task.state != URLSessionTask.State.completed) { usleep(1000) }
 
+        chronoGlobal = chronoGlobal + Date().timeIntervalSince(startChrono)
         return uneSerie
     }
     
-    func getSimilarShows(TVDBid : String) -> (names : [String], ids : [String])
-    {
+    func getSimilarShows(TVDBid : String) -> (names : [String], ids : [String]) {
+        let startChrono : Date = Date()
         var showNames : [String] = []
         var showIds : [String] = []
         var ended : Bool = false
@@ -229,11 +235,13 @@ class BetaSeries : NSObject
         task.resume()
         while (!ended) { usleep(1000) }
 
+        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
+
         return (showNames, showIds)
     }
     
-    func getTrendingShows() -> (names : [String], ids : [String])
-    {
+    func getTrendingShows() -> (names : [String], ids : [String]) {
+        let startChrono : Date = Date()
         var showNames : [String] = []
         var showIds : [String] = []
         var ended : Bool = false
@@ -269,11 +277,13 @@ class BetaSeries : NSObject
         task.resume()
         while (!ended) { usleep(1000) }
         
+        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
+
         return (showNames, showIds)
     }
 
-    func getPopularShows() -> (names : [String], ids : [String])
-    {
+    func getPopularShows() -> (names : [String], ids : [String]) {
+        let startChrono : Date = Date()
         var showNames : [String] = []
         var showIds : [String] = []
         var ended : Bool = false
@@ -308,56 +318,15 @@ class BetaSeries : NSObject
         task.resume()
         while (!ended) { usleep(1000) }
         
+        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
+
         return (showNames, showIds)
     }
     
-    
-    
-    func getLastEpisodeDate(TVdbId : String, saison : Int, episode : Int) -> Date
-    {
-        var ended : Bool = false
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        var uneDate : Date = Date()
         
-        var request : URLRequest = URLRequest(url: URL(string: "https://api.betaseries.com/shows/episodes?v=3.0&thetvdb_id=\(TVdbId)&season=\(saison)&episode=\(episode)")!)
-        request.httpMethod = "GET"
-        request.addValue("application/json", forHTTPHeaderField: "Accept")
-        request.addValue("\(BetaSeriesUserkey)", forHTTPHeaderField: "X-BetaSeries-Key")
-        
-        let task = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
-            if let data = data, let response = response as? HTTPURLResponse {
-                do {
-                    if (response.statusCode != 200) { print("BetaSeries::getLastEpisodeDate error \(response.statusCode) received "); return; }
-                    
-                    let jsonResponse : NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
-                    let episodeArray : NSArray = (jsonResponse.object(forKey: "episodes")) as! NSArray
-                    
-                    if (episodeArray.count > 0)
-                    {
-                        let stringDate : String = ((episodeArray.object(at: 0) as! NSDictionary).object(forKey: "date")) as? String ?? ""
-                        if (stringDate !=  "") { uneDate = dateFormatter.date(from: stringDate)! }
-                    }
-                    else
-                    {
-                        uneDate = ZeroDate
-                    }
-                    
-                    ended = true
-                    
-                } catch let error as NSError { print("BetaSeries::getSimilarShows failed: \(error.localizedDescription)"); ended = true; }
-            } else { print(error as Any); ended = true; }
-        })
-        
-        task.resume()
-        while (!ended) { usleep(1000) }
-        
-        return (uneDate)
-    }
     
-    
-    func rechercheParTitre(serieArechercher : String) -> [Serie]
-    {
+    func rechercheParTitre(serieArechercher : String) -> [Serie] {
+        let startChrono : Date = Date()
         var serieListe : [Serie] = []
         var ended : Bool = false
         
@@ -409,6 +378,8 @@ class BetaSeries : NSObject
         task.resume()
         while (!ended) { usleep(1000) }
         
+        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
+
         return serieListe
     }
     

@@ -23,8 +23,7 @@ class Graph: UIView {
     }
 
     
-    func change()
-    {
+    func change() {
         if (grapheType == 0) { grapheType = 1 }
         else if (grapheType == 1) { grapheType = 0 }
         
@@ -32,14 +31,12 @@ class Graph: UIView {
     }
     
 
-    func sendSerie(_ uneSerie: Serie)
-    {
+    func sendSerie(_ uneSerie: Serie) {
         theSerie = uneSerie
     }
     
     
-    func background()
-    {
+    func background() {
         let origineX : CGFloat = 30.0
         let origineY :CGFloat = self.frame.height - 30.0
         let hauteur : CGFloat = (self.frame.height - 30.0 - 10.0)
@@ -64,8 +61,7 @@ class Graph: UIView {
         path.stroke()
         
         // Lignes achurées horizontales
-        for i:Int in 1 ..< 4
-        {
+        for i:Int in 1 ..< 4 {
             let pathLine : UIBezierPath = UIBezierPath()
             pathLine.move(to: CGPoint(x: origineX, y: origineY - (hauteur * CGFloat(i)/4)))
             pathLine.addLine(to: CGPoint(x: origineX + largeur, y: origineY - (hauteur * CGFloat(i)/4)))
@@ -75,15 +71,13 @@ class Graph: UIView {
         }
 
         // Légende en Y
-        for i:Int in 0 ..< 5
-        {
+        for i:Int in 0 ..< 5 {
             let episode : NSString = String(i*25) as NSString
             episode.draw(in: CGRect(x: 7, y: origineY - (hauteur * CGFloat(i)/4) - 7, width: 20, height: 10), withAttributes: textAttributes)
         }
 
         // Coches verticales
-        for i:Int in 0 ..< nbSaisons
-        {
+        for i:Int in 0 ..< nbSaisons {
             let saison : NSString = String(i+1) as NSString
             saison.draw(in: CGRect(x: origineX - 5.0 + (largeur * (CGFloat(i)+0.5) / CGFloat(nbSaisons)),
                                    y: self.frame.height - 25, width: 15, height: 12), withAttributes: textAttributes)
@@ -104,14 +98,12 @@ class Graph: UIView {
     }
     
     
-    func traceGraphePoints()
-    {
+    func traceGraphePoints() {
         let nbSaisons : Int = theSerie.saisons.count
         let origineX : CGFloat = 30.0
         let largeur : CGFloat = (self.frame.width - origineX - 10.0)
 
-        for i:Int in 0 ..< nbSaisons
-        {
+        for i:Int in 0 ..< nbSaisons {
             let offset : CGFloat = (largeur * (CGFloat(i)+0.5) / CGFloat(nbSaisons))
             
             traceUnPoint(theSerie.saisons[i].getFairRatingTVdb(), uneCouleur: colorTVdb, offsetSaison: offset, offsetSource: 0)

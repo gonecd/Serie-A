@@ -70,10 +70,10 @@ class ViewSaisonListe: UITableViewController {
         let uneSaison = viewList[indexPath.row].saisons[allSaisons[indexPath.row] - 1]
         cell.saison.text = "Saison " + String(uneSaison.saison) + " - " + String(uneSaison.nbEpisodes) + " épisodes"
         
-        if (uneSaison.starts == ZeroDate) { cell.debut.text = "?" }
+        if (uneSaison.starts == ZeroDate) { cell.debut.text = "TBD" }
         else { cell.debut.text = dateFormatter.string(from: uneSaison.starts) }
         
-        if (uneSaison.ends == ZeroDate) { cell.fin.text = "?" }
+        if (uneSaison.ends == ZeroDate) { cell.fin.text = "TBD" }
         else { cell.fin.text = dateFormatter.string(from: uneSaison.ends) }
         
         cell.globalRating.text = String(viewList[indexPath.row].getGlobalRating()) + " %"
