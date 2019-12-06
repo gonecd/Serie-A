@@ -132,8 +132,8 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
     }
     
     @IBAction func webAlloCine(_ sender: Any) {
-        if (alloCine.getPath(serie: serie.serie) != "") {
-            UIApplication.shared.open(URL(string: alloCine.getPath(serie: serie.serie))!)
+        if (serie.idAlloCine != "") {
+            UIApplication.shared.open(URL(string: "http://www.allocine.fr/series/ficheserie_gen_cserie=" + serie.idAlloCine + ".html")!)
         }
 
     }

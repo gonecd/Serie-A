@@ -58,8 +58,6 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
         
         title = serie.serie
         
-        //alloCine.getID(serie: serie.serie)
-        
         let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleGesture))
         swipeLeft.direction = .left
         self.view.addGestureRecognizer(swipeLeft)
@@ -200,7 +198,7 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
             else { cell.fin.text = dateFormatter.string(from: serie.saisons[indexPath.row].ends) }
             
             cell.graphe.setSerie(serie: serie, saison: indexPath.row + 1)
-            cell.graphe.setType(type: 1)
+            cell.graphe.setType(type: 3)
             cell.graphe.setNeedsDisplay()
 
             return cell

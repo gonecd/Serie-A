@@ -252,8 +252,6 @@ class ViewAccueil: UIViewController  {
 //            print(" Saisons[\(uneSaison.saison)] = \(uneSaison.episodes.count) épisodes comptés et \(uneSaison.nbEpisodes) déclarés, \(uneSaison.nbWatchedEps) vus")
 //        }
 
-        
-        
         db.quickRefresh()
         db.finaliseDB()
         db.shareWithWidget()
@@ -268,7 +266,5 @@ class ViewAccueil: UIViewController  {
         self.viewDidAppear(false)
         
     }
-    
-
         
 }
