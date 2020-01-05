@@ -146,9 +146,9 @@ class TheMoviedb : NSObject {
     }
     
     
-    func getIDs(serie: Serie)
-    {
+    func getIDs(serie: Serie) -> Bool {
         let startChrono : Date = Date()
+        var found : Bool = false
         var request : URLRequest = URLRequest(url: NSURL(string: "https://api.themoviedb.org/3/tv/\(serie.idMoviedb)/external_ids?api_key=\(TheMoviedbUserkey)&language=en-US")! as URL)
         request.httpMethod = "GET"
         
@@ -159,8 +159,13 @@ class TheMoviedb : NSObject {
                     {
                         let jsonResponse : NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
                         
-                        if (jsonResponse.object(forKey: "imdb_id") != nil) { serie.idIMdb = (jsonResponse.object(forKey: "imdb_id") as? String ?? "") }
-                        if (jsonResponse.object(forKey: "imdb_id") != nil) { serie.idTrakt = (jsonResponse.object(forKey: "imdb_id") as? String ?? "") }
+                        found = true
+                        
+                        if (jsonResponse.object(forKey: "imdb_id") != nil) {
+                            serie.idIMdb = (jsonResponse.object(forKey: "imdb_id") as? String ?? "")
+                            serie.idTrakt = serie.idIMdb
+                        }
+
                         if (jsonResponse.object(forKey: "tvdb_id") != nil) { serie.idTVdb = String(jsonResponse.object(forKey: "tvdb_id") as? Int ?? 0) }
                     }
                     else
@@ -174,6 +179,8 @@ class TheMoviedb : NSObject {
         while (task.state != URLSessionTask.State.completed) { usleep(1000) }
         
         chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
+        
+        return found
     }
     
     func getSerieGlobalInfos(idMovieDB : String) -> Serie
@@ -457,7 +464,7 @@ class TheMoviedb : NSObject {
                             foundComments.append(review)
                             foundLikes.append(0)
                             foundDates.append(ZeroDate)
-                            foundSource.append(sourceMovieDB)
+                            foundSource.append(srcMovieDB)
                         }
                         
                         ended = true

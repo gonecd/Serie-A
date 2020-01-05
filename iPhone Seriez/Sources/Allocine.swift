@@ -12,6 +12,7 @@ import SeriesCommon
 
 class AlloCine : NSObject {
     var chronoGlobal : TimeInterval = 0
+    var chronoOther : TimeInterval = 0
 
     let indexWebPage: Dictionary = [
         "24" : "58",
@@ -36,6 +37,7 @@ class AlloCine : NSObject {
         "Person of Interest" : "9290",
         "Republican Gangsters" : "19344",
         "Revolution" : "10591",
+        "Rick and Morty" : "11561",
         "Savages" : "24290",
         "Shameless" : "7634",
         "Spiral" : "538",
@@ -106,23 +108,7 @@ class AlloCine : NSObject {
         return uneSerie
     }
     
-    
-//    func getPath(serie : String) -> String {
-//
-//        let indexDB : Int = indexWebPage[serie] ?? -1
-//
-//        if (indexDB == 0) {
-//            // Série indexée mais page web non définie
-//            return ""
-//        } else if (indexDB == -1) {
-//            // Série non indexée
-//            print("==> AlloCine - Série inconnue : \(serie)")
-//            return ""
-//        } else {
-//            return "http://www.allocine.fr/series/ficheserie_gen_cserie=" + String(indexDB) + ".html"
-//        }
-//    }
-    
+
     func getID(serie: String) -> String {
         let webPage : String = "http://www.allocine.fr/recherche/6/?q=" + serie.lowercased().replacingOccurrences(of: "%", with: "+").replacingOccurrences(of: "'", with: "+").replacingOccurrences(of: " ", with: "+")
         
@@ -143,5 +129,92 @@ class AlloCine : NSObject {
 
         print("==> AlloCine - ID non trouvé : \(serie)")
         return ""
+    }
+    
+
+    func getPopularShows() -> (names : [String], ids : [String]) {
+        let startChrono : Date = Date()
+        var showNames : [String] = []
+        var showIds : [String] = []
+        
+        do {
+            let page : String = try String(contentsOf: URL(string : "http://www.allocine.fr/series/meilleures/")!)
+            let doc : Document = try SwiftSoup.parse(page)
+            let showList = try doc.select("div [class='data_box']")
+            
+            for oneShow in showList {
+                let showName : String = try oneShow.select("h2").text()
+                let AlloCineID : String = try oneShow.select("a").attr("href").components(separatedBy: "=")[1].components(separatedBy: ".")[0]
+
+                showNames.append(showName)
+                showIds.append(AlloCineID)
+            }
+        }
+        catch let error as NSError { print("AlloCine failed for getShowList : \(error.localizedDescription)") }
+        
+        
+        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
+        return (showNames, showIds)
+    }
+    
+
+    func getTrendingShows() -> (names : [String], ids : [String]) {
+        let startChrono : Date = Date()
+        var showNames : [String] = []
+        var showIds : [String] = []
+        
+        do {
+            let page : String = try String(contentsOf: URL(string : "http://www.allocine.fr/series/top/")!)
+            let doc : Document = try SwiftSoup.parse(page)
+            let showList = try doc.select("div [class='card entity-card entity-card-list cf']")
+            
+            for oneShow in showList {
+                let showName : String = try oneShow.select("h2").text()
+                let AlloCineID : String = try oneShow.select("a").attr("href").components(separatedBy: "=")[1].components(separatedBy: ".")[0]
+
+                showNames.append(showName)
+                showIds.append(AlloCineID)
+            }
+        }
+        catch let error as NSError { print("AlloCine failed for getShowList : \(error.localizedDescription)") }
+        
+        
+        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
+        return (showNames, showIds)
+    }
+    
+    
+    func getCritics(serie: String, saison: Int) -> [Critique] {
+        let startChrono : Date = Date()
+        var result : [Critique] = []
+        
+        var idAlloCine : String = indexWebPage[serie] ?? ""
+        if (idAlloCine == "") { idAlloCine = getID(serie: serie) }
+        if (idAlloCine == "") { return result }
+
+        let webPage : String = "http://www.allocine.fr/series/ficheserie-" + idAlloCine + "/critiques/presse/"
+        
+        do {
+            let page : String = try String(contentsOf: URL(string : webPage)!)
+            let doc : Document = try SwiftSoup.parse(page)
+            
+            let critics = try doc.select("div [class='item hred']")
+            
+            for oneCritic in critics {
+                let uneCritique : Critique = Critique()
+                
+                uneCritique.source = srcAlloCine
+                uneCritique.journal = try oneCritic.select("h2").text()
+                uneCritique.auteur = try oneCritic.select("div [class='eval-holder']").text().replacingOccurrences(of: "par ", with: "")
+                uneCritique.texte = try oneCritic.select("p").text()
+                uneCritique.saison = 0
+
+                result.append(uneCritique)
+            }
+        }
+        catch let error as NSError { print("AlloCine getCritics failed for \(serie): \(error.localizedDescription)") }
+        
+        chronoGlobal = chronoGlobal + Date().timeIntervalSince(startChrono)
+        return result
     }
 }

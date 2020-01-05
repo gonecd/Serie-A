@@ -217,4 +217,40 @@ class TVmaze {
         chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
         return serieListe
     }
+    
+    func getTrendingShows() -> (names : [String], ids : [String]) {
+        return getShowList(url: "https://www.tvmaze.com/shows")
+    }
+    
+    
+    func getPopularShows() -> (names : [String], ids : [String]) {
+        return getShowList(url: "https://www.tvmaze.com/shows?Show[sort]=7")
+    }
+    
+
+    func getShowList(url : String) -> (names : [String], ids : [String]) {
+        let startChrono : Date = Date()
+        var showNames : [String] = []
+        var showIds : [String] = []
+        
+        do {
+            let page : String = try String(contentsOf: URL(string : url)!)
+            let doc : Document = try SwiftSoup.parse(page)
+            let showList = try doc.select("div [class='card primary grid-x']")
+            
+            for oneShow in showList {
+                let showName : String = try oneShow.select("div [class='content auto cell']").select("a")[0].text()
+                let TVMazeID : String = try oneShow.select("div [class='content auto cell']").select("a")[0].attr("href").components(separatedBy: "/")[1]
+
+                showNames.append(showName)
+                showIds.append(TVMazeID)
+            }
+        }
+        catch let error as NSError { print("TVMaze failed for getShowList : \(error.localizedDescription)") }
+        
+        
+        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
+        return (showNames, showIds)
+    }
+    
 }

@@ -14,7 +14,7 @@ class RottenTomatoes {
     var chronoGlobal : TimeInterval = 0
     var chronoRatings : TimeInterval = 0
     var chronoOther : TimeInterval = 0
-
+    
     init() {
     }
     
@@ -151,5 +151,111 @@ class RottenTomatoes {
         default:
             return "https://www.rottentomatoes.com/tv/\(serie.lowercased().replacingOccurrences(of: "%", with: "_").replacingOccurrences(of: "'", with: "_").replacingOccurrences(of: " ", with: "_"))"
         }
+    }
+    
+    
+    func getTrendingShows() -> (names : [String], ids : [String]) {
+        return getShowList(url: "https://www.rottentomatoes.com/browse/tv-list-2")
+    }
+    
+    
+    func getPopularShows() -> (names : [String], ids : [String]) {
+        return getShowList(url: "https://www.rottentomatoes.com/browse/tv-list-3")
+    }
+    
+
+    func getShowList(url : String) -> (names : [String], ids : [String]) {
+        let startChrono : Date = Date()
+        var showNames : [String] = []
+        var showIds : [String] = []
+        
+        do {
+            let page : String = try String(contentsOf: URL(string : url)!)
+            let regex = try! NSRegularExpression(pattern: ".*(\\[\\{.*tomatoIcon.*\\}\\]).*", options: NSRegularExpression.Options.caseInsensitive)
+            let result = regex.firstMatch(in: page, options: [], range: NSMakeRange(0, page.count))
+            let json = page[Range(result!.range(at: 1), in: page)!].utf8
+            let jsonResponse : NSArray = try JSONSerialization.jsonObject(with: Data(json), options: JSONSerialization.ReadingOptions.mutableContainers) as! NSArray
+            
+            for onePropale in jsonResponse {
+                let titre : String = (((onePropale as! NSDictionary).object(forKey: "title")) as? String ?? "")
+                
+                if (titre.contains(": Season")) {
+                    let serie : String = titre.components(separatedBy: ": Season")[0]
+                    
+                    showNames.append(serie)
+                    showIds.append("")
+                }
+            }
+        }
+        catch let error as NSError { print("RottenTomatoes failed for getShowList : \(error.localizedDescription)") }
+        
+        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
+        return (showNames, showIds)
+    }
+    
+    func getCritics(serie: String, saison: Int) -> [Critique] {
+        let startChrono : Date = Date()
+        var result : [Critique] = []
+        var webPage : String = getPath(serie: serie)
+
+        if (webPage == "") { return result }
+        webPage = webPage + String(format: "/s%02d", saison) + "/reviews?type=top_critics"
+
+        do {
+            let page : String = try String(contentsOf: URL(string : webPage)!)
+            let doc : Document = try SwiftSoup.parse(page)
+            
+            let critics = try doc.select("div [class='row review_table_row']")
+            
+            for oneCritic in critics {
+                let uneCritique : Critique = Critique()
+                
+                uneCritique.source = srcRottenTom
+                uneCritique.journal = try oneCritic.select("div [class='col-sm-13 col-xs-24 col-sm-pull-4 critic_name']").select("a")[1].text()
+                uneCritique.auteur = try oneCritic.select("div [class='col-sm-13 col-xs-24 col-sm-pull-4 critic_name']").select("a")[0].text()
+                uneCritique.texte = try oneCritic.select("div [class='critic__review-quote']").text()
+                uneCritique.lien = try oneCritic.select("div [class='small subtle']").select("a").attr("href")
+                uneCritique.date = try oneCritic.select("div [class='critic__review-date subtle small']").text()
+                uneCritique.saison = saison
+
+                result.append(uneCritique)
+            }
+        }
+        catch let error as NSError { print("RottenTomatoes getCritics failed for \(serie): \(error.localizedDescription)") }
+        
+        chronoGlobal = chronoGlobal + Date().timeIntervalSince(startChrono)
+        return result
+    }
+    
+  
+    func getComments(serie: String, saison: Int, episode: Int) -> [Critique] {
+        let startChrono : Date = Date()
+        var result : [Critique] = []
+        var webPage : String = getPath(serie: serie)
+        
+        if (webPage == "") { return result }
+        webPage = webPage + String(format: "/s%02d/e%02d", saison, episode) + "/reviews"
+        
+        do {
+            let page : String = try String(contentsOf: URL(string : webPage)!)
+            let doc : Document = try SwiftSoup.parse(page)
+            let criticList = try doc.select("div [class='table table-striped']").select("tr")
+            
+            for oneCritic in criticList {
+                let uneCritique : Critique = Critique()
+                
+                uneCritique.source = srcRottenTom
+                uneCritique.journal = try oneCritic.select("[class='subtle']").text()
+                uneCritique.auteur = try oneCritic.select("[class='unstyled bold articleLink']").text()
+                uneCritique.texte = try oneCritic.select("p").text()
+                uneCritique.date = try oneCritic.select("tr")[0].select("[class='pull-right subtle small']").text()
+                
+                result.append(uneCritique)
+            }
+        }
+        catch let error as NSError { print("RottenTomatoes getCritics failed for \(serie): \(error.localizedDescription)") }
+        
+        chronoGlobal = chronoGlobal + Date().timeIntervalSince(startChrono)
+        return result
     }
 }

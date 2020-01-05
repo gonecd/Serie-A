@@ -93,8 +93,7 @@ class GraphMiniSaison: UIView {
     }
     
     
-    func computeValue(noteCurrentSeason : Int, totalPrevSeasons : Int, nbPrevSeasons : Int) -> Int
-    {
+    func computeValue(noteCurrentSeason : Int, totalPrevSeasons : Int, nbPrevSeasons : Int) -> Int {
         if ((nbPrevSeasons == 0) || (totalPrevSeasons == 0) ) { return 50 }
         
         let moyPrevSeasons : Int = Int( Double(totalPrevSeasons) / Double(nbPrevSeasons) )
@@ -220,8 +219,6 @@ class GraphMiniSaison: UIView {
     
     
     func traceAllEpisodes() {
-        var offset : CGFloat = 0.0
-        
         for unEpisode in theSerie.saisons[theSaison-1].episodes {
             traceUnPoint(note: unEpisode.getFairRatingTrakt(), ligne: 1, color: colorTrakt)
             traceUnPoint(note: unEpisode.getFairRatingBetaSeries(), ligne: 2, color: colorBetaSeries)
@@ -240,14 +237,13 @@ class GraphMiniSaison: UIView {
         var maxIMdb : Int = 0
 
         for unEpisode in theSerie.saisons[theSaison-1].episodes {
-            
-            if (unEpisode.getFairRatingTrakt() < minTrakt) { minTrakt = unEpisode.getFairRatingTrakt() }
+            if ((unEpisode.getFairRatingTrakt() < minTrakt) && (unEpisode.ratingTrakt != 0) ) { minTrakt = unEpisode.getFairRatingTrakt() }
             if (unEpisode.getFairRatingTrakt() > maxTrakt) { maxTrakt = unEpisode.getFairRatingTrakt() }
 
-            if (unEpisode.getFairRatingBetaSeries() < minBetaSeries) { minBetaSeries = unEpisode.getFairRatingBetaSeries() }
+            if ((unEpisode.getFairRatingBetaSeries() < minBetaSeries) && (unEpisode.ratingBetaSeries != 0) ) { minBetaSeries = unEpisode.getFairRatingBetaSeries() }
             if (unEpisode.getFairRatingBetaSeries() > maxBetaSeries) { maxBetaSeries = unEpisode.getFairRatingBetaSeries() }
 
-            if (unEpisode.getFairRatingIMdb() < minIMdb) { minIMdb = unEpisode.getFairRatingIMdb() }
+            if ((unEpisode.getFairRatingIMdb() < minIMdb) && (unEpisode.ratingIMdb != 0) ) { minIMdb = unEpisode.getFairRatingIMdb() }
             if (unEpisode.getFairRatingIMdb() > maxIMdb) { maxIMdb = unEpisode.getFairRatingIMdb() }
         }
 
@@ -327,6 +323,7 @@ class GraphMiniSaison: UIView {
         color.withAlphaComponent(0.25).setFill()
         
         var noteAffichee : Int = note
+        if (note == 0 ) { return }
         if (note > 100) { noteAffichee = 100 }
         if (note < 0) { noteAffichee = 0 }
         
@@ -368,7 +365,6 @@ class GraphMiniSaison: UIView {
         path.addLine(to: CGPoint(x: origineX + (largeur * CGFloat(mymax) / 100), y: origineY + size - (hauteur * CGFloat(25*ligne) / 100)))
         path.addLine(to: CGPoint(x: origineX + (largeur * CGFloat(mymin) / 100), y: origineY + size - (hauteur * CGFloat(25*ligne) / 100)))
         path.addLine(to: CGPoint(x: origineX + (largeur * CGFloat(mymin) / 100), y: origineY - size - (hauteur * CGFloat(25*ligne) / 100)))
-
         path.stroke()
         path.fill()
         

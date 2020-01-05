@@ -62,7 +62,6 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
         for i in 0..<sharedInfos.count {
             let labelSerie = UILabel(frame: CGRect(x: 75, y: 5+(hauteurParSaison*i), width: Int(size.width - 90) , height: 25))
-            labelSerie.textColor = .black
             labelSerie.font = .systemFont(ofSize: 24.0, weight : .heavy)
             labelSerie.textAlignment = .left
             labelSerie.text = sharedInfos[i].serie
@@ -71,21 +70,21 @@ class TodayViewController: UIViewController, NCWidgetProviding {
             let labelSaison = UILabel(frame: CGRect(x: Int(size.width - 120), y: 38+(hauteurParSaison*i), width: 40, height: 40))
             labelSaison.font = .systemFont(ofSize: 18.0, weight : .bold)
             labelSaison.backgroundColor = .white
-            labelSaison.textColor = .blue
+            labelSaison.textColor = .systemBlue
             labelSaison.textAlignment = .center
             labelSaison.text = "S" + String(sharedInfos[i].saison)
-            labelSaison.layer.borderColor = UIColor.blue.cgColor
+            labelSaison.layer.borderColor = UIColor.systemBlue.cgColor
             labelSaison.layer.borderWidth = 2
             labelSaison.layer.cornerRadius = 20
             labelSaison.layer.masksToBounds = true
             self.view.addSubview(labelSaison)
             
             let labelChannel = UILabel(frame: CGRect(x: 90, y: 40+(hauteurParSaison*i), width: 120, height: 15))
-            labelChannel.textColor = .darkGray
+            labelChannel.textColor = .systemGray
             labelChannel.font = UIFont.preferredFont(forTextStyle: .footnote)
             labelChannel.textAlignment = .center
             labelChannel.text = sharedInfos[i].channel
-            labelChannel.layer.borderColor = UIColor.darkGray.cgColor
+            labelChannel.layer.borderColor = UIColor.systemGray.cgColor
             labelChannel.layer.borderWidth = 1
             labelChannel.layer.cornerRadius = 7
             labelChannel.layer.masksToBounds = true
@@ -93,7 +92,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
             
             let labelAvance = UILabel(frame: CGRect(x: 120, y: 60+(hauteurParSaison*i), width: 200, height: 21))
             labelAvance.font = UIFont.preferredFont(forTextStyle: .footnote)
-            labelAvance.textColor = .darkGray
+            labelAvance.textColor = .systemGray
             labelAvance.textAlignment = .left
             labelAvance.text = String(sharedInfos[i].nbWatched) + " eps sur " + String(sharedInfos[i].nbEps)
             self.view.addSubview(labelAvance)
@@ -103,7 +102,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
             self.view.addSubview(poster)
             
             let grapheVus : GraphViewed = GraphViewed(frame: CGRect(x: 90, y: 60+(hauteurParSaison*i), width: 20, height: 20))
-            grapheVus.sendFigures(eps: sharedInfos[i].nbEps, watched: sharedInfos[i].nbWatched, color : UIColor.darkGray)
+            grapheVus.sendFigures(eps: sharedInfos[i].nbEps, watched: sharedInfos[i].nbWatched, color : UIColor.systemGray)
             grapheVus.setNeedsDisplay()
             self.view.addSubview(grapheVus)
             
@@ -127,7 +126,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
             self.view.addSubview(poster)
             
             let rateSerie = UILabel(frame: CGRect(x: largeur+((largeur+40)*i)-10, y: 5, width: 40, height: 20))
-            rateSerie.textColor = .blue
+            rateSerie.textColor = .systemBlue
             rateSerie.backgroundColor = .white
             rateSerie.font = .systemFont(ofSize: 12.0, weight : .heavy)
             rateSerie.textAlignment = .center
@@ -137,7 +136,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
             self.view.addSubview(rateSerie)
             
             let grapheVus : GraphViewed = GraphViewed(frame: CGRect(x: largeur+((largeur+40)*i)-5, y: 32, width: 30, height: 30))
-            grapheVus.sendFigures(eps: sharedInfos[i].nbEps, watched: sharedInfos[i].nbWatched, color : UIColor.blue)
+            grapheVus.sendFigures(eps: sharedInfos[i].nbEps, watched: sharedInfos[i].nbWatched, color : .systemBlue)
             grapheVus.setNeedsDisplay()
             self.view.addSubview(grapheVus)
             
@@ -180,7 +179,7 @@ class GraphViewed: UIView {
         
         // Couleur des lignes
         couleur.setStroke()
-        if (couleur == UIColor.blue) { UIColor.white.setFill() }
+        if (couleur == .systemBlue) { UIColor.white.setFill() }
         
         let centreX : CGFloat = self.frame.height / 2
         let centreY : CGFloat = self.frame.width / 2
@@ -195,7 +194,7 @@ class GraphViewed: UIView {
                     endAngle: 0,
                     clockwise: false)
         cercle.stroke()
-        if (couleur == UIColor.blue) {
+        if (couleur == .systemBlue) {
             UIColor.white.setFill()
             cercle.fill()
         }
@@ -224,16 +223,15 @@ class GraphViewed: UIView {
     
 class GraphRates: UIView {
     
-    let colorTrakt          : UIColor = UIColor.red
-    let colorTVdb           : UIColor = UIColor.gray
-    let colorBetaSeries     : UIColor = UIColor.blue
-    let colorIMDB           : UIColor = UIColor.orange
-    let colorMoviedb        : UIColor = UIColor.green
-    let colorTVmaze         : UIColor = UIColor.magenta
-    let colorRottenTomatoes : UIColor = UIColor.purple
+    let colorTrakt          : UIColor = .systemRed
+    let colorTVdb           : UIColor = .systemGray
+    let colorBetaSeries     : UIColor = .systemBlue
+    let colorIMDB           : UIColor = .systemOrange
+    let colorMoviedb        : UIColor = .systemGreen
+    let colorTVmaze         : UIColor = .systemTeal
+    let colorRottenTomatoes : UIColor = .systemPurple
     
-    let colorBackground : UIColor = UIColor.lightGray
-    let colorAxis       : UIColor = UIColor.darkGray
+    let colorAxis       : UIColor = .systemGray
 
     var noteTrakt : Int = 0
     var noteTVdb : Int = 0

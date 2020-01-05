@@ -83,16 +83,16 @@ func makeGradiant(carre : UIView, couleur : String) {
     carre.layer.shadowRadius = 10.0
 
     if (couleur == "Rouge") {
-        myGradient.colors = [UIColor(red: 148.0/255.0, green: 17.0/255.0, blue: 0.0, alpha: 1.0).cgColor, UIColor.red.cgColor]
+        myGradient.colors = [UIColor(red: 148.0/255.0, green: 17.0/255.0, blue: 0.0, alpha: 1.0).cgColor, UIColor.systemRed.cgColor]
     }
     else if (couleur == "Bleu") {
-        myGradient.colors = [UIColor(red: 1.0/255.0, green: 25.0/255.0, blue: 147.0/255.0, alpha: 1.0).cgColor, UIColor.blue.cgColor]
+        myGradient.colors = [UIColor(red: 1.0/255.0, green: 25.0/255.0, blue: 147.0/255.0, alpha: 1.0).cgColor, UIColor.systemBlue.cgColor]
     }
     else if (couleur == "Vert") {
         myGradient.colors = [UIColor(red: 0.0, green: 80.0/255.0, blue: 0.0, alpha: 1.0).cgColor, UIColor(red: 0.0, green: 143.0/255.0, blue: 0.0, alpha: 1.0).cgColor]
     }
     else if (couleur == "Gris") {
-        myGradient.colors = [UIColor.darkGray.cgColor, UIColor.gray.cgColor]
+        myGradient.colors = [UIColor.darkGray.cgColor, UIColor.systemGray.cgColor]
     }
     
     myGradient.startPoint = CGPoint(x: 0, y: 0)
@@ -112,16 +112,16 @@ func makeMiniGradiant(carre : UIView, couleur : String) {
     let myGradient : CAGradientLayer = CAGradientLayer()
     
     if (couleur == "Rouge") {
-        myGradient.colors = [UIColor(red: 148.0/255.0, green: 17.0/255.0, blue: 0.0, alpha: 1.0).cgColor, UIColor.red.cgColor]
+        myGradient.colors = [UIColor(red: 148.0/255.0, green: 17.0/255.0, blue: 0.0, alpha: 1.0).cgColor, UIColor.systemRed.cgColor]
     }
     else if (couleur == "Bleu") {
-        myGradient.colors = [UIColor(red: 1.0/255.0, green: 25.0/255.0, blue: 147.0/255.0, alpha: 1.0).cgColor, UIColor.blue.cgColor]
+        myGradient.colors = [UIColor(red: 1.0/255.0, green: 25.0/255.0, blue: 147.0/255.0, alpha: 1.0).cgColor, UIColor.systemBlue.cgColor]
     }
     else if (couleur == "Vert") {
         myGradient.colors = [UIColor(red: 0.0, green: 80.0/255.0, blue: 0.0, alpha: 1.0).cgColor, UIColor(red: 0.0, green: 143.0/255.0, blue: 0.0, alpha: 1.0).cgColor]
     }
     else if (couleur == "Gris") {
-        myGradient.colors = [UIColor.darkGray.cgColor, UIColor.gray.cgColor]
+        myGradient.colors = [UIColor.darkGray.cgColor, UIColor.systemGray.cgColor]
     }
     
     myGradient.startPoint = CGPoint(x: 0, y: 0)

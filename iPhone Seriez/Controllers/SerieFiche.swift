@@ -20,8 +20,9 @@ class CellSaison: UITableViewCell {
 class CellComment: UITableViewCell {
     @IBOutlet weak var logo: UIImageView!
     @IBOutlet weak var comment: UITextView!
-    @IBOutlet weak var likes: UILabel!
     @IBOutlet weak var date: UILabel!
+    @IBOutlet weak var journal: UILabel!
+    @IBOutlet weak var auteur: UILabel!
 }
 
 
@@ -29,8 +30,8 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
     
     var serie : Serie = Serie(serie: "")
     var image : UIImage = UIImage()
-    var webOpinions : (comments : [String], likes : [Int], dates : [Date], source : [Int]) = ([], [], [], [])
-    
+    var allCritics : [Critique] = []
+
     @IBOutlet weak var resume: UITextView!
     @IBOutlet weak var banniere: UIImageView!
     @IBOutlet weak var graphe: Graph!
@@ -52,10 +53,16 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
     @IBOutlet weak var annee: UILabel!
     @IBOutlet weak var note: UILabel!
 
+    @IBOutlet weak var labelInfos: UILabel!
+    @IBOutlet weak var labelResume: UILabel!
+    @IBOutlet weak var labelNotes: UILabel!
+    @IBOutlet weak var labelSaisons: UILabel!
+    @IBOutlet weak var labelCritiques: UILabel!
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+                
         title = serie.serie
         
         let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleGesture))
@@ -67,6 +74,12 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
         self.view.addGestureRecognizer(swipeRight)
 
         pageControl.addTarget(self, action: #selector(self.changePage(sender:)), for: UIControl.Event.valueChanged)
+        
+        arrondirLabel(texte: labelInfos, radius: 10)
+        arrondirLabel(texte: labelResume, radius: 10)
+        arrondirLabel(texte: labelNotes, radius: 10)
+        arrondirLabel(texte: labelSaisons, radius: 10)
+        arrondirLabel(texte: labelCritiques, radius: 10)
         
         annee.text = String(serie.year)
         resume.text = serie.resume
@@ -94,11 +107,11 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
         // Affichage du status
         if (serie.status == "Ended") {
             status.text = "FINIE"
-            status.textColor = UIColor.black
+            status.textColor = .black
         }
         else {
             status.text = "EN COURS"
-            status.textColor = UIColor.blue
+            status.textColor = .systemBlue
         }
         
         // Remplissage des labels
@@ -112,25 +125,27 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
 
         let queue : OperationQueue = OperationQueue()
 
-        let opeReviews = BlockOperation(block: {
-            self.webOpinions = theMoviedb.getReviews(movieDBid: self.serie.idMoviedb)
+        let opeCritics = BlockOperation(block: {
+            self.allCritics.append(contentsOf: alloCine.getCritics(serie: self.serie.serie, saison: 1))
             OperationQueue.main.addOperation({
-                self.viewComments.reloadData()
-                self.viewComments.setNeedsLayout()
-            } )
-
-            let webOpinionsTmp : (comments : [String], likes : [Int], dates : [Date], source : [Int]) = trakt.getComments(IMDBid: self.serie.idIMdb, season: 0, episode: 0)
-            self.webOpinions.comments.append(contentsOf: webOpinionsTmp.comments)
-            self.webOpinions.likes.append(contentsOf: webOpinionsTmp.likes)
-            self.webOpinions.dates.append(contentsOf: webOpinionsTmp.dates)
-            self.webOpinions.source.append(contentsOf: webOpinionsTmp.source)
+                 self.viewComments.reloadData()
+                 self.viewComments.setNeedsLayout()
+             } )
+            
+            self.allCritics.append(contentsOf: rottenTomatoes.getCritics(serie: self.serie.serie, saison: 1))
             OperationQueue.main.addOperation({
-                self.viewComments.reloadData()
-                self.viewComments.setNeedsLayout()
-            } )
+                 self.viewComments.reloadData()
+                 self.viewComments.setNeedsLayout()
+             } )
+            
+            self.allCritics.append(contentsOf: metaCritic.getCritics(serie: self.serie.serie, saison: 1))
+            OperationQueue.main.addOperation({
+                 self.viewComments.reloadData()
+                 self.viewComments.setNeedsLayout()
+             } )
         } )
-        queue.addOperation(opeReviews)
-
+        queue.addOperation(opeCritics)
+       
         let opRates = BlockOperation(block: {
             if (self.serie.idTVdb != "") { betaSeries.getEpisodesRatings(self.serie) }
             OperationQueue.main.addOperation({
@@ -167,7 +182,7 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
             } )
         } )
         opeFinalise.addDependency(opRates)
-        opeFinalise.addDependency(opeReviews)
+        opeFinalise.addDependency(opeCritics)
         queue.addOperation(opeFinalise)
 
     }
@@ -178,7 +193,7 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if (tableView == viewSaisons) { return serie.saisons.count }
-        else { return webOpinions.comments.count }
+        else { return allCritics.count }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -205,11 +220,16 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
         }
         else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "CellComment", for: indexPath) as! CellComment
-            cell.comment.text = webOpinions.comments[indexPath.row]
-            if (webOpinions.likes[indexPath.row] > 0) { cell.likes.text = String(webOpinions.likes[indexPath.row]) + " likes" }
-            if (webOpinions.dates[indexPath.row] != ZeroDate) { cell.date.text = dateFormatter.string(from: webOpinions.dates[indexPath.row]) }
-            if (webOpinions.source[indexPath.row] == sourceTrakt) { cell.logo.image = #imageLiteral(resourceName: "trakt.ico") }
-            if (webOpinions.source[indexPath.row] == sourceMovieDB) { cell.logo.image = #imageLiteral(resourceName: "themoviedb.ico") }
+
+            cell.comment.text = allCritics[indexPath.row].texte
+            cell.date.text = allCritics[indexPath.row].date
+            cell.journal.text = allCritics[indexPath.row].journal
+            cell.auteur.text = allCritics[indexPath.row].auteur
+
+            if (allCritics[indexPath.row].source == srcMetaCritic) { cell.logo.image = #imageLiteral(resourceName: "metacritic.png") }
+            if (allCritics[indexPath.row].source == srcRottenTom) { cell.logo.image = #imageLiteral(resourceName: "rottentomatoes.ico") }
+            if (allCritics[indexPath.row].source == srcAlloCine) { cell.logo.image = #imageLiteral(resourceName: "allocine.ico") }
+
             return cell
         }
     }

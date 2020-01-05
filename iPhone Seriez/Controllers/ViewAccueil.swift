@@ -45,10 +45,13 @@ class ViewAccueil: UIViewController  {
         makeGradiant(carre: cadreSaisonEncours, couleur : "Rouge")
         makeGradiant(carre: cadreSerieWatchlist, couleur : "Vert")
         makeGradiant(carre: cadreRecherche, couleur : "Vert")
-        makeGradiant(carre: cadreConseil, couleur : "Vert")
-        makeGradiant(carre: cadreConseil, couleur : "Vert")
         makeGradiant(carre: cadreConfiguration, couleur : "Gris")
         makeGradiant(carre: cadreReload, couleur : "Gris")
+        
+        // iPad spécific
+        if (UIDevice.current.userInterfaceIdiom == .pad) {
+            makeGradiant(carre: cadreConseil, couleur : "Vert")
+        }
 
         // Faire des jolis compteurs à coins ronds
         arrondir(texte: cptSeriesFinies, radius : 10.0)
@@ -252,6 +255,14 @@ class ViewAccueil: UIViewController  {
 //            print(" Saisons[\(uneSaison.saison)] = \(uneSaison.episodes.count) épisodes comptés et \(uneSaison.nbEpisodes) déclarés, \(uneSaison.nbWatchedEps) vus")
 //        }
 
+//        // Regenerate Refresh Dates
+//        let defaults = UserDefaults.standard
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateFormat = "dd/MM/yyyy HH:mm"
+//        defaults.set(dateFormatter.string(from: Date()), forKey: "RefreshDates")
+//        defaults.set(dateFormatter.string(from: Date()), forKey: "RefreshIMDB")
+
+        
         db.quickRefresh()
         db.finaliseDB()
         db.shareWithWidget()

@@ -16,7 +16,7 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
     var image : UIImage = UIImage()
     var saison : Int = 0
     var episode : Int = 0
-    var webOpinions : (comments : [String], likes : [Int], dates : [Date], source : [Int]) = ([], [], [], [])
+    var allComments : [Critique] = []
     @IBOutlet weak var boutonVuUnEp: UIView!
 
     @IBOutlet weak var resume: UITextView!
@@ -30,7 +30,8 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
     @IBOutlet weak var labelNotes: UILabel!
     @IBOutlet weak var labelResume: UILabel!
     @IBOutlet weak var labelcommentaires: UILabel!
-    
+    @IBOutlet weak var labelLiens: UILabel!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -39,15 +40,17 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
         arrondirLabel(texte: labelNotes, radius: 10)
         arrondirLabel(texte: labelResume, radius: 10)
         arrondirLabel(texte: labelcommentaires, radius: 10)
-        
+        arrondirLabel(texte: labelLiens, radius: 10)
+
         makeGradiant(carre: boutonVuUnEp, couleur: "Rouge")
         if (episode <= serie.saisons[saison - 1].nbWatchedEps) {
             boutonVuUnEp.isHidden = true
         }
 
-        
-        webOpinions = trakt.getComments(IMDBid: self.serie.idIMdb, season: saison, episode: episode)
-        
+        allComments.append(contentsOf: imdb.getComments(IMDBid: self.serie.saisons[self.saison-1].episodes[self.episode-1].idIMdb))
+        allComments.append(contentsOf: trakt.getComments(IMDBid: self.serie.idIMdb, season: self.saison, episode: self.episode))
+        allComments.append(contentsOf: rottenTomatoes.getComments(serie: self.serie.serie, saison: self.saison, episode: self.episode))
+
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale.current
         dateFormatter.dateFormat = "dd MMM yy"
@@ -73,22 +76,20 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return webOpinions.comments.count
+        return allComments.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale.current
-        dateFormatter.dateFormat = "dd MMM yy"
-        
         let cell = tableView.dequeueReusableCell(withIdentifier: "CellComment", for: indexPath) as! CellComment
-        cell.comment.text = webOpinions.comments[indexPath.row]
-        
-        if (webOpinions.likes[indexPath.row] > 0) { cell.likes.text = String(webOpinions.likes[indexPath.row]) + " likes" }
-        if (webOpinions.dates[indexPath.row] != ZeroDate) { cell.date.text = dateFormatter.string(from: webOpinions.dates[indexPath.row]) }
-        if (webOpinions.source[indexPath.row] == sourceTrakt) { cell.logo.image = #imageLiteral(resourceName: "trakt.ico") }
-        if (webOpinions.source[indexPath.row] == sourceMovieDB) { cell.logo.image = #imageLiteral(resourceName: "themoviedb.ico") }
+        cell.comment.text = allComments[indexPath.row].texte
+        cell.date.text = allComments[indexPath.row].date
+        cell.journal.text = allComments[indexPath.row].journal
+        cell.auteur.text = allComments[indexPath.row].auteur
+
+        if (allComments[indexPath.row].source == srcTrakt) { cell.logo.image = #imageLiteral(resourceName: "trakt.ico") }
+        if (allComments[indexPath.row].source == srcIMdb) { cell.logo.image = #imageLiteral(resourceName: "imdb.ico") }
+        if (allComments[indexPath.row].source == srcRottenTom) { cell.logo.image = #imageLiteral(resourceName: "rottentomatoes.ico") }
+
         return cell
     }
     

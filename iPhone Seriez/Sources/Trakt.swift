@@ -46,7 +46,7 @@ class Trakt : NSObject {
             return true
         }
         else {
-            self.downloadToken(key: "02FA9441")
+            self.downloadToken(key: "1DCAC123")
             
             return false
         }
@@ -130,8 +130,46 @@ class Trakt : NSObject {
         task.resume()
         while (task.state != URLSessionTask.State.completed) { sleep(1) }
     }
+
     
-    
+    func getIDs(serie: Serie) -> Bool {
+        let startChrono : Date = Date()
+        let uneSerie : Serie = Serie(serie: "")
+        var request : URLRequest
+        var found : Bool = false
+        
+        if (serie.idIMdb != "") { request = URLRequest(url: URL(string: "https://api.trakt.tv/shows/\(serie.idIMdb)")!) }
+        else                    { request = URLRequest(url: URL(string: "https://api.trakt.tv/shows/\(serie.slug())")!) }
+        
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("Bearer \(self.Token)", forHTTPHeaderField: "Authorization")
+        request.addValue("2", forHTTPHeaderField: "trakt-api-version")
+        request.addValue("\(self.TraktClientID)", forHTTPHeaderField: "trakt-api-key")
+        
+        let task = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
+            if let data = data, let response = response as? HTTPURLResponse {
+                do {
+                    if (response.statusCode != 200) { print("Trakt::getIDs \(serie.serie) error \(response.statusCode) received "); return; }
+                    
+                    let jsonResponse : NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
+                    
+                    found = true
+                    uneSerie.idIMdb = (jsonResponse.object(forKey: "ids")! as AnyObject).object(forKey: "imdb") as? String ?? ""
+                    uneSerie.idTVdb = String((jsonResponse.object(forKey: "ids")! as AnyObject).object(forKey: "tvdb") as? Int ?? 0)
+                    uneSerie.idTrakt = String((jsonResponse.object(forKey: "ids")! as AnyObject).object(forKey: "trakt") as? Int ?? 0)
+                    uneSerie.idMoviedb = String((jsonResponse.object(forKey: "ids")! as AnyObject).object(forKey: "tmdb") as? Int ?? 0)
+                    
+                } catch let error as NSError { print("Trakt::getIDs \(serie.serie) failed: \(error.localizedDescription)") }
+            } else { print(error as Any) }
+        })
+        
+        task.resume()
+        while (task.state != URLSessionTask.State.completed) { usleep(1000) }
+        
+        chronoGlobal = chronoGlobal + Date().timeIntervalSince(startChrono)
+
+        return found
+    }
     
     
     func recherche(serieArechercher : String, aChercherDans : String) -> [Serie]
@@ -878,7 +916,7 @@ class Trakt : NSObject {
                         foundComments.append(comment)
                         foundLikes.append(oneLike)
                         foundDates.append(oneDate)
-                        foundSource.append(sourceTrakt)
+                        foundSource.append(srcTrakt)
                     }
                     
                     ended = true
@@ -895,4 +933,62 @@ class Trakt : NSObject {
         return (foundComments, foundLikes, foundDates, foundSource)
     }
     
+    
+    func getComments(IMDBid : String, season : Int, episode : Int) -> [Critique] {
+        let startChrono : Date = Date()
+        var stringURL : String = ""
+        var ended : Bool = false
+        var result : [Critique] = []
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        
+        if (episode == 0) {
+            if (season == 0) {
+                stringURL = "https://api.trakt.tv/shows/\(IMDBid)/comments/likes"
+            }
+            else {
+                stringURL = "https://api.trakt.tv/shows/\(IMDBid)/seasons/\(season)/comments/likes"
+            }
+        } else {
+            stringURL = "https://api.trakt.tv/shows/\(IMDBid)/seasons/\(season)/episodes/\(episode)/comments/likes"
+        }
+        
+        
+        var request = URLRequest(url: URL(string: stringURL)!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("Bearer \(self.Token)", forHTTPHeaderField: "Authorization")
+        request.addValue("2", forHTTPHeaderField: "trakt-api-version")
+        request.addValue("\(self.TraktClientID)", forHTTPHeaderField: "trakt-api-key")
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let data = data, let response = response as? HTTPURLResponse {
+                do {
+                    if (response.statusCode != 200) { print("Trakt::getComments : error \(response.statusCode) received "); ended = true; return; }
+                    
+                    let jsonResponse : NSArray = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSArray
+                    
+                    for oneComment in jsonResponse
+                    {
+                        let uneCritique : Critique = Critique()
+                        
+                        uneCritique.source = srcTrakt
+                        uneCritique.texte = ((oneComment as! NSDictionary).object(forKey: "comment")) as? String ?? ""
+                        uneCritique.date = ((oneComment as! NSDictionary).object(forKey: "created_at")) as? String ?? ""
+
+                        result.append(uneCritique)
+                    }
+                    
+                    ended = true
+                    
+                } catch let error as NSError { print("Trakt::getComments : \(error.localizedDescription)"); ended = true; }
+            } else { print(error as Any); ended = true; }
+        }
+        
+        task.resume()
+        while (!ended) { usleep(1000) }
+        
+        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
+        return result
+    }
 }

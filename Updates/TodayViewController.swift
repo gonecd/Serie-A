@@ -58,9 +58,8 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         }
     }
 
-    func addLabel(x : Int, y : Int, w : Int, h : Int, color : UIColor, size : CGFloat, weight : UIFont.Weight, alignement : NSTextAlignment, text : String) {
+    func addLabel(x : Int, y : Int, w : Int, h : Int, size : CGFloat, weight : UIFont.Weight, alignement : NSTextAlignment, text : String) {
         let myLabel = UILabel(frame: CGRect(x: x, y: y, width: w , height: h))
-        myLabel.textColor = color
         myLabel.font = .systemFont(ofSize: size, weight : weight)
         myLabel.textAlignment = alignement
         myLabel.text = text
@@ -92,37 +91,37 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         var netColor : UIColor
         
         for i in 0..<sharedInfos.count {
-            addLabel(x : 15, y : 5+(hauteurParUpdate*i), w : 100, h : 25, color : .black, size : 15.0, weight : .bold, alignement : .center, text : sharedInfos[sharedInfos.count-1-i].timestamp)
+            addLabel(x : 15, y : 5+(hauteurParUpdate*i), w : 100, h : 25, size : 15.0, weight : .bold, alignement : .center, text : sharedInfos[sharedInfos.count-1-i].timestamp)
             
             switch sharedInfos[sharedInfos.count-1-i].network {
-            case "WiFi" : netColor = .green
-            case "No net" : netColor = .red
-            case "4G" : netColor = .orange
-            case "3G" : netColor = .orange
-            case "2G" : netColor = .orange
-            default : netColor = .darkGray
+            case "WiFi" : netColor = .systemGreen
+            case "No net" : netColor = .systemRed
+            case "4G" : netColor = .systemOrange
+            case "3G" : netColor = .systemOrange
+            case "2G" : netColor = .systemOrange
+            default : netColor = .systemGray
             }
             addRoundLabel(x : 140, y : 10+(hauteurParUpdate*i), w : 50, h : 15, color : netColor, size : 12.0, weight : .regular, text : sharedInfos[sharedInfos.count-1-i].network)
 
             if (sharedInfos[sharedInfos.count-1-i].refreshDates == "No") {
-                addRoundLabel(x : 200, y : 10+(hauteurParUpdate*i), w : 40, h : 15, color : .red, size : 12.0, weight : .regular, text : "No")
+                addRoundLabel(x : 200, y : 10+(hauteurParUpdate*i), w : 40, h : 15, color : .systemRed, size : 12.0, weight : .regular, text : "No")
             }
             else {
-                addLabel(x : 200, y : 10+(hauteurParUpdate*i), w : 40, h : 15, color : .black, size : 12.0, weight : .regular, alignement : .right, text : sharedInfos[sharedInfos.count-1-i].refreshDates)
+                addLabel(x : 200, y : 10+(hauteurParUpdate*i), w : 40, h : 15, size : 12.0, weight : .regular, alignement : .right, text : sharedInfos[sharedInfos.count-1-i].refreshDates)
             }
 
             if (sharedInfos[sharedInfos.count-1-i].refreshIMDB == "No") {
-                addRoundLabel(x : 250, y : 10+(hauteurParUpdate*i), w : 40, h : 15, color : .red, size : 12.0, weight : .regular, text : "No")
+                addRoundLabel(x : 250, y : 10+(hauteurParUpdate*i), w : 40, h : 15, color : .systemRed, size : 12.0, weight : .regular, text : "No")
             }
             else {
-                addLabel(x : 250, y : 10+(hauteurParUpdate*i), w : 40, h : 15, color : .black, size : 12.0, weight : .regular, alignement : .right, text : sharedInfos[sharedInfos.count-1-i].refreshIMDB)
+                addLabel(x : 250, y : 10+(hauteurParUpdate*i), w : 40, h : 15, size : 12.0, weight : .regular, alignement : .right, text : sharedInfos[sharedInfos.count-1-i].refreshIMDB)
             }
 
             if (sharedInfos[sharedInfos.count-1-i].refreshViewed == "No") {
-                addRoundLabel(x : 300, y : 10+(hauteurParUpdate*i), w : 40, h : 15, color : .red, size : 12.0, weight : .regular, text : "No")
+                addRoundLabel(x : 300, y : 10+(hauteurParUpdate*i), w : 40, h : 15, color : .systemRed, size : 12.0, weight : .regular, text : "No")
             }
             else {
-                addLabel(x : 300, y : 10+(hauteurParUpdate*i), w : 40, h : 15, color : .black, size : 12.0, weight : .regular, alignement : .right, text : sharedInfos[sharedInfos.count-1-i].refreshViewed)
+                addLabel(x : 300, y : 10+(hauteurParUpdate*i), w : 40, h : 15, size : 12.0, weight : .regular, alignement : .right, text : sharedInfos[sharedInfos.count-1-i].refreshViewed)
             }
         }
     }
@@ -148,9 +147,9 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         }
         
         // Ajout des titres
-        addLabel(x : 100, y : 13, w : 80, h : 25, color : .black, size : 12.0, weight : .regular, alignement : .center, text : "Dates saisons")
-        addLabel(x : 190, y : 13, w : 80, h : 25, color : .black, size : 12.0, weight : .regular, alignement : .center, text : "Notes IMDB")
-        addLabel(x : 280, y : 13, w : 80, h : 25, color : .black, size : 12.0, weight : .regular, alignement : .center, text : "Episodes vus")
+        addLabel(x : 100, y : 13, w : 80, h : 25, size : 12.0, weight : .regular, alignement : .center, text : "Dates saisons")
+        addLabel(x : 190, y : 13, w : 80, h : 25, size : 12.0, weight : .regular, alignement : .center, text : "Notes IMDB")
+        addLabel(x : 280, y : 13, w : 80, h : 25, size : 12.0, weight : .regular, alignement : .center, text : "Episodes vus")
         
         // Ajout des logos
         addImage(x : 100, y : 45, w : 48, h : 48, image : #imageLiteral(resourceName: "tvmaze.ico"))
@@ -158,9 +157,9 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         addImage(x : 280, y : 45, w : 48, h : 48, image : #imageLiteral(resourceName: "trakt.ico"))
 
         // Ajout des heures
-        addLabel(x : 150, y : 80, w : 40, h : 15, color : .darkGray, size : 12.0, weight : .regular, alignement : .left, text : dates)
-        addLabel(x : 240, y : 80, w : 40, h : 15, color : .darkGray, size : 12.0, weight : .regular, alignement : .left, text : imdb)
-        addLabel(x : 330, y : 80, w : 40, h : 15, color : .darkGray, size : 12.0, weight : .regular, alignement : .left, text : viewed)
+        addLabel(x : 150, y : 80, w : 40, h : 15, size : 11.0, weight : .light, alignement : .left, text : dates)
+        addLabel(x : 240, y : 80, w : 40, h : 15, size : 11.0, weight : .light, alignement : .left, text : imdb)
+        addLabel(x : 330, y : 80, w : 40, h : 15, size : 11.0, weight : .light, alignement : .left, text : viewed)
         
         
         // Ajout des flags
@@ -186,8 +185,8 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         }
         
         // Ajout de Today + Nb Updates
-        addLabel(x : 5, y : 10, w : 100, h : 25, color : .black, size : 24.0, weight : .heavy, alignement : .left, text : "Today :")
-        addLabel(x : 15, y : 30, w : 70, h : 25, color : .black, size : 12.0, weight : .regular, alignement : .left, text : "(" + String(cptUpdates) + " updates)")
+        addLabel(x : 5, y : 10, w : 100, h : 25, size : 24.0, weight : .heavy, alignement : .left, text : "Today :")
+        addLabel(x : 15, y : 30, w : 70, h : 25, size : 12.0, weight : .regular, alignement : .left, text : "(" + String(cptUpdates) + " updates)")
     }
     
     

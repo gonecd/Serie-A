@@ -240,15 +240,15 @@ class ViewSearch: UIViewController
         let button : UIButton = sender as! UIButton
         
         if (button.isSelected == false) {
-            button.setTitleColor(UIColor.green, for: .selected)
+            button.setTitleColor(.systemGreen, for: .selected)
             button.isSelected = true
         }
-        else if ((button.isSelected == true) && (button.titleColor(for: .selected) == UIColor.green )) {
-            button.setTitleColor(UIColor.red, for: .selected)
+        else if ((button.isSelected == true) && (button.titleColor(for: .selected) == .systemGreen )) {
+            button.setTitleColor(.systemRed, for: .selected)
             button.isSelected = true
         }
-        else if ((button.isSelected == true) && (button.titleColor(for: .selected) == UIColor.red )) {
-            button.setTitleColor(UIColor.green, for: .selected)
+        else if ((button.isSelected == true) && (button.titleColor(for: .selected) == .systemRed )) {
+            button.setTitleColor(.systemGreen, for: .selected)
             button.isSelected = false
         }
     }
@@ -317,25 +317,25 @@ class ViewSearch: UIViewController
         
         // Choix des genres
         var tmpGenres : String = ""
-        if (action.isSelected && (action.titleColor(for: .selected) == UIColor.green)) { tmpGenres = tmpGenres + "Action, " }
-        if (adventure.isSelected && (adventure.titleColor(for: .selected) == UIColor.green)) { tmpGenres = tmpGenres + "Adventure, " }
-        if (animation.isSelected && (animation.titleColor(for: .selected) == UIColor.green)) { tmpGenres = tmpGenres + "Animation, " }
-        if (comedy.isSelected && (comedy.titleColor(for: .selected) == UIColor.green)) { tmpGenres = tmpGenres + "Comedy, " }
-        if (crime.isSelected && (crime.titleColor(for: .selected) == UIColor.green)) { tmpGenres = tmpGenres + "Crime, " }
-        if (documentary.isSelected && (documentary.titleColor(for: .selected) == UIColor.green)) { tmpGenres = tmpGenres + "Documentary, " }
-        if (drama.isSelected && (drama.titleColor(for: .selected) == UIColor.green)) { tmpGenres = tmpGenres + "Drama, " }
-        if (family.isSelected && (family.titleColor(for: .selected) == UIColor.green)) { tmpGenres = tmpGenres + "Family, " }
-        if (fantasy.isSelected && (fantasy.titleColor(for: .selected) == UIColor.green)) { tmpGenres = tmpGenres + "Fantasy, " }
-        if (history.isSelected && (history.titleColor(for: .selected) == UIColor.green)) { tmpGenres = tmpGenres + "History, " }
-        if (horror.isSelected && (horror.titleColor(for: .selected) == UIColor.green)) { tmpGenres = tmpGenres + "Horror, " }
-        if (music.isSelected && (music.titleColor(for: .selected) == UIColor.green)) { tmpGenres = tmpGenres + "Music, " }
-        if (mystery.isSelected && (mystery.titleColor(for: .selected) == UIColor.green)) { tmpGenres = tmpGenres + "Mystery, " }
-        if (romance.isSelected && (romance.titleColor(for: .selected) == UIColor.green)) { tmpGenres = tmpGenres + "Romance, " }
-        if (scienceFiction.isSelected && (scienceFiction.titleColor(for: .selected) == UIColor.green)) { tmpGenres = tmpGenres + "Science Fiction, " }
-        if (tvMovie.isSelected && (tvMovie.titleColor(for: .selected) == UIColor.green)) { tmpGenres = tmpGenres + "TV Movie, " }
-        if (thriller.isSelected && (thriller.titleColor(for: .selected) == UIColor.green)) { tmpGenres = tmpGenres + "Thriller, " }
-        if (war.isSelected && (war.titleColor(for: .selected) == UIColor.green)) { tmpGenres = tmpGenres + "War, " }
-        if (western.isSelected && (western.titleColor(for: .selected) == UIColor.green)) { tmpGenres = tmpGenres + "Western, " }
+        if (action.isSelected && (action.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "Action, " }
+        if (adventure.isSelected && (adventure.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "Adventure, " }
+        if (animation.isSelected && (animation.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "Animation, " }
+        if (comedy.isSelected && (comedy.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "Comedy, " }
+        if (crime.isSelected && (crime.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "Crime, " }
+        if (documentary.isSelected && (documentary.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "Documentary, " }
+        if (drama.isSelected && (drama.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "Drama, " }
+        if (family.isSelected && (family.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "Family, " }
+        if (fantasy.isSelected && (fantasy.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "Fantasy, " }
+        if (history.isSelected && (history.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "History, " }
+        if (horror.isSelected && (horror.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "Horror, " }
+        if (music.isSelected && (music.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "Music, " }
+        if (mystery.isSelected && (mystery.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "Mystery, " }
+        if (romance.isSelected && (romance.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "Romance, " }
+        if (scienceFiction.isSelected && (scienceFiction.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "Science Fiction, " }
+        if (tvMovie.isSelected && (tvMovie.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "TV Movie, " }
+        if (thriller.isSelected && (thriller.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "Thriller, " }
+        if (war.isSelected && (war.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "War, " }
+        if (western.isSelected && (western.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "Western, " }
         if (tmpGenres == "" ) { descriptionTexte.text = descriptionTexte.text + "\n\ntous genres confondus" }
         else {
             tmpGenres.removeLast()
@@ -345,25 +345,25 @@ class ViewSearch: UIViewController
         
         // TODO : exclusions de genres
         var tmpGenres2 : String = ""
-        if (action.isSelected && (action.titleColor(for: .selected) == UIColor.red)) { tmpGenres2 = tmpGenres2 + "Action, " }
-        if (adventure.isSelected && (adventure.titleColor(for: .selected) == UIColor.red)) { tmpGenres2 = tmpGenres2 + "Adventure, " }
-        if (animation.isSelected && (animation.titleColor(for: .selected) == UIColor.red)) { tmpGenres2 = tmpGenres2 + "Animation, " }
-        if (comedy.isSelected && (comedy.titleColor(for: .selected) == UIColor.red)) { tmpGenres2 = tmpGenres2 + "Comedy, " }
-        if (crime.isSelected && (crime.titleColor(for: .selected) == UIColor.red)) { tmpGenres2 = tmpGenres2 + "Crime, " }
-        if (documentary.isSelected && (documentary.titleColor(for: .selected) == UIColor.red)) { tmpGenres2 = tmpGenres2 + "Documentary, " }
-        if (drama.isSelected && (drama.titleColor(for: .selected) == UIColor.red)) { tmpGenres2 = tmpGenres2 + "Drama, " }
-        if (family.isSelected && (family.titleColor(for: .selected) == UIColor.red)) { tmpGenres2 = tmpGenres2 + "Family, " }
-        if (fantasy.isSelected && (fantasy.titleColor(for: .selected) == UIColor.red)) { tmpGenres2 = tmpGenres2 + "Fantasy, " }
-        if (history.isSelected && (history.titleColor(for: .selected) == UIColor.red)) { tmpGenres2 = tmpGenres2 + "History, " }
-        if (horror.isSelected && (horror.titleColor(for: .selected) == UIColor.red)) { tmpGenres2 = tmpGenres2 + "Horror, " }
-        if (music.isSelected && (music.titleColor(for: .selected) == UIColor.red)) { tmpGenres2 = tmpGenres2 + "Music, " }
-        if (mystery.isSelected && (mystery.titleColor(for: .selected) == UIColor.red)) { tmpGenres2 = tmpGenres2 + "Mystery, " }
-        if (romance.isSelected && (romance.titleColor(for: .selected) == UIColor.red)) { tmpGenres2 = tmpGenres2 + "Romance, " }
-        if (scienceFiction.isSelected && (scienceFiction.titleColor(for: .selected) == UIColor.red)) { tmpGenres2 = tmpGenres2 + "Science Fiction, " }
-        if (tvMovie.isSelected && (tvMovie.titleColor(for: .selected) == UIColor.red)) { tmpGenres2 = tmpGenres2 + "TV Movie, " }
-        if (thriller.isSelected && (thriller.titleColor(for: .selected) == UIColor.red)) { tmpGenres2 = tmpGenres2 + "Thriller, " }
-        if (war.isSelected && (war.titleColor(for: .selected) == UIColor.red)) { tmpGenres2 = tmpGenres2 + "War, " }
-        if (western.isSelected && (western.titleColor(for: .selected) == UIColor.red)) { tmpGenres2 = tmpGenres2 + "Western, " }
+        if (action.isSelected && (action.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "Action, " }
+        if (adventure.isSelected && (adventure.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "Adventure, " }
+        if (animation.isSelected && (animation.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "Animation, " }
+        if (comedy.isSelected && (comedy.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "Comedy, " }
+        if (crime.isSelected && (crime.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "Crime, " }
+        if (documentary.isSelected && (documentary.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "Documentary, " }
+        if (drama.isSelected && (drama.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "Drama, " }
+        if (family.isSelected && (family.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "Family, " }
+        if (fantasy.isSelected && (fantasy.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "Fantasy, " }
+        if (history.isSelected && (history.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "History, " }
+        if (horror.isSelected && (horror.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "Horror, " }
+        if (music.isSelected && (music.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "Music, " }
+        if (mystery.isSelected && (mystery.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "Mystery, " }
+        if (romance.isSelected && (romance.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "Romance, " }
+        if (scienceFiction.isSelected && (scienceFiction.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "Science Fiction, " }
+        if (tvMovie.isSelected && (tvMovie.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "TV Movie, " }
+        if (thriller.isSelected && (thriller.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "Thriller, " }
+        if (war.isSelected && (war.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "War, " }
+        if (western.isSelected && (western.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "Western, " }
         if (tmpGenres2 == "" ) { descriptionTexte.text = descriptionTexte.text + "" }
         else {
             tmpGenres2.removeLast()

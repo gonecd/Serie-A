@@ -24,48 +24,49 @@ var rottenTomatoes : RottenTomatoes = RottenTomatoes.init()
 var metaCritic     : MetaCritic     = MetaCritic.init()
 var alloCine       : AlloCine       = AlloCine.init()
 
-var db          : Database   = Database.init()
+var db : Database   = Database.init()
 
 // Code des source
-let sourceTrakt         : Int = 0
-let sourceTVdb          : Int = 1
-let sourceBetaSeries    : Int = 2
-let sourceMovieDB       : Int = 3
-let sourceIMdb          : Int = 4
+let srcTrakt      : Int = 1
+let srcTVdb       : Int = 2
+let srcBetaSeries : Int = 3
+let srcMovieDB    : Int = 4
+let srcIMdb       : Int = 5
+let srcTVMaze     : Int = 6
+let srcMetaCritic : Int = 7
+let srcRottenTom  : Int = 8
+let srcAlloCine   : Int = 9
+
+// Code des source
+let typeTrending : Int = 1
+let typePopular  : Int = 2
+
 
 // Limitations de chargement
-let similarShowsPerSource       : Int = 8
-let popularShowsPerSource       : Int = 10
+let similarShowsPerSource : Int = 8
+let popularShowsPerSource : Int = 20
 
 
 // Couleurs de remplissage des sources
-let colorTrakt          : UIColor = UIColor.red
-let colorTVdb           : UIColor = UIColor.lightGray
-let colorBetaSeries     : UIColor = UIColor.blue
-let colorIMDB           : UIColor = UIColor.orange
-let colorMoviedb        : UIColor = UIColor.green
-let colorTVmaze         : UIColor = UIColor.magenta
-let colorRottenTomatoes : UIColor = UIColor.purple
-let colorMetaCritic     : UIColor = UIColor.black
-let colorAlloCine       : UIColor = UIColor.brown
+let colorTrakt          : UIColor = .systemRed
+let colorTVdb           : UIColor = .systemGray
+let colorBetaSeries     : UIColor = .systemBlue
+let colorIMDB           : UIColor = .systemOrange
+let colorMoviedb        : UIColor = .systemGreen
+let colorTVmaze         : UIColor = .systemTeal
+let colorRottenTomatoes : UIColor = .systemPurple
+let colorMetaCritic     : UIColor = .systemIndigo
+let colorAlloCine       : UIColor = .systemYellow
 
+let colorAxis       : UIColor = UIColor.systemGray2
 
-//class var black: NSColor
-//class var brown: NSColor
-//class var darkGray: NSColor
-//class var gray: NSColor
-//class var lightGray: NSColor
-//class var yellow: NSColor
-
-
-let colorBackground : UIColor = UIColor.lightGray
-let colorAxis       : UIColor = UIColor.darkGray
 
 // Categories pour les conseils
 let categInconnues      : Int = 0
 let categWatchlist      : Int = 1
 let categAbandonnees    : Int = 2
 let categSuivies        : Int = 3
+let categFinies         : Int = 4
 
 // Genres on MovieDB
 let genresMovieDB: NSDictionary = [

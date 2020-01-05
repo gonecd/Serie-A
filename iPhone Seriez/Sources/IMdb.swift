@@ -8,6 +8,7 @@
 
 import Foundation
 import SeriesCommon
+import SwiftSoup
 import Gzip
 
 class IMdb : NSObject {
@@ -15,7 +16,7 @@ class IMdb : NSObject {
     var chronoGlobal : TimeInterval = 0
     var chronoRatings : TimeInterval = 0
     var chronoOther : TimeInterval = 0
-
+    
     override init() {
         super.init()
     }
@@ -91,5 +92,73 @@ class IMdb : NSObject {
         return uneSerie
     }
 
+    
+    func getTrendingShows() -> (names : [String], ids : [String]) {
+        return getShowList(url: "https://www.imdb.com/chart/tvmeter")
+    }
+    
+    
+    func getPopularShows() -> (names : [String], ids : [String]) {
+        return getShowList(url: "https://www.imdb.com/chart/toptv")
+    }
+    
+
+    func getShowList(url : String) -> (names : [String], ids : [String]) {
+        let startChrono : Date = Date()
+        var showNames : [String] = []
+        var showIds : [String] = []
+        
+        do {
+            let page : String = try String(contentsOf: URL(string : url)!)
+            let doc : Document = try SwiftSoup.parse(page)
+            let showList = try doc.select("tr")
+            
+            for oneShow in showList {
+                if (try oneShow.select("td").count > 1) {
+                    let showName : String = try oneShow.select("td")[1].select("a").text()
+                    let IMDBid : String = try oneShow.select("td")[1].select("a").attr("href").components(separatedBy: "/")[2]
+                    
+                    showNames.append(showName)
+                    showIds.append(IMDBid)
+                }
+            }
+        }
+        catch let error as NSError { print("IMdb failed for getShowList : \(error.localizedDescription)") }
+        
+        
+        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
+        return (showNames, showIds)
+    }
+    
+
+    func getComments(IMDBid : String) -> [Critique] {
+        let startChrono : Date = Date()
+        var result : [Critique] = []
+        let url : String = "https://www.imdb.com/title/\(IMDBid)/reviews?spoiler=hide&sort=helpfulnessScore&dir=desc&ratingFilter=0"
+        
+        do {
+            let page : String = try String(contentsOf: URL(string : url)!)
+            let doc : Document = try SwiftSoup.parse(page)
+            let commentList = try doc.select("div [class='review-container']")
+            
+            for oneComment in commentList {
+                let uneCritique : Critique = Critique()
+                
+                uneCritique.source = srcIMdb
+                uneCritique.journal = try oneComment.select("[class='title']").text()
+                uneCritique.auteur = try oneComment.select("[class='display-name-link']").text()
+                uneCritique.texte = try oneComment.select("div [class='text']").text()
+                uneCritique.date = try oneComment.select("[class='review-date']").text()
+                uneCritique.note = try oneComment.select("[class='rating-other-user-rating']").text()
+                
+                result.append(uneCritique)
+            }
+        }
+        catch let error as NSError { print("IMdb failed for getShowList : \(error.localizedDescription)") }
+
+        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
+        return result
+    }
+    
 }
 

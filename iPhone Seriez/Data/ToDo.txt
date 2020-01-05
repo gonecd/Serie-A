@@ -26,3 +26,16 @@ New feature
   Mainboard iPad
 
 
+
+
+Commentaires d'épisodes :
+
+* BetaSeries = https://api.betaseries.com/comments/comments?v=3.0&id=433224&type=episode&replies=0&order=desc (+ besoin de recup les id d'épisodes : https://api.betaseries.com/shows/episodes?v=3.0&thetvdb_id=121361&season=5)
+* Trakt = déjà implémenté
+* TheMovieDB : none
+* RottenTomatoes : https://www.rottentomatoes.com/tv/game_of_thrones/s08/e04/reviews
+* IMDB : https://www.imdb.com/title/tt6027912/reviews?spoiler=hide&sort=helpfulnessScore&dir=desc&ratingFilter=0
+* AlloCine : none
+* TheTVdb : none
+* TV Maze : none
+* MetaCritic : https://www.metacritic.com/tv/ray-donovan/season-2/episode-8-sunny/user-reviews?sort-by=most-helpful&num_items=100

@@ -81,7 +81,7 @@ class ViewSerieListe: UITableViewController {
         }
         else {
             cell.status.text = "EN COURS"
-            cell.status.textColor = UIColor.blue
+            cell.status.textColor = .systemBlue
         }
         
         // Affichage du drapeau
@@ -123,7 +123,7 @@ class ViewSerieListe: UITableViewController {
             self.liste.reloadData()
             self.view.setNeedsDisplay()
         }
-        reload.backgroundColor = .green
+        reload.backgroundColor = .systemGreen
         
         let remove = UIContextualAction(style: .destructive, title: "Remove") {  (contextualAction, view, boolValue) in
             if (self.supprimerUneSerieDansLaWatchlistTrakt(uneSerie: self.viewList[indexPath.row])) {
@@ -132,7 +132,7 @@ class ViewSerieListe: UITableViewController {
                 self.view.setNeedsDisplay()
             }
         }
-        remove.backgroundColor = .red
+        remove.backgroundColor = .systemRed
 
         let addWatchlist = UIContextualAction(style: .destructive, title: "Add to watchlist") {  (contextualAction, view, boolValue) in
             if (trakt.addToWatchlist(theTVdbId: self.viewList[indexPath.row].idTVdb)) {
@@ -142,7 +142,7 @@ class ViewSerieListe: UITableViewController {
                 db.saveDB()
             }
         }
-        addWatchlist.backgroundColor = .purple
+        addWatchlist.backgroundColor = .systemPurple
 
         if (self.isWatchlist) { return UISwipeActionsConfiguration(actions: [reload, remove]) }
         else if (self.isPropositions) { return UISwipeActionsConfiguration(actions: [addWatchlist]) }

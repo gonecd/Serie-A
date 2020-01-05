@@ -116,7 +116,7 @@ class ViewSaisonListe: UITableViewController {
                     let nbEps : Int = uneSaison.nbEpisodes - uneSaison.nbEpisodesDiffuses()
                     cell.jours.text = "\(nbEps) eps"
                     let alpha : CGFloat = 1.0 - CGFloat(min(20, nbEps)) / CGFloat(20)
-                    cell.viewBgd.layer.borderColor = UIColor.blue.withAlphaComponent(alpha).cgColor
+                    cell.viewBgd.layer.borderColor = UIColor.systemBlue.withAlphaComponent(alpha).cgColor
                 }
                 else {
                     cell.miniGraphe.isHidden = false
@@ -137,7 +137,7 @@ class ViewSaisonListe: UITableViewController {
                 let nbJours : Int = daysBetweenDates(startDate: Date(), endDate: uneSaison.starts)
                 cell.jours.text = "J - \(nbJours)"
                 let alpha : CGFloat = CGFloat(max(0, 180 - nbJours)) / CGFloat(180)
-                cell.viewBgd.layer.borderColor = UIColor.red.withAlphaComponent(alpha).cgColor
+                cell.viewBgd.layer.borderColor = UIColor.systemRed.withAlphaComponent(alpha).cgColor
             }
             
             cell.viewBgd.layer.cornerRadius = 10.0
@@ -179,7 +179,7 @@ class ViewSaisonListe: UITableViewController {
             self.liste.reloadData()
             self.view.setNeedsDisplay()
         }
-        reload.backgroundColor = .green
+        reload.backgroundColor = .systemGreen
         
         return UISwipeActionsConfiguration(actions: [reload])
     }

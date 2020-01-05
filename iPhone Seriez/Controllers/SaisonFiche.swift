@@ -22,11 +22,15 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
     var serie : Serie = Serie(serie: "")
     var image : UIImage = UIImage()
     var saison : Int = 0
+    var allCritics : [Critique] = []
 
     @IBOutlet weak var banniere: UIImageView!
     @IBOutlet weak var graphe: GraphSaison!
     @IBOutlet weak var episodesList: UITableView!
-    @IBOutlet weak var table: UITableView!
+    @IBOutlet weak var criticList: UITableView!
+
+    @IBOutlet weak var labelEpisodes: UILabel!
+    @IBOutlet weak var labelCritiques: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,9 +42,28 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         graphe.setNeedsDisplay()
         theTVdb.getEpisodesDetailsAndRating(uneSerie: self.serie)
 
-        
+        arrondirLabel(texte: labelEpisodes, radius: 10)
+        arrondirLabel(texte: labelCritiques, radius: 10)
+
         let queue : OperationQueue = OperationQueue()
 
+        if (UIDevice.current.userInterfaceIdiom == .pad) {
+            let opeCritics = BlockOperation(block: {
+                self.allCritics.append(contentsOf: rottenTomatoes.getCritics(serie: self.serie.serie, saison: self.saison))
+                OperationQueue.main.addOperation({
+                    self.criticList.reloadData()
+                    self.criticList.setNeedsLayout()
+                } )
+                
+                self.allCritics.append(contentsOf: metaCritic.getCritics(serie: self.serie.serie, saison: self.saison))
+                OperationQueue.main.addOperation({
+                    self.criticList.reloadData()
+                    self.criticList.setNeedsLayout()
+                } )
+            } )
+            queue.addOperation(opeCritics)
+        }
+        
         let opeLoadBetaSeries = BlockOperation(block: {
             if (self.serie.idTVdb != "") { betaSeries.getEpisodesRatings(self.serie) }
             self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
@@ -99,20 +122,12 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
-        if (segue.identifier == "showEpisode") {
-            let viewController = segue.destination as! EpisodeFiche
-            let collectionCell : CellEpisode = sender as! CellEpisode
-            viewController.serie = serie
-            viewController.saison = saison
-            viewController.image = image
-            viewController.episode = Int(collectionCell.numero.text!)!
-        }
-        else {
-            let viewController = segue.destination as! SerieFiche
-            viewController.serie = serie
-            viewController.image = image
-        }
+        let viewController = segue.destination as! EpisodeFiche
+        let collectionCell : CellEpisode = sender as! CellEpisode
+        viewController.serie = serie
+        viewController.saison = saison
+        viewController.image = image
+        viewController.episode = Int(collectionCell.numero.text!)!
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -120,25 +135,43 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return serie.saisons[saison - 1].episodes.count
+        if (tableView == episodesList) { return serie.saisons[saison - 1].episodes.count }
+        else { return allCritics.count }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CellEpisode", for: indexPath) as! CellEpisode
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale.current
-        dateFormatter.dateFormat = "dd MMM yy"
         
-        cell.numero.text = String(indexPath.row + 1)
-        cell.titre.text = serie.saisons[saison - 1].episodes[indexPath.row].titre
-        
-        if (serie.saisons[saison - 1].episodes[indexPath.row].date == ZeroDate) { cell.date.text = "TBD" }
-        else { cell.date.text = dateFormatter.string(from: serie.saisons[saison - 1].episodes[indexPath.row].date) }
-        
-        if ( (indexPath.row + 1) > serie.saisons[saison - 1].nbWatchedEps) { cell.vu.isHidden = true }
-        else { cell.vu.isHidden = false }
+        if (tableView == episodesList) {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "CellEpisode", for: indexPath) as! CellEpisode
+            let dateFormatter = DateFormatter()
+            dateFormatter.locale = Locale.current
+            dateFormatter.dateFormat = "dd MMM yy"
+            
+            cell.numero.text = String(indexPath.row + 1)
+            cell.titre.text = serie.saisons[saison - 1].episodes[indexPath.row].titre
+            
+            if (serie.saisons[saison - 1].episodes[indexPath.row].date == ZeroDate) { cell.date.text = "TBD" }
+            else { cell.date.text = dateFormatter.string(from: serie.saisons[saison - 1].episodes[indexPath.row].date) }
+            
+            if ( (indexPath.row + 1) > serie.saisons[saison - 1].nbWatchedEps) { cell.vu.isHidden = true }
+            else { cell.vu.isHidden = false }
+            
+            return cell
+        }
+        else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "CellComment", for: indexPath) as! CellComment
 
-        return cell
+            cell.comment.text = allCritics[indexPath.row].texte
+            cell.date.text = allCritics[indexPath.row].date
+            cell.journal.text = allCritics[indexPath.row].journal
+            cell.auteur.text = allCritics[indexPath.row].auteur
+
+            if (allCritics[indexPath.row].source == srcMetaCritic) { cell.logo.image = #imageLiteral(resourceName: "metacritic.png") }
+            if (allCritics[indexPath.row].source == srcRottenTom) { cell.logo.image = #imageLiteral(resourceName: "rottentomatoes.ico") }
+            if (allCritics[indexPath.row].source == srcAlloCine) { cell.logo.image = #imageLiteral(resourceName: "allocine.ico") }
+
+            return cell
+        }
     }
     
 }
