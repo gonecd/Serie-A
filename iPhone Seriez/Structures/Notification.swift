@@ -48,9 +48,6 @@ func loadIMDB() {
 
 
 func loadDates() {
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "dd MMMM yyyy"
-    
     for uneSerie in db.shows {
         if ( (uneSerie.watchlist == false) && (uneSerie.unfollowed == false) && (uneSerie.status != "Ended") ){
             let svgSerie : Serie = uneSerie
@@ -65,16 +62,16 @@ func loadDates() {
                 
                 // La saison n'existait pas
                 if (uneSaison.saison > svgSerie.saisons.count) {
-                    if (uneSaison.starts.compare(Date()) == .orderedDescending) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) commencera le \(dateFormatter.string(from: uneSaison.starts))") }
-                    if (uneSaison.ends.compare(Date()) == .orderedDescending) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) finira le \(dateFormatter.string(from: uneSaison.ends))") }
+                    if (uneSaison.starts.compare(Date()) == .orderedDescending) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) commencera le \(dateFormLong.string(from: uneSaison.starts))") }
+                    if (uneSaison.ends.compare(Date()) == .orderedDescending) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) finira le \(dateFormLong.string(from: uneSaison.ends))") }
                 }
                 else {
                     // La saison existait et les dates ont changé
                     if (uneSaison.starts != svgSerie.saisons[uneSaison.saison-1].starts) {
-                        if (uneSaison.starts.compare(Date()) == .orderedDescending) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) commencera le \(dateFormatter.string(from: uneSaison.starts))") }
+                        if (uneSaison.starts.compare(Date()) == .orderedDescending) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) commencera le \(dateFormLong.string(from: uneSaison.starts))") }
                     }
                     if (uneSaison.ends != svgSerie.saisons[uneSaison.saison-1].ends) {
-                        if (uneSaison.ends.compare(Date()) == .orderedDescending) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) finira le \(dateFormatter.string(from: uneSaison.ends))") }
+                        if (uneSaison.ends.compare(Date()) == .orderedDescending) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) finira le \(dateFormLong.string(from: uneSaison.ends))") }
                     }
                 }
             }

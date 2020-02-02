@@ -662,8 +662,6 @@ class Trakt : NSObject {
     func getSaisons(uneSerie : Serie)
     {
         let startChrono : Date = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
 
         var request = URLRequest(url: URL(string: "https://api.trakt.tv/shows/\(uneSerie.idTrakt)/seasons?extended=full")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -696,14 +694,14 @@ class Trakt : NSObject {
                                 }
                                 
                                 let stringDate : String = ((uneSaison as! NSDictionary).object(forKey: "first_aired")) as? String ?? ""
-                                if (stringDate !=  "") { uneSerie.saisons[saisonNum - 1].starts = dateFormatter.date(from: String(stringDate.dropLast(14)))! }
+                                if (stringDate !=  "") { uneSerie.saisons[saisonNum - 1].starts = dateFormSource.date(from: String(stringDate.dropLast(14)))! }
                             }
                             else
                             {
                                 let ficheSaison : Saison = Saison(serie: uneSerie.serie, saison: saisonNum)
                                 ficheSaison.nbEpisodes = ((uneSaison as! NSDictionary).object(forKey: "episode_count")) as? Int ?? 0
                                 let stringDate : String = ((uneSaison as! NSDictionary).object(forKey: "first_aired")) as? String ?? ""
-                                if (stringDate !=  "") { ficheSaison.starts = dateFormatter.date(from: String(stringDate.dropLast(14)))! }
+                                if (stringDate !=  "") { ficheSaison.starts = dateFormSource.date(from: String(stringDate.dropLast(14)))! }
 
                                 uneSerie.saisons.append(ficheSaison)
                             }

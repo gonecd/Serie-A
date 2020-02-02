@@ -218,3 +218,26 @@ class AlloCine : NSObject {
         return result
     }
 }
+
+
+/*
+ ==> AlloCine - ID non trouvé : Hard (2008)
+ ==> AlloCine - ID non trouvé : War of the Worlds
+ 
+ 
+ RottenTomatoes failed: The file “outlander” couldn’t be opened.
+ RottenTomatoes failed: The file “what_we_do_in_the_shadows” couldn’t be opened.
+ RottenTomatoes failed: The file “death_note” couldn’t be opened.
+ RottenTomatoes failed: The file “hard_(2008)” couldn’t be opened.
+ RottenTomatoes failed: The file “true_blood” couldn’t be opened.
+ 
+ 
+ MetaCritic failed: The file “hard-(2008)” couldn’t be opened.
+ MetaCritic failed: The file “war-of-the-worlds” couldn’t be opened.
+ 
+ 
+ TVmaze::getSerieGlobalInfos error 404 received for id=361041 / tt9844334
+ 
+ 
+ */
+

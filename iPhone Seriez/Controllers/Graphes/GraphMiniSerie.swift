@@ -10,7 +10,7 @@ import UIKit
 class GraphMiniSerie: UIView {
     
     var noteTrakt : Int = 0
-    var noteTVdb : Int = 0
+//    var noteTVdb : Int = 0
     var noteBetaSeries : Int = 0
     var noteIMDB : Int = 0
     var noteRottenTomatoes : Int = 0
@@ -68,7 +68,7 @@ class GraphMiniSerie: UIView {
         nbNotes = 0
         
         if (rateTrakt > 0) { nbNotes = nbNotes + 1 }
-        if (rateTVdb > 0) { nbNotes = nbNotes + 1 }
+//        if (rateTVdb > 0) { nbNotes = nbNotes + 1 }
         if (rateBetaSeries > 0) { nbNotes = nbNotes + 1 }
         if (rateIMdb > 0) { nbNotes = nbNotes + 1 }
         if (rateRottenTomatoes > 0) { nbNotes = nbNotes + 1 }
@@ -79,7 +79,7 @@ class GraphMiniSerie: UIView {
         if (nbNotes == 0) { nbNotes = 1 }
 
         noteTrakt = rateTrakt
-        noteTVdb = rateTVdb
+//        noteTVdb = rateTVdb
         noteBetaSeries = rateBetaSeries
         noteIMDB = rateIMdb
         noteRottenTomatoes = rateRottenTomatoes
@@ -156,10 +156,10 @@ class GraphMiniSerie: UIView {
             traceUneBarre(noteTrakt, color: colorTrakt, offset: offset)
         }
         
-        if (noteTVdb > 0) {
-            offset = offset + 1
-            traceUneBarre(noteTVdb, color: colorTVdb, offset: offset)
-        }
+//        if (noteTVdb > 0) {
+//            offset = offset + 1
+//            traceUneBarre(noteTVdb, color: colorTVdb, offset: offset)
+//        }
 
         if (noteBetaSeries > 0) {
             offset = offset + 1
@@ -224,10 +224,10 @@ class GraphMiniSerie: UIView {
             traceUnCercle(noteTrakt, color: colorTrakt, offset: offset)
         }
         
-        if (noteTVdb > 0) {
-            offset = offset + 1
-            traceUnCercle(noteTVdb, color: colorTVdb, offset: offset)
-        }
+//        if (noteTVdb > 0) {
+//            offset = offset + 1
+//            traceUnCercle(noteTVdb, color: colorTVdb, offset: offset)
+//        }
         
         if (noteBetaSeries > 0) {
             offset = offset + 1

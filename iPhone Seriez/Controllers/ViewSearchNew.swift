@@ -18,24 +18,31 @@ class ViewSearchNew: UIViewController
     @IBOutlet weak var advanced: UIView!
     
     var seriesTrouvees : [Serie] = []
-        
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         makeGradiant(carre: advanced, couleur : "Gris")
     }
-
+    
     
     @IBAction func chercher(_ sender: Any) {
-        // https://medium.com/@garg.vivek/primary-action-event-of-uitextfield-87fdac46b648
-        
         if (recherche.text!.count > 2) {
             let searchString : String = recherche.text!
             
-            let dataTrakt : [Serie] = trakt.rechercheParTitre(serieArechercher: searchString)
-            let dataBetaSeries : [Serie] = betaSeries.rechercheParTitre(serieArechercher: searchString)
-            let dataTheMovieDB : [Serie] = theMoviedb.rechercheParTitre(serieArechercher: searchString)
-            let dataTVMaze : [Serie] = tvMaze.rechercheParTitre(serieArechercher: searchString)
+            var dataTrakt       : [Serie] = []
+            var dataBetaSeries  : [Serie] = []
+            var dataTheMovieDB  : [Serie] = []
+            var dataTVMaze      : [Serie] = []
+            
+            let queue : OperationQueue = OperationQueue()
+            
+            queue.addOperation(BlockOperation(block: { dataBetaSeries = betaSeries.rechercheParTitre(serieArechercher: searchString) } ))
+            queue.addOperation(BlockOperation(block: { dataTheMovieDB = theMoviedb.rechercheParTitre(serieArechercher: searchString) } ))
+            queue.addOperation(BlockOperation(block: { dataTVMaze = tvMaze.rechercheParTitre(serieArechercher: searchString) } ))
+            queue.addOperation(BlockOperation(block: { dataTrakt = trakt.rechercheParTitre(serieArechercher: searchString) } ))
+            
+            queue.waitUntilAllOperationsAreFinished()
             
             seriesTrouvees = mergeResults(dataTrakt: dataTrakt, dataBetaSeries: dataBetaSeries, dataTheMovieDB: dataTheMovieDB, dataTVMaze: dataTVMaze)
             performSegue(withIdentifier: "showSearchResults", sender: nil)
@@ -57,7 +64,7 @@ class ViewSearchNew: UIViewController
             var uneSerieTVMaze : Serie = emptySerie
             var uneSerieIMDB : Serie = emptySerie
             uneSerieIMDB = imdb.getSerieGlobalInfos(idIMDB: uneSerieTrakt.idIMdb)
-
+            
             for i in 0..<dataBetaSeries.count { if (uneSerieTrakt.idIMdb == dataBetaSeries[i].idIMdb) { uneSerieBetaSeries = dataBetaSeries[i]; break; } }
             for i in 0..<dataTheMovieDB.count { if (uneSerieTrakt.idMoviedb == dataTheMovieDB[i].idMoviedb) { uneSerieMovieDB = dataTheMovieDB[i]; break; } }
             for i in 0..<dataTVMaze.count { if (uneSerieTrakt.idIMdb == dataTVMaze[i].idIMdb) { uneSerieTVMaze = dataTVMaze[i]; break; } }
@@ -116,20 +123,20 @@ class ViewSearchNew: UIViewController
             if traitees.contains(uneSerieMovieDB.serie) { continue }
             result.append(uneSerieMovieDB)
         }
-
-        return result.sorted(by: { ($0.ratingTrakt + $0.ratingBetaSeries + $0.ratingMovieDB + $0.ratingTVmaze) > ($1.ratingTrakt + $1.ratingBetaSeries + $1.ratingMovieDB + $1.ratingTVmaze) })
+        
+        return Array(result.sorted(by: { ($0.ratingTrakt + $0.ratingBetaSeries + $0.ratingMovieDB + $0.ratingTVmaze) > ($1.ratingTrakt + $1.ratingBetaSeries + $1.ratingMovieDB + $1.ratingTVmaze) }).prefix(12))
     }
     
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (seriesTrouvees != [] && segue.identifier == "showSearchResults") {
             let viewController = segue.destination as! ViewSerieListe
-
+            
             viewController.title = "Propositions de séries"
             viewController.viewList = seriesTrouvees
             viewController.isPropositions = true
         }
     }
-
+    
 }
 

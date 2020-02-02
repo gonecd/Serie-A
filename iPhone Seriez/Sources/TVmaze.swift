@@ -118,8 +118,6 @@ class TVmaze {
         var foundDebuts : [Date] = []
         var foundFins : [Date] = []
         var ended : Bool = false
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
         
         if (idTVmaze == "") {
             print("TVmaze::getSeasonsDates failed : no ID")
@@ -144,11 +142,11 @@ class TVmaze {
                         
                         let debutStr : String = ((uneSaison as! NSDictionary).object(forKey: "premiereDate")) as? String ?? ""
                         var debutDate : Date = ZeroDate
-                        if (debutStr !=  "") { debutDate = dateFormatter.date(from: debutStr)! }
+                        if (debutStr !=  "") { debutDate = dateFormSource.date(from: debutStr)! }
                         
                         let finStr : String = ((uneSaison as! NSDictionary).object(forKey: "endDate")) as? String ?? ""
                         var finDate : Date = ZeroDate
-                        if (finStr !=  "") { finDate = dateFormatter.date(from: finStr)! }
+                        if (finStr !=  "") { finDate = dateFormSource.date(from: finStr)! }
                         
                         foundSaisons.append(saison)
                         foundEps.append(nbEp)
@@ -247,7 +245,6 @@ class TVmaze {
             }
         }
         catch let error as NSError { print("TVMaze failed for getShowList : \(error.localizedDescription)") }
-        
         
         chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
         return (showNames, showIds)

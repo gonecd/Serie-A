@@ -34,6 +34,14 @@ class ViewAccueil: UIViewController  {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Initialize date formatters
+        dateFormShort.locale = Locale.current
+        dateFormShort.dateFormat = "dd MMM yy"
+        dateFormLong.locale = Locale.current
+        dateFormLong.dateFormat = "dd MMM yyyy"
+        dateFormSource.locale = Locale.current
+        dateFormSource.dateFormat = "yyyy-MM-dd"
+
         checkDirectories()
         
         // Faire des jolis carrés dégradés à coins ronds
@@ -208,51 +216,21 @@ class ViewAccueil: UIViewController  {
     
  
     @IBAction func quickReload(_ sender: Any) {
-        //        print("serie;IMDB;TVDB;Trakt;BetaSeries;MovieDB;TVmaze;RottenTomatoes;MetaCritic;AlloCine;")
-        //
-        //        for uneSerie in db.shows {
-        //            print("\(uneSerie.serie);\(uneSerie.ratingIMDB);\(uneSerie.ratingTVDB);\(uneSerie.ratingTrakt);\(uneSerie.ratingBetaSeries);\(uneSerie.ratingMovieDB);\(uneSerie.ratingTVmaze);\(uneSerie.ratingRottenTomatoes);\(uneSerie.ratingMetaCritic);\(uneSerie.ratingAlloCine);")
-        //        }
+
+//        // Print all series rates
+//        print("serie;IMDB;TVDB;Trakt;BetaSeries;MovieDB;TVmaze;RottenTomatoes;MetaCritic;AlloCine;")
+//        for uneSerie in db.shows {
+//            print("\(uneSerie.serie);\(uneSerie.ratingIMDB);\(uneSerie.ratingTVDB);\(uneSerie.ratingTrakt);\(uneSerie.ratingBetaSeries);\(uneSerie.ratingMovieDB);\(uneSerie.ratingTVmaze);\(uneSerie.ratingRottenTomatoes);\(uneSerie.ratingMetaCritic);\(uneSerie.ratingAlloCine);")
+//        }
         
-//                print("serie;saison;episode;ratingTVdb;ratersTVdb;ratingTrakt;ratersTrakt;ratingBetaSeries;ratersBetaSeries;ratingIMdb;ratersIMdb;ratingMoviedb;ratersMoviedb;")
-//
+//        // Print all episodes rates
+//        print("serie;saison;episode;ratingTVdb;ratersTVdb;ratingTrakt;ratersTrakt;ratingBetaSeries;ratersBetaSeries;ratingIMdb;ratersIMdb;ratingMoviedb;ratersMoviedb;")
 //        for uneSerie in db.shows {
 //            for uneSaison in uneSerie.saisons {
 //                for unEpisode in uneSaison.episodes {
 //                    print("\(unEpisode.serie);\(unEpisode.saison);\(unEpisode.episode);\(unEpisode.ratingTVdb);\(unEpisode.ratersTVdb);\(unEpisode.ratingTrakt);\(unEpisode.ratersTrakt);\(unEpisode.ratingBetaSeries);\(unEpisode.ratersBetaSeries);\(unEpisode.ratingIMdb);\(unEpisode.ratersIMdb);\(unEpisode.ratingMoviedb);\(unEpisode.ratersMoviedb);")
 //                }
 //            }
-//        }
-//
-
-        
-//        let uneSerie : Serie = Serie(serie: "Death Note")
-//        let refSerie : Serie = db.shows[db.index[uneSerie.serie] ?? 1]
-//
-//        uneSerie.idIMdb = refSerie.idIMdb
-//        uneSerie.idTVdb = refSerie.idTVdb
-//        uneSerie.idTrakt = refSerie.idTrakt
-//        uneSerie.idMoviedb = refSerie.idMoviedb
-//        uneSerie.idTVmaze = refSerie.idTVmaze
-//
-//        db.downloadGlobalInfo(serie : uneSerie)
-//
-//        print("Serie : \(uneSerie.serie)")
-//        print(" NbEpisodes : \(uneSerie.nbEpisodes)")
-//        print(" NbSaisons : \(uneSerie.nbSaisons)")
-//        print(" Saisons count : \(uneSerie.saisons.count)")
-//        for uneSaison in uneSerie.saisons {
-//            print(" Saisons[\(uneSaison.saison)] = \(uneSaison.episodes.count) épisodes comptés et \(uneSaison.nbEpisodes) déclarés, \(uneSaison.nbWatchedEps) vus")
-//        }
-//
-//        db.downloadDates(serie: uneSerie)
-//
-//        print("Serie : \(uneSerie.serie)")
-//        print(" NbEpisodes : \(uneSerie.nbEpisodes)")
-//        print(" NbSaisons : \(uneSerie.nbSaisons)")
-//        print(" Saisons count : \(uneSerie.saisons.count)")
-//        for uneSaison in uneSerie.saisons {
-//            print(" Saisons[\(uneSaison.saison)] = \(uneSaison.episodes.count) épisodes comptés et \(uneSaison.nbEpisodes) déclarés, \(uneSaison.nbWatchedEps) vus")
 //        }
 
 //        // Regenerate Refresh Dates

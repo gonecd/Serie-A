@@ -197,20 +197,16 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale.current
-        dateFormatter.dateFormat = "dd MMM yy"
-        
         if (tableView == viewSaisons) {
             let cell = tableView.dequeueReusableCell(withIdentifier: "CellSaison", for: indexPath) as! CellSaison
             cell.saison.text = "Saison " + String(indexPath.row + 1)
             cell.episodes.text = String(serie.saisons[indexPath.row].nbEpisodes) + " épisodes"
             
             if (serie.saisons[indexPath.row].starts == ZeroDate) { cell.debut.text = "TBD" }
-            else { cell.debut.text = dateFormatter.string(from: serie.saisons[indexPath.row].starts) }
+            else { cell.debut.text = dateFormShort.string(from: serie.saisons[indexPath.row].starts) }
 
             if (serie.saisons[indexPath.row].ends == ZeroDate) { cell.fin.text = "TBD" }
-            else { cell.fin.text = dateFormatter.string(from: serie.saisons[indexPath.row].ends) }
+            else { cell.fin.text = dateFormShort.string(from: serie.saisons[indexPath.row].ends) }
             
             cell.graphe.setSerie(serie: serie, saison: indexPath.row + 1)
             cell.graphe.setType(type: 3)

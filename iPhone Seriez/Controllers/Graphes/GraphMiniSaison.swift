@@ -375,6 +375,8 @@ class GraphMiniSaison: UIView {
         path2.addLine(to: CGPoint(x: origineX + (largeur * CGFloat(mymoy-1) / 100), y: origineY + size + size - (hauteur * CGFloat(25*ligne) / 100)))
         path2.addLine(to: CGPoint(x: origineX + (largeur * CGFloat(mymoy-1) / 100), y: origineY - size - size - (hauteur * CGFloat(25*ligne) / 100)))
         path2.stroke()
+        color.setFill()
+        path2.fill()
 
     }
 

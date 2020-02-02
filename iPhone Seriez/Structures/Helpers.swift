@@ -38,7 +38,12 @@ func getImage(_ url: String) -> UIImage {
     else {
         let imageData = NSData(contentsOf: URL(string: url)!)
         imageData?.write(toFile: pathToImage, atomically: true)
-        return UIImage(data: imageData! as Data)!
+        if (imageData != nil) {
+            return UIImage(data: imageData! as Data)!
+        }
+        else {
+            return UIImage()
+        }
     }
 }
 

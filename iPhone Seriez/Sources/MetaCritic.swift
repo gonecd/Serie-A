@@ -37,10 +37,9 @@ class MetaCritic {
         do {
             let page : String = try String(contentsOf: URL(string : webPage)!)
             let doc : Document = try SwiftSoup.parse(page)
-            let extract : String = try doc.select("div [class='product_header']").text()
-            let rating : String = extract.components(separatedBy: " ")[2]
+            let extract : String = try doc.select("[class='metascore_w header_size tvshow positive']").text()
             
-            uneSerie.ratingMetaCritic = Int(rating) ?? 0
+            uneSerie.ratingMetaCritic = Int(extract) ?? 0
         }
         catch let error as NSError { print("MetaCritic failed: \(error.localizedDescription)") }
         

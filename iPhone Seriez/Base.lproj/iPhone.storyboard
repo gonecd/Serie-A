@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="VO4-8T-SgV">
-    <device id="retina6_1" orientation="portrait" appearance="dark"/>
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -2625,7 +2625,7 @@
         <image name="tvmaze.ico" width="48" height="48"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="ogQ-U5-GBF"/>
+        <segue reference="pq9-Mm-aFb"/>
         <segue reference="si9-zD-4Gf"/>
         <segue reference="WRr-5V-a2r"/>
     </inferredMetricsTieBreakers>

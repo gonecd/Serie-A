@@ -13,6 +13,10 @@ let AppDir : URL = FileManager.default.urls(for: .documentDirectory, in: .userDo
 let PosterDir : URL = AppDir.appendingPathComponent("poster")
 let IMdbDir : URL = AppDir.appendingPathComponent("imdb")
 
+let dateFormShort   = DateFormatter()
+let dateFormLong    = DateFormatter()
+let dateFormSource  = DateFormatter()
+
 // Structures globales
 var trakt          : Trakt          = Trakt.init()
 var theTVdb        : TheTVdb        = TheTVdb.init()

@@ -69,9 +69,6 @@ class TheTVdb : NSObject {
         var session     : URLSession
         var task        : URLSessionDataTask
         
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        
         while ( continuer ) {
             // Parsing de la saison
             url = URL(string: "https://api.thetvdb.com/series/\(uneSerie.idTVdb)/episodes?page=\(pageToLoad)")!
@@ -126,7 +123,7 @@ class TheTVdb : NSObject {
                                             uneSerie.saisons[laSaison - 1].episodes[lEpisode - 1].date = ZeroDate
                                         }
                                         else {
-                                            uneSerie.saisons[laSaison - 1].episodes[lEpisode - 1].date = dateFormatter.date(from: stringDate)!
+                                            uneSerie.saisons[laSaison - 1].episodes[lEpisode - 1].date = dateFormSource.date(from: stringDate)!
                                         }
                                     }
                                     else {

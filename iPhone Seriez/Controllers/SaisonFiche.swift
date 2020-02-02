@@ -143,15 +143,12 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         
         if (tableView == episodesList) {
             let cell = tableView.dequeueReusableCell(withIdentifier: "CellEpisode", for: indexPath) as! CellEpisode
-            let dateFormatter = DateFormatter()
-            dateFormatter.locale = Locale.current
-            dateFormatter.dateFormat = "dd MMM yy"
             
             cell.numero.text = String(indexPath.row + 1)
             cell.titre.text = serie.saisons[saison - 1].episodes[indexPath.row].titre
             
             if (serie.saisons[saison - 1].episodes[indexPath.row].date == ZeroDate) { cell.date.text = "TBD" }
-            else { cell.date.text = dateFormatter.string(from: serie.saisons[saison - 1].episodes[indexPath.row].date) }
+            else { cell.date.text = dateFormShort.string(from: serie.saisons[saison - 1].episodes[indexPath.row].date) }
             
             if ( (indexPath.row + 1) > serie.saisons[saison - 1].nbWatchedEps) { cell.vu.isHidden = true }
             else { cell.vu.isHidden = false }

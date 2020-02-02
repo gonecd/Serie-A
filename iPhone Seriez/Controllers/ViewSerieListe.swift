@@ -29,7 +29,6 @@ class ViewSerieListe: UITableViewController {
     
     var viewList: [Serie] = [Serie]()
     var allSaisons: [Int] = [Int]()
-    let dateFormatter = DateFormatter()
     var grapheType : Int = 0
     
     @IBOutlet var liste: UITableView!
@@ -38,9 +37,6 @@ class ViewSerieListe: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        dateFormatter.locale = Locale.current
-        dateFormatter.dateFormat = "dd MMM yyyy"
     }
     
     override func didReceiveMemoryWarning() {

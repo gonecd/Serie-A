@@ -25,6 +25,8 @@ class CellSaisonListe: UITableViewCell {
     @IBOutlet weak var avantapres: UILabel!
     @IBOutlet weak var diffusion: UILabel!
     
+    @IBOutlet weak var graphBis: GraphMiniSaison!
+    
     var index: Int = 0
 }
 
@@ -33,16 +35,12 @@ class ViewSaisonListe: UITableViewController {
     
     var viewList: [Serie] = [Serie]()
     var allSaisons: [Int] = [Int]()
-    let dateFormatter = DateFormatter()
     var grapheType : Int = 0
 
     @IBOutlet var liste: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        dateFormatter.locale = Locale.current
-        dateFormatter.dateFormat = "dd MMM yyyy"
     }
     
     override func didReceiveMemoryWarning() {
@@ -71,13 +69,13 @@ class ViewSaisonListe: UITableViewController {
         cell.saison.text = "Saison " + String(uneSaison.saison) + " - " + String(uneSaison.nbEpisodes) + " épisodes"
         
         if (uneSaison.starts == ZeroDate) { cell.debut.text = "TBD" }
-        else { cell.debut.text = dateFormatter.string(from: uneSaison.starts) }
+        else { cell.debut.text = dateFormLong.string(from: uneSaison.starts) }
         
         if (uneSaison.ends == ZeroDate) { cell.fin.text = "TBD" }
-        else { cell.fin.text = dateFormatter.string(from: uneSaison.ends) }
+        else { cell.fin.text = dateFormLong.string(from: uneSaison.ends) }
         
         cell.globalRating.text = String(viewList[indexPath.row].getGlobalRating()) + " %"
-        arrondir(texte: cell.globalRating, radius: 12.0)
+        arrondir(texte: cell.globalRating, radius: 18.0)
         
         // Affichage du status
         cell.status.layer.cornerRadius = 8
@@ -100,6 +98,12 @@ class ViewSaisonListe: UITableViewController {
             cell.miniGraphe.setSerie(serie: viewList[indexPath.row], saison: allSaisons[indexPath.row])
             cell.miniGraphe.setType(type: grapheType)
             cell.miniGraphe.setNeedsDisplay()
+
+            if (UIDevice.current.userInterfaceIdiom == .pad) {
+                cell.graphBis.setSerie(serie: viewList[indexPath.row], saison: allSaisons[indexPath.row])
+                cell.graphBis.setType(type: 3)
+                cell.graphBis.setNeedsDisplay()
+            }
         }
         else {
             
@@ -125,13 +129,20 @@ class ViewSaisonListe: UITableViewController {
                     cell.diffusion.isHidden = true
                     cell.jours.isHidden = true
 
-                    cell.miniGraphe.setSerie(serie: viewList[indexPath.row], saison: allSaisons[indexPath.row])
-                    cell.miniGraphe.setType(type: grapheType)
-                    cell.miniGraphe.setNeedsDisplay()
+                        cell.miniGraphe.setSerie(serie: viewList[indexPath.row], saison: allSaisons[indexPath.row])
+                        cell.miniGraphe.setType(type: grapheType)
+                        cell.miniGraphe.setNeedsDisplay()
+                }
+
+                if (UIDevice.current.userInterfaceIdiom == .pad) {
+                    cell.graphBis.setSerie(serie: viewList[indexPath.row], saison: allSaisons[indexPath.row])
+                    cell.graphBis.setType(type: 3)
+                    cell.graphBis.setNeedsDisplay()
                 }
             }
             else {
                 cell.miniGraphe.isHidden = true
+                if (UIDevice.current.userInterfaceIdiom == .pad) { cell.graphBis.isHidden = true }
                 cell.avantapres.text = "avant la"
                 cell.diffusion.text = "première"
                 let nbJours : Int = daysBetweenDates(startDate: Date(), endDate: uneSaison.starts)

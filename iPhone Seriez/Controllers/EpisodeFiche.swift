@@ -47,28 +47,42 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
             boutonVuUnEp.isHidden = true
         }
 
-        allComments.append(contentsOf: imdb.getComments(IMDBid: self.serie.saisons[self.saison-1].episodes[self.episode-1].idIMdb))
-        allComments.append(contentsOf: trakt.getComments(IMDBid: self.serie.idIMdb, season: self.saison, episode: self.episode))
-        allComments.append(contentsOf: rottenTomatoes.getComments(serie: self.serie.serie, saison: self.saison, episode: self.episode))
-
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale.current
-        dateFormatter.dateFormat = "dd MMM yy"
-        
         resume.text = serie.saisons[saison - 1].episodes[episode - 1].resume
         titre.text = serie.saisons[saison - 1].episodes[episode - 1].titre
-        date.text = dateFormatter.string(from: serie.saisons[saison - 1].episodes[episode - 1].date)
+        date.text = dateFormShort.string(from: serie.saisons[saison - 1].episodes[episode - 1].date)
         banniere.image = image
         
-        graphe.sendEpisode(nTrakt: serie.saisons[saison - 1].episodes[episode - 1].ratingTrakt,
-                           nTVdb: serie.saisons[saison - 1].episodes[episode - 1].ratingTVdb,
-                           nBetaSeries: serie.saisons[saison - 1].episodes[episode - 1].ratingBetaSeries,
-                           nMovieDB: serie.saisons[saison - 1].episodes[episode - 1].ratingMoviedb,
-                           nIMDB: serie.saisons[saison - 1].episodes[episode - 1].ratingIMdb,
-                           nRottenTomatoes: serie.saisons[saison - 1].episodes[episode - 1].ratingRottenTomatoes,
-                           nTVMaze: serie.saisons[saison - 1].episodes[episode - 1].ratingTVMaze,
-                           nMetaCritic: serie.saisons[saison - 1].episodes[episode - 1].ratingMetaCritic,
-                           nAlloCine: 0 )
+        graphe.sendEpisode(ep: serie.saisons[saison - 1].episodes[episode - 1])
+        
+
+        let queue : OperationQueue = OperationQueue()
+
+        let opeCommentsIMDB = BlockOperation(block: {
+            self.allComments.append(contentsOf: imdb.getComments(IMDBid: self.serie.saisons[self.saison-1].episodes[self.episode-1].idIMdb).prefix(5))
+            OperationQueue.main.addOperation({
+                self.viewComments.reloadData()
+                self.viewComments.setNeedsLayout()
+            } )
+        } )
+        queue.addOperation(opeCommentsIMDB)
+
+        let opeCommentsTrakt = BlockOperation(block: {
+            self.allComments.append(contentsOf: trakt.getComments(IMDBid: self.serie.idIMdb, season: self.saison, episode: self.episode).prefix(5))
+            OperationQueue.main.addOperation({
+                self.viewComments.reloadData()
+                self.viewComments.setNeedsLayout()
+            } )
+        } )
+        queue.addOperation(opeCommentsTrakt)
+        
+        let opeCommentsRotten = BlockOperation(block: {
+            self.allComments.append(contentsOf: rottenTomatoes.getComments(serie: self.serie.serie, saison: self.saison, episode: self.episode).prefix(5))
+            OperationQueue.main.addOperation({
+                self.viewComments.reloadData()
+                self.viewComments.setNeedsLayout()
+            } )
+        } )
+        queue.addOperation(opeCommentsRotten)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {

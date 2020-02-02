@@ -188,8 +188,6 @@ class TheMoviedb : NSObject {
         let startChrono : Date = Date()
         let uneSerie : Serie = Serie(serie: "")
         var request : URLRequest
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
         
         if (idMovieDB != "")  {
             request = URLRequest(url: URL(string: "https://api.themoviedb.org/3/tv/\(idMovieDB)?api_key=e12674d4eadc7acafcbf7821bc32403b&language=en-US&append_to_response=external_ids,content_ratings")!) }
@@ -248,7 +246,7 @@ class TheMoviedb : NSObject {
                                 uneSaison.nbEpisodes = (((jsonResponse.object(forKey: "seasons") as? NSArray ?? []).object(at: i) as! NSDictionary).object(forKey: "episode_count")) as? Int ?? 0
                                 
                                 let stringDate : String = (((jsonResponse.object(forKey: "seasons") as? NSArray ?? []).object(at: i) as! NSDictionary).object(forKey: "air_date")) as? String ?? ""
-                                if (stringDate !=  "") { uneSaison.starts = dateFormatter.date(from: stringDate)! }
+                                if (stringDate !=  "") { uneSaison.starts = dateFormSource.date(from: stringDate)! }
 
                                 uneSerie.saisons.append(uneSaison)
                             }

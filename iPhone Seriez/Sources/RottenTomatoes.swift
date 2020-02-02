@@ -211,8 +211,12 @@ class RottenTomatoes {
                 let uneCritique : Critique = Critique()
                 
                 uneCritique.source = srcRottenTom
-                uneCritique.journal = try oneCritic.select("div [class='col-sm-13 col-xs-24 col-sm-pull-4 critic_name']").select("a")[1].text()
-                uneCritique.auteur = try oneCritic.select("div [class='col-sm-13 col-xs-24 col-sm-pull-4 critic_name']").select("a")[0].text()
+                uneCritique.journal = try oneCritic.select("[class='unstyled bold articleLink critic__name']").text()
+                uneCritique.auteur = try oneCritic.select("[class='critic__publication']").text()
+
+//                uneCritique.journal = try oneCritic.select("div [class='col-sm-13 col-xs-24 col-sm-pull-4 critic_name']").select("a")[1].text()
+//                uneCritique.auteur = try oneCritic.select("div [class='col-sm-13 col-xs-24 col-sm-pull-4 critic_name']").select("a")[0].text()
+
                 uneCritique.texte = try oneCritic.select("div [class='critic__review-quote']").text()
                 uneCritique.lien = try oneCritic.select("div [class='small subtle']").select("a").attr("href")
                 uneCritique.date = try oneCritic.select("div [class='critic__review-date subtle small']").text()

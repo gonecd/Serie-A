@@ -86,62 +86,28 @@ class Database : NSObject
     func downloadGlobalInfo(serie : Serie) {
         let queue : OperationQueue = OperationQueue()
         
-        var dataTVdb : Serie = Serie(serie: "")
-        var dataBetaSeries : Serie = Serie(serie: "")
-        var dataMoviedb : Serie = Serie(serie: "")
-        var dataTrakt : Serie = Serie(serie: "")
-        var dataTVmaze : Serie = Serie(serie: "")
-        var dataRotten : Serie = Serie(serie: "")
-        var dataMetaCritic : Serie = Serie(serie: "")
-        var dataAlloCine : Serie = Serie(serie: "")
-        var dataIMDB : Serie = Serie(serie: "")
+        var dataTVdb        : Serie = Serie(serie: "")
+        var dataBetaSeries  : Serie = Serie(serie: "")
+        var dataMoviedb     : Serie = Serie(serie: "")
+        var dataTrakt       : Serie = Serie(serie: "")
+        var dataTVmaze      : Serie = Serie(serie: "")
+        var dataRotten      : Serie = Serie(serie: "")
+        var dataMetaCritic  : Serie = Serie(serie: "")
+        var dataAlloCine    : Serie = Serie(serie: "")
+        var dataIMDB        : Serie = Serie(serie: "")
 
-        let opeLoadTVdb = BlockOperation(block: {
-            dataTVdb = theTVdb.getSerieGlobalInfos(idTVdb: serie.idTVdb)
-        } )
-        queue.addOperation(opeLoadTVdb)
-
-        let opeLoadBetaSeries = BlockOperation(block: {
-            dataBetaSeries = betaSeries.getSerieGlobalInfos(idTVDB : serie.idTVdb, idIMDB : serie.idIMdb)
-        } )
-        queue.addOperation(opeLoadBetaSeries)
-
-        let opeLoadMovieDB = BlockOperation(block: {
-            dataMoviedb = theMoviedb.getSerieGlobalInfos(idMovieDB: serie.idMoviedb)
-        } )
-        queue.addOperation(opeLoadMovieDB)
-
-        let opeLoadIMDB = BlockOperation(block: {
-            dataIMDB = imdb.getSerieGlobalInfos(idIMDB: serie.idIMdb)
-        } )
-        queue.addOperation(opeLoadIMDB)
-
-        let opeLoadTrakt = BlockOperation(block: {
-            dataTrakt = trakt.getSerieGlobalInfos(idTraktOrIMDB: serie.idIMdb)
-        } )
-        queue.addOperation(opeLoadTrakt)
-        
-        let opeLoadTVmaze = BlockOperation(block: {
-            dataTVmaze = tvMaze.getSerieGlobalInfos(idTVDB : serie.idTVdb, idIMDB : serie.idIMdb)
-        } )
-        queue.addOperation(opeLoadTVmaze)
-        
-        let opeLoadRottenT = BlockOperation(block: {
-            dataRotten = rottenTomatoes.getSerieGlobalInfos(serie : serie.serie)
-        } )
-        queue.addOperation(opeLoadRottenT)
-
-        let opeLoadMetaCritic = BlockOperation(block: {
-            dataMetaCritic = metaCritic.getSerieGlobalInfos(serie: serie.serie)
-        } )
-        queue.addOperation(opeLoadMetaCritic)
-
-        let opeLoadAlloCine = BlockOperation(block: {
-            dataAlloCine = alloCine.getSerieGlobalInfos(serie: serie.serie)
-        } )
-        queue.addOperation(opeLoadAlloCine)
+        queue.addOperation(BlockOperation(block: { dataTVdb = theTVdb.getSerieGlobalInfos(idTVdb: serie.idTVdb) } ) )
+        queue.addOperation(BlockOperation(block: { dataBetaSeries = betaSeries.getSerieGlobalInfos(idTVDB : serie.idTVdb, idIMDB : serie.idIMdb) } ) )
+        queue.addOperation(BlockOperation(block: { dataMoviedb = theMoviedb.getSerieGlobalInfos(idMovieDB: serie.idMoviedb) } ) )
+        queue.addOperation(BlockOperation(block: { dataIMDB = imdb.getSerieGlobalInfos(idIMDB: serie.idIMdb) } ) )
+        queue.addOperation(BlockOperation(block: { dataTrakt = trakt.getSerieGlobalInfos(idTraktOrIMDB: serie.idIMdb) } ) )
+        queue.addOperation(BlockOperation(block: { dataTVmaze = tvMaze.getSerieGlobalInfos(idTVDB : serie.idTVdb, idIMDB : serie.idIMdb) } ) )
+        queue.addOperation(BlockOperation(block: { dataRotten = rottenTomatoes.getSerieGlobalInfos(serie : serie.serie) } ) )
+        queue.addOperation(BlockOperation(block: { dataMetaCritic = metaCritic.getSerieGlobalInfos(serie: serie.serie) } ) )
+        queue.addOperation(BlockOperation(block: { dataAlloCine = alloCine.getSerieGlobalInfos(serie: serie.serie) } ) )
 
         queue.waitUntilAllOperationsAreFinished()
+        
         serie.cleverMerge(TVdb: dataTVdb, Moviedb: dataMoviedb, Trakt: dataTrakt, BetaSeries: dataBetaSeries, IMDB: dataIMDB, RottenTomatoes: dataRotten, TVmaze: dataTVmaze, MetaCritic: dataMetaCritic, AlloCine: dataAlloCine)
     }
     
@@ -151,25 +117,10 @@ class Database : NSObject
         
         let queue : OperationQueue = OperationQueue()
         
-        let opeLoadBetaSeries = BlockOperation(block: {
-            if (serie.idTVdb != "") { betaSeries.getEpisodesRatingsBis(serie) }
-        } )
-        queue.addOperation(opeLoadBetaSeries)
-
-        let opeLoadMovieDB = BlockOperation(block: {
-            if (serie.idMoviedb != "") { theMoviedb.getEpisodesRatings(serie) }
-        } )
-        queue.addOperation(opeLoadMovieDB)
-
-        let opeLoadIMDB = BlockOperation(block: {
-            imdb.getEpisodesRatings(serie)
-        } )
-        queue.addOperation(opeLoadIMDB)
-
-        let opeLoadTrakt = BlockOperation(block: {
-            if (serie.idTrakt != "") { trakt.getEpisodesRatings(serie) }
-        } )
-        queue.addOperation(opeLoadTrakt)
+        queue.addOperation(BlockOperation(block: { if (serie.idTVdb != "") { betaSeries.getEpisodesRatingsBis(serie) } } ) )
+        queue.addOperation(BlockOperation(block: { if (serie.idMoviedb != "") { theMoviedb.getEpisodesRatings(serie) } } ) )
+        queue.addOperation(BlockOperation(block: { imdb.getEpisodesRatings(serie) } ) )
+        queue.addOperation(BlockOperation(block: { if (serie.idTrakt != "") { trakt.getEpisodesRatings(serie) } } ) )
         
         queue.waitUntilAllOperationsAreFinished()
     }

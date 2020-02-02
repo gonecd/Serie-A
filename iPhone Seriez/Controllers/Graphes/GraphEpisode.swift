@@ -45,19 +45,19 @@ class GraphEpisode: UIView {
     }
     
     
-    func sendEpisode(nTrakt:Int, nTVdb:Int, nBetaSeries:Int, nMovieDB:Int, nIMDB:Int, nRottenTomatoes:Int, nTVMaze:Int, nMetaCritic:Int, nAlloCine :Int){
-        noteTrakt = nTrakt
-        noteTVdb = nTVdb
-        noteBetaSerie = nBetaSeries
-        noteMovieDB = nMovieDB
-        noteIMDB = nIMDB
-        noteRottenTomatoes = nRottenTomatoes
-        noteTVMaze = nTVMaze
-        noteMetaCritic = nMetaCritic
-        noteAlloCine = nAlloCine
+    func sendEpisode(ep: Episode){
+        noteTrakt = ep.ratingTrakt
+        noteTVdb = ep.ratingTVdb
+        noteBetaSerie = ep.ratingBetaSeries
+        noteMovieDB = ep.ratingMoviedb
+        noteIMDB = ep.ratingIMdb
+        noteRottenTomatoes = ep.ratingRottenTomatoes
+        noteTVMaze = ep.ratingTVMaze
+        noteMetaCritic = ep.ratingMetaCritic
+        noteAlloCine = 0
     }
 
-    
+
     func background() {
         #imageLiteral(resourceName: "trakt.ico").draw(in: CGRect(x: 0.0, y: 0.0, width: 18.0, height: 18.0))
         #imageLiteral(resourceName: "thetvdb.png").draw(in: CGRect(x: 0.0, y: linH, width: 18.0, height: 18.0))
