@@ -11,8 +11,7 @@ import SwiftSoup
 import SeriesCommon
 
 class AlloCine : NSObject {
-    var chronoGlobal : TimeInterval = 0
-    var chronoOther : TimeInterval = 0
+    var chrono : TimeInterval = 0
 
     let indexWebPage: Dictionary = [
         "24" : "58",
@@ -62,16 +61,12 @@ class AlloCine : NSObject {
         "WorkinGirls" : "10289",
         "Years and Years" : "23707"
     ]
-    
-    
+        
     
     override init() {
     }
     
-    func getChrono() -> TimeInterval {
-        return chronoGlobal
-    }
-
+    
     func getSerieGlobalInfos(serie : String) -> Serie {
         let startChrono : Date = Date()
         let uneSerie : Serie = Serie(serie: serie)
@@ -96,7 +91,7 @@ class AlloCine : NSObject {
                     let uneNote : Double = Double(mots[i+1].replacingOccurrences(of: ",", with: "."))!
                     uneSerie.ratingAlloCine = Int(uneNote * 20.0)
 
-                    chronoGlobal = chronoGlobal + Date().timeIntervalSince(startChrono)
+                    chrono = chrono + Date().timeIntervalSince(startChrono)
                     return uneSerie
                 }
             }
@@ -104,7 +99,7 @@ class AlloCine : NSObject {
         catch let error as NSError { print("AlloCine scrapping failed for \(serie): \(error.localizedDescription)") }
         
         print("==> AlloCine - Note non trouvée : \(serie)")
-        chronoGlobal = chronoGlobal + Date().timeIntervalSince(startChrono)
+        chrono = chrono + Date().timeIntervalSince(startChrono)
         return uneSerie
     }
     
@@ -151,9 +146,8 @@ class AlloCine : NSObject {
             }
         }
         catch let error as NSError { print("AlloCine failed for getShowList : \(error.localizedDescription)") }
-        
-        
-        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
+                
+        chrono = chrono + Date().timeIntervalSince(startChrono)
         return (showNames, showIds)
     }
     
@@ -178,8 +172,7 @@ class AlloCine : NSObject {
         }
         catch let error as NSError { print("AlloCine failed for getShowList : \(error.localizedDescription)") }
         
-        
-        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
+        chrono = chrono + Date().timeIntervalSince(startChrono)
         return (showNames, showIds)
     }
     
@@ -214,30 +207,7 @@ class AlloCine : NSObject {
         }
         catch let error as NSError { print("AlloCine getCritics failed for \(serie): \(error.localizedDescription)") }
         
-        chronoGlobal = chronoGlobal + Date().timeIntervalSince(startChrono)
+        chrono = chrono + Date().timeIntervalSince(startChrono)
         return result
     }
 }
-
-
-/*
- ==> AlloCine - ID non trouvé : Hard (2008)
- ==> AlloCine - ID non trouvé : War of the Worlds
- 
- 
- RottenTomatoes failed: The file “outlander” couldn’t be opened.
- RottenTomatoes failed: The file “what_we_do_in_the_shadows” couldn’t be opened.
- RottenTomatoes failed: The file “death_note” couldn’t be opened.
- RottenTomatoes failed: The file “hard_(2008)” couldn’t be opened.
- RottenTomatoes failed: The file “true_blood” couldn’t be opened.
- 
- 
- MetaCritic failed: The file “hard-(2008)” couldn’t be opened.
- MetaCritic failed: The file “war-of-the-worlds” couldn’t be opened.
- 
- 
- TVmaze::getSerieGlobalInfos error 404 received for id=361041 / tt9844334
- 
- 
- */
-

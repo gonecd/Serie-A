@@ -32,6 +32,17 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
     @IBOutlet weak var labelcommentaires: UILabel!
     @IBOutlet weak var labelLiens: UILabel!
 
+    @IBOutlet weak var bTrakt: UIButton!
+    @IBOutlet weak var bMovieDB: UIButton!
+    @IBOutlet weak var bTVMaze: UIButton!
+    @IBOutlet weak var bRotTom: UIButton!
+    @IBOutlet weak var bIMDB: UIButton!
+    @IBOutlet weak var bBetaSeries: UIButton!
+    @IBOutlet weak var bMetaCritic: UIButton!
+    @IBOutlet weak var bAlloCine: UIButton!
+
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -47,6 +58,17 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
             boutonVuUnEp.isHidden = true
         }
 
+        // Masquer les liens s'il n'y a pas de page derrière ... (version iPad only)
+        if (UIDevice.current.userInterfaceIdiom == .pad) {
+            if (serie.idTrakt == "") { bTrakt.isHidden = true }
+            if (rottenTomatoes.getPath(serie: serie.serie) == "") { bRotTom.isHidden = true }
+            if (metaCritic.getPath(serie: serie.serie) == "") { bMetaCritic.isHidden = true }
+            if (serie.idAlloCine == "") { bAlloCine.isHidden = true }
+            if (serie.idTVmaze == "") { bTVMaze.isHidden = true }
+            if (serie.saisons[saison-1].episodes[episode-1].idIMdb == "") { bIMDB.isHidden = true }
+            if (serie.idMoviedb == "") { bMovieDB.isHidden = true }
+        }
+        
         resume.text = serie.saisons[saison - 1].episodes[episode - 1].resume
         titre.text = serie.saisons[saison - 1].episodes[episode - 1].titre
         date.text = dateFormShort.string(from: serie.saisons[saison - 1].episodes[episode - 1].date)
@@ -107,54 +129,17 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
         return cell
     }
     
-    @IBAction func webIMdb(_ sender: AnyObject) {
-        if (serie.saisons[saison-1].episodes[episode-1].idIMdb != "") {
-            let myURL : String = "http://www.imdb.com/title/\(serie.saisons[saison-1].episodes[episode-1].idIMdb)"
-            UIApplication.shared.open(URL(string: myURL)!)
-        }
-    }
-    
-    @IBAction func webTrakt(_ sender: AnyObject) {
-        let myURL : String = "http://trakt.tv/shows/\(serie.serie.lowercased().replacingOccurrences(of: " ", with: "-").replacingOccurrences(of: "'", with: "-"))/seasons/\(saison)/episodes/\(episode)"
-        UIApplication.shared.open(URL(string: myURL)!)
-    }
-    
-    @IBAction func webTheTVdb(_ sender: AnyObject) {
-        let myURL : String = "https://www.thetvdb.com/?tab=series&id=\(serie.idTVdb)"
-        UIApplication.shared.open(URL(string: myURL)!)
-    }
-    
-    @IBAction func webRottenTomatoes(_ sender: AnyObject) {
-        if (rottenTomatoes.getPath(serie: serie.serie) != "") {
-            let myURL : String = rottenTomatoes.getPath(serie: serie.serie) + String(format: "/s%02d/e%02d", saison, episode)
-            UIApplication.shared.open(URL(string: myURL)!)
-        }
-    }
-    
+    @IBAction func webIMdb(_ sender: AnyObject) { UIApplication.shared.open(URL(string: "http://www.imdb.com/title/\(serie.saisons[saison-1].episodes[episode-1].idIMdb)")!) }
+    @IBAction func webTrakt(_ sender: AnyObject) { UIApplication.shared.open(URL(string: "https://trakt.tv/shows/\(serie.idTrakt)/seasons/\(saison)/episodes/\(episode)")!) }
+    @IBAction func webRottenTomatoes(_ sender: AnyObject) { UIApplication.shared.open(URL(string: rottenTomatoes.getPath(serie: serie.serie) + String(format: "/s%02d/e%02d", saison, episode))!) }
+    @IBAction func webMetaCritic(_ sender: AnyObject) { UIApplication.shared.open(URL(string: metaCritic.getPath(serie: serie.serie) + String(format: "/season-%d", saison))!) }
+    @IBAction func webAlloCine(_ sender: Any) { UIApplication.shared.open(URL(string: "http://www.allocine.fr/series/ficheserie_gen_cserie=" + serie.idAlloCine + ".html")!) }
+    @IBAction func webTVMaze(_ sender: Any) { UIApplication.shared.open(URL(string: "https://www.tvmaze.com/shows/\(serie.idTVmaze)")!) }
+    @IBAction func webTheMovieDB(_ sender: Any) { UIApplication.shared.open(URL(string: "https://www.themoviedb.org/tv/\(serie.idMoviedb)/season/\(saison)/episode/\(episode)")!) }
+
     @IBAction func webBetaSeries(_ sender: AnyObject) {
         let myURL : String = "https://www.betaseries.com/episode/\(serie.serie.lowercased().replacingOccurrences(of: "'", with: "").replacingOccurrences(of: " ", with: "-"))" + String(format: "/s%02de%02d", saison, episode)
         UIApplication.shared.open(URL(string: myURL)!)
-    }
-    
-    @IBAction func webMetaCritic(_ sender: AnyObject) {
-        if (metaCritic.getPath(serie: serie.serie) != "") {
-            UIApplication.shared.open(URL(string: metaCritic.getPath(serie: serie.serie) + String(format: "/season-%d", saison))!)
-        }
-    }
-    
-    @IBAction func webTheMovieDB(_ sender: Any) {
-
-    }
-    
-    @IBAction func webAlloCine(_ sender: Any) {
-        if (serie.idAlloCine != "") {
-            UIApplication.shared.open(URL(string: "http://www.allocine.fr/series/ficheserie_gen_cserie=" + serie.idAlloCine + ".html")!)
-        }
-
-    }
-
-    @IBAction func webTVMaze(_ sender: Any) {
-
     }
 
     @IBAction func vuUnEpisode(_ sender: Any) {

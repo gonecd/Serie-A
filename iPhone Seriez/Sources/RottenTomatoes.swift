@@ -11,16 +11,11 @@ import SwiftSoup
 import SeriesCommon
 
 class RottenTomatoes {
-    var chronoGlobal : TimeInterval = 0
-    var chronoRatings : TimeInterval = 0
-    var chronoOther : TimeInterval = 0
+    var chrono : TimeInterval = 0
     
     init() {
     }
     
-    func getChrono() -> TimeInterval {
-        return chronoGlobal+chronoRatings
-    }
     
     func getSerieGlobalInfos(serie : String) -> Serie {
         let startChrono : Date = Date()
@@ -38,7 +33,7 @@ class RottenTomatoes {
         }
         catch let error as NSError { print("RottenTomatoes failed: \(error.localizedDescription)") }
         
-        chronoGlobal = chronoGlobal + Date().timeIntervalSince(startChrono)
+        chrono = chrono + Date().timeIntervalSince(startChrono)
         return uneSerie
     }
     
@@ -67,7 +62,7 @@ class RottenTomatoes {
             catch let error as NSError { print("RottenTomatoes failed for \(uneSerie.serie) saison \(uneSaison.saison): \(error.localizedDescription)") }
         }
 
-        chronoRatings = chronoRatings + Date().timeIntervalSince(startChrono)
+        chrono = chrono + Date().timeIntervalSince(startChrono)
     }
     
     
@@ -94,7 +89,7 @@ class RottenTomatoes {
         print("Avis = \(critic)")
         
         
-        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
+        chrono = chrono + Date().timeIntervalSince(startChrono)
         return 0
     }
     
@@ -189,7 +184,7 @@ class RottenTomatoes {
         }
         catch let error as NSError { print("RottenTomatoes failed for getShowList : \(error.localizedDescription)") }
         
-        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
+        chrono = chrono + Date().timeIntervalSince(startChrono)
         return (showNames, showIds)
     }
     
@@ -213,10 +208,6 @@ class RottenTomatoes {
                 uneCritique.source = srcRottenTom
                 uneCritique.journal = try oneCritic.select("[class='unstyled bold articleLink critic__name']").text()
                 uneCritique.auteur = try oneCritic.select("[class='critic__publication']").text()
-
-//                uneCritique.journal = try oneCritic.select("div [class='col-sm-13 col-xs-24 col-sm-pull-4 critic_name']").select("a")[1].text()
-//                uneCritique.auteur = try oneCritic.select("div [class='col-sm-13 col-xs-24 col-sm-pull-4 critic_name']").select("a")[0].text()
-
                 uneCritique.texte = try oneCritic.select("div [class='critic__review-quote']").text()
                 uneCritique.lien = try oneCritic.select("div [class='small subtle']").select("a").attr("href")
                 uneCritique.date = try oneCritic.select("div [class='critic__review-date subtle small']").text()
@@ -227,7 +218,7 @@ class RottenTomatoes {
         }
         catch let error as NSError { print("RottenTomatoes getCritics failed for \(serie): \(error.localizedDescription)") }
         
-        chronoGlobal = chronoGlobal + Date().timeIntervalSince(startChrono)
+        chrono = chrono + Date().timeIntervalSince(startChrono)
         return result
     }
     
@@ -259,7 +250,7 @@ class RottenTomatoes {
         }
         catch let error as NSError { print("RottenTomatoes getCritics failed for \(serie): \(error.localizedDescription)") }
         
-        chronoGlobal = chronoGlobal + Date().timeIntervalSince(startChrono)
+        chrono = chrono + Date().timeIntervalSince(startChrono)
         return result
     }
 }

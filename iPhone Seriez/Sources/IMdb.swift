@@ -13,17 +13,12 @@ import Gzip
 
 class IMdb : NSObject {
     var IMDBrates : NSMutableDictionary = NSMutableDictionary()
-    var chronoGlobal : TimeInterval = 0
-    var chronoRatings : TimeInterval = 0
-    var chronoOther : TimeInterval = 0
+    var chrono : TimeInterval = 0
     
     override init() {
         super.init()
     }
     
-    func getChrono() -> TimeInterval {
-        return chronoGlobal+chronoRatings+chronoOther
-    }
 
     func loadDataFile() {
         let startChrono : Date = Date()
@@ -35,7 +30,7 @@ class IMdb : NSObject {
                 IMDBrates.setValue(row, forKey: columns[0])
             }
         }
-        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
+        chrono = chrono + Date().timeIntervalSince(startChrono)
     }
 
     
@@ -48,7 +43,7 @@ class IMdb : NSObject {
         let rawData = NSData(contentsOf: URL(string: "https://datasets.imdbws.com/title.ratings.tsv.gz")!)
         let unzippedData : Data = rawData! as Data
         try! unzippedData.gunzipped().write(to: IMdbDir.appendingPathComponent("ratings.tsv"))
-        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
+        chrono = chrono + Date().timeIntervalSince(startChrono)
     }
     
     
@@ -70,7 +65,7 @@ class IMdb : NSObject {
             }
         }
 
-        chronoRatings = chronoRatings + Date().timeIntervalSince(startChrono)
+        chrono = chrono + Date().timeIntervalSince(startChrono)
     }
     
     
@@ -88,7 +83,7 @@ class IMdb : NSObject {
             print("IMDB::getSerieGlobalInfos::Not found for id = \(idIMDB)")
         }
         
-        chronoGlobal = chronoGlobal + Date().timeIntervalSince(startChrono)
+        chrono = chrono + Date().timeIntervalSince(startChrono)
         return uneSerie
     }
 
@@ -126,7 +121,7 @@ class IMdb : NSObject {
         catch let error as NSError { print("IMdb failed for getShowList : \(error.localizedDescription)") }
         
         
-        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
+        chrono = chrono + Date().timeIntervalSince(startChrono)
         return (showNames, showIds)
     }
     
@@ -156,7 +151,7 @@ class IMdb : NSObject {
         }
         catch let error as NSError { print("IMdb failed for getShowList : \(error.localizedDescription)") }
 
-        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
+        chrono = chrono + Date().timeIntervalSince(startChrono)
         return result
     }
     

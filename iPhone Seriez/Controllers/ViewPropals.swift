@@ -634,5 +634,9 @@ class ViewPropals: UIViewController, UICollectionViewDataSource, UICollectionVie
         
         viewController.serie = allSuggestedSeries[tableCell.index]
         viewController.image = getImage(allSuggestedSeries[tableCell.index].banner)
+        
+        if (allSuggestions[tableCell.index].category == categInconnues) {
+            viewController.modeRecherche = true
+        }
     }
 }

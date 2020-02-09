@@ -1180,9 +1180,9 @@
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="srh-Ob-MaK">
                                         <rect key="frame" x="212" y="160" width="24" height="24"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="Button" image="thetvdb.png"/>
+                                        <state key="normal" title="Button" image="tvmaze.ico"/>
                                         <connections>
-                                            <action selector="webTheTVdb:" destination="shf-Lk-5bU" eventType="touchUpInside" id="bHe-2y-cz7"/>
+                                            <action selector="webTVMaze:" destination="shf-Lk-5bU" eventType="touchUpInside" id="qou-0y-rvd"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VGH-0l-Qhz">
@@ -1313,6 +1313,14 @@
                                         <color key="textColor" red="0.016804177310000001" green="0.19835099580000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gcT-OJ-1qk">
+                                        <rect key="frame" x="410" y="160" width="24" height="24"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Button" image="allocine.ico"/>
+                                        <connections>
+                                            <action selector="webAlloCine:" destination="shf-Lk-5bU" eventType="touchUpInside" id="Z0V-je-KUR"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                             </view>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Oeu-e0-qf9">
@@ -1499,6 +1507,25 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SSS-JT-CFU">
+                                <rect key="frame" x="355" y="260" width="100" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z0R-ao-Bj2" userLabel="Conseil">
+                                        <rect key="frame" x="0.0" y="0.0" width="100" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <state key="normal" title="       Watchlist"/>
+                                        <connections>
+                                            <action selector="addToWatchlist:" destination="shf-Lk-5bU" eventType="touchUpInside" id="kVZ-KV-u1H"/>
+                                        </connections>
+                                    </button>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="List-icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="VYx-nS-Gwn">
+                                        <rect key="frame" x="7" y="5" width="20" height="20"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                </subviews>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="xVv-Ir-JgY"/>
@@ -1512,7 +1539,16 @@
                     </navigationItem>
                     <connections>
                         <outlet property="annee" destination="lKl-fX-525" id="rkY-Vz-X1u"/>
+                        <outlet property="bAlloCine" destination="gcT-OJ-1qk" id="okI-I9-z2z"/>
+                        <outlet property="bBetaSeries" destination="xaG-rq-zWl" id="98p-59-DQg"/>
+                        <outlet property="bIMDB" destination="Tle-9z-Mef" id="GKN-aN-Q72"/>
+                        <outlet property="bMetaCritic" destination="1vq-jg-7l1" id="96w-vm-lbn"/>
+                        <outlet property="bRotTom" destination="VGH-0l-Qhz" id="Qp6-OT-1gm"/>
+                        <outlet property="bTVMaze" destination="srh-Ob-MaK" id="pei-BY-FZe"/>
+                        <outlet property="bTrakt" destination="sfi-iS-9HG" id="K5M-XG-ejU"/>
+                        <outlet property="bWebSite" destination="foN-MG-2BQ" id="5yc-nN-dWX"/>
                         <outlet property="banniere" destination="YD8-cc-iHd" id="pFK-5z-OMk"/>
+                        <outlet property="boutonWatchlist" destination="SSS-JT-CFU" id="prJ-A3-OVK"/>
                         <outlet property="certif" destination="H6C-n3-CaQ" id="hhj-NH-xPt"/>
                         <outlet property="drapeau" destination="bdv-4V-6c9" id="kZo-lC-p31"/>
                         <outlet property="drapeauBgd" destination="Tcm-gP-hR7" id="oob-aE-Nc1"/>
@@ -1553,15 +1589,15 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="40" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="lt6-hJ-ItP">
-                                <rect key="frame" x="-1" y="593" width="480" height="431"/>
+                                <rect key="frame" x="-1" y="593" width="479" height="431"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CellEpisode" id="Glc-br-upC" customClass="CellEpisode" customModule="SerieA" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="480" height="40"/>
+                                        <rect key="frame" x="0.0" y="28" width="479" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Glc-br-upC" id="Mx3-FN-5TH">
-                                            <rect key="frame" x="0.0" y="0.0" width="480" height="40"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="479" height="40"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZaB-1y-T32">
@@ -1796,14 +1832,6 @@
                                     <action selector="webMetaCritic:" destination="KeR-Ru-dLU" eventType="touchUpInside" id="Mld-8a-5J6"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S3V-0H-efq">
-                                <rect key="frame" x="144" y="563" width="24" height="24"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button" image="thetvdb.png"/>
-                                <connections>
-                                    <action selector="webTheTVdb:" destination="KeR-Ru-dLU" eventType="touchUpInside" id="gkg-yC-fhu"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="74A-mY-bqC">
                                 <rect key="frame" x="184" y="563" width="24" height="24"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1837,7 +1865,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iLy-6M-rie">
-                                <rect key="frame" x="384" y="563" width="24" height="24"/>
+                                <rect key="frame" x="147" y="563" width="24" height="24"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button" image="tvmaze.ico"/>
                                 <connections>
@@ -1935,6 +1963,14 @@
                     </view>
                     <navigationItem key="navigationItem" title="Episode" id="lRW-tH-LHN"/>
                     <connections>
+                        <outlet property="bAlloCine" destination="urp-4M-lMe" id="VY8-Dr-690"/>
+                        <outlet property="bBetaSeries" destination="6zF-bb-4dQ" id="aKh-ue-rUM"/>
+                        <outlet property="bIMDB" destination="rj0-yW-jon" id="Fiv-pc-eD5"/>
+                        <outlet property="bMetaCritic" destination="0Gw-PC-MJI" id="n2k-Bn-qab"/>
+                        <outlet property="bMovieDB" destination="i0W-r3-cA5" id="iLY-Rs-g21"/>
+                        <outlet property="bRotTom" destination="74A-mY-bqC" id="3ta-PL-Oh3"/>
+                        <outlet property="bTVMaze" destination="iLy-6M-rie" id="MOc-lc-WQZ"/>
+                        <outlet property="bTrakt" destination="1zH-pA-Mcq" id="RNf-Jd-xYK"/>
                         <outlet property="banniere" destination="SGX-aS-2Wb" id="Iik-px-vX1"/>
                         <outlet property="boutonVuUnEp" destination="2tP-l7-WA3" id="4kM-0V-LdD"/>
                         <outlet property="date" destination="28x-AJ-vai" id="mob-kr-DWk"/>
@@ -3580,7 +3616,7 @@
     <inferredMetricsTieBreakers>
         <segue reference="ZOZ-dL-SRb"/>
         <segue reference="qMm-64-X0G"/>
-        <segue reference="ARf-YV-fBT"/>
+        <segue reference="si9-zD-4Gf"/>
         <segue reference="Gjc-Uw-9eJ"/>
         <segue reference="fdX-1U-lPu"/>
     </inferredMetricsTieBreakers>

@@ -14,16 +14,11 @@ import SwiftSoup
 import SeriesCommon
 
 class MetaCritic {
-    var chronoGlobal : TimeInterval = 0
-    var chronoRatings : TimeInterval = 0
-    var chronoOther : TimeInterval = 0
+    var chrono : TimeInterval = 0
     
     init() {
     }
     
-    func getChrono() -> TimeInterval {
-        return chronoGlobal+chronoRatings
-    }
     
     func getSerieGlobalInfos(serie : String) -> Serie {
         let startChrono : Date = Date()
@@ -43,7 +38,7 @@ class MetaCritic {
         }
         catch let error as NSError { print("MetaCritic failed: \(error.localizedDescription)") }
         
-        chronoGlobal = chronoGlobal + Date().timeIntervalSince(startChrono)
+        chrono = chrono + Date().timeIntervalSince(startChrono)
         return uneSerie
     }
     
@@ -77,7 +72,7 @@ class MetaCritic {
             catch let error as NSError { print("MetaCritic failed for \(uneSerie.serie) saison \(uneSaison.saison) : \(error.localizedDescription)") }
         }
         
-        chronoRatings = chronoRatings + Date().timeIntervalSince(startChrono)
+        chrono = chrono + Date().timeIntervalSince(startChrono)
     }
     
     
@@ -117,7 +112,7 @@ class MetaCritic {
         catch let error as NSError { print("MetaCritic failed for getShowList : \(error.localizedDescription)") }
         
         
-        chronoOther = chronoOther + Date().timeIntervalSince(startChrono)
+        chrono = chrono + Date().timeIntervalSince(startChrono)
         return (showNames, showIds)
     }
     
@@ -221,7 +216,7 @@ class MetaCritic {
         }
         catch let error as NSError { print("MetaCritic getCritics failed for \(serie): \(error.localizedDescription)") }
         
-        chronoGlobal = chronoGlobal + Date().timeIntervalSince(startChrono)
+        chrono = chrono + Date().timeIntervalSince(startChrono)
         return result
     }
 }

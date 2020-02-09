@@ -30,7 +30,7 @@ class ViewSerieListe: UITableViewController {
     var viewList: [Serie] = [Serie]()
     var allSaisons: [Int] = [Int]()
     var grapheType : Int = 0
-    
+
     @IBOutlet var liste: UITableView!
     var isWatchlist : Bool = false
     var isPropositions : Bool = false
@@ -109,6 +109,7 @@ class ViewSerieListe: UITableViewController {
         let tableCell : CellSerieListe = sender as! CellSerieListe
         viewController.serie = viewList[tableCell.index]
         viewController.image = getImage(viewList[tableCell.index].banner)
+        viewController.modeRecherche = isPropositions
     }
     
     

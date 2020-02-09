@@ -129,15 +129,15 @@ class Configuration: UIViewController
     
     
     func updateChronos() {
-        chronoTrakt.text = String(format: "%0.3f sec", trakt.getChrono())
-        chronoTVdb.text = String(format: "%0.3f sec", theTVdb.getChrono())
-        chronoBetaSeries.text = String(format: "%0.3f sec", betaSeries.getChrono())
-        chronoMovieDB.text = String(format: "%0.3f sec", theMoviedb.getChrono())
-        chronoIMdb.text = String(format: "%0.3f sec", imdb.getChrono())
-        chronoRottenTom.text = String(format: "%0.3f sec", rottenTomatoes.getChrono())
-        chronoTVmaze.text = String(format: "%0.3f sec", tvMaze.getChrono())
-        chronoMetaCritic.text = String(format: "%0.3f sec", metaCritic.getChrono())
-        chronoAlloCine.text = String(format: "%0.3f sec", alloCine.getChrono())
+        chronoTrakt.text = String(format: "%0.3f sec", trakt.chrono)
+        chronoTVdb.text = String(format: "%0.3f sec", theTVdb.chrono)
+        chronoBetaSeries.text = String(format: "%0.3f sec", betaSeries.chrono)
+        chronoMovieDB.text = String(format: "%0.3f sec", theMoviedb.chrono)
+        chronoIMdb.text = String(format: "%0.3f sec", imdb.chrono)
+        chronoRottenTom.text = String(format: "%0.3f sec", rottenTomatoes.chrono)
+        chronoTVmaze.text = String(format: "%0.3f sec", tvMaze.chrono)
+        chronoMetaCritic.text = String(format: "%0.3f sec", metaCritic.chrono)
+        chronoAlloCine.text = String(format: "%0.3f sec", alloCine.chrono)
     }
     
     

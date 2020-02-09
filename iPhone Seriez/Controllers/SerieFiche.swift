@@ -31,7 +31,8 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
     var serie : Serie = Serie(serie: "")
     var image : UIImage = UIImage()
     var allCritics : [Critique] = []
-
+    var modeRecherche: Bool = false
+    
     @IBOutlet weak var resume: UITextView!
     @IBOutlet weak var banniere: UIImageView!
     @IBOutlet weak var graphe: Graph!
@@ -41,7 +42,8 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
     @IBOutlet weak var viewInfos: UIView!
     @IBOutlet weak var viewSaisons: UITableView!
     @IBOutlet weak var viewComments: UITableView!
-    
+    @IBOutlet weak var boutonWatchlist: UIView!
+
     @IBOutlet weak var network: UILabel!
     @IBOutlet weak var status: UILabel!
     @IBOutlet weak var genre: UILabel!
@@ -59,12 +61,27 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
     @IBOutlet weak var labelSaisons: UILabel!
     @IBOutlet weak var labelCritiques: UILabel!
 
+    @IBOutlet weak var bWebSite: UIButton!
+    @IBOutlet weak var bTrakt: UIButton!
+    @IBOutlet weak var bTVMaze: UIButton!
+    @IBOutlet weak var bRotTom: UIButton!
+    @IBOutlet weak var bIMDB: UIButton!
+    @IBOutlet weak var bBetaSeries: UIButton!
+    @IBOutlet weak var bMetaCritic: UIButton!
+    @IBOutlet weak var bAlloCine: UIButton!
+
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
                 
         title = serie.serie
         
+        makeGradiant(carre: boutonWatchlist, couleur: "Vert")
+        if (modeRecherche) {
+            boutonWatchlist.isHidden = false
+        }
+
         let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleGesture))
         swipeLeft.direction = .left
         self.view.addGestureRecognizer(swipeLeft)
@@ -86,6 +103,15 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
         banniere.image = image
         note.text = String(serie.getGlobalRating()) + " %"
         
+        // Masquer les liens s'il n'y a pas de page derrière ...
+        if (rottenTomatoes.getPath(serie: serie.serie) == "") { bRotTom.isHidden = true }
+        if (metaCritic.getPath(serie: serie.serie) == "") { bMetaCritic.isHidden = true }
+        if (serie.homepage == "") { bWebSite.isHidden = true }
+        if (serie.idAlloCine == "") { bAlloCine.isHidden = true }
+        if (serie.idTVmaze == "") { bTVMaze.isHidden = true }
+        if (serie.idIMdb == "") { bIMDB.isHidden = true }
+        if (serie.idTrakt == "") { bTrakt.isHidden = true }
+
         // Affichage des genres
         var allGenres : String = ""
         for unGenre in serie.genres {
@@ -298,42 +324,32 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
         graphe.change()
     }
     
-    @IBAction func webTrakt(_ sender: AnyObject) {
-        let myURL : String = "http://trakt.tv/shows/\(serie.serie.lowercased().replacingOccurrences(of: " ", with: "-").replacingOccurrences(of: "'", with: "-"))"
-        UIApplication.shared.open(URL(string: myURL)!)
-    }
-    
-    @IBAction func webTheTVdb(_ sender: AnyObject) {
-        let myURL : String = "https://www.thetvdb.com/?tab=series&id=\(serie.idTVdb)"
-        UIApplication.shared.open(URL(string: myURL)!)
-    }
-    
-    @IBAction func webRottenTomatoes(_ sender: AnyObject) {
-        if (rottenTomatoes.getPath(serie: serie.serie) != "") {
-            UIApplication.shared.open(URL(string: rottenTomatoes.getPath(serie: serie.serie))!)
-        }
-    }
-    
-    @IBAction func webIMdb(_ sender: AnyObject) {
-        let myURL : String = "http://www.imdb.com/title/\(serie.idIMdb)"
-        UIApplication.shared.open(URL(string: myURL)!)
-    }
+    @IBAction func webTrakt(_ sender: AnyObject) { UIApplication.shared.open(URL(string: "https://trakt.tv/shows/\(serie.idTrakt)")!) }
+    @IBAction func webTVMaze(_ sender: AnyObject) { UIApplication.shared.open(URL(string: "https://www.tvmaze.com/shows/\(serie.idTVmaze)")!) }
+    @IBAction func webMetaCritic(_ sender: AnyObject) { UIApplication.shared.open(URL(string: metaCritic.getPath(serie: serie.serie))!) }
+    @IBAction func webHomepage(_ sender: Any) { UIApplication.shared.open(URL(string: serie.homepage)!)}
+    @IBAction func webRottenTomatoes(_ sender: AnyObject) { UIApplication.shared.open(URL(string: rottenTomatoes.getPath(serie: serie.serie))!) }
+    @IBAction func webIMdb(_ sender: AnyObject) { UIApplication.shared.open(URL(string: "http://www.imdb.com/title/\(serie.idIMdb)")!) }
+    @IBAction func webAlloCine(_ sender: AnyObject) { UIApplication.shared.open(URL(string: "http://www.allocine.fr/series/ficheserie_gen_cserie=\(serie.idAlloCine).html")!) }
     
     @IBAction func webBetaSeries(_ sender: AnyObject) {
         let myURL : String = "https://www.betaseries.com/serie/\(serie.serie.lowercased().replacingOccurrences(of: "'", with: "").replacingOccurrences(of: " ", with: "-"))"
         UIApplication.shared.open(URL(string: myURL)!)
     }
     
-    @IBAction func webMetaCritic(_ sender: AnyObject) {
-        if (metaCritic.getPath(serie: serie.serie) != "") {
-            UIApplication.shared.open(URL(string: metaCritic.getPath(serie: serie.serie))!)
+    @IBAction func addToWatchlist(_ sender: AnyObject) {
+        if (serie.idTVdb != "") {
+            if (trakt.addToWatchlist(theTVdbId: serie.idTVdb)) {
+                db.downloadGlobalInfo(serie: serie)
+                serie.watchlist = true
+                db.shows.append(serie)
+                
+                boutonWatchlist.isHidden = true
+                
+                db.saveDB()
+            }
         }
     }
-    
-    @IBAction func webHomepage(_ sender: Any) {
-        if (serie.homepage != "") {
-            UIApplication.shared.open(URL(string: serie.homepage)!)
-        }
-    }
+
     
 }
