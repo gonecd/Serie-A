@@ -10,7 +10,6 @@ import SeriesCommon
 
 class Graph: UIView {
     
-    var grapheType : Int = 0
     var theSerie : Serie = Serie(serie: "")
     
     override func draw(_ dirtyRect: CGRect) {
@@ -18,19 +17,10 @@ class Graph: UIView {
 
         // Drawing code here.
         self.background()
-        if (grapheType == 0) { self.traceGraphePoints() }
-        if (grapheType == 1) { self.traceGrapheLignes() }
+        self.traceGraphePoints()
     }
 
     
-    func change() {
-        if (grapheType == 0) { grapheType = 1 }
-        else if (grapheType == 1) { grapheType = 0 }
-        
-        self.setNeedsDisplay()
-    }
-    
-
     func sendSerie(_ uneSerie: Serie) {
         theSerie = uneSerie
     }
@@ -106,10 +96,8 @@ class Graph: UIView {
         for i:Int in 0 ..< nbSaisons {
             let offset : CGFloat = (largeur * (CGFloat(i)+0.5) / CGFloat(nbSaisons))
             
-            traceUnPoint(theSerie.saisons[i].getFairRatingTVdb(), uneCouleur: colorTVdb, offsetSaison: offset, offsetSource: 0)
-            traceUnPoint(theSerie.saisons[i].getFairRatingTrakt(), uneCouleur: colorTrakt, offsetSaison: offset, offsetSource: 2)
-            traceUnPoint(theSerie.saisons[i].getFairRatingBetaSeries(), uneCouleur: colorBetaSeries, offsetSaison: offset, offsetSource: 4)
-            traceUnPoint(theSerie.saisons[i].getFairRatingMoviedb(), uneCouleur: colorMoviedb, offsetSaison: offset, offsetSource: 8)
+            traceUnPoint(theSerie.saisons[i].getFairRatingTrakt(), uneCouleur: colorTrakt, offsetSaison: offset, offsetSource: 0)
+            traceUnPoint(theSerie.saisons[i].getFairRatingBetaSeries(), uneCouleur: colorBetaSeries, offsetSaison: offset, offsetSource: 5)
             traceUnPoint(theSerie.saisons[i].getFairRatingIMdb(), uneCouleur: colorIMDB, offsetSaison: offset, offsetSource: 10)
         }
     }
@@ -139,82 +127,6 @@ class Graph: UIView {
                     clockwise: false)
         path.lineWidth = 2.0
         path.stroke()
-    }
-
-
-    func traceGrapheLignes()
-    {
-        let uneCase : CGFloat = (self.frame.width - 30.0 - 10.0) / CGFloat(theSerie.saisons.count)
-
-        for uneSaison in theSerie.saisons
-        {
-            let nbEps: Int = uneSaison.episodes.count
-            var locNotesTVdb: [Int] = [Int]()
-            var locNotesTrakt: [Int] = [Int]()
-            var locNotesBetaSeries: [Int] = [Int]()
-            var locNotesMoviedb: [Int] = [Int]()
-            var locNotesIMdb: [Int] = [Int]()
-
-            for i:Int in 0 ..< nbEps
-            {
-                locNotesTVdb.append(uneSaison.episodes[i].getFairRatingTVdb())
-                locNotesTrakt.append(uneSaison.episodes[i].getFairRatingTrakt())
-                locNotesBetaSeries.append(uneSaison.episodes[i].getFairRatingBetaSeries())
-                locNotesMoviedb.append(uneSaison.episodes[i].getFairRatingMoviedb())
-                locNotesIMdb.append(uneSaison.episodes[i].getFairRatingIMdb())
-            }
-
-            traceLigne(locNotesTVdb, nbEpisodes: nbEps, uneCouleur: colorTVdb, offsetSaison: uneSaison.saison, largeur: uneCase)
-            traceLigne(locNotesTrakt, nbEpisodes: nbEps, uneCouleur: colorTrakt, offsetSaison: uneSaison.saison, largeur: uneCase)
-            traceLigne(locNotesBetaSeries, nbEpisodes: nbEps, uneCouleur: colorBetaSeries, offsetSaison: uneSaison.saison, largeur: uneCase)
-            traceLigne(locNotesMoviedb, nbEpisodes: nbEps, uneCouleur: colorMoviedb, offsetSaison: uneSaison.saison, largeur: uneCase)
-            traceLigne(locNotesIMdb, nbEpisodes: nbEps, uneCouleur: colorIMDB, offsetSaison: uneSaison.saison, largeur: uneCase)
-        }
-    }
-
-
-    func traceLigne(_ desNotes: [Int], nbEpisodes: Int, uneCouleur: UIColor, offsetSaison: Int, largeur: CGFloat)
-    {
-        let origineX : CGFloat = 30.0 + (CGFloat(offsetSaison - 1) * largeur)
-        let origineY :CGFloat = self.frame.height - 30.0
-        let hauteur : CGFloat = (self.frame.height - 30.0 - 10.0)
-
-        // Regression linéaire
-        var sigmaX : Double = 0.0
-        var sigmaX2 : Double = 0.0
-        var sigmaY : Double = 0.0
-        var sigmaXY : Double = 0.0
-        var n : Double = 0.0
-
-        for i:Int in 0 ..< nbEpisodes
-        {
-            if desNotes[i] != 0
-            {
-                let X : Double = Double(i+1)
-                sigmaX = sigmaX + X
-                sigmaY = sigmaY + Double(desNotes[i])
-                sigmaX2 = sigmaX2 + (X * X)
-                sigmaXY = sigmaXY + (X * Double(desNotes[i]))
-                n = n + 1.0
-            }
-        }
-
-        // Tracé de la droite
-        if (n > 3.0)
-        {
-            let B : Double = ((n * sigmaXY) - (sigmaX * sigmaY)) / ((n * sigmaX2) - (sigmaX * sigmaX))
-            let A : Double = (sigmaY / n) - B * (sigmaX / n)
-
-            let path : UIBezierPath = UIBezierPath()
-            path.move(to: CGPoint(x: origineX + (largeur * 0.5 / CGFloat(nbEpisodes)),
-                                  y: (origineY - (hauteur * CGFloat(A + B))/100)))
-            path.addLine(to: CGPoint(x: origineX + (largeur * (CGFloat(nbEpisodes-1)+0.5) / CGFloat(nbEpisodes)),
-                                     y: (origineY - (hauteur * CGFloat(A + (B * Double(nbEpisodes))))/100)))
-            uneCouleur.setStroke()
-            path.lineWidth = 2.0
-
-            path.stroke()
-        }
     }
 
 }

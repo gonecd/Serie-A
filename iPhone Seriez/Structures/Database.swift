@@ -9,9 +9,7 @@
 import Foundation
 import SeriesCommon
 
-class Database : NSObject
-{
-    
+class Database : NSObject {
     var shows : [Serie] = []
     var index : Dictionary = [String:Int]()
     
@@ -115,10 +113,18 @@ class Database : NSObject
     func downloadDetailInfo(serie : Serie) {
         theTVdb.getEpisodesDetailsAndRating(uneSerie: serie)
         
+        for uneSaison in serie.saisons {
+            for unEpisode in uneSaison.episodes {
+                if ((unEpisode.idIMdb) == "" && (unEpisode.date.compare(Date()) == .orderedAscending)) {
+                    unEpisode.idIMdb = imdb.getEpisodeID(serieID: serie.idIMdb, saison: uneSaison.saison, episode: unEpisode.episode)
+                    if (unEpisode.idIMdb == "") { print("No IMDB id for \(serie.serie) saison: \(uneSaison.saison) episode: \(unEpisode.episode)") }
+                }
+            }
+        }
+
         let queue : OperationQueue = OperationQueue()
         
         queue.addOperation(BlockOperation(block: { if (serie.idTVdb != "") { betaSeries.getEpisodesRatingsBis(serie) } } ) )
-        queue.addOperation(BlockOperation(block: { if (serie.idMoviedb != "") { theMoviedb.getEpisodesRatings(serie) } } ) )
         queue.addOperation(BlockOperation(block: { imdb.getEpisodesRatings(serie) } ) )
         queue.addOperation(BlockOperation(block: { if (serie.idTrakt != "") { trakt.getEpisodesRatings(serie) } } ) )
         
@@ -141,7 +147,7 @@ class Database : NSObject
                 if (tvMazeResults.nbEps[i] != 0) { serie.saisons[seasonIdx].nbEpisodes = tvMazeResults.nbEps[i] }
             }
             else {
-                // TV Maze est buggué pour Mpney Heist : il compte une saison en trop
+                // TV Maze est buggué pour Money Heist : il compte une saison en trop
                 if (serie.serie == "Money Heist") { return }
                 
                 // Ajout de la saison et de ses informations
@@ -229,7 +235,6 @@ class Database : NSObject
                                                                poster: uneSerie.poster,
                                                                rateGlobal: uneSerie.getGlobalRating(),
                                                                rateTrakt: uneSerie.getFairGlobalRatingTrakt(),
-                                                               rateTVDB: uneSerie.getFairGlobalRatingTVdb(),
                                                                rateIMDB: uneSerie.getFairGlobalRatingIMdb(),
                                                                rateMovieDB: uneSerie.getFairGlobalRatingMoviedb(),
                                                                rateTVmaze: uneSerie.getFairGlobalRatingTVmaze(),
@@ -314,8 +319,7 @@ class Database : NSObject
         valWatchList = 0
         valSeriesAbandonnees = 0
         
-        for uneSerie in db.shows
-        {
+        for uneSerie in db.shows {
             if (uneSerie.unfollowed) { valSeriesAbandonnees = valSeriesAbandonnees + 1 }
             if (uneSerie.watchlist) { valWatchList = valWatchList + 1 }
             if (uneSerie.saisons.count > 0) {
@@ -342,4 +346,154 @@ class Database : NSObject
             }
         }
     }
+    
+    func computeFairRates() {
+        // Load Data
+        for uneSerie in shows {
+            print("Loading \(uneSerie.serie)")
+            downloadGlobalInfo(serie: uneSerie)
+            downloadDates(serie: uneSerie)
+            downloadDetailInfo(serie: uneSerie)
+        }
+
+        saveDB()
+        
+        // Calcule moyenne et écart type pour les ssaisons
+        var moyIMDB : Double = 0.0
+        var moyTrakt : Double = 0.0
+        var moyMovieDB : Double = 0.0
+        var moyBetaSeries : Double = 0.0
+        var moyTVMaze : Double = 0.0
+        var moyRottenTom : Double = 0.0
+        var moyMetaCritic : Double = 0.0
+        var moyAlloCine : Double = 0.0
+
+        var nbIMDB : Int = 0
+        var nbTrakt : Int = 0
+        var nbMovieDB : Int = 0
+        var nbBetaSeries : Int = 0
+        var nbTVMaze : Int = 0
+        var nbRottenTom : Int = 0
+        var nbMetaCritic : Int = 0
+        var nbAlloCine : Int = 0
+
+        var ecartIMDB : Double = 0.0
+        var ecartTrakt : Double = 0.0
+        var ecartMovieDB : Double = 0.0
+        var ecartBetaSeries : Double = 0.0
+        var ecartTVMaze : Double = 0.0
+        var ecartRottenTom : Double = 0.0
+        var ecartMetaCritic : Double = 0.0
+        var ecartAlloCine : Double = 0.0
+
+
+        for uneSerie in shows {
+            if (uneSerie.ratingIMDB != 0) {  moyIMDB = moyIMDB + Double(uneSerie.ratingIMDB); nbIMDB = nbIMDB + 1; ecartIMDB = ecartIMDB + Double(uneSerie.ratingIMDB * uneSerie.ratingIMDB) }
+            if (uneSerie.ratingTrakt != 0) {  moyTrakt = moyTrakt + Double(uneSerie.ratingTrakt); nbTrakt = nbTrakt + 1; ecartTrakt = ecartTrakt + Double(uneSerie.ratingTrakt * uneSerie.ratingTrakt) }
+            if (uneSerie.ratingMovieDB != 0) {  moyMovieDB = moyMovieDB + Double(uneSerie.ratingMovieDB); nbMovieDB = nbMovieDB + 1; ecartMovieDB = ecartMovieDB + Double(uneSerie.ratingMovieDB * uneSerie.ratingMovieDB) }
+            if (uneSerie.ratingBetaSeries != 0) {  moyBetaSeries = moyBetaSeries + Double(uneSerie.ratingBetaSeries); nbBetaSeries = nbBetaSeries + 1; ecartBetaSeries = ecartBetaSeries + Double(uneSerie.ratingBetaSeries * uneSerie.ratingBetaSeries) }
+            if (uneSerie.ratingTVmaze != 0) {  moyTVMaze = moyTVMaze + Double(uneSerie.ratingTVmaze); nbTVMaze = nbTVMaze + 1; ecartTVMaze = ecartTVMaze + Double(uneSerie.ratingTVmaze * uneSerie.ratingTVmaze) }
+            if (uneSerie.ratingRottenTomatoes != 0) {  moyRottenTom = moyRottenTom + Double(uneSerie.ratingRottenTomatoes); nbRottenTom = nbRottenTom + 1; ecartRottenTom = ecartRottenTom + Double(uneSerie.ratingRottenTomatoes * uneSerie.ratingRottenTomatoes) }
+            if (uneSerie.ratingMetaCritic != 0) {  moyMetaCritic = moyMetaCritic + Double(uneSerie.ratingMetaCritic); nbMetaCritic = nbMetaCritic + 1; ecartMetaCritic = ecartMetaCritic + Double(uneSerie.ratingMetaCritic * uneSerie.ratingMetaCritic) }
+            if (uneSerie.ratingAlloCine != 0) {  moyAlloCine = moyAlloCine + Double(uneSerie.ratingAlloCine); nbAlloCine = nbAlloCine + 1; ecartAlloCine = ecartAlloCine + Double(uneSerie.ratingAlloCine * uneSerie.ratingAlloCine) }
+            if (uneSerie.ratingIMDB != 0) {  moyIMDB = moyIMDB + Double(uneSerie.ratingIMDB); nbIMDB = nbIMDB + 1; ecartIMDB = ecartIMDB + Double(uneSerie.ratingIMDB * uneSerie.ratingIMDB) }
+        }
+        moyIMDB = moyIMDB / Double(nbIMDB)
+        moyTrakt = moyTrakt / Double(nbTrakt)
+        moyMovieDB = moyMovieDB / Double(nbMovieDB)
+        moyBetaSeries = moyBetaSeries / Double(nbBetaSeries)
+        moyTVMaze = moyTVMaze / Double(nbTVMaze)
+        moyRottenTom = moyRottenTom / Double(nbRottenTom)
+        moyMetaCritic = moyMetaCritic / Double(nbMetaCritic)
+        moyAlloCine = moyAlloCine / Double(nbAlloCine)
+
+        ecartIMDB = sqrt( ( ecartIMDB / Double(nbIMDB) ) - (moyIMDB * moyIMDB) )
+        ecartTrakt = sqrt( ( ecartTrakt / Double(nbTrakt) ) - (moyTrakt * moyTrakt) )
+        ecartMovieDB = sqrt( ( ecartMovieDB / Double(nbMovieDB) ) - (moyMovieDB * moyMovieDB) )
+        ecartBetaSeries = sqrt( ( ecartBetaSeries / Double(nbBetaSeries) ) - (moyBetaSeries * moyBetaSeries) )
+        ecartTVMaze = sqrt( ( ecartTVMaze / Double(nbTVMaze) ) - (moyTVMaze * moyTVMaze) )
+        ecartRottenTom = sqrt( ( ecartRottenTom / Double(nbRottenTom) ) - (moyRottenTom * moyRottenTom) )
+        ecartMetaCritic = sqrt( ( ecartMetaCritic / Double(nbMetaCritic) ) - (moyMetaCritic * moyMetaCritic) )
+        ecartAlloCine = sqrt( ( ecartAlloCine / Double(nbAlloCine) ) - (moyAlloCine * moyAlloCine) )
+
+        print("Coefficients pour les séries ")
+        print("-----------------------------")
+
+        print("IMDB           Moyenne = \(moyIMDB) et Ecart = \(ecartIMDB)")
+        print("Trakt          Moyenne = \(moyTrakt) et Ecart = \(ecartTrakt)")
+        print("MovieDB        Moyenne = \(moyMovieDB) et Ecart = \(ecartMovieDB)")
+        print("BetaSeries     Moyenne = \(moyBetaSeries) et Ecart = \(ecartBetaSeries)")
+        print("TVMaze         Moyenne = \(moyTVMaze) et Ecart = \(ecartTVMaze)")
+        print("RottenTom      Moyenne = \(moyRottenTom) et Ecart = \(ecartRottenTom)")
+        print("MetaCritic     Moyenne = \(moyMetaCritic) et Ecart = \(ecartMetaCritic)")
+        print("AlloCine       Moyenne = \(moyAlloCine) et Ecart = \(ecartAlloCine)")
+        print()
+        print()
+        
+        // Calcule moyenne et écart type pour les épisodes
+        var moyIMDBEps : Double = 0.0
+        var moyTraktEps : Double = 0.0
+        var moyBetaSeriesEps : Double = 0.0
+
+        var nbIMDBEps : Int = 0
+        var nbTraktEps : Int = 0
+        var nbBetaSeriesEps : Int = 0
+
+        var ecartIMDBEps : Double = 0.0
+        var ecartTraktEps : Double = 0.0
+        var ecartBetaSeriesEps : Double = 0.0
+
+        // Moyennes simples
+//        for uneSerie in shows {
+//            for uneSaison in uneSerie.saisons {
+//                for unEpisode in uneSaison.episodes {
+//                    if (unEpisode.ratingIMdb != 0) {  moyIMDBEps = moyIMDBEps + Double(unEpisode.ratingIMdb); nbIMDBEps = nbIMDBEps + 1; ecartIMDBEps = ecartIMDBEps + Double(unEpisode.ratingIMdb * unEpisode.ratingIMdb) }
+//                    if (unEpisode.ratingTrakt != 0) {  moyTraktEps = moyTraktEps + Double(unEpisode.ratingTrakt); nbTraktEps = nbTraktEps + 1; ecartTraktEps = ecartTraktEps + Double(unEpisode.ratingTrakt * unEpisode.ratingTrakt) }
+//                    if (unEpisode.ratingBetaSeries != 0) {  moyBetaSeriesEps = moyBetaSeriesEps + Double(unEpisode.ratingBetaSeries); nbBetaSeriesEps = nbBetaSeriesEps + 1; ecartBetaSeriesEps = ecartBetaSeriesEps + Double(unEpisode.ratingBetaSeries * unEpisode.ratingBetaSeries) }
+//                }
+//
+//            }
+//        }
+
+        // Moyennes pondérées par nombre de votants
+        for uneSerie in shows {
+            for uneSaison in uneSerie.saisons {
+                for unEpisode in uneSaison.episodes {
+                    if (unEpisode.ratingIMdb != 0) {
+                        moyIMDBEps = moyIMDBEps + Double(unEpisode.ratingIMdb * unEpisode.ratersIMdb)
+                        nbIMDBEps = nbIMDBEps + unEpisode.ratersIMdb
+                        ecartIMDBEps = ecartIMDBEps + Double(unEpisode.ratingIMdb * unEpisode.ratingIMdb * unEpisode.ratersIMdb)
+                    }
+                    
+                    if (unEpisode.ratingTrakt != 0) {
+                        moyTraktEps = moyTraktEps + Double(unEpisode.ratingTrakt * unEpisode.ratersTrakt)
+                        nbTraktEps = nbTraktEps + unEpisode.ratersTrakt
+                        ecartTraktEps = ecartTraktEps + Double(unEpisode.ratingTrakt * unEpisode.ratingTrakt * unEpisode.ratersTrakt)
+                    }
+                    
+                    if (unEpisode.ratingBetaSeries != 0) {
+                        moyBetaSeriesEps = moyBetaSeriesEps + Double(unEpisode.ratingBetaSeries * unEpisode.ratersBetaSeries)
+                        nbBetaSeriesEps = nbBetaSeriesEps + unEpisode.ratersBetaSeries
+                        ecartBetaSeriesEps = ecartBetaSeriesEps + Double(unEpisode.ratingBetaSeries * unEpisode.ratingBetaSeries * unEpisode.ratersBetaSeries)
+                    }
+                }
+            }
+        }
+        
+        moyIMDBEps = moyIMDBEps / Double(nbIMDBEps)
+        moyTraktEps = moyTraktEps / Double(nbTraktEps)
+        moyBetaSeriesEps = moyBetaSeriesEps / Double(nbBetaSeriesEps)
+
+        ecartIMDBEps = sqrt( ( ecartIMDBEps / Double(nbIMDBEps) ) - (moyIMDBEps * moyIMDBEps) )
+        ecartTraktEps = sqrt( ( ecartTraktEps / Double(nbTraktEps) ) - (moyTraktEps * moyTraktEps) )
+        ecartBetaSeriesEps = sqrt( ( ecartBetaSeriesEps / Double(nbBetaSeriesEps) ) - (moyBetaSeriesEps * moyBetaSeriesEps) )
+
+        print("Coefficients pour les épisodes ")
+        print("-------------------------------")
+
+        print("IMDB           Moyenne = \(moyIMDBEps) et Ecart = \(ecartIMDBEps)")
+        print("Trakt          Moyenne = \(moyTraktEps) et Ecart = \(ecartTraktEps)")
+        print("BetaSeries     Moyenne = \(moyBetaSeriesEps) et Ecart = \(ecartBetaSeriesEps)")
+    }
+
 }

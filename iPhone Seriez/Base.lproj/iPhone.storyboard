@@ -288,6 +288,9 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
                                         <state key="normal" title="       Connect"/>
+                                        <connections>
+                                            <action selector="connectToTrakt:" destination="P9R-cs-o5I" eventType="touchUpInside" id="9fQ-G7-ISs"/>
+                                        </connections>
                                     </button>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="trakt.ico" translatesAutoresizingMaskIntoConstraints="NO" id="TQ0-9a-Mqg">
                                         <rect key="frame" x="8" y="5" width="20" height="20"/>
@@ -1275,13 +1278,7 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="xVv-Ir-JgY"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Serie" id="hWZ-Qk-JNc">
-                        <barButtonItem key="rightBarButtonItem" image="Chart-icon.png" id="QTx-Pc-nhu">
-                            <connections>
-                                <action selector="graphe:" destination="shf-Lk-5bU" id="LrJ-e4-aef"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Serie" id="hWZ-Qk-JNc"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="annee" destination="lKl-fX-525" id="rkY-Vz-X1u"/>

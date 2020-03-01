@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		00CDEAE7CD43765B6402647A /* Pods_SerieA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 621C44FD23BE39E700FB9536 /* Pods_SerieA.framework */; };
+		00CDEAE7CD43765B6402647A /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		2A85242E5F52E97EB7C05F39 /* Pods_SerieA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A21F0479BBD9521083FD9EAA /* Pods_SerieA.framework */; };
 		6208D96822352ACC00FE179F /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6208D96722352ACC00FE179F /* Notification.swift */; };
 		620B22FE22A304FD0027DCF6 /* MetaCritic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620B22FD22A304FD0027DCF6 /* MetaCritic.swift */; };
@@ -35,6 +35,8 @@
 		625799B7219734480010144D /* ViewPropals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625799B6219734480010144D /* ViewPropals.swift */; };
 		625F4AFE2214859600FE5A5C /* SeriesCommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 625F4AFD221484F200FE5A5C /* SeriesCommon.framework */; };
 		625F4AFF2214859600FE5A5C /* SeriesCommon.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 625F4AFD221484F200FE5A5C /* SeriesCommon.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		62612BBB23DDE2B100ACCF81 /* Statistiques.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62612BBA23DDE2B100ACCF81 /* Statistiques.swift */; };
+		62612BBC23DDE7F600ACCF81 /* Statistiques.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62612BBA23DDE2B100ACCF81 /* Statistiques.swift */; };
 		626D4727204C624500B1A64D /* Notes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626D4726204C624500B1A64D /* Notes.swift */; };
 		626D4729204C6DE900B1A64D /* IMdb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626D4728204C6DE900B1A64D /* IMdb.swift */; };
 		626F88C72210939300E5A132 /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 626F88C62210939300E5A132 /* NotificationCenter.framework */; };
@@ -343,6 +345,7 @@
 		625F4AF8221484F200FE5A5C /* SeriesCommon.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SeriesCommon.xcodeproj; path = ../SeriesCommon/SeriesCommon.xcodeproj; sourceTree = "<group>"; };
 		625F4B022214B05100FE5A5C /* SerieA.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SerieA.entitlements; sourceTree = "<group>"; };
 		625F4B032214B39F00FE5A5C /* En cours.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "En cours.entitlements"; sourceTree = "<group>"; };
+		62612BBA23DDE2B100ACCF81 /* Statistiques.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Statistiques.swift; sourceTree = "<group>"; };
 		626D4726204C624500B1A64D /* Notes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notes.swift; sourceTree = "<group>"; };
 		626D4728204C6DE900B1A64D /* IMdb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMdb.swift; sourceTree = "<group>"; };
 		626F88C52210939300E5A132 /* En cours.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "En cours.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -459,7 +462,7 @@
 			files = (
 				625F4AFE2214859600FE5A5C /* SeriesCommon.framework in Frameworks */,
 				2A85242E5F52E97EB7C05F39 /* Pods_SerieA.framework in Frameworks */,
-				00CDEAE7CD43765B6402647A /* Pods_SerieA.framework in Frameworks */,
+				00CDEAE7CD43765B6402647A /* (null) in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -521,6 +524,7 @@
 			children = (
 				624D874A2043325600AFDA06 /* Graphes */,
 				621B1D9C20D665B800F4F3BD /* Configuration.swift */,
+				62612BBA23DDE2B100ACCF81 /* Statistiques.swift */,
 				62F8ECF32013775800A41EF7 /* EpisodeFiche.swift */,
 				62AC509F200E58A200A8C841 /* SaisonFiche.swift */,
 				62DD87A91FB7838400A9B9EE /* SerieFiche.swift */,
@@ -1138,6 +1142,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				62612BBC23DDE7F600ACCF81 /* Statistiques.swift in Sources */,
 				628A1382236F38E8006B2AD4 /* SerieFiche.swift in Sources */,
 				628A1383236F38E8006B2AD4 /* Configuration.swift in Sources */,
 				628A1384236F38E8006B2AD4 /* TheMoviedb.swift in Sources */,
@@ -1176,6 +1181,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				62612BBB23DDE2B100ACCF81 /* Statistiques.swift in Sources */,
 				62DD87AA1FB7838400A9B9EE /* SerieFiche.swift in Sources */,
 				621B1D9D20D665B800F4F3BD /* Configuration.swift in Sources */,
 				62D0EBBD204C374B009774B6 /* TheMoviedb.swift in Sources */,

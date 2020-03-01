@@ -107,7 +107,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
             self.view.addSubview(grapheVus)
             
             let grapheNotes : GraphRates = GraphRates(frame: CGRect(x: Int(size.width - 60), y: 38+(hauteurParSaison*i), width: 40, height: 40))
-            grapheNotes.sendFigures(rateTrakt: sharedInfos[i].rateTrakt, rateTVdb: sharedInfos[i].rateTVDB, rateBetaSeries: sharedInfos[i].rateBetaSeries, rateMoviedb: sharedInfos[i].rateMovieDB, rateIMdb: sharedInfos[i].rateIMDB, rateTVmaze: sharedInfos[i].rateTVmaze, rateRottenTomatoes: sharedInfos[i].rateRottenTomatoes)
+            grapheNotes.sendFigures(rateTrakt: sharedInfos[i].rateTrakt, rateBetaSeries: sharedInfos[i].rateBetaSeries, rateMoviedb: sharedInfos[i].rateMovieDB, rateIMdb: sharedInfos[i].rateIMDB, rateTVmaze: sharedInfos[i].rateTVmaze, rateRottenTomatoes: sharedInfos[i].rateRottenTomatoes)
             grapheNotes.setNeedsDisplay()
             self.view.addSubview(grapheNotes)
 
@@ -224,7 +224,6 @@ class GraphViewed: UIView {
 class GraphRates: UIView {
     
     let colorTrakt          : UIColor = .systemRed
-    let colorTVdb           : UIColor = .systemGray
     let colorBetaSeries     : UIColor = .systemBlue
     let colorIMDB           : UIColor = .systemOrange
     let colorMoviedb        : UIColor = .systemGreen
@@ -234,7 +233,6 @@ class GraphRates: UIView {
     let colorAxis       : UIColor = .systemGray
 
     var noteTrakt : Int = 0
-    var noteTVdb : Int = 0
     var noteBetaSeries : Int = 0
     var noteIMDB : Int = 0
     var noteRottenTomatoes : Int = 0
@@ -282,10 +280,9 @@ class GraphRates: UIView {
     }
     
         
-    func sendFigures(rateTrakt : Int, rateTVdb : Int, rateBetaSeries : Int, rateMoviedb : Int, rateIMdb : Int, rateTVmaze : Int, rateRottenTomatoes : Int)
+    func sendFigures(rateTrakt : Int, rateBetaSeries : Int, rateMoviedb : Int, rateIMdb : Int, rateTVmaze : Int, rateRottenTomatoes : Int)
     {
         noteTrakt = rateTrakt
-        noteTVdb = rateTVdb
         noteBetaSeries = rateBetaSeries
         noteIMDB = rateIMdb
         noteRottenTomatoes = rateRottenTomatoes
@@ -341,13 +338,12 @@ class GraphRates: UIView {
     
     
     func traceGrapheCercle() {
-        traceUnCercle(noteTVdb,           color: colorTVdb,           offset: 1)
+        traceUnCercle(noteRottenTomatoes, color: colorRottenTomatoes, offset: 1)
         traceUnCercle(noteTrakt,          color: colorTrakt,          offset: 2)
         traceUnCercle(noteBetaSeries,     color: colorBetaSeries,     offset: 3)
         traceUnCercle(noteIMDB,           color: colorIMDB,           offset: 4)
         traceUnCercle(noteMoviedb,        color: colorMoviedb,        offset: 5)
         traceUnCercle(noteTVmaze,         color: colorTVmaze,         offset: 6)
-        traceUnCercle(noteRottenTomatoes, color: colorRottenTomatoes, offset: 7)
     }
     
     

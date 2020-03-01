@@ -41,7 +41,14 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
         graphe.setNeedsDisplay()
         theTVdb.getEpisodesDetailsAndRating(uneSerie: self.serie)
-
+        
+        for unEpisode in serie.saisons[saison-1].episodes {
+            if ((unEpisode.idIMdb) == "" && (unEpisode.date.compare(Date()) == .orderedAscending)) {
+                unEpisode.idIMdb = imdb.getEpisodeID(serieID: serie.idIMdb, saison: saison, episode: unEpisode.episode)
+                if (unEpisode.idIMdb == "") { print("No IMDB id for \(serie.serie) saison: \(saison) episode: \(unEpisode.episode)") }
+            }
+        }
+        
         arrondirLabel(texte: labelEpisodes, radius: 10)
         arrondirLabel(texte: labelCritiques, radius: 10)
 

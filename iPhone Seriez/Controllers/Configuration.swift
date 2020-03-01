@@ -127,6 +127,10 @@ class Configuration: UIViewController
         
     }
     
+    @IBAction func connectToTrakt(_ sender: Any) {
+        trakt.webAutenth()
+    }
+    
     
     func updateChronos() {
         chronoTrakt.text = String(format: "%0.3f sec", trakt.chrono)

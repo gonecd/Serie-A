@@ -377,7 +377,6 @@ class GraphMiniSaison: UIView {
         path2.stroke()
         color.setFill()
         path2.fill()
-
     }
 
 }

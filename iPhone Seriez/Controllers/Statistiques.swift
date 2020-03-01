@@ -69,7 +69,7 @@ class Stat3: UIView  {
     var largeur  : CGFloat = 0.0
     
     let bordure  : CGFloat = 10.0
-    let nbMonths : Int     = 6
+    let nbMonths : Int     = 5
     
     var borneDebut : Date = Date()
     var borneFin : Date = Date()
@@ -165,9 +165,9 @@ class Stat3: UIView  {
     func traceGantt(debut: Date, fin: Date, offset : Int, serie : String, color: UIColor) {
         if (fin.compare(ZeroDate) == .orderedSame) { return }
         
-        let size : CGFloat = 6.0
-        let decalY : CGFloat = 20.0
-        let intervalle : CGFloat = 30.0
+        let size : CGFloat = 3.0
+        let decalY : CGFloat = 10.0
+        let intervalle : CGFloat = 26.0
         var xdebut : CGFloat
         var xfin : CGFloat
         
@@ -195,6 +195,12 @@ class Stat3: UIView  {
                                         / CGFloat(Calendar.current.dateComponents([.day], from: borneDebut, to: borneFin).day!)
         }
 
+        if (debut.compare(fin) == .orderedSame) {
+            xdebut = xdebut - 1.0
+            xfin = xfin + 1.0
+        }
+        
+    
         let path : UIBezierPath = UIBezierPath()
         
         color.setStroke()

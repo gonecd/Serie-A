@@ -164,8 +164,6 @@ class TheTVdb : NSObject {
             uneSerie.banner = (reqResult.object(forKey: "data")! as AnyObject).object(forKey: "banner") as? String ?? ""
             if (uneSerie.banner != "") { uneSerie.banner = "https://www.thetvdb.com/banners/" + uneSerie.banner }
             
-            uneSerie.ratingTVDB = 10 * Int((reqResult.object(forKey: "data")! as AnyObject).object(forKey: "siteRating") as? Double ?? 0.0)
-            uneSerie.ratersTVDB = (reqResult.object(forKey: "data")! as AnyObject).object(forKey: "siteRatingCount") as? Int ?? 0
             uneSerie.idTVdb = String((reqResult.object(forKey: "data")! as AnyObject).object(forKey: "id") as? Int ?? 0)
             uneSerie.idIMdb = (reqResult.object(forKey: "data")! as AnyObject).object(forKey: "imdbId") as? String ?? ""
             

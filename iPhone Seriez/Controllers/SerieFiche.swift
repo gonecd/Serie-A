@@ -173,19 +173,13 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
         queue.addOperation(opeCritics)
        
         let opRates = BlockOperation(block: {
-            if (self.serie.idTVdb != "") { betaSeries.getEpisodesRatings(self.serie) }
-            OperationQueue.main.addOperation({
-                self.graphe.sendSerie(self.serie)
-                self.graphe.setNeedsDisplay()
-            } )
-
-            if (self.serie.idMoviedb != "") { theMoviedb.getEpisodesRatings(self.serie) }
-            OperationQueue.main.addOperation({
-                self.graphe.sendSerie(self.serie)
-                self.graphe.setNeedsDisplay()
-            } )
-
             imdb.getEpisodesRatings(self.serie)
+            OperationQueue.main.addOperation({
+                self.graphe.sendSerie(self.serie)
+                self.graphe.setNeedsDisplay()
+            } )
+
+            if (self.serie.idTVdb != "") { betaSeries.getEpisodesRatings(self.serie) }
             OperationQueue.main.addOperation({
                 self.graphe.sendSerie(self.serie)
                 self.graphe.setNeedsDisplay()
@@ -319,10 +313,6 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
         }
     }
     
-    
-    @IBAction func graphe(_ sender: Any) {
-        graphe.change()
-    }
     
     @IBAction func webTrakt(_ sender: AnyObject) { UIApplication.shared.open(URL(string: "https://trakt.tv/shows/\(serie.idTrakt)")!) }
     @IBAction func webTVMaze(_ sender: AnyObject) { UIApplication.shared.open(URL(string: "https://www.tvmaze.com/shows/\(serie.idTVmaze)")!) }

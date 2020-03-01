@@ -85,7 +85,6 @@ class ViewSerieListe: UITableViewController {
         
         // Affichage du mini graphe
         cell.miniGraphe.sendNotes(rateTrakt: viewList[indexPath.row].getFairGlobalRatingTrakt(),
-                                  rateTVdb: viewList[indexPath.row].getFairGlobalRatingTVdb(),
                                   rateBetaSeries: viewList[indexPath.row].getFairGlobalRatingBetaSeries(),
                                   rateMoviedb: viewList[indexPath.row].getFairGlobalRatingMoviedb(),
                                   rateIMdb: viewList[indexPath.row].getFairGlobalRatingIMdb(),

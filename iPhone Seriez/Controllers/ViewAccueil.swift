@@ -79,7 +79,7 @@ class ViewAccueil: UIViewController  {
         border(texte: cptWatchList)
 
         // Initialisation sources de données
-        _ = trakt.start()
+        trakt.start()
         theTVdb.initializeToken()
         imdb.loadDataFile()
         
@@ -239,6 +239,10 @@ class ViewAccueil: UIViewController  {
 //        dateFormatter.dateFormat = "dd/MM/yyyy HH:mm"
 //        defaults.set(dateFormatter.string(from: Date()), forKey: "RefreshDates")
 //        defaults.set(dateFormatter.string(from: Date()), forKey: "RefreshIMDB")
+
+        
+//        // Calculate the coefficients for FairRates computation
+//        db.computeFairRates()
 
         
         db.quickRefresh()

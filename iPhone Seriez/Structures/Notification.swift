@@ -48,9 +48,18 @@ func loadIMDB() {
 
 
 func loadDates() {
+    let today : Date = Date()
+    
     for uneSerie in db.shows {
         if ( (uneSerie.watchlist == false) && (uneSerie.unfollowed == false) && (uneSerie.status != "Ended") ){
-            let svgSerie : Serie = uneSerie
+            var svgSerie : Serie = Serie(serie: "")
+            do {
+                let data = try NSKeyedArchiver.archivedData(withRootObject: uneSerie, requiringSecureCoding: false)
+                svgSerie = try (NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as? Serie)!
+            } catch {
+                print("La copie physique de la serie a échoué")
+            }
+            
             db.downloadDates(serie : uneSerie)
             
             for uneSaison in uneSerie.saisons {
@@ -62,16 +71,16 @@ func loadDates() {
                 
                 // La saison n'existait pas
                 if (uneSaison.saison > svgSerie.saisons.count) {
-                    if (uneSaison.starts.compare(Date()) == .orderedDescending) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) commencera le \(dateFormLong.string(from: uneSaison.starts))") }
-                    if (uneSaison.ends.compare(Date()) == .orderedDescending) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) finira le \(dateFormLong.string(from: uneSaison.ends))") }
+                    if (uneSaison.starts.compare(today) == .orderedDescending) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) commencera le \(dateFormLong.string(from: uneSaison.starts))") }
+                    if (uneSaison.ends.compare(today) == .orderedDescending) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) finira le \(dateFormLong.string(from: uneSaison.ends))") }
                 }
                 else {
                     // La saison existait et les dates ont changé
                     if (uneSaison.starts != svgSerie.saisons[uneSaison.saison-1].starts) {
-                        if (uneSaison.starts.compare(Date()) == .orderedDescending) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) commencera le \(dateFormLong.string(from: uneSaison.starts))") }
+                        if (uneSaison.starts.compare(today) == .orderedDescending) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) commencera le \(dateFormLong.string(from: uneSaison.starts))") }
                     }
                     if (uneSaison.ends != svgSerie.saisons[uneSaison.saison-1].ends) {
-                        if (uneSaison.ends.compare(Date()) == .orderedDescending) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) finira le \(dateFormLong.string(from: uneSaison.ends))") }
+                        if (uneSaison.ends.compare(today) == .orderedDescending) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) finira le \(dateFormLong.string(from: uneSaison.ends))") }
                     }
                 }
             }

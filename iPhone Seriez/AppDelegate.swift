@@ -119,6 +119,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         completionHandler(.newData)
     }
+    
+    
+    func application(_ application: UIApplication,
+                     open url: URL,
+                     options: [UIApplication.OpenURLOptionsKey : Any] = [:] ) -> Bool {
+        
+        let components = NSURLComponents(url: url, resolvingAgainstBaseURL: true)
+        let source = components!.host
+        let params = components!.queryItems
+
+        switch source {
+        case "Trakt":
+            trakt.downloadToken(key: params?.first?.value ?? "")
+            break
+            
+        default:
+            print("Callback URL scheme : Source inconnue = \(source ?? "")")
+        }
+        
+        return true
+    }
+
 }
 
 extension AppDelegate: UNUserNotificationCenterDelegate
