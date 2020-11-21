@@ -194,6 +194,10 @@ class GraphMiniSaison: UIView {
         path2.move(to: CGPoint(x: origineX, y: origineY - (hauteur / 4)))
         path2.addLine(to: CGPoint(x: origineX + largeur, y: origineY - (hauteur / 4)))
         path2.stroke()
+
+        path2.move(to: CGPoint(x: origineX + (largeur / 2), y: origineY))
+        path2.addLine(to: CGPoint(x: origineX + (largeur / 2), y: origineY - hauteur ))
+        path2.stroke()
     }
     
     

@@ -65,6 +65,11 @@ class TVmaze {
             uneSerie.homepage = reqResult.object(forKey: "url") as? String ?? ""
             uneSerie.ratingTVmaze = Int(10 * ((reqResult.object(forKey: "rating")! as AnyObject).object(forKey: "average") as? Double ?? 0.0))
         }
+        else {
+            if ( (idIMDB != "") && (idTVDB != "")) {
+                return getSerieGlobalInfos(idTVDB : idTVDB, idIMDB : "")
+            }
+        }
         
         return uneSerie
     }
@@ -174,11 +179,11 @@ class TVmaze {
         return serieListe
     }
     
-    func getTrendingShows() -> (names : [String], ids : [String]) { return getShowList(url: "https://www.tvmaze.com/shows") }
+    func getTrendingShows() -> (names : [String], ids : [String]) { return parseShowList(url: "https://www.tvmaze.com/shows") }
 
-    func getPopularShows() -> (names : [String], ids : [String]) { return getShowList(url: "https://www.tvmaze.com/shows?Show[sort]=7") }
+    func getPopularShows() -> (names : [String], ids : [String]) { return parseShowList(url: "https://www.tvmaze.com/shows?Show[sort]=7") }
 
-    func getShowList(url : String) -> (names : [String], ids : [String]) {
+    func parseShowList(url : String) -> (names : [String], ids : [String]) {
         let startChrono : Date = Date()
         var showNames : [String] = []
         var showIds : [String] = []

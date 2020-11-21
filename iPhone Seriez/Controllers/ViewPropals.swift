@@ -170,7 +170,7 @@ class ViewPropals: UIViewController, UICollectionViewDataSource, UICollectionVie
                     var found : Bool = false
                     found = trakt.getIDs(serie: uneSerie)
                     
-                    if (!found && self.allSuggestions[i].MovieDBid != "" ) { theMoviedb.getIDs(serie: uneSerie) }
+                    if (!found && self.allSuggestions[i].MovieDBid != "" ) { _ = theMoviedb.getIDs(serie: uneSerie) }
                     
                     db.downloadGlobalInfo(serie: uneSerie)
                 }
@@ -188,39 +188,6 @@ class ViewPropals: UIViewController, UICollectionViewDataSource, UICollectionVie
                         
             DispatchQueue.main.async { self.viewStatuses.isHidden = false }
         }
-    }
-    
-    func loadDetails(nbSeries : Int) {
-        allSuggestedSeries.removeAll()
-        
-        for i in 0..<nbSeries {
-            if (i > allSuggestions.count) { return }
-            
-            var uneSerie : Serie = Serie(serie: allSuggestions[i].serie)
-            
-            if (allSuggestions[i].category == categInconnues) {
-                uneSerie.idIMdb = allSuggestions[i].IMDBid
-                uneSerie.idMoviedb = allSuggestions[i].MovieDBid
-                
-                var found : Bool = false
-                found = trakt.getIDs(serie: uneSerie)
-                
-                if (!found && allSuggestions[i].MovieDBid != "" ) { theMoviedb.getIDs(serie: uneSerie) }
-                
-                db.downloadGlobalInfo(serie: uneSerie)
-            }
-            else {
-                uneSerie = db.shows[db.index[allSuggestions[i].serie]!]
-            }
-            
-            allSuggestedSeries.append(uneSerie)
-        }
-        
-        viewCollection.reloadData()
-        viewCollection.setNeedsDisplay()
-
-        viewStatuses.isHidden = false
-        viewGetShows.isHidden = true
     }
     
     
@@ -479,7 +446,7 @@ class ViewPropals: UIViewController, UICollectionViewDataSource, UICollectionVie
         if (indexDB != -1) {
             if (db.shows[indexDB].watchlist) { return categWatchlist }
             else if (db.shows[indexDB].unfollowed) { return categAbandonnees }
-            else if (db.shows[indexDB].watching()) { return categSuivies }
+            else if (db.shows[indexDB].enCours()) { return categSuivies }
             else { return categFinies }
         }
         
@@ -488,7 +455,7 @@ class ViewPropals: UIViewController, UICollectionViewDataSource, UICollectionVie
     
     
     @IBAction func flipFlop(_ sender: Any) {
-        var bouton : UIButton = sender as! UIButton
+        let bouton : UIButton = sender as! UIButton
         
         if (bouton.alpha == alphaFull) {
             bouton.alpha = alphaLight
@@ -636,7 +603,7 @@ class ViewPropals: UIViewController, UICollectionViewDataSource, UICollectionVie
         viewController.image = getImage(allSuggestedSeries[tableCell.index].banner)
         
         if (allSuggestions[tableCell.index].category == categInconnues) {
-            viewController.modeRecherche = true
+            viewController.modeAffichage = modeRecherche
         }
     }
 }

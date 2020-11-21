@@ -115,9 +115,9 @@ class Database : NSObject {
         
         for uneSaison in serie.saisons {
             for unEpisode in uneSaison.episodes {
-                if ((unEpisode.idIMdb) == "" && (unEpisode.date.compare(Date()) == .orderedAscending)) {
+                if ((unEpisode.idIMdb) == "" && (unEpisode.date.compare(Date()) == .orderedAscending) && (unEpisode.date != ZeroDate) ) {
                     unEpisode.idIMdb = imdb.getEpisodeID(serieID: serie.idIMdb, saison: uneSaison.saison, episode: unEpisode.episode)
-                    if (unEpisode.idIMdb == "") { print("No IMDB id for \(serie.serie) saison: \(uneSaison.saison) episode: \(unEpisode.episode)") }
+                    if (unEpisode.idIMdb == "") { print("No IMDB id for \(serie.serie) saison: \(uneSaison.saison) episode: \(unEpisode.episode) serieID: \(serie.idIMdb)") }
                 }
             }
         }
@@ -168,6 +168,7 @@ class Database : NSObject {
         
         db.shows[db.index["Absolutely Fabulous"]!].saisons[3].nbEpisodes = db.shows[db.index["Absolutely Fabulous"]!].saisons[3].nbWatchedEps
         db.shows[db.index["Kaamelott"]!].saisons[3].nbEpisodes = db.shows[db.index["Kaamelott"]!].saisons[3].nbWatchedEps
+        db.shows[db.index["Kaamelott"]!].saisons[4].nbEpisodes = db.shows[db.index["Kaamelott"]!].saisons[3].nbWatchedEps
         db.shows[db.index["Lost"]!].saisons[0].nbEpisodes = db.shows[db.index["Lost"]!].saisons[0].nbWatchedEps
         db.shows[db.index["Sense8"]!].saisons[1].nbEpisodes = db.shows[db.index["Sense8"]!].saisons[1].nbWatchedEps
         db.shows[db.index["Shameless"]!].saisons[7].nbEpisodes = db.shows[db.index["Shameless"]!].saisons[7].nbWatchedEps
