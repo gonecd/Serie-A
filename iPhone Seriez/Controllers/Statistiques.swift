@@ -230,19 +230,29 @@ class Stat1: UIView  {
         
         let total : Int = db.valSeriesAbandonnees + db.valSeriesFinies + db.valWatchList + db.valSeriesEnCours
         
+        centreX = self.frame.height / 2
+        centreY = self.frame.height / 2
+        rayon = self.frame.height * 4 / 10
+        
         traceUnCercle(color: .systemGray, debut: 0.0, fin: CGFloat(db.valSeriesFinies)/CGFloat(total))
         traceUnCercle(color: .systemBlue, debut: CGFloat(db.valSeriesFinies)/CGFloat(total), fin: CGFloat(db.valSeriesFinies + db.valSeriesEnCours)/CGFloat(total))
         traceUnCercle(color: .systemRed, debut: CGFloat(db.valSeriesFinies + db.valSeriesEnCours)/CGFloat(total), fin: CGFloat(db.valSeriesFinies + db.valSeriesEnCours + db.valSeriesAbandonnees)/CGFloat(total))
         traceUnCercle(color: .systemGreen, debut: CGFloat(db.valSeriesFinies + db.valSeriesEnCours + db.valSeriesAbandonnees)/CGFloat(total), fin: 1.0)
         
-        var textAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 24), NSAttributedString.Key.foregroundColor: UIColor.systemGray]
-        "\(db.valSeriesFinies) séries finies".draw(in: CGRect(x: 300.0, y: 50, width: 300, height: 25), withAttributes: textAttributes)
-        textAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 24), NSAttributedString.Key.foregroundColor: UIColor.systemBlue]
-        "\(db.valSeriesEnCours) séries en cours".draw(in: CGRect(x: 300.0, y: 100, width: 300, height: 25), withAttributes: textAttributes)
-        textAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 24), NSAttributedString.Key.foregroundColor: UIColor.systemRed]
-        "\(db.valSeriesAbandonnees) séries abandonnées".draw(in: CGRect(x: 300.0, y: 150, width: 300, height: 25), withAttributes: textAttributes)
-        textAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 24), NSAttributedString.Key.foregroundColor: UIColor.systemGreen]
-        "\(db.valWatchList) séries à voir ?".draw(in: CGRect(x: 300.0, y: 200, width: 300, height: 25), withAttributes: textAttributes)
+        
+        let x_label : CGFloat = self.frame.height
+        let y_label : CGFloat = self.frame.height / 6
+        let size : CGFloat = self.frame.height * 2 / 25
+
+        
+        var textAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: size), NSAttributedString.Key.foregroundColor: UIColor.systemGray]
+        "\(db.valSeriesFinies) séries finies".draw(in: CGRect(x: x_label, y: y_label, width: 300, height: 25), withAttributes: textAttributes)
+        textAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: size), NSAttributedString.Key.foregroundColor: UIColor.systemBlue]
+        "\(db.valSeriesEnCours) séries en cours".draw(in: CGRect(x: x_label, y: y_label * 2, width: 300, height: 25), withAttributes: textAttributes)
+        textAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: size), NSAttributedString.Key.foregroundColor: UIColor.systemRed]
+        "\(db.valSeriesAbandonnees) séries abandonnées".draw(in: CGRect(x: x_label, y: y_label * 3, width: 300, height: 25), withAttributes: textAttributes)
+        textAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: size), NSAttributedString.Key.foregroundColor: UIColor.systemGreen]
+        "\(db.valWatchList) séries à voir ?".draw(in: CGRect(x: x_label, y: y_label * 4, width: 300, height: 25), withAttributes: textAttributes)
     }
     
     

@@ -80,11 +80,11 @@ class TodayViewController: UIViewController, NCWidgetProviding {
             self.view.addSubview(labelSaison)
             
             let labelChannel = UILabel(frame: CGRect(x: 90, y: 40+(hauteurParSaison*i), width: 120, height: 15))
-            labelChannel.textColor = .systemGray
+//            labelChannel.textColor = .systemIndigo
             labelChannel.font = UIFont.preferredFont(forTextStyle: .footnote)
             labelChannel.textAlignment = .center
             labelChannel.text = sharedInfos[i].channel
-            labelChannel.layer.borderColor = UIColor.systemGray.cgColor
+//            labelChannel.layer.borderColor = UIColor.systemIndigo.cgColor
             labelChannel.layer.borderWidth = 1
             labelChannel.layer.cornerRadius = 7
             labelChannel.layer.masksToBounds = true
@@ -92,7 +92,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
             
             let labelAvance = UILabel(frame: CGRect(x: 120, y: 60+(hauteurParSaison*i), width: 200, height: 21))
             labelAvance.font = UIFont.preferredFont(forTextStyle: .footnote)
-            labelAvance.textColor = .systemGray
+//            labelAvance.textColor = .systemIndigo
             labelAvance.textAlignment = .left
             labelAvance.text = String(sharedInfos[i].nbWatched) + " eps sur " + String(sharedInfos[i].nbEps)
             self.view.addSubview(labelAvance)
@@ -102,7 +102,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
             self.view.addSubview(poster)
             
             let grapheVus : GraphViewed = GraphViewed(frame: CGRect(x: 90, y: 60+(hauteurParSaison*i), width: 20, height: 20))
-            grapheVus.sendFigures(eps: sharedInfos[i].nbEps, watched: sharedInfos[i].nbWatched, color : UIColor.systemGray)
+            grapheVus.sendFigures(eps: sharedInfos[i].nbEps, watched: sharedInfos[i].nbWatched, color : UIColor.systemBlue)
             grapheVus.setNeedsDisplay()
             self.view.addSubview(grapheVus)
             

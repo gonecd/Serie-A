@@ -45,7 +45,7 @@ class MetaCritic {
     
     func getEpisodesRatings(_ uneSerie: Serie) {
         let startChrono : Date = Date()
-        let webPage : String = getPath(serie: uneSerie.serie)
+        let webPage : String = getPath(serie: uneSerie.serie).addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
         if (webPage == "") { return }
         
         for uneSaison in uneSerie.saisons {
@@ -126,8 +126,10 @@ class MetaCritic {
         case "Maniac":                                  return "https://www.metacritic.com/tv/maniac-2018"
         case "Catch-22":                                return "https://www.metacritic.com/tv/catch-22-2019"
         case "What We Do in the Shadows":               return "https://www.metacritic.com/tv/what-we-do-in-the-shadows-2019"
+        case "War of the Worlds":                       return "https://www.metacritic.com/tv/war-of-the-worlds-2020"
 
         case "Absolutely Fabulous":                     return "https://www.metacritic.com/tv/absolutely-fabulous-uk"
+        case "The IT Crowd":                            return "https://www.metacritic.com/tv/the-it-crowd-uk"
         case "Shameless":                               return "https://www.metacritic.com/tv/shameless-us"
 
         case "Dirk Gently's Holistic Detective Agency": return "https://www.metacritic.com/tv/dirk-gentlys-holistic-detective-agency"
@@ -137,6 +139,7 @@ class MetaCritic {
         case "The Haunting":                            return "https://www.metacritic.com/tv/the-haunting-of-hill-house"
         case "The Marvelous Mrs. Maisel":               return "https://www.metacritic.com/tv/the-marvelous-mrs-maisel"
         case "Rick and Morty":                          return "https://www.metacritic.com/tv/rick-morty"
+        case "Locke & Key":                             return "https://www.metacritic.com/tv/locke-key"
 
         case "Hero Corp",
              "Call My Agent",
@@ -155,6 +158,7 @@ class MetaCritic {
              "Kaamelott",
              "Kaboul Kitchen",
              "Mafiosa",
+             "Marianne",
              "Maison close",
              "Money Heist",
              "Monty Python's Flying Circus",
@@ -167,6 +171,9 @@ class MetaCritic {
              "Savages",
              "The Collapse",
              "Vernon Subutex",
+             "Caliphate",
+             "The Crimson Rivers",
+             "One-Punch Man",
              "How to Sell Drugs Online (Fast)":
             return ""
             
@@ -183,7 +190,8 @@ class MetaCritic {
         
         if (webPage == "") { return result }
         webPage = webPage + "/critic-reviews?sort-by=date&num_items=200"
-        
+        webPage = webPage.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
+
         do {
             let page : String = try String(contentsOf: URL(string : webPage)!)
             let doc : Document = try SwiftSoup.parse(page)

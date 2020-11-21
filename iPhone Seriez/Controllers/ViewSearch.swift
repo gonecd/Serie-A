@@ -490,7 +490,7 @@ class ViewSearch: UIViewController
         {
             viewController.title = "Propositions de séries"
             viewController.viewList = self.seriesTrouvees
-            viewController.isPropositions = true
+            viewController.modeAffichage = modeRecherche
         }
     }
     

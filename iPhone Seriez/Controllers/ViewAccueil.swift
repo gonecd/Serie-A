@@ -82,6 +82,8 @@ class ViewAccueil: UIViewController  {
         trakt.start()
         theTVdb.initializeToken()
         imdb.loadDataFile()
+        imdb.prepareEpisodes()
+        justWatch.initDiffuseurs()
         
         // Chargement de la dernière sauvegarde
         db.loadDB()
@@ -124,16 +126,17 @@ class ViewAccueil: UIViewController  {
         case "Watchlist":
             let viewController = targetController as! ViewSerieListe
             viewController.title = "Watchlist"
-            viewController.isWatchlist = true
             for uneSerie in db.shows { if (uneSerie.watchlist) { buildList.append(uneSerie) } }
             viewController.viewList = buildList
+            viewController.modeAffichage = modeWatchlist
             
         case "Abandonnées":
             let viewController = targetController as! ViewSerieListe
             viewController.title = "Séries abandonnées"
             for uneSerie in db.shows { if (uneSerie.unfollowed) { buildList.append(uneSerie) } }
             viewController.viewList = buildList
-            
+            viewController.modeAffichage = modeAbandon
+
         case "Finies":
             let viewController = targetController as! ViewSerieListe
             viewController.title = "Séries anciennes et finies"
@@ -145,7 +148,8 @@ class ViewAccueil: UIViewController  {
                 }
             }
             viewController.viewList = buildList
-            
+            viewController.modeAffichage = modeFinie
+
         case "En cours":
             let viewController = targetController as! ViewSerieListe
             viewController.title = "Séries en cours"
@@ -157,7 +161,8 @@ class ViewAccueil: UIViewController  {
                 }
             }
             viewController.viewList = buildList
-            
+            viewController.modeAffichage = modeEnCours
+
         case "On the air":
             let viewController = targetController as! ViewSaisonListe
             viewController.title = "Saisons en diffusion"
@@ -218,9 +223,9 @@ class ViewAccueil: UIViewController  {
     @IBAction func quickReload(_ sender: Any) {
 
 //        // Print all series rates
-//        print("serie;IMDB;TVDB;Trakt;BetaSeries;MovieDB;TVmaze;RottenTomatoes;MetaCritic;AlloCine;")
+//        print("serie;IMDB;Trakt;BetaSeries;MovieDB;TVmaze;RottenTomatoes;MetaCritic;AlloCine;")
 //        for uneSerie in db.shows {
-//            print("\(uneSerie.serie);\(uneSerie.ratingIMDB);\(uneSerie.ratingTVDB);\(uneSerie.ratingTrakt);\(uneSerie.ratingBetaSeries);\(uneSerie.ratingMovieDB);\(uneSerie.ratingTVmaze);\(uneSerie.ratingRottenTomatoes);\(uneSerie.ratingMetaCritic);\(uneSerie.ratingAlloCine);")
+//            print("\(uneSerie.serie);\(uneSerie.ratingIMDB);\(uneSerie.ratingTrakt);\(uneSerie.ratingBetaSeries);\(uneSerie.ratingMovieDB);\(uneSerie.ratingTVmaze);\(uneSerie.ratingRottenTomatoes);\(uneSerie.ratingMetaCritic);\(uneSerie.ratingAlloCine);")
 //        }
         
 //        // Print all episodes rates
@@ -245,6 +250,12 @@ class ViewAccueil: UIViewController  {
 //        db.computeFairRates()
 
         
+        // Testing IMDB episodes loading
+//        imdb.downloadEpisodes()
+//        imdb.prepareEpisodes()
+//        print ("tt7134908 saison 3 épisode 5 = \(imdb.getEpisodeID(serieID: "tt7134908", saison: 3, episode: 5))")
+        
+        
         db.quickRefresh()
         db.finaliseDB()
         db.shareWithWidget()
@@ -257,7 +268,20 @@ class ViewAccueil: UIViewController  {
 
         db.finaliseDB()
         self.viewDidAppear(false)
-        
     }
         
 }
+
+/*
+
+TVmaze::error 404 received for req=http://api.tvmaze.com/lookup/shows?imdb=tt10875696
+TVmaze::error 404 received for req=http://api.tvmaze.com/lookup/shows?imdb=tt9844334
+TVmaze::error 404 received for req=http://api.tvmaze.com/lookup/shows?thetvdb=361041
+TVmaze::error 404 received for req=http://api.tvmaze.com/lookup/shows?imdb=tt10970552
+
+ 
+TVmaze::getSeasonsDates failed : no ID
+RottenTomatoes getCritics failed for Call My Agent!: The file “reviews” couldn’t be opened.
+
+ 
+ */

@@ -17,10 +17,39 @@ class RottenTomatoes {
     }
     
     
-    func getSerieGlobalInfos(serie : String) -> Serie {
+    func loadAPI(reqAPI: String) -> NSObject {
+        let startChrono : Date = Date()
+        var ended : Bool = false
+        var result : NSObject = NSObject()
+        
+        var request : URLRequest = URLRequest(url: URL(string: reqAPI)!)
+        request.httpMethod = "GET"
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        
+        let task = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
+            if let data = data, let response = response as? HTTPURLResponse {
+                do {
+                    if (response.statusCode != 200) { print("RottenTomatoes::error \(response.statusCode) received for req=\(reqAPI)"); ended = true; return }
+                    result = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSObject
+                    ended = true
+                    
+                } catch let error as NSError { print("RottenTomatoes::failed \(error.localizedDescription) for req=\(reqAPI)"); ended = true; }
+            } else { print(error as Any); ended = true; }
+        })
+        
+        task.resume()
+        while (!ended) { usleep(1000) }
+        
+        chrono = chrono + Date().timeIntervalSince(startChrono)
+        return result
+    }
+
+    
+    
+    func getSerieGlobalInfosWeb(serie : String) -> Serie {
         let startChrono : Date = Date()
         let uneSerie : Serie = Serie(serie: serie)
-        let webPage : String = getPath(serie: serie)
+        let webPage : String = getPath(serie: serie).addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
         
         if (webPage == "") { return uneSerie }
         
@@ -34,15 +63,34 @@ class RottenTomatoes {
         catch let error as NSError { print("RottenTomatoes failed: \(error.localizedDescription)") }
         
         chrono = chrono + Date().timeIntervalSince(startChrono)
+
         return uneSerie
     }
-    
+
+
+    func getSerieGlobalInfos(serie : String) -> Serie {
+        let uneSerie : Serie = Serie(serie: serie)
+        let reqURL : String = "https://www.rottentomatoes.com/api/private/v2.0/search?q=\(serie.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) ?? "")"
+        
+        let reqResult : NSDictionary = loadAPI(reqAPI: reqURL) as! NSDictionary
+        
+        for oneShow in (reqResult.object(forKey: "tvSeries") as! NSArray) {
+            if (serie == (((oneShow as! NSDictionary).object(forKey: "title")) as? String ?? "")) {
+                uneSerie.ratingRottenTomatoes = ((oneShow as! NSDictionary).object(forKey: "meterScore")) as? Int ?? 0
+
+                return uneSerie
+            }
+        }
+
+        return uneSerie
+    }
+
     
     func getEpisodesRatings(_ uneSerie: Serie) {
         let startChrono : Date = Date()
-        let webPage : String = getPath(serie: uneSerie.serie)
+        let webPage : String = getPath(serie: uneSerie.serie).addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
         if (webPage == "") { return }
-        
+
         for uneSaison in uneSerie.saisons {
             do {
                 let page : String = try String(contentsOf: URL(string : webPage+"/s0"+String(uneSaison.saison))!)
@@ -123,9 +171,21 @@ class RottenTomatoes {
         case "Catch-22":
             return "https://www.rottentomatoes.com/tv/catch_22"
             
+        case "The Boys":
+            return "https://www.rottentomatoes.com/tv/the_boys_2019"
+            
+        case "Locke & Key":
+            return "https://www.rottentomatoes.com/tv/locke_and_key"
+            
+        case "One-Punch Man":
+            return "https://www.rottentomatoes.com/tv/one_punch_man"
+            
+        case "Call My Agent",
+             "Call My Agent!":
+            return "https://www.rottentomatoes.com/tv/call_my_agent_"
+            
         case "Hero Corp",
-             "Call My Agent",
-             "Call My Agent!",
+             "Caliphate",
              "Baron Noir",
              "Republican Gangsters",
              "WorkinGirls",
@@ -195,6 +255,8 @@ class RottenTomatoes {
 
         if (webPage == "") { return result }
         webPage = webPage + String(format: "/s%02d", saison) + "/reviews?type=top_critics"
+        webPage = webPage.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
+
 
         do {
             let page : String = try String(contentsOf: URL(string : webPage)!)

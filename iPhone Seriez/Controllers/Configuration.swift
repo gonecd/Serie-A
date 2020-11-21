@@ -12,7 +12,6 @@ import SeriesCommon
 class Configuration: UIViewController
 {
     @IBOutlet weak var progresData: UIProgressView!
-    @IBOutlet weak var boutonIMDB: UIButton!
     @IBOutlet weak var encours: UILabel!
     @IBOutlet weak var loadingIMDB: UIActivityIndicatorView!
     
@@ -38,18 +37,22 @@ class Configuration: UIViewController
     
     @IBOutlet weak var viewReload: UIView!
     @IBOutlet weak var viewConnect: UIView!
+    @IBOutlet weak var viewMyRates: UIView!
+    @IBOutlet weak var viewIMDBids: UIView!
+    @IBOutlet weak var viewIMDBratings: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         progresData.isHidden = true
         loadingIMDB.isHidden = true
-        boutonIMDB.layer.cornerRadius = 8.0
-        boutonIMDB.layer.masksToBounds = true
         updateChronos()
         
         makeGradiant(carre: viewReload, couleur : "Gris")
         makeGradiant(carre: viewConnect, couleur : "Gris")
-        
+        makeGradiant(carre: viewMyRates, couleur : "Gris")
+        makeGradiant(carre: viewIMDBids, couleur : "Gris")
+        makeGradiant(carre: viewIMDBratings, couleur : "Gris")
+
         makePrettyColorViews(view: colTrakt, couleur: colorTrakt)
         makePrettyColorViews(view: colTVdb, couleur: colorTVdb)
         makePrettyColorViews(view: colBetaSeries, couleur: colorBetaSeries)
@@ -169,5 +172,33 @@ class Configuration: UIViewController
             }
         }
     }
+    
+    @IBAction func getMyRates(_ sender: Any) {
+        let myRates : Dictionary = trakt.getMyRatings()
+        
+        for uneSerie in db.shows {
+            uneSerie.myRating = myRates[uneSerie.serie] ?? -1
+        }
+        
+        db.saveDB()
+    }
+
+    
+    @IBAction func LoadIMDBids(_ sender: Any) {
+        loadingIMDB.isHidden = false
+        loadingIMDB.startAnimating()
+        
+        DispatchQueue.global(qos: .utility).async {
+            
+            imdb.downloadEpisodes()
+                       
+            DispatchQueue.main.async {
+                self.loadingIMDB.stopAnimating()
+                self.loadingIMDB.isHidden = true
+                db.saveDB()
+            }
+        }
+    }
+    
 }
 

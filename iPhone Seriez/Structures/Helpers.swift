@@ -48,6 +48,18 @@ func getImage(_ url: String) -> UIImage {
 }
 
 
+func loadImage(_ url: String) -> UIImage {
+    if (url == "") { return UIImage() }
+    
+    let imageData = NSData(contentsOf: URL(string: url)!)
+    if (imageData != nil) {
+        return UIImage(data: imageData! as Data)!
+    }
+    else {
+        return UIImage()
+    }
+}
+
 func getDrapeau(country : String) -> UIImage {
     switch country {
     case "US": return #imageLiteral(resourceName: "Flag_of_the_United_States.png")
@@ -62,14 +74,14 @@ func getDrapeau(country : String) -> UIImage {
     case "BR": return #imageLiteral(resourceName: "Flag_of_Brazil.png")
     case "JP": return #imageLiteral(resourceName: "Flag_of_Japan.png")
     case "AU": return #imageLiteral(resourceName: "Flag_of_Australia.png")
-
     case "IL": return #imageLiteral(resourceName: "Flag_of_Israel.png")
     case "SE": return #imageLiteral(resourceName: "Flag_of_Sweden.png")
     case "FI": return #imageLiteral(resourceName: "Flag_of_Finland.png")
     case "IN": return #imageLiteral(resourceName: "Flag_of_India.png")
     case "TW": return #imageLiteral(resourceName: "Flag_of_Taiwan.png")
     case "CN": return #imageLiteral(resourceName: "Flag_of_China.png")
-
+    case "BE": return #imageLiteral(resourceName: "Flag_of_Belgium.png")
+        
     case "": return UIImage()
 
     default:
@@ -138,6 +150,12 @@ func makeMiniGradiant(carre : UIView, couleur : String) {
     carre.layer.insertSublayer(myGradient, at: 0)
 }
 
+func arrondir(fenetre: UIView, radius : CGFloat) {
+    fenetre.layer.cornerRadius = radius
+    fenetre.layer.borderWidth = 4.0
+    fenetre.layer.borderColor = UIColor.systemFill.cgColor
+    fenetre.layer.masksToBounds = true
+}
 
 func arrondir(texte: UITextField, radius : CGFloat) {
     texte.layer.cornerRadius = radius
@@ -145,6 +163,11 @@ func arrondir(texte: UITextField, radius : CGFloat) {
 }
 
 func arrondirLabel(texte: UILabel, radius : CGFloat) {
+    texte.layer.cornerRadius = radius
+    texte.layer.masksToBounds = true
+}
+
+func arrondirButton(texte: UIButton, radius : CGFloat) {
     texte.layer.cornerRadius = radius
     texte.layer.masksToBounds = true
 }
@@ -196,4 +219,20 @@ func getCellType() -> String {
     default:
         return "Undef"
     }
+}
+
+
+func colorGradient(borneInf : CGFloat, borneSup: CGFloat, valeur: CGFloat) -> UIColor {
+    var red: CGFloat = 0.0
+    var green: CGFloat = 0.0
+
+    if (valeur < (borneSup - borneInf)/2 ) {
+        red = 204.0 / 255.0
+        green = red * (valeur - borneInf) / ( (borneSup - borneInf)/2 )
+    } else {
+        green = 204.0 / 255.0
+        red = green * (borneSup - valeur) / ( (borneSup - borneInf)/2 )
+    }
+    
+    return UIColor.init(red: red, green: green, blue: 0.0, alpha: 1.0)
 }

@@ -14,67 +14,86 @@ class AlloCine : NSObject {
     var chrono : TimeInterval = 0
 
     let indexWebPage: Dictionary = [
-        "24" : "58",
-        "A Very Secret Service" : "10224",
-        "Bref." : "10520",
-        "Call My Agent!" : "5019",
-        "Crashing" : "20473",
-        "Dark" : "20328",
-        "Dirk Gently's Holistic Detective Agency" : "20395",
-        "Elite" : "22373",
-        "Fargo" : "11042",
-        "Fawlty Towers" : "794",
-        "Fear the Walking Dead" : "16958",
-        "House" : "238",
-        "How to Sell Drugs Online (Fast)" : "24940",
-        "Lost" : "223",
-        "Maniac" : "20388",
-        "Marco Polo" : "10841",
-        "Mindhunter" : "20143",
-        "Money Heist" : "21504",
-        "NCIS" : "133",
-        "Person of Interest" : "9290",
-        "Republican Gangsters" : "19344",
-        "Revolution" : "10591",
-        "Rick and Morty" : "11561",
-        "Savages" : "24290",
-        "Shameless" : "7634",
-        "Spiral" : "538",
-        "The 100" : "11871",
-        "The 4400" : "251",
-        "The Americans" : "10790",
-        "The Bureau" : "17907",
-        "The Collapse" : "25687",
-        "The End of the F***ing World" : "22881",
-        "The Handmaid's Tale" : "20677",
-        "The Haunting" : "21978",
-        "The Man in the High Castle" : "9359",
-        "The Marvelous Mrs. Maisel" : "21002",
-        "The Office" : "199",
-        "The Returned" : "4138",
-        "The Tunnel" : "11141",
-        "The Unit" : "450",
-        "Twin Peaks" : "536",
-        "Under the Dome" : "7834",
-        "What We Do in the Shadows" : "23200",
-        "When They See Us" : "23908",
-        "WorkinGirls" : "10289",
-        "Years and Years" : "23707"
+        "A Very Secret Service" : 10224,
+        "Bref." : 10520,
+        "Call My Agent!" : 5019,
+        "Crashing" : 20473,
+        "Dirk Gently's Holistic Detective Agency" : 20395,
+        "Elite" : 22373,
+        "Fargo" : 11042,
+        "Fear the Walking Dead" : 16958,
+        "How to Sell Drugs Online (Fast)" : 24940,
+        "Into the Night" : 25585,
+        "Lost in Space" : 18240,
+        "Maniac" : 20388,
+        "Marco Polo" : 10841,
+        "Mindhunter" : 20143,
+        "Money Heist" : 21504,
+        "One-Punch Man" : 20669,
+        "Person of Interest" : 9290,
+        "Real Humans" : 10946,
+        "Revolution" : 10591,
+        "Savages" : 24290,
+        "Shameless" : 7634,
+        "Spiral" : 538,
+        "The Americans" : 10790,
+        "The Bureau" : 17907,
+        "The Collapse" : 25687,
+        "The Crimson Rivers" : 20108,
+        "The End of the F***ing World" : 22881,
+        "The Haunting" : 21978,
+        "The Man in the High Castle" : 9359,
+        "The Office" : 199,
+        "The Returned" : 4138,
+        "Under the Dome" : 7834,
+        "What We Do in the Shadows" : 23200,
+        "WorkinGirls" : 10289
     ]
-        
     
     override init() {
     }
     
     
+    
+    func loadAPI(reqAPI: String) -> NSObject {
+        let startChrono : Date = Date()
+        var ended : Bool = false
+        var result : NSObject = NSObject()
+        
+        var request : URLRequest = URLRequest(url: URL(string: reqAPI)!)
+        request.httpMethod = "GET"
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        
+        let task = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
+            if let data = data, let response = response as? HTTPURLResponse {
+                do {
+                    if (response.statusCode != 200) { print("RottenTomatoes::error \(response.statusCode) received for req=\(reqAPI)"); ended = true; return }
+                    result = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSObject
+                    ended = true
+                    
+                } catch let error as NSError { print("RottenTomatoes::failed \(error.localizedDescription) for req=\(reqAPI)"); ended = true; }
+            } else { print(error as Any); ended = true; }
+        })
+        
+        task.resume()
+        while (!ended) { usleep(1000) }
+        
+        chrono = chrono + Date().timeIntervalSince(startChrono)
+        return result
+    }
+
+
     func getSerieGlobalInfos(serie : String) -> Serie {
         let startChrono : Date = Date()
         let uneSerie : Serie = Serie(serie: serie)
         
-        if (uneSerie.idAlloCine == "") {
-            uneSerie.idAlloCine = indexWebPage[serie] ?? ""
-            if (uneSerie.idAlloCine == "") { uneSerie.idAlloCine = getID(serie: serie) }
-            if (uneSerie.idAlloCine == "") { return uneSerie }
+        if ( (uneSerie.idAlloCine == "") || (uneSerie.idAlloCine == "0") ){
+            uneSerie.idAlloCine = String(indexWebPage[serie] ?? 0)
+            if (uneSerie.idAlloCine == "0") { uneSerie.idAlloCine = getID(serie: serie) }
+            if (uneSerie.idAlloCine == "0") {
+                print("AlloCine::getSerieGlobalInfos no ID for \(serie)")
+                return uneSerie
+            }
         }
 
         let webPage : String = "http://www.allocine.fr/series/ficheserie_gen_cserie=" + uneSerie.idAlloCine + ".html"
@@ -105,25 +124,20 @@ class AlloCine : NSObject {
     
 
     func getID(serie: String) -> String {
-        let webPage : String = "http://www.allocine.fr/recherche/6/?q=" + serie.lowercased().replacingOccurrences(of: "%", with: "+").replacingOccurrences(of: "'", with: "+").replacingOccurrences(of: " ", with: "+")
+        let reqURL : String = "https://www.allocine.fr/_/autocomplete/\(serie.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) ?? "toto")"
         
-        do {
-            let page : String = try String(contentsOf: URL(string : webPage)!)
-            let doc : Document = try SwiftSoup.parse(page)
-            let candidats : Elements = try doc.select("div [class='vmargin10t']").select("tr").select("td [style]")
+        let reqResult : NSDictionary = loadAPI(reqAPI: reqURL) as! NSDictionary
 
-            for unCandidat in candidats {
-                let name : String = try unCandidat.select("a").text()
-                let href : String = try unCandidat.select("a").attr("href")
-                
-                if (name == serie) {
-                    return href.filter { "0"..."9" ~= $0 }
-                }
+        for oneResult in (reqResult.object(forKey: "results") as! NSArray) {
+            if ((((oneResult as! NSDictionary).object(forKey: "entity_type")) as? String ?? "") == "series") {
+                let label : String = ((oneResult as! NSDictionary).object(forKey: "original_label")) as? String ?? "???"
+                let id : String = ((oneResult as! NSDictionary).object(forKey: "entity_id")) as? String ?? "---"
+
+                if (label == serie) {return id}
             }
-        } catch let error as NSError { print("AlloCine getID failed for \(serie): \(error.localizedDescription)") }
+        }
 
-        print("==> AlloCine - ID non trouvé : \(serie)")
-        return ""
+        return "0"
     }
     
 
@@ -181,9 +195,12 @@ class AlloCine : NSObject {
         let startChrono : Date = Date()
         var result : [Critique] = []
         
-        var idAlloCine : String = indexWebPage[serie] ?? ""
-        if (idAlloCine == "") { idAlloCine = getID(serie: serie) }
-        if (idAlloCine == "") { return result }
+        var idAlloCine : String = String(indexWebPage[serie] ?? 0)
+        if (idAlloCine == "0") { idAlloCine = getID(serie: serie) }
+        if (idAlloCine == "0") {
+            print("AlloCine::getCritics no ID for \(serie)")
+            return result
+        }
 
         let webPage : String = "http://www.allocine.fr/series/ficheserie-" + idAlloCine + "/critiques/presse/"
         

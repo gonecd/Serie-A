@@ -13,9 +13,6 @@ class TheTVdb : NSObject {
     var chrono : TimeInterval = 0
 
     var TokenPath : String = String()
-    let TheTVdbUserkey : String = "MO3XCCVP74QJR7GF"
-    //let TheTVdbUserkey : String = "FA20954ED9DB5200"
-    let TheTVdbUsername : String = "gonecd"
     let TheTVdbAPIkey : String = "8168E8621729A50F"
     var Token : String = ""
     
@@ -62,8 +59,8 @@ class TheTVdb : NSObject {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("Bearer \(self.TheTVdbAPIkey)", forHTTPHeaderField: "Authorization")
-        request.httpBody = "{\n  \"apikey\": \"\(self.TheTVdbAPIkey)\",\n  \"username\": \"\(self.TheTVdbUsername)\",\n  \"userkey\": \"\(self.TheTVdbUserkey)\"\n}".data(using: String.Encoding.utf8);
-        
+        request.httpBody = "{\n  \"apikey\": \"\(self.TheTVdbAPIkey)\"\n}".data(using: String.Encoding.utf8);
+
         let task = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
             if let data = data, let response = response as? HTTPURLResponse {
                 if response.statusCode == 200 {
@@ -80,7 +77,6 @@ class TheTVdb : NSObject {
         
         task.resume()
         while (task.state != URLSessionTask.State.completed) { sleep(1) }
-
     }
     
 
@@ -88,8 +84,15 @@ class TheTVdb : NSObject {
         var pageToLoad  : Int = 1
         var continuer   : Bool = true
         
+        if (uneSerie.idTVdb == "") { return }
+
         while ( continuer ) {
             let reqResult : NSDictionary = loadAPI(reqAPI: "https://api.thetvdb.com/series/\(uneSerie.idTVdb)/episodes?page=\(pageToLoad)") as? NSDictionary ?? NSDictionary()
+            
+            if (reqResult.object(forKey: "links") != nil) {
+                let nextPage : Int = ((reqResult.object(forKey: "links") as AnyObject).object(forKey: "next") as? Int ?? 0)
+                if (nextPage == 0) { continuer = false }
+            }
             
             if (reqResult.object(forKey: "data") != nil) {
                 for fiche in reqResult.object(forKey: "data")! as! NSArray {
@@ -138,10 +141,6 @@ class TheTVdb : NSObject {
                     }
                 }
             }
-            else { // On a été une page trop loin, il n'y a plus d'autres épisodes
-                continuer = false
-            }
-            
             pageToLoad = pageToLoad + 1
         }
     }
@@ -150,31 +149,27 @@ class TheTVdb : NSObject {
     func getSerieGlobalInfos(idTVdb : String) -> Serie {
         let uneSerie : Serie = Serie(serie: "")
         
-        if (idTVdb != "") { return uneSerie }
+        if (idTVdb == "") { return uneSerie }
         
         let reqResult : NSDictionary = loadAPI(reqAPI: "https://api.thetvdb.com/series/\(idTVdb)") as? NSDictionary ?? NSDictionary()
         
         if (reqResult.object(forKey: "data") != nil) {
             uneSerie.serie = (reqResult.object(forKey: "data")! as AnyObject).object(forKey: "seriesName") as? String ?? ""
+            uneSerie.idTVdb = String((reqResult.object(forKey: "data")! as AnyObject).object(forKey: "id") as? Int ?? 0)
+            uneSerie.idIMdb = (reqResult.object(forKey: "data")! as AnyObject).object(forKey: "imdbId") as? String ?? ""
             uneSerie.status = (reqResult.object(forKey: "data")! as AnyObject).object(forKey: "status") as? String ?? ""
             uneSerie.network = (reqResult.object(forKey: "data")! as AnyObject).object(forKey: "network") as? String ?? ""
             uneSerie.resume = (reqResult.object(forKey: "data")! as AnyObject).object(forKey: "overview") as? String ?? ""
             uneSerie.genres = (reqResult.object(forKey: "data")! as AnyObject).object(forKey: "genre") as? [String] ?? []
-            
-            uneSerie.banner = (reqResult.object(forKey: "data")! as AnyObject).object(forKey: "banner") as? String ?? ""
-            if (uneSerie.banner != "") { uneSerie.banner = "https://www.thetvdb.com/banners/" + uneSerie.banner }
-            
-            uneSerie.idTVdb = String((reqResult.object(forKey: "data")! as AnyObject).object(forKey: "id") as? Int ?? 0)
-            uneSerie.idIMdb = (reqResult.object(forKey: "data")! as AnyObject).object(forKey: "imdbId") as? String ?? ""
-            
+            uneSerie.certification = (reqResult.object(forKey: "data")! as AnyObject).object(forKey: "rating") as? String ?? ""
+
+            let bannerFile : String =  (reqResult.object(forKey: "data")! as AnyObject).object(forKey: "banner") as? String ?? ""
+            if (bannerFile != "") { uneSerie.banner = "https://www.thetvdb.com/banners/" + bannerFile }
+
             let textRuntime : String = (reqResult.object(forKey: "data")! as AnyObject).object(forKey: "runtime") as? String ?? "0"
             if (textRuntime != "" ) { uneSerie.runtime = Int(textRuntime)! }
-            
-            uneSerie.certification = (reqResult.object(forKey: "data")! as AnyObject).object(forKey: "rating") as? String ?? ""
-            
         }
         
         return uneSerie
-    }
-    
+    }    
 }

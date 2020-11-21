@@ -40,6 +40,7 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         banniere.image = image
         self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
         graphe.setNeedsDisplay()
+        
         theTVdb.getEpisodesDetailsAndRating(uneSerie: self.serie)
         
         for unEpisode in serie.saisons[saison-1].episodes {

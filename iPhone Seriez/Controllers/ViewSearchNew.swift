@@ -134,7 +134,7 @@ class ViewSearchNew: UIViewController
             
             viewController.title = "Propositions de séries"
             viewController.viewList = seriesTrouvees
-            viewController.isPropositions = true
+            viewController.modeAffichage = modeRecherche
         }
     }
     

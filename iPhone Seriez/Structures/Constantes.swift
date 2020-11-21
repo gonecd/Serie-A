@@ -27,6 +27,7 @@ var tvMaze         : TVmaze         = TVmaze.init()
 var rottenTomatoes : RottenTomatoes = RottenTomatoes.init()
 var metaCritic     : MetaCritic     = MetaCritic.init()
 var alloCine       : AlloCine       = AlloCine.init()
+var justWatch      : JustWatch      = JustWatch.init()
 
 var db : Database   = Database.init()
 
@@ -151,3 +152,11 @@ let languesMovieDB: NSDictionary = [
     "Spanish" : "es",
     "Swedish" : "sv"
 ]
+
+// Modes d'affichage de la view Série
+let modeFinie       : Int = 1
+let modeEnCours     : Int = 2
+let modeAbandon     : Int = 3
+let modeWatchlist   : Int = 4
+let modeRecherche   : Int = 5
+
