@@ -94,7 +94,7 @@ class Database : NSObject {
         var dataAlloCine    : Serie = Serie(serie: "")
         var dataIMDB        : Serie = Serie(serie: "")
 
-        queue.addOperation(BlockOperation(block: { dataTVdb = theTVdb.getSerieGlobalInfos(idTVdb: serie.idTVdb) } ) )
+        //killtvdb queue.addOperation(BlockOperation(block: { dataTVdb = theTVdb.getSerieGlobalInfos(idTVdb: serie.idTVdb) } ) )
         queue.addOperation(BlockOperation(block: { dataBetaSeries = betaSeries.getSerieGlobalInfos(idTVDB : serie.idTVdb, idIMDB : serie.idIMdb) } ) )
         queue.addOperation(BlockOperation(block: { dataMoviedb = theMoviedb.getSerieGlobalInfos(idMovieDB: serie.idMoviedb) } ) )
         queue.addOperation(BlockOperation(block: { dataIMDB = imdb.getSerieGlobalInfos(idIMDB: serie.idIMdb) } ) )
@@ -111,7 +111,8 @@ class Database : NSObject {
     
     
     func downloadDetailInfo(serie : Serie) {
-        theTVdb.getEpisodesDetailsAndRating(uneSerie: serie)
+        //killtvdb theTVdb.getEpisodesDetailsAndRating(uneSerie: serie)
+        trakt.getEpisodes(uneSerie: serie)
         
         for uneSaison in serie.saisons {
             for unEpisode in uneSaison.episodes {
@@ -126,7 +127,7 @@ class Database : NSObject {
         
         queue.addOperation(BlockOperation(block: { if (serie.idTVdb != "") { betaSeries.getEpisodesRatingsBis(serie) } } ) )
         queue.addOperation(BlockOperation(block: { imdb.getEpisodesRatings(serie) } ) )
-        queue.addOperation(BlockOperation(block: { if (serie.idTrakt != "") { trakt.getEpisodesRatings(serie) } } ) )
+        //killtvdb queue.addOperation(BlockOperation(block: { if (serie.idTrakt != "") { trakt.getEpisodesRatings(serie) } } ) )
         
         queue.waitUntilAllOperationsAreFinished()
     }

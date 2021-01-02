@@ -420,11 +420,19 @@ class Trakt : NSObject {
     
        
     func getEpisodes(uneSerie : Serie) {
-        let reqResult : NSArray = loadAPI(reqAPI: "https://api.trakt.tv/shows/\(uneSerie.idTrakt)/seasons?extended=episodes") as! NSArray
+        var request : String = ""
         
+        if (uneSerie.idTrakt != "")         { request = "https://api.trakt.tv/shows/\(uneSerie.idTrakt)/seasons?extended=episodes,full" }
+        else if (uneSerie.idIMdb != "")     { request = "https://api.trakt.tv/shows/\(uneSerie.idIMdb)/seasons?extended=episodes,full" }
+        else { return }
+        
+        let reqResult : NSArray = loadAPI(reqAPI: request) as? NSArray ?? NSArray()
+        if (reqResult.count == 0) { return }
+
         for uneSaison in reqResult {
             let saisonNum : Int = ((uneSaison as! NSDictionary).object(forKey: "number")) as? Int ?? 0
-            
+            let today : Date = Date()
+
             if (saisonNum != 0) {
                 var ficheSaison : Saison
                 
@@ -457,14 +465,27 @@ class Trakt : NSObject {
                         ficheEpisode.titre = (unEpisode as! NSDictionary).object(forKey: "title")! as? String ?? ""
                         ficheEpisode.idIMdb = ((unEpisode as! NSDictionary).object(forKey: "ids")! as AnyObject).object(forKey: "imdb") as? String ?? ""
                         ficheEpisode.idTVdb = ((unEpisode as! NSDictionary).object(forKey: "ids")! as AnyObject).object(forKey: "tvdb") as? Int ?? 0
+                        ficheEpisode.resume = (unEpisode as! NSDictionary).object(forKey: "overview")! as? String ?? ""
+
+                        let stringDate : String = (unEpisode as! NSDictionary).object(forKey: "first_aired")! as? String ?? ""
+                        if (stringDate ==  "") {
+                            ficheEpisode.date = ZeroDate
+                        }
+                        else {
+                            ficheEpisode.date = dateFormTrakt.date(from: stringDate)!
+                        }
+                        
+                        if ( (ficheEpisode.date.compare(today) == .orderedAscending) && (ficheEpisode.date.compare(ZeroDate) != .orderedSame) ) {
+                            ficheEpisode.ratingTrakt = Int(10 * ((unEpisode as! NSDictionary).object(forKey: "rating")! as? Double ?? 0.0))
+                            ficheEpisode.ratersTrakt = (unEpisode as! NSDictionary).object(forKey: "votes")! as? Int ?? -1
+                        }
+                        
                     }
                 }
 
                 // On update les compteurs de la saison
                 ficheSaison.nbEpisodes = ficheSaison.episodes.count
             }
- 
-            
         }
     }
     

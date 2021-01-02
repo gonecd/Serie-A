@@ -41,7 +41,8 @@ class ViewAccueil: UIViewController  {
         dateFormLong.dateFormat = "dd MMM yyyy"
         dateFormSource.locale = Locale.current
         dateFormSource.dateFormat = "yyyy-MM-dd"
-
+        dateFormTrakt.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSX"
+        
         checkDirectories()
         
         // Faire des jolis carrés dégradés à coins ronds

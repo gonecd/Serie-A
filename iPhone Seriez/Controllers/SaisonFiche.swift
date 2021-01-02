@@ -41,8 +41,9 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
         graphe.setNeedsDisplay()
         
-        theTVdb.getEpisodesDetailsAndRating(uneSerie: self.serie)
-        
+        //killtvdb theTVdb.getEpisodesDetailsAndRating(uneSerie: serie)
+        trakt.getEpisodes(uneSerie: serie)
+
         for unEpisode in serie.saisons[saison-1].episodes {
             if ((unEpisode.idIMdb) == "" && (unEpisode.date.compare(Date()) == .orderedAscending)) {
                 unEpisode.idIMdb = imdb.getEpisodeID(serieID: serie.idIMdb, saison: saison, episode: unEpisode.episode)
@@ -93,12 +94,12 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         } )
         queue.addOperation(opeLoadIMDB)
 
-        let opeLoadTrakt = BlockOperation(block: {
-            if (self.serie.idTrakt != "") { trakt.getEpisodesRatings(self.serie) }
-            self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
-            OperationQueue.main.addOperation({ self.graphe.setNeedsDisplay() } )
-        } )
-        queue.addOperation(opeLoadTrakt)
+// killtvdb       let opeLoadTrakt = BlockOperation(block: {
+//            if (self.serie.idTrakt != "") { trakt.getEpisodesRatings(self.serie) }
+//            self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
+//            OperationQueue.main.addOperation({ self.graphe.setNeedsDisplay() } )
+//        } )
+//        queue.addOperation(opeLoadTrakt)
         
         let opeLoadTVmaze = BlockOperation(block: {
             tvMaze.getEpisodesRatings(self.serie)
@@ -121,7 +122,7 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         opeFinalise.addDependency(opeLoadBetaSeries)
         opeFinalise.addDependency(opeLoadMovieDB)
         opeFinalise.addDependency(opeLoadIMDB)
-        opeFinalise.addDependency(opeLoadTrakt)
+// killtvdb       opeFinalise.addDependency(opeLoadTrakt)
         opeFinalise.addDependency(opeLoadTVmaze)
         opeFinalise.addDependency(opeLoadRottenT)
         opeFinalise.addDependency(opeLoadMetaCritic)

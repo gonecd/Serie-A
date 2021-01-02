@@ -104,7 +104,7 @@ class BetaSeries : NSObject {
             return
         }
         
-        let reqResult : NSDictionary = loadAPI(reqAPI: "https://api.betaseries.com/episodes/display?thetvdb_id=\(listeEpisodes)") as! NSDictionary
+        let reqResult : NSDictionary = loadAPI(reqAPI: "https://api.betaseries.com/episodes/display?thetvdb_id=\(listeEpisodes)") as? NSDictionary ?? NSDictionary()
         
         if (reqResult.object(forKey: "episodes") != nil) {
             for unEpisode in reqResult.object(forKey: "episodes")! as! NSArray {
@@ -133,7 +133,9 @@ class BetaSeries : NSObject {
         else if (idTVDB != "")  { reqURL = "https://api.betaseries.com/shows/display?v=3.0&thetvdb_id=\(idTVDB)" }
         else                    { return uneSerie }
         
-        let reqResult : NSDictionary = loadAPI(reqAPI: reqURL) as! NSDictionary
+        let reqResult : NSDictionary = loadAPI(reqAPI: reqURL) as? NSDictionary ?? NSDictionary()
+        if (reqResult.count == 0) { return uneSerie }
+        
         let show = reqResult.object(forKey: "show") as! NSDictionary
         
         uneSerie.serie = show.object(forKey: "title") as? String ?? ""
@@ -167,7 +169,9 @@ class BetaSeries : NSObject {
             else if (idTVDB != "")  { reqURL = "https://api.betaseries.com/shows/display?v=3.0&thetvdb_id=\(idTVDB)" }
             else                    { return result }
             
-            let reqResult : NSDictionary = loadAPI(reqAPI: reqURL) as! NSDictionary
+            let reqResult : NSDictionary = loadAPI(reqAPI: reqURL) as? NSDictionary ?? NSDictionary()
+            if (reqResult.count == 0) { return result }
+            
             let show = reqResult.object(forKey: "show") as! NSDictionary
             
             if ((show.object(forKey: "platforms") != nil) && !(show.object(forKey: "platforms") is NSNull)) {
@@ -215,7 +219,8 @@ class BetaSeries : NSObject {
         var showNames : [String] = []
         var showIds : [String] = []
         var compteur : Int = 0
-        let reqResult : NSDictionary = loadAPI(reqAPI: "https://api.betaseries.com/shows/similars?v=3.0&thetvdb_id=\(TVDBid)") as! NSDictionary
+        let reqResult : NSDictionary = loadAPI(reqAPI: "https://api.betaseries.com/shows/similars?v=3.0&thetvdb_id=\(TVDBid)") as? NSDictionary ?? NSDictionary()
+        if (reqResult.count == 0) { return (showNames, showIds) }
         
         for oneShow in (reqResult.object(forKey: "similars") as! NSArray) {
             let titre : String = ((oneShow as! NSDictionary).object(forKey: "show_title")) as? String ?? ""
@@ -239,7 +244,8 @@ class BetaSeries : NSObject {
     func getShowList(url : String) -> (names : [String], ids : [String]) {
         var showNames : [String] = []
         var showIds : [String] = []
-        let reqResult : NSDictionary = loadAPI(reqAPI: url) as! NSDictionary
+        let reqResult : NSDictionary = loadAPI(reqAPI: url) as? NSDictionary ?? NSDictionary()
+        if (reqResult.count == 0) { return (showNames, showIds) }
         
         for oneShow in (reqResult.object(forKey: "shows") as! NSArray) {
             let titre : String = ((oneShow as! NSDictionary).object(forKey: "title")) as? String ?? ""
@@ -255,7 +261,8 @@ class BetaSeries : NSObject {
     
     func rechercheParTitre(serieArechercher : String) -> [Serie] {
         var serieListe : [Serie] = []
-        let reqResult : NSDictionary = loadAPI(reqAPI: "https://api.betaseries.com/shows/search?title=\(serieArechercher.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)!)&v=3.0&order=popularity") as! NSDictionary
+        let reqResult : NSDictionary = loadAPI(reqAPI: "https://api.betaseries.com/shows/search?title=\(serieArechercher.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)!)&v=3.0&order=popularity") as? NSDictionary ?? NSDictionary()
+        if (reqResult.count == 0) { return serieListe }
         
         for oneItem in (reqResult.object(forKey: "shows") as! NSArray) {
             let oneShow : NSDictionary = oneItem as! NSDictionary
@@ -286,3 +293,4 @@ class BetaSeries : NSObject {
     }
 
 }
+

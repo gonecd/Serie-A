@@ -16,6 +16,7 @@ let IMdbDir : URL = AppDir.appendingPathComponent("imdb")
 let dateFormShort   = DateFormatter()
 let dateFormLong    = DateFormatter()
 let dateFormSource  = DateFormatter()
+let dateFormTrakt   = DateFormatter()
 
 // Structures globales
 var trakt          : Trakt          = Trakt.init()

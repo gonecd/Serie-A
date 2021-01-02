@@ -84,14 +84,18 @@ class ViewSerieListe: UITableViewController {
         
         // Affichage du status
         arrondir(texte: cell.status, radius: 8.0)
-        if (viewList[indexPath.row].status == "Ended") {
-            cell.status.text = "FINIE"
-            cell.status.textColor = UIColor.black
-        }
-        else {
-            cell.status.text = "EN COURS"
-            cell.status.textColor = .systemBlue
-        }
+        cell.status.text = computeSerieStatus(serie : viewList[indexPath.row]).label
+        cell.status.textColor = computeSerieStatus(serie : viewList[indexPath.row]).couleur
+
+        //        if (viewList[indexPath.row].status == "Ended") {
+//            cell.status.text = "FINIE"
+//            cell.status.textColor = UIColor.black
+//        }
+//        else {
+//            cell.status.text = "EN COURS"
+//            cell.status.textColor = .systemBlue
+//        }
+        
         
         // Affichage du drapeau
         cell.drapeau.image = getDrapeau(country: viewList[indexPath.row].country)
@@ -109,6 +113,16 @@ class ViewSerieListe: UITableViewController {
         cell.miniGraphe.setNeedsDisplay()
         
         return cell
+    }
+    
+    
+    func computeSerieStatus(serie : Serie) -> (label: String, couleur: UIColor) {
+        if (serie.saisons.last!.starts.compare(ZeroDate) == .orderedSame) { return ("Saison prévue", .systemTeal) }
+        if (serie.saisons.last!.starts.compare(Date()) == .orderedDescending) { return ("Dates annoncées", .systemIndigo) }
+        if (serie.status == "Ended") { return ("Série terminée", .systemRed) }
+        if ((serie.saisons.last!.starts.compare(Date()) == .orderedAscending) && ((serie.saisons.last!.ends.compare(Date()) == .orderedDescending) || (serie.saisons.last!.ends.compare(ZeroDate) == .orderedSame)) ) { return ("Saison en cours", .systemBlue) }
+
+        return ("", .systemFill)
     }
     
     
@@ -134,29 +148,6 @@ class ViewSerieListe: UITableViewController {
         }
         reload.backgroundColor = .systemGreen
         return UISwipeActionsConfiguration(actions: [reload])
-        
-//        let remove = UIContextualAction(style: .destructive, title: "Remove") {  (contextualAction, view, boolValue) in
-//            if (self.supprimerUneSerieDansLaWatchlistTrakt(uneSerie: self.viewList[indexPath.row])) {
-//                self.viewList.remove(at: indexPath.row)
-//                self.liste.reloadData()
-//                self.view.setNeedsDisplay()
-//            }
-//        }
-//        remove.backgroundColor = .systemRed
-//
-//        let addWatchlist = UIContextualAction(style: .destructive, title: "Add to watchlist") {  (contextualAction, view, boolValue) in
-//            if (trakt.addToWatchlist(theTVdbId: self.viewList[indexPath.row].idTVdb)) {
-//                db.downloadGlobalInfo(serie: self.viewList[indexPath.row])
-//                self.viewList[indexPath.row].watchlist = true
-//                db.shows.append(self.viewList[indexPath.row])
-//                db.saveDB()
-//            }
-//        }
-//        addWatchlist.backgroundColor = .systemPurple
-//
-//        if (self.modeAffichage == modeWatchlist) { return UISwipeActionsConfiguration(actions: [reload, remove]) }
-//        else if (self.modeAffichage == modeRecherche) { return UISwipeActionsConfiguration(actions: [addWatchlist]) }
-//        else { return UISwipeActionsConfiguration(actions: [reload]) }
     }
     
     
@@ -173,16 +164,5 @@ class ViewSerieListe: UITableViewController {
         self.liste.reloadData()
         self.view.setNeedsDisplay()
     }
-    
-//    func supprimerUneSerieDansLaWatchlistTrakt(uneSerie: Serie) -> Bool {
-//        if (trakt.removeFromWatchlist(theTVdbId: uneSerie.idTVdb)) {
-//            db.shows.remove(at: db.shows.firstIndex(of: uneSerie)!)
-//            db.saveDB()
-//            //TODO : updateCompteurs()
-//
-//            return true
-//        }
-//        return false
-//    }
     
 }

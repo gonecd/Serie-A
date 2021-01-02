@@ -223,10 +223,14 @@ class GraphMiniSaison: UIView {
     
     
     func traceAllEpisodes() {
+        let today : Date = Date()
+        
         for unEpisode in theSerie.saisons[theSaison-1].episodes {
-            traceUnPoint(note: unEpisode.getFairRatingTrakt(), ligne: 1, color: colorTrakt)
-            traceUnPoint(note: unEpisode.getFairRatingBetaSeries(), ligne: 2, color: colorBetaSeries)
-            traceUnPoint(note: unEpisode.getFairRatingIMdb(), ligne: 3, color: colorIMDB)
+            if ( (unEpisode.date.compare(today) == .orderedAscending) && (unEpisode.date.compare(ZeroDate) != .orderedSame) ) {
+                traceUnPoint(note: unEpisode.getFairRatingTrakt(), ligne: 1, color: colorTrakt)
+                traceUnPoint(note: unEpisode.getFairRatingBetaSeries(), ligne: 2, color: colorBetaSeries)
+                traceUnPoint(note: unEpisode.getFairRatingIMdb(), ligne: 3, color: colorIMDB)
+            }
         }
     }
     
@@ -239,18 +243,22 @@ class GraphMiniSaison: UIView {
         var maxTrakt : Int = 0
         var maxBetaSeries : Int = 0
         var maxIMdb : Int = 0
-
+        
+        let today : Date = Date()
+        
         for unEpisode in theSerie.saisons[theSaison-1].episodes {
-            if ((unEpisode.getFairRatingTrakt() < minTrakt) && (unEpisode.ratingTrakt != 0) ) { minTrakt = unEpisode.getFairRatingTrakt() }
-            if (unEpisode.getFairRatingTrakt() > maxTrakt) { maxTrakt = unEpisode.getFairRatingTrakt() }
-
-            if ((unEpisode.getFairRatingBetaSeries() < minBetaSeries) && (unEpisode.ratingBetaSeries != 0) ) { minBetaSeries = unEpisode.getFairRatingBetaSeries() }
-            if (unEpisode.getFairRatingBetaSeries() > maxBetaSeries) { maxBetaSeries = unEpisode.getFairRatingBetaSeries() }
-
-            if ((unEpisode.getFairRatingIMdb() < minIMdb) && (unEpisode.ratingIMdb != 0) ) { minIMdb = unEpisode.getFairRatingIMdb() }
-            if (unEpisode.getFairRatingIMdb() > maxIMdb) { maxIMdb = unEpisode.getFairRatingIMdb() }
+            if ( (unEpisode.date.compare(today) == .orderedAscending) && (unEpisode.date.compare(ZeroDate) != .orderedSame) ) {
+                if ((unEpisode.getFairRatingTrakt() < minTrakt) && (unEpisode.ratingTrakt != 0) ) { minTrakt = unEpisode.getFairRatingTrakt() }
+                if (unEpisode.getFairRatingTrakt() > maxTrakt) { maxTrakt = unEpisode.getFairRatingTrakt() }
+                
+                if ((unEpisode.getFairRatingBetaSeries() < minBetaSeries) && (unEpisode.ratingBetaSeries != 0) ) { minBetaSeries = unEpisode.getFairRatingBetaSeries() }
+                if (unEpisode.getFairRatingBetaSeries() > maxBetaSeries) { maxBetaSeries = unEpisode.getFairRatingBetaSeries() }
+                
+                if ((unEpisode.getFairRatingIMdb() < minIMdb) && (unEpisode.ratingIMdb != 0) ) { minIMdb = unEpisode.getFairRatingIMdb() }
+                if (unEpisode.getFairRatingIMdb() > maxIMdb) { maxIMdb = unEpisode.getFairRatingIMdb() }
+            }
         }
-
+        
         traceUneBox(min: minTrakt, max: maxTrakt, moy: theSerie.saisons[theSaison-1].getFairRatingTrakt(), ligne: 1, color: colorTrakt)
         traceUneBox(min: minBetaSeries, max: maxBetaSeries, moy: theSerie.saisons[theSaison-1].getFairRatingBetaSeries(), ligne: 2, color: colorBetaSeries)
         traceUneBox(min: minIMdb, max: maxIMdb, moy: theSerie.saisons[theSaison-1].getFairRatingIMdb(), ligne: 3, color: colorIMDB)
