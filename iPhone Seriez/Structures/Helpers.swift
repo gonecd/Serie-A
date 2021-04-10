@@ -81,7 +81,8 @@ func getDrapeau(country : String) -> UIImage {
     case "TW": return #imageLiteral(resourceName: "Flag_of_Taiwan.png")
     case "CN": return #imageLiteral(resourceName: "Flag_of_China.png")
     case "BE": return #imageLiteral(resourceName: "Flag_of_Belgium.png")
-        
+    case "IT": return #imageLiteral(resourceName: "Flag_of_Italy.png")
+
     case "": return UIImage()
 
     default:
@@ -235,4 +236,25 @@ func colorGradient(borneInf : CGFloat, borneSup: CGFloat, valeur: CGFloat) -> UI
     }
     
     return UIColor.init(red: red, green: green, blue: 0.0, alpha: 1.0)
+}
+
+
+func getStreamers(serie: String, idTVDB: String, idIMDB: String, saison: Int) -> [String] {
+    var allStreamers : [String] = []
+    
+    for oneDiffuseur in justWatch.getDiffuseurs(serie: serie) {
+        if (oneDiffuseur.mode == "flatrate") {
+            allStreamers.append(oneDiffuseur.logo)
+            print("JustWatch  : " + oneDiffuseur.name + " - " + oneDiffuseur.contenu)
+        }
+    }
+    
+    for oneDiffuseur in betaSeries.getDiffuseurs(idTVDB : idTVDB, idIMDB : idIMDB) {
+        if (oneDiffuseur.mode == "SVOD") {
+            allStreamers.append(oneDiffuseur.logo)
+            print("BetaSeries : " + oneDiffuseur.name + " - " + oneDiffuseur.contenu)
+        }
+    }
+    
+    return allStreamers
 }

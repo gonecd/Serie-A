@@ -467,7 +467,7 @@ class ViewSearch: UIViewController
                 
                 for uneSerie in self.seriesTrouvees
                 {
-                    theMoviedb.getIDs(serie: uneSerie)
+                    _ = theMoviedb.getIDs(serie: uneSerie)
                     db.downloadGlobalInfo(serie: uneSerie)
                     compteur = compteur + 1
                     DispatchQueue.main.async { self.cptDetails.text = String(compteur) }

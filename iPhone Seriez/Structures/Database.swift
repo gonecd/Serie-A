@@ -94,7 +94,7 @@ class Database : NSObject {
         var dataAlloCine    : Serie = Serie(serie: "")
         var dataIMDB        : Serie = Serie(serie: "")
 
-        //killtvdb queue.addOperation(BlockOperation(block: { dataTVdb = theTVdb.getSerieGlobalInfos(idTVdb: serie.idTVdb) } ) )
+        queue.addOperation(BlockOperation(block: { dataTVdb = theTVdb.getSerieGlobalInfos(idTVdb: serie.idTVdb) } ) )
         queue.addOperation(BlockOperation(block: { dataBetaSeries = betaSeries.getSerieGlobalInfos(idTVDB : serie.idTVdb, idIMDB : serie.idIMdb) } ) )
         queue.addOperation(BlockOperation(block: { dataMoviedb = theMoviedb.getSerieGlobalInfos(idMovieDB: serie.idMoviedb) } ) )
         queue.addOperation(BlockOperation(block: { dataIMDB = imdb.getSerieGlobalInfos(idIMDB: serie.idIMdb) } ) )
@@ -168,17 +168,10 @@ class Database : NSObject {
         db.fillIndex()
         
         db.shows[db.index["Absolutely Fabulous"]!].saisons[3].nbEpisodes = db.shows[db.index["Absolutely Fabulous"]!].saisons[3].nbWatchedEps
+        db.shows[db.index["Absolutely Fabulous"]!].saisons[4].nbEpisodes = db.shows[db.index["Absolutely Fabulous"]!].saisons[4].nbWatchedEps
+        db.shows[db.index["Desperate Housewives"]!].saisons[1].nbEpisodes = db.shows[db.index["Desperate Housewives"]!].saisons[1].nbWatchedEps
         db.shows[db.index["Kaamelott"]!].saisons[3].nbEpisodes = db.shows[db.index["Kaamelott"]!].saisons[3].nbWatchedEps
-        db.shows[db.index["Kaamelott"]!].saisons[4].nbEpisodes = db.shows[db.index["Kaamelott"]!].saisons[3].nbWatchedEps
         db.shows[db.index["Lost"]!].saisons[0].nbEpisodes = db.shows[db.index["Lost"]!].saisons[0].nbWatchedEps
-        db.shows[db.index["Sense8"]!].saisons[1].nbEpisodes = db.shows[db.index["Sense8"]!].saisons[1].nbWatchedEps
-        db.shows[db.index["Shameless"]!].saisons[7].nbEpisodes = db.shows[db.index["Shameless"]!].saisons[7].nbWatchedEps
-        db.shows[db.index["Terra Nova"]!].saisons[0].nbEpisodes = db.shows[db.index["Terra Nova"]!].saisons[0].nbWatchedEps
-        db.shows[db.index["WorkinGirls"]!].saisons[0].nbEpisodes = db.shows[db.index["WorkinGirls"]!].saisons[0].nbWatchedEps
-        db.shows[db.index["WorkinGirls"]!].saisons[1].nbEpisodes = db.shows[db.index["WorkinGirls"]!].saisons[1].nbWatchedEps
-        db.shows[db.index["WorkinGirls"]!].saisons[2].nbEpisodes = db.shows[db.index["WorkinGirls"]!].saisons[2].nbWatchedEps
-        db.shows[db.index["WorkinGirls"]!].saisons[3].nbEpisodes = db.shows[db.index["WorkinGirls"]!].saisons[3].nbWatchedEps
-        db.shows[db.index["Hero Corp"]!].saisons[2].nbEpisodes = db.shows[db.index["Hero Corp"]!].saisons[2].nbWatchedEps
         
         updateCompteurs()
     }

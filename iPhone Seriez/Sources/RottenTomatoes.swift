@@ -116,7 +116,8 @@ class RottenTomatoes {
     
     func getEpisodeDetails(_ uneSerie: Serie, saison: Int, episode: Int) -> Int {
         let startChrono : Date = Date()
-        let webPage : String = getPath(serie: uneSerie.serie)
+        let webPage : String = getPath(serie: uneSerie.serie).addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
+
         if (webPage == "") { return 0 }
         
         let labelEps = String(format: "/s%02d/e%02d", saison, episode)
@@ -292,7 +293,8 @@ class RottenTomatoes {
         
         if (webPage == "") { return result }
         webPage = webPage + String(format: "/s%02d/e%02d", saison, episode) + "/reviews"
-        
+        webPage = webPage.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
+
         do {
             let page : String = try String(contentsOf: URL(string : webPage)!)
             let doc : Document = try SwiftSoup.parse(page)

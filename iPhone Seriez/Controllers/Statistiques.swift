@@ -10,8 +10,8 @@ import UIKit
 import SeriesCommon
 
 class Statistiques: UIViewController {
-    
-    
+    // Stats chiffrées
+    // --------------------------
     
     @IBOutlet weak var graphe1: Stat1!
     @IBOutlet weak var graphe2: UIView!
@@ -43,7 +43,7 @@ class Statistiques: UIViewController {
                     (uneSaison.ends.compare(today) == .orderedAscending ) && (uneSaison.ends != ZeroDate) &&
                     (uneSaison.watched() == false) && (uneSerie.watchlist == false) && (uneSerie.unfollowed == false) ) {
                     
-                    nbEpisodesToSee = nbEpisodesToSee + uneSaison.nbEpisodes
+                    nbEpisodesToSee = nbEpisodesToSee + uneSaison.nbEpisodes - uneSaison.nbWatchedEps
                     
                     if (serieDejaComptee == false) {
                         nbSeriesToSee = nbSeriesToSee + 1
@@ -62,6 +62,8 @@ class Statistiques: UIViewController {
 
 
 class Stat3: UIView  {
+    // Gant view
+    // --------------------------
     
     var origineX : CGFloat = 0.0
     var origineY : CGFloat = 0.0
@@ -110,7 +112,7 @@ class Stat3: UIView  {
         path.addLine(to: CGPoint(x:origineX, y:origineY))
         path.stroke()
         
-        // Lignes achurées horizontales
+        // Lignes achurées verticales
         for i:Int in 0 ..< nbMonths {
             let firstDayOfMonth = Calendar.current.date(byAdding: .month, value: i, to: borneDebut)!
             let xFirstDay = origineX + largeur * CGFloat(Calendar.current.dateComponents([.day], from: borneDebut, to: firstDayOfMonth).day!)
@@ -141,13 +143,17 @@ class Stat3: UIView  {
         // Tracer les gants de chaque épisode
         var offset : Int = 0
         for uneSerie in db.shows {
-            if (uneSerie.watchlist || uneSerie.unfollowed ) { continue }
-            
+            if ( uneSerie.unfollowed ) { continue }
+//            if (uneSerie.watchlist || uneSerie.unfollowed ) { continue }
+
             for uneSaison in uneSerie.saisons {
                 if (uneSaison.ends.compare(borneDebut) == .orderedDescending ) {
                     offset = offset + 1
 
-                    if ( (uneSaison.starts.compare(now) == .orderedDescending) ) { // Annoncées
+                    if ( uneSerie.watchlist ) { // Watchlist
+                        traceGantt(debut: uneSaison.starts, fin: uneSaison.ends, offset: offset, serie: uneSerie.serie, color: UIColor.systemGreen)
+                    }
+                    else if ( (uneSaison.starts.compare(now) == .orderedDescending) ) { // Annoncées
                         traceGantt(debut: uneSaison.starts, fin: uneSaison.ends, offset: offset, serie: uneSerie.serie, color: UIColor.systemIndigo)
                     }
                     else if ( (uneSaison.ends.compare(now) == .orderedAscending) ) { // Finies
@@ -220,7 +226,9 @@ class Stat3: UIView  {
 
 
 class Stat1: UIView  {
-    
+    // Camembert
+    // --------------------------
+
     var centreX : CGFloat = 150.0
     var centreY : CGFloat = 150.0
     var rayon : CGFloat = 120.0
@@ -239,11 +247,9 @@ class Stat1: UIView  {
         traceUnCercle(color: .systemRed, debut: CGFloat(db.valSeriesFinies + db.valSeriesEnCours)/CGFloat(total), fin: CGFloat(db.valSeriesFinies + db.valSeriesEnCours + db.valSeriesAbandonnees)/CGFloat(total))
         traceUnCercle(color: .systemGreen, debut: CGFloat(db.valSeriesFinies + db.valSeriesEnCours + db.valSeriesAbandonnees)/CGFloat(total), fin: 1.0)
         
-        
         let x_label : CGFloat = self.frame.height
         let y_label : CGFloat = self.frame.height / 6
         let size : CGFloat = self.frame.height * 2 / 25
-
         
         var textAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: size), NSAttributedString.Key.foregroundColor: UIColor.systemGray]
         "\(db.valSeriesFinies) séries finies".draw(in: CGRect(x: x_label, y: y_label, width: 300, height: 25), withAttributes: textAttributes)

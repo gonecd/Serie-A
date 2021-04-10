@@ -247,7 +247,6 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
         langue.text? = serie.language
         drapeau.image = getDrapeau(country: serie.country)
         
-        //killtvdb theTVdb.getEpisodesDetailsAndRating(uneSerie: serie)
         trakt.getEpisodes(uneSerie: serie)
 
         let queue : OperationQueue = OperationQueue()
@@ -285,12 +284,6 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
                 self.graphe.sendSerie(self.serie)
                 self.graphe.setNeedsDisplay()
             } )
-
-//killtvdb            if (self.serie.idTrakt != "") { trakt.getEpisodesRatings(self.serie) }
-//            OperationQueue.main.addOperation({
-//                self.graphe.sendSerie(self.serie)
-//                self.graphe.setNeedsDisplay()
-//            } )
         } )
         queue.addOperation(opRates)
         

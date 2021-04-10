@@ -87,16 +87,6 @@ class ViewSerieListe: UITableViewController {
         cell.status.text = computeSerieStatus(serie : viewList[indexPath.row]).label
         cell.status.textColor = computeSerieStatus(serie : viewList[indexPath.row]).couleur
 
-        //        if (viewList[indexPath.row].status == "Ended") {
-//            cell.status.text = "FINIE"
-//            cell.status.textColor = UIColor.black
-//        }
-//        else {
-//            cell.status.text = "EN COURS"
-//            cell.status.textColor = .systemBlue
-//        }
-        
-        
         // Affichage du drapeau
         cell.drapeau.image = getDrapeau(country: viewList[indexPath.row].country)
         
@@ -117,10 +107,12 @@ class ViewSerieListe: UITableViewController {
     
     
     func computeSerieStatus(serie : Serie) -> (label: String, couleur: UIColor) {
-        if (serie.saisons.last!.starts.compare(ZeroDate) == .orderedSame) { return ("Saison prévue", .systemTeal) }
-        if (serie.saisons.last!.starts.compare(Date()) == .orderedDescending) { return ("Dates annoncées", .systemIndigo) }
+        if (serie.saisons.count > 0) {
+            if (serie.saisons.last!.starts.compare(ZeroDate) == .orderedSame) { return ("Saison prévue", .systemTeal) }
+            if (serie.saisons.last!.starts.compare(Date()) == .orderedDescending) { return ("Dates annoncées", .systemIndigo) }
+        }
         if (serie.status == "Ended") { return ("Série terminée", .systemRed) }
-        if ((serie.saisons.last!.starts.compare(Date()) == .orderedAscending) && ((serie.saisons.last!.ends.compare(Date()) == .orderedDescending) || (serie.saisons.last!.ends.compare(ZeroDate) == .orderedSame)) ) { return ("Saison en cours", .systemBlue) }
+        if ((serie.saisons.count > 0) && (serie.saisons.last!.starts.compare(Date()) == .orderedAscending) && ((serie.saisons.last!.ends.compare(Date()) == .orderedDescending) || (serie.saisons.last!.ends.compare(ZeroDate) == .orderedSame)) ) { return ("Saison en cours", .systemBlue) }
 
         return ("", .systemFill)
     }

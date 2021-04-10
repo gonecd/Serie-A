@@ -31,6 +31,12 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
 
     @IBOutlet weak var labelEpisodes: UILabel!
     @IBOutlet weak var labelCritiques: UILabel!
+    @IBOutlet weak var labelDiffuseurs: UILabel!
+
+    @IBOutlet weak var diffuseur1: UIImageView!
+    @IBOutlet weak var diffuseur2: UIImageView!
+    @IBOutlet weak var diffuseur3: UIImageView!
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,7 +47,6 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
         graphe.setNeedsDisplay()
         
-        //killtvdb theTVdb.getEpisodesDetailsAndRating(uneSerie: serie)
         trakt.getEpisodes(uneSerie: serie)
 
         for unEpisode in serie.saisons[saison-1].episodes {
@@ -53,7 +58,23 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         
         arrondirLabel(texte: labelEpisodes, radius: 10)
         arrondirLabel(texte: labelCritiques, radius: 10)
+        arrondirLabel(texte: labelDiffuseurs, radius: 10)
 
+        arrondir(fenetre: diffuseur1, radius: 4)
+        arrondir(fenetre: diffuseur2, radius: 4)
+        arrondir(fenetre: diffuseur3, radius: 4)
+        
+        // Récupération des diffuseurs en mode streaming
+        let allStreamers : [String] = getStreamers(serie: self.serie.serie, idTVDB: self.serie.idTVdb, idIMDB: self.serie.idIMdb, saison: self.saison)
+//        for oneDiffuseur in justWatch.getDiffuseurs(serie: self.serie.serie) {
+//            if (oneDiffuseur.mode == "flatrate") { allStreamers.append(oneDiffuseur.logo) }
+//        }
+        
+        if (allStreamers.count > 0) { self.diffuseur1.image = loadImage(allStreamers[0]) }
+        if (allStreamers.count > 1) { self.diffuseur2.image = loadImage(allStreamers[1]) }
+        if (allStreamers.count > 2) { self.diffuseur3.image = loadImage(allStreamers[2]) }
+
+        
         let queue : OperationQueue = OperationQueue()
 
         if (UIDevice.current.userInterfaceIdiom == .pad) {
@@ -93,13 +114,6 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
             OperationQueue.main.addOperation({ self.graphe.setNeedsDisplay() } )
         } )
         queue.addOperation(opeLoadIMDB)
-
-// killtvdb       let opeLoadTrakt = BlockOperation(block: {
-//            if (self.serie.idTrakt != "") { trakt.getEpisodesRatings(self.serie) }
-//            self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
-//            OperationQueue.main.addOperation({ self.graphe.setNeedsDisplay() } )
-//        } )
-//        queue.addOperation(opeLoadTrakt)
         
         let opeLoadTVmaze = BlockOperation(block: {
             tvMaze.getEpisodesRatings(self.serie)
@@ -122,7 +136,6 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         opeFinalise.addDependency(opeLoadBetaSeries)
         opeFinalise.addDependency(opeLoadMovieDB)
         opeFinalise.addDependency(opeLoadIMDB)
-// killtvdb       opeFinalise.addDependency(opeLoadTrakt)
         opeFinalise.addDependency(opeLoadTVmaze)
         opeFinalise.addDependency(opeLoadRottenT)
         opeFinalise.addDependency(opeLoadMetaCritic)

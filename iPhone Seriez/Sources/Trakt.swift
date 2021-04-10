@@ -446,40 +446,42 @@ class Trakt : NSObject {
                 }
                 
                 // On parse les épisodes
-                for unEpisode in ((uneSaison as! NSDictionary).object(forKey: "episodes")) as! NSArray {
-                    let episodeNum : Int = ((unEpisode as! NSDictionary).object(forKey: "number")) as? Int ?? 0
-                    
-                    if (episodeNum != 0) {
-                        var ficheEpisode : Episode
+                if ((((uneSaison as! NSDictionary).object(forKey: "episode_count")) as? Int ?? 0) > 0) {
+                    for unEpisode in ((uneSaison as! NSDictionary).object(forKey: "episodes")) as! NSArray {
+                        let episodeNum : Int = ((unEpisode as! NSDictionary).object(forKey: "number")) as? Int ?? 0
                         
-                        // Création de la structure de épisode ou récupération de l'épisode existent
-                        if (episodeNum > ficheSaison.episodes.count) {
-                            ficheEpisode = Episode(serie: uneSerie.serie, fichier: "", saison: saisonNum, episode: episodeNum)
-                            ficheSaison.episodes.append(ficheEpisode)
+                        if (episodeNum != 0) {
+                            var ficheEpisode : Episode
+                            
+                            // Création de la structure de épisode ou récupération de l'épisode existent
+                            if (episodeNum > ficheSaison.episodes.count) {
+                                ficheEpisode = Episode(serie: uneSerie.serie, fichier: "", saison: saisonNum, episode: episodeNum)
+                                ficheSaison.episodes.append(ficheEpisode)
+                            }
+                            else {
+                                ficheEpisode = ficheSaison.episodes[episodeNum-1]
+                            }
+                            
+                            // Récupération des données dans le message
+                            ficheEpisode.titre = (unEpisode as! NSDictionary).object(forKey: "title")! as? String ?? ""
+                            ficheEpisode.idIMdb = ((unEpisode as! NSDictionary).object(forKey: "ids")! as AnyObject).object(forKey: "imdb") as? String ?? ""
+                            ficheEpisode.idTVdb = ((unEpisode as! NSDictionary).object(forKey: "ids")! as AnyObject).object(forKey: "tvdb") as? Int ?? 0
+                            ficheEpisode.resume = (unEpisode as! NSDictionary).object(forKey: "overview")! as? String ?? ""
+                            
+                            let stringDate : String = (unEpisode as! NSDictionary).object(forKey: "first_aired")! as? String ?? ""
+                            if (stringDate ==  "") {
+                                ficheEpisode.date = ZeroDate
+                            }
+                            else {
+                                ficheEpisode.date = dateFormTrakt.date(from: stringDate)!
+                            }
+                            
+                            if ( (ficheEpisode.date.compare(today) == .orderedAscending) && (ficheEpisode.date.compare(ZeroDate) != .orderedSame) ) {
+                                ficheEpisode.ratingTrakt = Int(10 * ((unEpisode as! NSDictionary).object(forKey: "rating")! as? Double ?? 0.0))
+                                ficheEpisode.ratersTrakt = (unEpisode as! NSDictionary).object(forKey: "votes")! as? Int ?? -1
+                            }
+                            
                         }
-                        else {
-                            ficheEpisode = ficheSaison.episodes[episodeNum-1]
-                        }
-                        
-                        // Récupération des données dans le message
-                        ficheEpisode.titre = (unEpisode as! NSDictionary).object(forKey: "title")! as? String ?? ""
-                        ficheEpisode.idIMdb = ((unEpisode as! NSDictionary).object(forKey: "ids")! as AnyObject).object(forKey: "imdb") as? String ?? ""
-                        ficheEpisode.idTVdb = ((unEpisode as! NSDictionary).object(forKey: "ids")! as AnyObject).object(forKey: "tvdb") as? Int ?? 0
-                        ficheEpisode.resume = (unEpisode as! NSDictionary).object(forKey: "overview")! as? String ?? ""
-
-                        let stringDate : String = (unEpisode as! NSDictionary).object(forKey: "first_aired")! as? String ?? ""
-                        if (stringDate ==  "") {
-                            ficheEpisode.date = ZeroDate
-                        }
-                        else {
-                            ficheEpisode.date = dateFormTrakt.date(from: stringDate)!
-                        }
-                        
-                        if ( (ficheEpisode.date.compare(today) == .orderedAscending) && (ficheEpisode.date.compare(ZeroDate) != .orderedSame) ) {
-                            ficheEpisode.ratingTrakt = Int(10 * ((unEpisode as! NSDictionary).object(forKey: "rating")! as? Double ?? 0.0))
-                            ficheEpisode.ratersTrakt = (unEpisode as! NSDictionary).object(forKey: "votes")! as? Int ?? -1
-                        }
-                        
                     }
                 }
 

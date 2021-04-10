@@ -23,7 +23,7 @@ class MetaCritic {
     func getSerieGlobalInfos(serie : String) -> Serie {
         let startChrono : Date = Date()
         let uneSerie : Serie = Serie(serie: serie)
-        let webPage : String = getPath(serie: serie)
+        let webPage : String = getPath(serie: serie).addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
         
         if (webPage == "") {
             return uneSerie
