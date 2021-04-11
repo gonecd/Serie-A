@@ -90,22 +90,25 @@ class MetaCritic {
         let startChrono : Date = Date()
         var showNames : [String] = []
         var showIds : [String] = []
-        
+        var compteur : Int = 0
+
         do {
             let page : String = try String(contentsOf: URL(string : url)!)
             let doc : Document = try SwiftSoup.parse(page)
-            let showList = try doc.select("div [class='product_wrap']")
+
+            let showList = try doc.select("[class='collapsed']")
             
             for oneShow in showList {
-                let showName : String = try oneShow.select("div [class='basic_stat product_title']").text()
+                let showName : String = try oneShow.select("img").attr("alt")
                 
                 if (showName.contains(": Season")) {
                     let serie : String = showName.components(separatedBy: ": Season")[0]
                     
-                    if (!showNames.contains(serie)) {
+                    if ((!showNames.contains(serie)) && (compteur < popularShowsPerSource)){
                         showNames.append(serie)
                         showIds.append("")
-                    }
+                        compteur = compteur + 1
+                    }                   
                 }
             }
         }

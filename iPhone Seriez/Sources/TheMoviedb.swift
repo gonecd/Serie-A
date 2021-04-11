@@ -137,7 +137,7 @@ class TheMoviedb : NSObject {
             found = true
             serie.idTVdb = String(reqResult.object(forKey: "tvdb_id") as? Int ?? 0)
         }
-        
+
         return found
     }
     
@@ -243,13 +243,7 @@ class TheMoviedb : NSObject {
                 let titre : String = ((oneShow as! NSDictionary).object(forKey: "name")) as? String ?? ""
                 let idMovieDB : String = String(((oneShow as! NSDictionary).object(forKey: "id")) as? Int ?? 0)
                 
-                var exclure : Bool = false
-                for i in 0..<((((oneShow as! NSDictionary).object(forKey: "genre_ids")) as? NSArray ?? []).count) {
-                    let unGenre : Int = (((oneShow as! NSDictionary).object(forKey: "genre_ids")) as? NSArray ?? []).object(at: i) as? Int ?? 0
-                    if ((unGenre == genreAnimation) || (unGenre == genreDocumentaire) ) { exclure = true }
-                }
-                
-                if ( (exclure == false) && (compteur < popularShowsPerSource) ) {
+                if (compteur < popularShowsPerSource) {
                     compteur = compteur + 1
                     showNames.append(titre)
                     showIds.append(idMovieDB)
@@ -273,13 +267,7 @@ class TheMoviedb : NSObject {
                 let titre : String = ((oneShow as! NSDictionary).object(forKey: "name")) as? String ?? ""
                 let idMovieDB : String = String(((oneShow as! NSDictionary).object(forKey: "id")) as? Int ?? 0)
                 
-                var exclure : Bool = false
-                for i in 0..<((((oneShow as! NSDictionary).object(forKey: "genre_ids")) as? NSArray ?? []).count) {
-                    let unGenre : Int = (((oneShow as! NSDictionary).object(forKey: "genre_ids")) as? NSArray ?? []).object(at: i) as? Int ?? 0
-                    if ((unGenre == genreAnimation) || (unGenre == genreDocumentaire) ) { exclure = true }
-                }
-                
-                if ( (exclure == false) && (compteur < popularShowsPerSource) ) {
+                if (compteur < popularShowsPerSource) {
                     compteur = compteur + 1
                     showNames.append(titre)
                     showIds.append(idMovieDB)

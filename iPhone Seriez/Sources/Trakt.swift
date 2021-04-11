@@ -201,12 +201,12 @@ class Trakt : NSObject {
         
         if (reqResult.object(forKey: "ids") != nil) {
             found = true
-            uneSerie.idIMdb = (reqResult.object(forKey: "ids")! as AnyObject).object(forKey: "imdb") as? String ?? ""
-            uneSerie.idTVdb = String((reqResult.object(forKey: "ids")! as AnyObject).object(forKey: "tvdb") as? Int ?? 0)
-            uneSerie.idTrakt = String((reqResult.object(forKey: "ids")! as AnyObject).object(forKey: "trakt") as? Int ?? 0)
-            uneSerie.idMoviedb = String((reqResult.object(forKey: "ids")! as AnyObject).object(forKey: "tmdb") as? Int ?? 0)
+            serie.idIMdb = (reqResult.object(forKey: "ids")! as AnyObject).object(forKey: "imdb") as? String ?? ""
+            serie.idTVdb = String((reqResult.object(forKey: "ids")! as AnyObject).object(forKey: "tvdb") as? Int ?? 0)
+            serie.idTrakt = String((reqResult.object(forKey: "ids")! as AnyObject).object(forKey: "trakt") as? Int ?? 0)
+            serie.idMoviedb = String((reqResult.object(forKey: "ids")! as AnyObject).object(forKey: "tmdb") as? Int ?? 0)
         }
-
+        
         return found
     }
     
@@ -540,7 +540,7 @@ class Trakt : NSObject {
         var showIds : [String] = []
         var compteur : Int = 0
         
-        let reqResult : NSArray = loadAPI(reqAPI: "https://api.trakt.tv/shows/trending") as! NSArray
+        let reqResult : NSArray = loadAPI(reqAPI: "https://api.trakt.tv/shows/trending?limit=20") as! NSArray
 
         for oneShow in reqResult {
             let titre : String = (((oneShow as! NSDictionary).object(forKey: "show") as! NSDictionary).object(forKey: "title")) as? String ?? ""

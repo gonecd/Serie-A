@@ -224,21 +224,18 @@ class RottenTomatoes {
         let startChrono : Date = Date()
         var showNames : [String] = []
         var showIds : [String] = []
-        
+
         do {
             let page : String = try String(contentsOf: URL(string : url)!)
-            let regex = try! NSRegularExpression(pattern: ".*(\\[\\{.*tomatoIcon.*\\}\\]).*", options: NSRegularExpression.Options.caseInsensitive)
-            let result = regex.firstMatch(in: page, options: [], range: NSMakeRange(0, page.count))
-            let json = page[Range(result!.range(at: 1), in: page)!].utf8
-            let jsonResponse : NSArray = try JSONSerialization.jsonObject(with: Data(json), options: JSONSerialization.ReadingOptions.mutableContainers) as! NSArray
+            let doc : Document = try SwiftSoup.parse(page)
             
-            for onePropale in jsonResponse {
-                let titre : String = (((onePropale as! NSDictionary).object(forKey: "title")) as? String ?? "")
+            let showList = try doc.select("[id='tv-list-24']").select("[class='middle_col']")
+            
+            for oneShow in showList {
+                let showName : String = try oneShow.select("a").text()
                 
-                if (titre.contains(": Season")) {
-                    let serie : String = titre.components(separatedBy: ": Season")[0]
-                    
-                    showNames.append(serie)
+                if (!showNames.contains(showName)) {
+                    showNames.append(showName)
                     showIds.append("")
                 }
             }

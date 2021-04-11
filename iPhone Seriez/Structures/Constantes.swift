@@ -43,10 +43,6 @@ let srcMetaCritic : Int = 7
 let srcRottenTom  : Int = 8
 let srcAlloCine   : Int = 9
 
-// Code des source
-let typeTrending : Int = 1
-let typePopular  : Int = 2
-
 
 // Limitations de chargement
 let similarShowsPerSource : Int = 8

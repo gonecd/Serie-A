@@ -82,7 +82,8 @@ func getDrapeau(country : String) -> UIImage {
     case "CN": return #imageLiteral(resourceName: "Flag_of_China.png")
     case "BE": return #imageLiteral(resourceName: "Flag_of_Belgium.png")
     case "IT": return #imageLiteral(resourceName: "Flag_of_Italy.png")
-
+    case "MX": return #imageLiteral(resourceName: "Flag_of_Mexico.png")
+        
     case "": return UIImage()
 
     default:

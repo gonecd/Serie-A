@@ -169,17 +169,19 @@ class IMdb : NSObject {
         let startChrono: Date = Date()
         var showNames: [String] = []
         var showIds: [String] = []
-        
+        var compteur : Int = 0
+
         do {
             let page : String = try String(contentsOf: URL(string: url)!)
             let doc : Document = try SwiftSoup.parse(page)
             let showList = try doc.select("tr")
             
             for oneShow in showList {
-                if (try oneShow.select("td").count > 1) {
+                if ((try oneShow.select("td").count > 1) && (compteur < popularShowsPerSource)) {
                     let showName : String = try oneShow.select("td")[1].select("a").text()
                     let IMDBid : String = try oneShow.select("td")[1].select("a").attr("href").components(separatedBy: "/")[2]
-                    
+
+                    compteur = compteur + 1
                     showNames.append(showName)
                     showIds.append(IMDBid)
                 }
