@@ -43,6 +43,7 @@ class CellPropal : UICollectionViewCell {
     @IBOutlet weak var titre: UILabel!
     @IBOutlet weak var annee: UILabel!
     @IBOutlet weak var nbSaisons: UILabel!
+    @IBOutlet weak var nbEpidodes: UILabel!
     @IBOutlet weak var drapeau: UIImageView!
     
     @IBOutlet weak var iconeTrakt: UIImageView!
@@ -53,6 +54,8 @@ class CellPropal : UICollectionViewCell {
     @IBOutlet weak var iconeRottenTom: UIImageView!
     @IBOutlet weak var iconeIMDB: UIImageView!
     @IBOutlet weak var iconeMetaCritic: UIImageView!
+    
+    @IBOutlet weak var graph: GraphMiniSerie!
     
     var index: Int = 0
 }
@@ -78,6 +81,8 @@ class ViewPropals: UIViewController, UICollectionViewDataSource, UICollectionVie
     let alphaNull  : CGFloat = 0.00
     let alphaFull  : CGFloat = 1.00
     let alphaLight : CGFloat = 0.20
+    
+    var affficheGraphe : Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -129,7 +134,6 @@ class ViewPropals: UIViewController, UICollectionViewDataSource, UICollectionVie
         
         let opeLoadBetaSeries = BlockOperation(block: {
             let dataBetaSeries : (names : [String], ids : [String]) = betaSeries.getTrendingShows()
-            print("===> dataBetaSeries : " + String(dataBetaSeries.names.count))
             for i in 0..<dataBetaSeries.names.count {
                 let uneProposition : SrcProposition = SrcProposition(serie: dataBetaSeries.names[i], id: dataBetaSeries.ids[i], typeid: srcIMdb, source: srcBetaSeries)
                 self.allPropositions.append(uneProposition)
@@ -139,7 +143,6 @@ class ViewPropals: UIViewController, UICollectionViewDataSource, UICollectionVie
         
         let opeLoadMovieDB = BlockOperation(block: {
             let dataMoviedb : (names : [String], ids : [String]) = theMoviedb.getPopularShows()
-            print("===> dataMoviedb : " + String(dataMoviedb.names.count))
             for i in 0..<dataMoviedb.names.count {
                 let uneProposition : SrcProposition = SrcProposition(serie: dataMoviedb.names[i], id: dataMoviedb.ids[i], typeid: srcMovieDB, source: srcMovieDB)
                 self.allPropositions.append(uneProposition)
@@ -149,7 +152,6 @@ class ViewPropals: UIViewController, UICollectionViewDataSource, UICollectionVie
         
         let opeLoadIMDB = BlockOperation(block: {
             let dataIMDB : (names : [String], ids : [String]) = imdb.getTrendingShows()
-            print("===> dataIMDB : " + String(dataIMDB.names.count))
             for i in 0..<dataIMDB.names.count {
                 let uneProposition : SrcProposition = SrcProposition(serie: dataIMDB.names[i], id: dataIMDB.ids[i], typeid: srcIMdb, source: srcIMdb)
                 self.allPropositions.append(uneProposition)
@@ -159,7 +161,6 @@ class ViewPropals: UIViewController, UICollectionViewDataSource, UICollectionVie
         
         let opeLoadTrakt = BlockOperation(block: {
             let dataTrakt : (names : [String], ids : [String]) = trakt.getTrendingShows()
-            print("===> dataTrakt : " + String(dataTrakt.names.count))
             for i in 0..<dataTrakt.names.count {
                 let uneProposition : SrcProposition = SrcProposition(serie: dataTrakt.names[i], id: dataTrakt.ids[i], typeid: srcIMdb, source: srcTrakt)
                 self.allPropositions.append(uneProposition)
@@ -169,7 +170,6 @@ class ViewPropals: UIViewController, UICollectionViewDataSource, UICollectionVie
         
         let opeLoadTVmaze = BlockOperation(block: {
             let dataTVMaze : (names : [String], ids : [String]) = tvMaze.getTrendingShows()
-            print("===> dataTVMaze : " + String(dataTVMaze.names.count))
             for i in 0..<dataTVMaze.names.count {
                 let uneProposition : SrcProposition = SrcProposition(serie: dataTVMaze.names[i], id: dataTVMaze.ids[i], typeid: srcTVMaze, source: srcTVMaze)
                 self.allPropositions.append(uneProposition)
@@ -189,7 +189,6 @@ class ViewPropals: UIViewController, UICollectionViewDataSource, UICollectionVie
         
         let opeLoadMetaCritic = BlockOperation(block: {
             let dataMetaCritic : (names : [String], ids : [String]) = metaCritic.getTrendingShows()
-            print("===> dataMetaCritic : " + String(dataMetaCritic.names.count))
             for i in 0..<dataMetaCritic.names.count {
                 let uneProposition : SrcProposition = SrcProposition(serie: dataMetaCritic.names[i], id: dataMetaCritic.ids[i], typeid: 0, source: srcMetaCritic)
                 self.allPropositions.append(uneProposition)
@@ -199,7 +198,6 @@ class ViewPropals: UIViewController, UICollectionViewDataSource, UICollectionVie
         
         let opeLoadAlloCine = BlockOperation(block: {
             let dataAlloCine : (names : [String], ids : [String]) = alloCine.getTrendingShows()
-            print("===> dataAlloCine : " + String(dataAlloCine.names.count))
             for i in 0..<dataAlloCine.names.count {
                 let uneProposition : SrcProposition = SrcProposition(serie: dataAlloCine.names[i], id: dataAlloCine.ids[i], typeid: srcAlloCine, source: srcAlloCine)
                 self.allPropositions.append(uneProposition)
@@ -257,16 +255,36 @@ class ViewPropals: UIViewController, UICollectionViewDataSource, UICollectionVie
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CellPropal", for: indexPath as IndexPath) as! CellPropal
-        let sugg : Suggestion = findSuggestion(serie: displayedSeries[indexPath.row].serie)
+                
+        cell.layer.shadowColor = UIColor.black.cgColor
+        cell.layer.shadowOffset = CGSize(width: 5.0, height: 5.0)
+        cell.layer.shadowRadius = 5.0
+        cell.layer.shadowOpacity = 0.2
+        cell.layer.masksToBounds = false
         
         cell.titre.text = displayedSeries[indexPath.row].serie
-        cell.annee.text = String(displayedSeries[indexPath.row].year)
-        cell.nbSaisons.text = String(displayedSeries[indexPath.row].nbSaisons)
         cell.poster.image = getImage(displayedSeries[indexPath.row].poster)
+        cell.drapeau.image = getDrapeau(country: displayedSeries[indexPath.row].country)
         cell.note.text = String(displayedSeries[indexPath.row].getGlobalRating()) + " %"
         arrondir(texte: cell.note, radius: 8.0)
+        
+        cell.graph.sendNotes(rateTrakt: displayedSeries[indexPath.row].getFairGlobalRatingTrakt(),
+                             rateBetaSeries: displayedSeries[indexPath.row].getFairGlobalRatingBetaSeries(),
+                             rateMoviedb: displayedSeries[indexPath.row].getFairGlobalRatingMoviedb(),
+                             rateIMdb: displayedSeries[indexPath.row].getFairGlobalRatingIMdb(),
+                             rateTVmaze: displayedSeries[indexPath.row].getFairGlobalRatingTVmaze(),
+                             rateRottenTomatoes: displayedSeries[indexPath.row].getFairGlobalRatingRottenTomatoes(),
+                             rateMetaCritic: displayedSeries[indexPath.row].getFairGlobalRatingMetaCritic(),
+                             rateAlloCine: displayedSeries[indexPath.row].getFairGlobalRatingAlloCine() )
+        cell.graph.setType(type: 0)
+        cell.graph.setNeedsDisplay()
+        
+        let sugg : Suggestion = findSuggestion(serie: displayedSeries[indexPath.row].serie)
+        
+        cell.annee.text = String(displayedSeries[indexPath.row].year)
+        cell.nbSaisons.text = String(displayedSeries[indexPath.row].nbSaisons)
+        cell.nbEpidodes.text = String(displayedSeries[indexPath.row].nbEpisodes)
         cell.index = indexPath.row
-        cell.drapeau.image = getDrapeau(country: displayedSeries[indexPath.row].country)
         
         if (sugg.sources.contains(srcIMdb))        { cell.iconeIMDB.alpha = alphaFull }        else { cell.iconeIMDB.alpha = alphaLight }
         if (sugg.sources.contains(srcRottenTom))   { cell.iconeRottenTom.alpha = alphaFull }   else { cell.iconeRottenTom.alpha = alphaLight }
@@ -277,12 +295,26 @@ class ViewPropals: UIViewController, UICollectionViewDataSource, UICollectionVie
         if (sugg.sources.contains(srcBetaSeries))  { cell.iconeBetaSeries.alpha = alphaFull }  else { cell.iconeBetaSeries.alpha = alphaLight }
         if (sugg.sources.contains(srcMovieDB))     { cell.iconeMovieDB.alpha = alphaFull }     else { cell.iconeMovieDB.alpha = alphaLight }
         
+        if (affficheGraphe) {
+            cell.graph.isHidden = false
+        } else {
+            cell.graph.isHidden = true
+        }
+        
         return cell
     }
     
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
+    }
+    
+    
+    @IBAction func showGraphe(_ sender: Any) {
+        affficheGraphe = !affficheGraphe
+        
+        viewCollection.reloadData()
+        viewCollection.setNeedsDisplay()
     }
     
     

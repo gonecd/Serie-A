@@ -80,11 +80,9 @@ class TodayViewController: UIViewController, NCWidgetProviding {
             self.view.addSubview(labelSaison)
             
             let labelChannel = UILabel(frame: CGRect(x: 90, y: 40+(hauteurParSaison*i), width: 120, height: 15))
-//            labelChannel.textColor = .systemIndigo
             labelChannel.font = UIFont.preferredFont(forTextStyle: .footnote)
             labelChannel.textAlignment = .center
             labelChannel.text = sharedInfos[i].channel
-//            labelChannel.layer.borderColor = UIColor.systemIndigo.cgColor
             labelChannel.layer.borderWidth = 1
             labelChannel.layer.cornerRadius = 7
             labelChannel.layer.masksToBounds = true
@@ -92,7 +90,6 @@ class TodayViewController: UIViewController, NCWidgetProviding {
             
             let labelAvance = UILabel(frame: CGRect(x: 120, y: 60+(hauteurParSaison*i), width: 200, height: 21))
             labelAvance.font = UIFont.preferredFont(forTextStyle: .footnote)
-//            labelAvance.textColor = .systemIndigo
             labelAvance.textAlignment = .left
             labelAvance.text = String(sharedInfos[i].nbWatched) + " eps sur " + String(sharedInfos[i].nbEps)
             self.view.addSubview(labelAvance)
@@ -231,6 +228,7 @@ class GraphRates: UIView {
     let colorRottenTomatoes : UIColor = .systemPurple
     
     let colorAxis       : UIColor = .systemGray
+    let nbSource : CGFloat = 6.0
 
     var noteTrakt : Int = 0
     var noteBetaSeries : Int = 0
@@ -280,8 +278,7 @@ class GraphRates: UIView {
     }
     
         
-    func sendFigures(rateTrakt : Int, rateBetaSeries : Int, rateMoviedb : Int, rateIMdb : Int, rateTVmaze : Int, rateRottenTomatoes : Int)
-    {
+    func sendFigures(rateTrakt : Int, rateBetaSeries : Int, rateMoviedb : Int, rateIMdb : Int, rateTVmaze : Int, rateRottenTomatoes : Int) {
         noteTrakt = rateTrakt
         noteBetaSeries = rateBetaSeries
         noteIMDB = rateIMdb
@@ -290,8 +287,7 @@ class GraphRates: UIView {
         noteMoviedb = rateMoviedb
     }
     
-    func backgroundCercles()
-    {
+    func backgroundCercles() {
         // Couleur des lignes
         colorAxis.setStroke()
         UIColor.white.setFill()
@@ -308,10 +304,7 @@ class GraphRates: UIView {
     }
 
     
-    func traceRayons()
-    {
-        let nbSource : CGFloat = 7.0
-        
+    func traceRayons() {
         // Couleur des lignes
         colorAxis.setStroke()
         
@@ -348,7 +341,6 @@ class GraphRates: UIView {
     
     
     func traceUnCercle(_ noteX: Int, color: UIColor, offset: Int) {
-        let nbSource : CGFloat = 7.0
         let taille : CGFloat = rayon * CGFloat(noteX) / 100
         
         color.setStroke()

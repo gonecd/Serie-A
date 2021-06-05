@@ -178,7 +178,7 @@ class BetaSeries : NSObject {
                 let platforms = show.object(forKey: "platforms") as! NSDictionary
                 
                 if (platforms.object(forKey: "vod") != nil) {
-                    for unePlateforme in (platforms.object(forKey: "vod")! as! NSArray) {
+                    for unePlateforme in (platforms.object(forKey: "vod")! as? NSArray ?? NSArray()) {
                         let unDiffuseur : Diffuseur = Diffuseur.init()
                         unDiffuseur.mode = "VOD"
                         unDiffuseur.name = ((unePlateforme as! NSDictionary).object(forKey: "name")) as? String ?? ""

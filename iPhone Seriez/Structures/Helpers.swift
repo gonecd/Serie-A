@@ -246,14 +246,12 @@ func getStreamers(serie: String, idTVDB: String, idIMDB: String, saison: Int) ->
     for oneDiffuseur in justWatch.getDiffuseurs(serie: serie) {
         if (oneDiffuseur.mode == "flatrate") {
             allStreamers.append(oneDiffuseur.logo)
-            print("JustWatch  : " + oneDiffuseur.name + " - " + oneDiffuseur.contenu)
         }
     }
     
     for oneDiffuseur in betaSeries.getDiffuseurs(idTVDB : idTVDB, idIMDB : idIMDB) {
         if (oneDiffuseur.mode == "SVOD") {
             allStreamers.append(oneDiffuseur.logo)
-            print("BetaSeries : " + oneDiffuseur.name + " - " + oneDiffuseur.contenu)
         }
     }
     

@@ -394,8 +394,9 @@ class Trakt : NSObject {
         
         if (idTraktOrIMDB == "") { return uneSerie }
         
-        let reqResult : NSDictionary = loadAPI(reqAPI: "https://api.trakt.tv/shows/\(idTraktOrIMDB)?extended=full") as! NSDictionary
-
+        let reqResult : NSDictionary = loadAPI(reqAPI: "https://api.trakt.tv/shows/\(idTraktOrIMDB)?extended=full") as? NSDictionary ?? NSDictionary()
+        if (reqResult.count == 0) { return uneSerie }
+        
         uneSerie.serie = reqResult.object(forKey: "title") as? String ?? ""
         uneSerie.idIMdb = (reqResult.object(forKey: "ids")! as AnyObject).object(forKey: "imdb") as? String ?? ""
         uneSerie.idTVdb = String((reqResult.object(forKey: "ids")! as AnyObject).object(forKey: "tvdb") as? Int ?? 0)

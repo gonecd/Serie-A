@@ -66,10 +66,6 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         
         // Récupération des diffuseurs en mode streaming
         let allStreamers : [String] = getStreamers(serie: self.serie.serie, idTVDB: self.serie.idTVdb, idIMDB: self.serie.idIMdb, saison: self.saison)
-//        for oneDiffuseur in justWatch.getDiffuseurs(serie: self.serie.serie) {
-//            if (oneDiffuseur.mode == "flatrate") { allStreamers.append(oneDiffuseur.logo) }
-//        }
-        
         if (allStreamers.count > 0) { self.diffuseur1.image = loadImage(allStreamers[0]) }
         if (allStreamers.count > 1) { self.diffuseur2.image = loadImage(allStreamers[1]) }
         if (allStreamers.count > 2) { self.diffuseur3.image = loadImage(allStreamers[2]) }

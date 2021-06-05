@@ -9,31 +9,16 @@
 import UIKit
 import SeriesCommon
 
-class ViewSearch: UIViewController
-{
+class ViewSearch: UIViewController {
+    @IBOutlet weak var entete: UIView!
+    @IBOutlet weak var traktSearch: UIView!
+    @IBOutlet weak var moviedbSearch: UIView!
     
-    @IBOutlet weak var subViewAnnee: UIView!
-    @IBOutlet weak var subViewTitre: UIView!
-    @IBOutlet weak var subViewTexteLoc: UIView!
-    @IBOutlet weak var subViewGenre: UIView!
-    @IBOutlet weak var subViewNetwork: UIView!
-    @IBOutlet weak var subViewLangue: UIView!
-    
-    @IBOutlet weak var carreResults: UIView!
-    @IBOutlet weak var carreDetails: UIView!
     @IBOutlet weak var cptResults: UITextField!
     @IBOutlet weak var cptDetails: UITextField!
-    @IBOutlet weak var roueResults: UIActivityIndicatorView!
-    @IBOutlet weak var roueDetails: UIActivityIndicatorView!
-    
-    @IBOutlet weak var labelTitre: UILabel!
-    @IBOutlet weak var labelTexteLoc: UILabel!
-    @IBOutlet weak var labelAnnee: UILabel!
-    @IBOutlet weak var labelGenre: UILabel!
-    @IBOutlet weak var labelNetwork: UILabel!
-    @IBOutlet weak var labelLangue: UILabel!
     
     @IBOutlet weak var descriptionTexte: UITextView!
+    @IBOutlet weak var resultats: UITextView!
     
     @IBOutlet weak var inTitre: UISwitch!
     @IBOutlet weak var inResume: UISwitch!
@@ -78,57 +63,16 @@ class ViewSearch: UIViewController
     @IBOutlet weak var francais: UIButton!
     @IBOutlet weak var anglais: UIButton!
     
-    var activeSubView : UIView!
     var seriesTrouvees : [Serie] = []
-    var mode : Int = 2
     var detailsLoaded : Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleGesture))
-        swipeLeft.direction = .left
-        self.view.addGestureRecognizer(swipeLeft)
-        
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(handleGesture))
-        swipeRight.direction = .right
-        self.view.addGestureRecognizer(swipeRight)
-        
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
-        view.addGestureRecognizer(tap)
-        
-        labelTitre.transform = CGAffineTransform.init(rotationAngle: ( 3.1415926535/2.0))
-        labelTexteLoc.transform = CGAffineTransform.init(rotationAngle: ( 3.1415926535/2.0))
-        labelAnnee.transform = CGAffineTransform.init(rotationAngle: ( 3.1415926535/2.0))
-        labelGenre.transform = CGAffineTransform.init(rotationAngle: ( 3.1415926535/2.0))
-        labelNetwork.transform = CGAffineTransform.init(rotationAngle: ( 3.1415926535/2.0))
-        labelLangue.transform = CGAffineTransform.init(rotationAngle: ( 3.1415926535/2.0))
-        labelTitre.frame.origin = CGPoint(x: 300.0, y: 10.0)
-        labelTexteLoc.frame.origin = CGPoint(x: 300.0, y: 10.0)
-        labelAnnee.frame.origin = CGPoint(x: 10.0, y: 10.0)
-        labelGenre.frame.origin = CGPoint(x: 10.0, y: 10.0)
-        labelNetwork.frame.origin = CGPoint(x: 10.0, y: 10.0)
-        labelLangue.frame.origin = CGPoint(x: 10.0, y: 10.0)
-        
-        makeGradiant(carre: subViewTitre, couleur: "Rouge")
-        makeGradiant(carre: subViewTexteLoc, couleur: "Vert")
-        makeGradiant(carre: subViewAnnee, couleur: "Vert")
-        makeGradiant(carre: subViewGenre, couleur: "Bleu")
-        makeGradiant(carre: subViewNetwork, couleur: "Rouge")
-        makeGradiant(carre: subViewLangue, couleur: "Vert")
-        
-        makeGradiant(carre: carreResults, couleur: "Vert")
-        makeGradiant(carre: carreDetails, couleur: "Vert")
-        
-        subViewTitre.frame.origin.x = -333
-        subViewTexteLoc.frame.origin.x = -333
-        subViewAnnee.frame.origin.x = 373
-        subViewGenre.frame.origin.x = 373
-        subViewNetwork.frame.origin.x = 373
-        subViewLangue.frame.origin.x = 373
-        
-        activeSubView = nil
-        
+        makeGradiant(carre: entete, couleur: "Blanc")
+        makeGradiant(carre: traktSearch, couleur: "Blanc")
+        makeGradiant(carre: moviedbSearch, couleur: "Blanc")
+
         arrondir(texte: cptResults, radius: 10.0)
         arrondir(texte: cptDetails, radius: 10.0)
         cptResults.text = "+" + "\u{221E}"
@@ -138,104 +82,34 @@ class ViewSearch: UIViewController
     }
     
     
-    @objc func handleGesture(gesture: UISwipeGestureRecognizer) -> Void {
-        
-        // Mode "Par Titre"
-        if (mode == 0)
-        {
-            if gesture.direction == UISwipeGestureRecognizer.Direction.right {
-                if (self.activeSubView == nil) {
-                    if ( (gesture.location(in: self.view).y > 100.0) && (gesture.location(in: self.view).y < 200.0) )
-                    {
-                        UIView.animate(withDuration: 0.7, animations: { self.subViewTitre.frame.origin.x = 0 } )
-                        self.activeSubView = subViewTitre
-                    }
-                    else if ( (gesture.location(in: self.view).y > 200.0) && (gesture.location(in: self.view).y < 350.0) )
-                    {
-                        UIView.animate(withDuration: 0.7, animations: { self.subViewTexteLoc.frame.origin.x = 0 } )
-                        self.activeSubView = subViewTexteLoc
-                    }
-                }
-            }
-            else if gesture.direction == UISwipeGestureRecognizer.Direction.left {
-                if (self.activeSubView != nil) {
-                    UIView.animate(withDuration: 0.7, animations: { self.activeSubView.frame.origin.x = -300 } )
-                    self.activeSubView = nil
-                    self.updateRechercheTitre()
-                }
-            }
-        }
-        
-        
-        // Mode "Par Critères"
-        if (mode == 1)
-        {
-            if gesture.direction == UISwipeGestureRecognizer.Direction.right {
-                if (self.activeSubView != nil) {
-                    UIView.animate(withDuration: 0.7, animations: { self.activeSubView.frame.origin.x = 340 } )
-                    self.activeSubView = nil
-                    self.updateRecherche()
-                }
-            }
-            else if gesture.direction == UISwipeGestureRecognizer.Direction.left {
-                if (self.activeSubView == nil) {
-                    if ( (gesture.location(in: self.view).y > 100.0) && (gesture.location(in: self.view).y < 200.0) )
-                    {
-                        UIView.animate(withDuration: 0.7, animations: { self.subViewAnnee.frame.origin.x = 45 } )
-                        self.activeSubView = subViewAnnee
-                    }
-                    else if ( (gesture.location(in: self.view).y > 200.0) && (gesture.location(in: self.view).y < 300.0) )
-                    {
-                        UIView.animate(withDuration: 0.7, animations: { self.subViewGenre.frame.origin.x = 45 } )
-                        self.activeSubView = subViewGenre
-                    }
-                    else if ( (gesture.location(in: self.view).y > 300.0) && (gesture.location(in: self.view).y < 400.0) )
-                    {
-                        UIView.animate(withDuration: 0.7, animations: { self.subViewNetwork.frame.origin.x = 45 } )
-                        self.activeSubView = subViewNetwork
-                    }
-                    else if ( (gesture.location(in: self.view).y > 400.0) && (gesture.location(in: self.view).y < 500.0) )
-                    {
-                        UIView.animate(withDuration: 0.7, animations: { self.subViewLangue.frame.origin.x = 45 } )
-                        self.activeSubView = subViewLangue
-                    }
-                }
-            }
+    @IBAction func searchMode(_ sender: Any) {
+        let toggle : Int = (sender as! UISegmentedControl).selectedSegmentIndex
+        descriptionTexte.text = ""
+
+        switch toggle {
+        case 0:
+            self.moviedbSearch.isHidden = true
+            self.traktSearch.isHidden = true
+            break
+            
+        case 1:
+            self.moviedbSearch.isHidden = true
+            self.traktSearch.isHidden = false
+            updateRechercheTitre(sender)
+            break
+
+        case 2:
+            self.moviedbSearch.isHidden = false
+            self.traktSearch.isHidden = true
+            updateRechercheCriteres(sender)
+            break
+            
+        default:
+            return
         }
     }
     
-    @IBAction func parTitre(_ sender: Any) {
-        mode = 0
-        
-        UIView.animate(withDuration: 0.7, animations: { self.subViewAnnee.frame.origin.x = 373 } )
-        UIView.animate(withDuration: 0.7, animations: { self.subViewGenre.frame.origin.x = 373 } )
-        UIView.animate(withDuration: 0.7, animations: { self.subViewNetwork.frame.origin.x = 373 } )
-        UIView.animate(withDuration: 0.7, animations: { self.subViewLangue.frame.origin.x = 373 } )
-        
-        UIView.animate(withDuration: 0.7, animations: { self.subViewTitre.frame.origin.x = -300 } )
-        UIView.animate(withDuration: 0.7, animations: { self.subViewTexteLoc.frame.origin.x = -300 } )
-        
-        descriptionTexte.text = ""
-        updateRechercheTitre()
-    }
-    
-    
-    @IBAction func parCriteres(_ sender: Any) {
-        mode = 1
-        
-        UIView.animate(withDuration: 0.7, animations: { self.subViewAnnee.frame.origin.x = 340 } )
-        UIView.animate(withDuration: 0.7, animations: { self.subViewGenre.frame.origin.x = 340 } )
-        UIView.animate(withDuration: 0.7, animations: { self.subViewNetwork.frame.origin.x = 340 } )
-        UIView.animate(withDuration: 0.7, animations: { self.subViewLangue.frame.origin.x = 340 } )
-        
-        UIView.animate(withDuration: 0.7, animations: { self.subViewTitre.frame.origin.x = -333 } )
-        UIView.animate(withDuration: 0.7, animations: { self.subViewTexteLoc.frame.origin.x = -333 } )
-        
-        descriptionTexte.text = ""
-        updateRecherche()
-    }
-    
-    
+
     @IBAction func buttonSelect3States(_ sender: Any) {
         let button : UIButton = sender as! UIButton
         
@@ -251,19 +125,22 @@ class ViewSearch: UIViewController
             button.setTitleColor(.systemGreen, for: .selected)
             button.isSelected = false
         }
+
+        updateRechercheCriteres(sender)
     }
     
     @IBAction func buttonSelect2States(_ sender: Any) {
         let button : UIButton = sender as! UIButton
         button.isSelected = !button.isSelected
+        
+        updateRechercheCriteres(sender)
     }
     
     @objc func dismissKeyboard() {
         view.endEditing(true)
     }
     
-    func updateRechercheTitre()
-    {
+    @IBAction func updateRechercheTitre(_ sender: Any) {
         var chercherDans : String = ""
         
         // Choix du titre
@@ -294,13 +171,18 @@ class ViewSearch: UIViewController
             seriesTrouvees = trakt.recherche(serieArechercher: titre.text!, aChercherDans : chercherDans)
         }
         
+        var seriesResultat : String = ""
+            for i in 0..<min(seriesTrouvees.count,10) {
+                seriesResultat = seriesResultat + seriesTrouvees[i].serie + "\n"
+            }
+        resultats.text = seriesResultat
+
         cptResults.text = String(seriesTrouvees.count)
         cptDetails.text = "-"
         detailsLoaded = false
     }
     
-    func updateRecherche ()
-    {
+    @IBAction func updateRechercheCriteres (_ sender: Any) {
         descriptionTexte.text = "Toutes les séries"
         
         // Choix de la periode
@@ -312,9 +194,7 @@ class ViewSearch: UIViewController
             if (fin.text == "") { descriptionTexte.text = descriptionTexte.text + "\n\ndiffusées après " + debut.text! }
             else { descriptionTexte.text = descriptionTexte.text + "\n\ndiffusées entre " + debut.text! + " et " + fin.text! }
         }
-        
-        
-        
+
         // Choix des genres
         var tmpGenres : String = ""
         if (action.isSelected && (action.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "Action, " }
@@ -343,7 +223,7 @@ class ViewSearch: UIViewController
             descriptionTexte.text = descriptionTexte.text + "\n\nde genre " + tmpGenres
         }
         
-        // TODO : exclusions de genres
+        // exclusions de genres
         var tmpGenres2 : String = ""
         if (action.isSelected && (action.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "Action, " }
         if (adventure.isSelected && (adventure.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "Adventure, " }
@@ -424,56 +304,30 @@ class ViewSearch: UIViewController
                                                                  langue: tmpLangue,
                                                                  network: tmpNetworks.replacingOccurrences(of: ", ", with: ","))
         
+        var seriesResultat : String = ""
+        for i in 0..<min(seriesTrouvees.count,10) {
+            seriesResultat = seriesResultat + seriesTrouvees[i].serie + "\n"
+        }
+        resultats.text = seriesResultat
+
         cptResults.text = String(nbSeriesTrouvees)
         cptDetails.text = "-"
         detailsLoaded = false
     }
     
     
-    func doNothing(alertView: UIAlertAction!) {}
-    
-    @IBAction func afficheResults(_ sender: Any) {
-        let actionSheetController: UIAlertController = UIAlertController(title: "Ajouter à ma watchlist", message: nil, preferredStyle: .actionSheet)
-        
-        for uneSerie in seriesTrouvees
-        {
-            let uneAction: UIAlertAction = UIAlertAction(title: uneSerie.serie+" ("+String(uneSerie.year)+")", style: UIAlertAction.Style.default) { action -> Void in
-                if (trakt.addToWatchlist(theTVdbId: uneSerie.idTVdb))
-                {
-                    db.downloadGlobalInfo(serie: uneSerie)
-                    uneSerie.watchlist = true
-                    db.shows.append(uneSerie)
-                    db.saveDB()
-                    //TODO : updateCompteurs()
-                }
-            }
-            actionSheetController.addAction(uneAction)
-        }
-        
-        let cancelAction: UIAlertAction = UIAlertAction(title: "Annuler", style: UIAlertAction.Style.cancel, handler: doNothing)
-        actionSheetController.addAction(cancelAction)
-        
-        present(actionSheetController, animated: true, completion: nil)
-    }
-    
-    
     @IBAction func afficheDetails(_ sender: Any) {
         var compteur : Int = 0
         
-        if ((seriesTrouvees != []) && (detailsLoaded == false))
-        {
+        if ((seriesTrouvees != []) && (detailsLoaded == false)) {
             DispatchQueue.global(qos: .utility).async {
-                DispatchQueue.main.async { self.roueDetails.startAnimating() }
-                
-                for uneSerie in self.seriesTrouvees
-                {
+                for uneSerie in self.seriesTrouvees {
                     _ = theMoviedb.getIDs(serie: uneSerie)
                     db.downloadGlobalInfo(serie: uneSerie)
                     compteur = compteur + 1
                     DispatchQueue.main.async { self.cptDetails.text = String(compteur) }
                 }
                 
-                DispatchQueue.main.async { self.roueDetails.stopAnimating() }
                 self.detailsLoaded = true
             }
         }
@@ -486,12 +340,10 @@ class ViewSearch: UIViewController
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let viewController = segue.destination as! ViewSerieListe
         
-        if (seriesTrouvees != [])
-        {
+        if (seriesTrouvees != []) {
             viewController.title = "Propositions de séries"
             viewController.viewList = self.seriesTrouvees
             viewController.modeAffichage = modeRecherche
         }
     }
-    
 }
