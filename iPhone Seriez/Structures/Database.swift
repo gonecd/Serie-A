@@ -134,9 +134,10 @@ class Database : NSObject {
     
     
     func downloadDates(serie : Serie) {
-        // TV Maze est buggué pour Death Note
+        // TV Maze est buggué pour Death Note & Lupin
         if (serie.serie == "Death Note") { return }
-        
+        if (serie.serie == "Lupin") { return }
+
         let tvMazeResults : (saisons : [Int], nbEps : [Int], debuts : [Date], fins : [Date]) = tvMaze.getSeasonsDates(idTVmaze: serie.idTVmaze)
         
         for i:Int in 0..<tvMazeResults.saisons.count {

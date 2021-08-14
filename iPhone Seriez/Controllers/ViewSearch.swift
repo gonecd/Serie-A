@@ -14,17 +14,20 @@ class ViewSearch: UIViewController {
     @IBOutlet weak var traktSearch: UIView!
     @IBOutlet weak var moviedbSearch: UIView!
     
+    
+    // Entete
     @IBOutlet weak var cptResults: UITextField!
     @IBOutlet weak var cptDetails: UITextField!
-    
     @IBOutlet weak var descriptionTexte: UITextView!
     @IBOutlet weak var resultats: UITextView!
     
+    // Trakt Search
+    @IBOutlet weak var titre: UITextField!
     @IBOutlet weak var inTitre: UISwitch!
     @IBOutlet weak var inResume: UISwitch!
     @IBOutlet weak var inCasting: UISwitch!
     
-    @IBOutlet weak var titre: UITextField!
+    // Movie DB Search
     @IBOutlet weak var debut: UITextField!
     @IBOutlet weak var fin: UITextField!
     
@@ -173,7 +176,7 @@ class ViewSearch: UIViewController {
         
         var seriesResultat : String = ""
             for i in 0..<min(seriesTrouvees.count,10) {
-                seriesResultat = seriesResultat + seriesTrouvees[i].serie + "\n"
+                seriesResultat = seriesResultat + "(" + String(seriesTrouvees[i].year) + ") " + seriesTrouvees[i].serie + "\n"
             }
         resultats.text = seriesResultat
 
@@ -306,7 +309,7 @@ class ViewSearch: UIViewController {
         
         var seriesResultat : String = ""
         for i in 0..<min(seriesTrouvees.count,10) {
-            seriesResultat = seriesResultat + seriesTrouvees[i].serie + "\n"
+            seriesResultat = seriesResultat + "(" + String(seriesTrouvees[i].year) + ") " + seriesTrouvees[i].serie + "\n"
         }
         resultats.text = seriesResultat
 
@@ -347,3 +350,175 @@ class ViewSearch: UIViewController {
         }
     }
 }
+
+
+
+
+/*
+ 
+ From MovieDB :
+ https://image.tmdb.org/t/p/w154/xUtOM1QO4r8w8yeE00QvBdq58N5.jpg
+ https://image.tmdb.org/t/p/w780/wu444tM9YBllq9UcBv5TeidO3j3.jpg
+ 
+ {
+   "page": 1,
+   "results": [
+     {
+       "backdrop_path": "/wu444tM9YBllq9UcBv5TeidO3j3.jpg",
+       "first_air_date": "2020-01-31",
+       "genre_ids": [
+         18,
+         10765,
+         9648
+       ],
+       "id": 91557,
+       "name": "Ragnarok",
+       "origin_country": [
+         "NO"
+       ],
+       "original_language": "no",
+       "original_name": "Ragnarok",
+       "overview": "A small Norwegian town experiencing warm winters and violent downpours seems to be headed for another Ragnarök -- unless someone intervenes in time.",
+       "popularity": 1232.156,
+       "poster_path": "/xUtOM1QO4r8w8yeE00QvBdq58N5.jpg",
+       "vote_average": 8,
+       "vote_count": 441
+     },
+     {
+       "backdrop_path": "/b0WmHGc8LHTdGCVzxRb3IBMur57.jpg",
+       "first_air_date": "2021-03-19",
+       "genre_ids": [
+         10765,
+         10759,
+         18,
+         10768
+       ],
+       "id": 88396,
+       "name": "The Falcon and the Winter Soldier",
+       "origin_country": [
+         "US"
+       ],
+       "original_language": "en",
+       "original_name": "The Falcon and the Winter Soldier",
+       "overview": "Following the events of “Avengers: Endgame”, the Falcon, Sam Wilson and the Winter Soldier, Bucky Barnes team up in a global adventure that tests their abilities, and their patience.",
+       "popularity": 774.954,
+       "poster_path": "/6kbAMLteGO8yyewYau6bJ683sw7.jpg",
+       "vote_average": 7.9,
+       "vote_count": 5750
+     },
+     {
+       "backdrop_path": "/dYvIUzdh6TUv4IFRq8UBkX7bNNu.jpg",
+       "first_air_date": "2021-03-24",
+       "genre_ids": [
+         18,
+         80,
+         9648
+       ],
+       "id": 120168,
+       "name": "Who Killed Sara?",
+       "origin_country": [
+         "MX"
+       ],
+       "original_language": "es",
+       "original_name": "¿Quién mató a Sara?",
+       "overview": "Hell-bent on exacting revenge and proving he was framed for his sister's murder, Álex sets out to unearth much more than the crime's real culprit.",
+       "popularity": 725.655,
+       "poster_path": "/o7uk5ChRt3quPIv8PcvPfzyXdMw.jpg",
+       "vote_average": 7.8,
+       "vote_count": 769
+     },
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ Dans Trakt
+ 
+ [
+   {
+     "type": "show",
+     "score": 624.5253,
+     "show": {
+       "title": "CSI: Miami",
+       "year": 2002,
+       "ids": {
+         "trakt": 1609,
+         "slug": "csi-miami",
+         "tvdb": 78310,
+         "imdb": "tt0313043",
+         "tmdb": 1620,
+         "tvrage": 3184
+       }
+     }
+   },
+   {
+     "type": "show",
+     "score": 527.9726,
+     "show": {
+       "title": "Miami Vice",
+       "year": 1984,
+       "ids": {
+         "trakt": 1895,
+         "slug": "miami-vice",
+         "tvdb": 77098,
+         "imdb": "tt0086759",
+         "tmdb": 1908,
+         "tvrage": 4461
+       }
+     }
+   },
+   {
+     "type": "show",
+     "score": 413.6213,
+     "show": {
+       "title": "Miami Medical",
+       "year": 2010,
+       "ids": {
+         "trakt": 18575,
+         "slug": "miami-medical",
+         "tvdb": 142561,
+         "imdb": "tt1406662",
+         "tmdb": 18660,
+         "tvrage": {}
+       }
+     }
+   },
+   {
+     "type": "show",
+     "score": 384.74634,
+     "show": {
+       "title": "Miami Ink",
+       "year": 2005,
+       "ids": {
+         "trakt": 10931,
+         "slug": "miami-ink",
+         "tvdb": 78816,
+         "imdb": "tt0472014",
+         "tmdb": 10982,
+         "tvrage": 7177
+       }
+     }
+   },
+   {
+     "type": "show",
+     "score": 369.27158,
+     "show": {
+       "title": "WAGS: Miami",
+       "year": 2016,
+       "ids": {
+         "trakt": 112063,
+         "slug": "wags-miami",
+         "tvdb": 317892,
+         "imdb": "tt6316862",
+         "tmdb": 67787,
+         "tvrage": {}
+       }
+     }
+   },
+ 
+ 
+ 
+ */

@@ -122,21 +122,23 @@ class AlloCine : NSObject {
         return uneSerie
     }
     
-
+    
     func getID(serie: String) -> String {
         let reqURL : String = "https://www.allocine.fr/_/autocomplete/\(serie.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) ?? "toto")"
         
-        let reqResult : NSDictionary = loadAPI(reqAPI: reqURL) as! NSDictionary
-
-        for oneResult in (reqResult.object(forKey: "results") as! NSArray) {
-            if ((((oneResult as! NSDictionary).object(forKey: "entity_type")) as? String ?? "") == "series") {
-                let label : String = ((oneResult as! NSDictionary).object(forKey: "original_label")) as? String ?? "???"
-                let id : String = ((oneResult as! NSDictionary).object(forKey: "entity_id")) as? String ?? "---"
-
-                if (label == serie) {return id}
+        let reqResult : NSDictionary = loadAPI(reqAPI: reqURL) as? NSDictionary ?? NSDictionary()
+        
+        if (reqResult.object(forKey: "results") != nil) {
+            for oneResult in (reqResult.object(forKey: "results") as! NSArray) {
+                if ((((oneResult as! NSDictionary).object(forKey: "entity_type")) as? String ?? "") == "series") {
+                    let label : String = ((oneResult as! NSDictionary).object(forKey: "original_label")) as? String ?? "???"
+                    let id : String = ((oneResult as! NSDictionary).object(forKey: "entity_id")) as? String ?? "---"
+                    
+                    if (label == serie) {return id}
+                }
             }
         }
-
+        
         return "0"
     }
     
