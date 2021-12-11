@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import SeriesCommon
 
 class BetaSeries : NSObject {
     var chrono : TimeInterval = 0

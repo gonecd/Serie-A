@@ -8,7 +8,6 @@
 
 import UIKit
 import UserNotifications
-import SeriesCommon
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -62,60 +61,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
+    
     // Support for background fetch
     func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         
-        var start : Date = Date()
-        let defaults = UserDefaults.standard
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd/MM/yyyy HH:mm"
-        let dateFormatter2 = DateFormatter()
-        dateFormatter2.dateFormat = "dd/MM HH:mm"
+        var infosSaved : InfosRefresh = InfosRefresh(refreshDates: ZeroDate, refreshIMDB: ZeroDate, refreshViewed: ZeroDate)
+        if let data = UserDefaults(suiteName: "group.Series")!.value(forKey:"Refresh") as? Data {
+            infosSaved = try! PropertyListDecoder().decode(InfosRefresh.self, from: data)
+        }
 
-        var reloadDates : Date = Date.init(timeIntervalSince1970: 0)
-        var reloadIMDB  : Date = Date.init(timeIntervalSince1970: 0)
-
-        if (defaults.object(forKey: "RefreshDates") != nil) { reloadDates = dateFormatter.date(from: defaults.string(forKey: "RefreshDates")!)! }
-        if (defaults.object(forKey: "RefreshIMDB") != nil) { reloadIMDB = dateFormatter.date(from: defaults.string(forKey: "RefreshIMDB")!)! }
-        
-        var info : InfosRefresh = InfosRefresh(timestamp: dateFormatter2.string(from: start),
-                                               network: getNetWork(),
-                                               wifi: "Undef",
-                                               refreshDates: "No",
-                                               refreshIMDB: "No",
-                                               refreshViewed: "No")
-        db.shareRefreshWithWidget(newInfo: info)
-        
         // Dates TV Maze (une fois par jour)
-        if (Calendar.current.isDateInToday(reloadDates) == false) {
+        if (Calendar.current.isDateInToday(infosSaved.refreshDates) == false) {
             loadDates()
-            let end : Date = Date()
-
-            defaults.set(dateFormatter.string(from: start), forKey: "RefreshDates")
-            info.refreshDates = String(format : "%.2f s", end.timeIntervalSince(start))
-            db.shareRefreshWithWidget(newInfo: info)
-            
-            start = end
+            infosSaved.refreshDates = Date()
+            db.saveRefreshInfo(info: infosSaved)
         }
-        
+
         // Ratings IMDB (une fois par jpur)
-        if ( (Calendar.current.isDateInToday(reloadIMDB) == false) && (info.network == "WiFi") ) {
+        if ( Calendar.current.isDateInToday(infosSaved.refreshIMDB) == false ) {
             loadIMDB()
-            let end : Date = Date()
-
-            defaults.set(dateFormatter.string(from: start), forKey: "RefreshIMDB")
-            info.refreshIMDB = String(format : "%.2f s", end.timeIntervalSince(start))
-            db.shareRefreshWithWidget(newInfo: info)
-
-            start = end
+            infosSaved.refreshIMDB = Date()
+            db.saveRefreshInfo(info: infosSaved)
         }
-        
+
         // Statuses Trakt
         loadStatuses()
-        let end : Date = Date()
-        
-        info.refreshViewed = String(format : "%.2f s", end.timeIntervalSince(start))
-        db.shareRefreshWithWidget(newInfo: info)
+        infosSaved.refreshViewed = Date()
+        db.saveRefreshInfo(info: infosSaved)
 
         completionHandler(.newData)
     }

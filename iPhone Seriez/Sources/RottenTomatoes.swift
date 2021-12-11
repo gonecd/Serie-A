@@ -8,12 +8,13 @@
 
 import Foundation
 import SwiftSoup
-import SeriesCommon
 
 class RottenTomatoes {
     var chrono : TimeInterval = 0
-    
+    let dateFormRottenTomatoes = DateFormatter()
+
     init() {
+        dateFormRottenTomatoes.dateFormat = "MMM dd, yyyy"
     }
     
     
@@ -72,8 +73,9 @@ class RottenTomatoes {
         let uneSerie : Serie = Serie(serie: serie)
         let reqURL : String = "https://www.rottentomatoes.com/api/private/v2.0/search?q=\(serie.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) ?? "")"
         
-        let reqResult : NSDictionary = loadAPI(reqAPI: reqURL) as! NSDictionary
-        
+        let reqResult : NSDictionary = loadAPI(reqAPI: reqURL) as? NSDictionary ?? NSDictionary()
+        if (reqResult.count == 0) { return uneSerie }
+
         for oneShow in (reqResult.object(forKey: "tvSeries") as! NSArray) {
             if (serie == (((oneShow as! NSDictionary).object(forKey: "title")) as? String ?? "")) {
                 uneSerie.ratingRottenTomatoes = ((oneShow as! NSDictionary).object(forKey: "meterScore")) as? Int ?? 0
@@ -246,6 +248,7 @@ class RottenTomatoes {
         return (showNames, showIds)
     }
     
+    
     func getCritics(serie: String, saison: Int) -> [Critique] {
         let startChrono : Date = Date()
         var result : [Critique] = []
@@ -266,12 +269,15 @@ class RottenTomatoes {
                 let uneCritique : Critique = Critique()
                 
                 uneCritique.source = srcRottenTom
-                uneCritique.journal = try oneCritic.select("[class='unstyled bold articleLink critic__name']").text()
-                uneCritique.auteur = try oneCritic.select("[class='critic__publication']").text()
+                uneCritique.journal = try oneCritic.select("[class='critic__publication']").text()
+                uneCritique.auteur = try oneCritic.select("[class='unstyled bold articleLink critic__name']").text()
                 uneCritique.texte = try oneCritic.select("div [class='critic__review-quote']").text()
                 uneCritique.lien = try oneCritic.select("div [class='small subtle']").select("a").attr("href")
-                uneCritique.date = try oneCritic.select("div [class='critic__review-date subtle small']").text()
                 uneCritique.saison = saison
+
+                let dateString : String = try oneCritic.select("div [class='critic__review-date subtle small']").text()
+                let dateTmp : Date = dateFormRottenTomatoes.date(from: dateString) ?? ZeroDate
+                uneCritique.date = dateFormLong.string(from: dateTmp)
 
                 result.append(uneCritique)
             }
@@ -304,8 +310,11 @@ class RottenTomatoes {
                 uneCritique.journal = try oneCritic.select("[class='subtle']").text()
                 uneCritique.auteur = try oneCritic.select("[class='unstyled bold articleLink']").text()
                 uneCritique.texte = try oneCritic.select("p").text()
-                uneCritique.date = try oneCritic.select("tr")[0].select("[class='pull-right subtle small']").text()
                 
+                let dateString : String = try oneCritic.select("tr")[0].select("[class='pull-right subtle small']").text()
+                let dateTmp : Date = dateFormRottenTomatoes.date(from: dateString) ?? ZeroDate
+                uneCritique.date = dateFormLong.string(from: dateTmp)
+
                 result.append(uneCritique)
             }
         }

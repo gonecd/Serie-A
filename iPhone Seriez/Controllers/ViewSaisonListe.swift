@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SeriesCommon
 
 class CellSaisonListe: UITableViewCell {
     
@@ -74,8 +73,15 @@ class ViewSaisonListe: UITableViewController {
         if (uneSaison.ends == ZeroDate) { cell.fin.text = "TBD" }
         else { cell.fin.text = dateFormLong.string(from: uneSaison.ends) }
         
-        cell.globalRating.text = String(viewList[indexPath.row].getGlobalRating()) + " %"
-        arrondir(texte: cell.globalRating, radius: 18.0)
+//        cell.globalRating.text = String(viewList[indexPath.row].getGlobalRating()) + " 👏🏻 %"
+//        arrondir(texte: cell.globalRating, radius: 18.0)
+
+        let note : Double = Double(viewList[indexPath.row].getGlobalRating())/10.0
+        cell.globalRating.text = "👍🏼 " + String(note)
+        cell.globalRating.layer.borderColor = UIColor.systemBlue.cgColor
+        cell.globalRating.layer.borderWidth = 2
+        cell.globalRating.layer.cornerRadius = 12
+        cell.globalRating.layer.masksToBounds = true
         
         // Affichage du status
         cell.status.layer.cornerRadius = 8

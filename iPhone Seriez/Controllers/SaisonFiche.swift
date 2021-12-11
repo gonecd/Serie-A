@@ -7,13 +7,13 @@
 //
 
 import UIKit
-import SeriesCommon
 
 class CellEpisode: UITableViewCell {
     @IBOutlet weak var numero: UILabel!
     @IBOutlet weak var titre: UILabel!
     @IBOutlet weak var date: UILabel!
-    @IBOutlet weak var vu: UIImageView!
+    @IBOutlet weak var duree: UILabel!
+    @IBOutlet weak var graphe: GraphMiniEpisode!
 }
 
 
@@ -22,21 +22,22 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
     var serie : Serie = Serie(serie: "")
     var image : UIImage = UIImage()
     var saison : Int = 0
-    var allCritics : [Critique] = []
-
+    var durees : [Int] = []
+    
     @IBOutlet weak var banniere: UIImageView!
     @IBOutlet weak var graphe: GraphSaison!
+    @IBOutlet weak var graphSaisons: GraphMiniSaison!
     @IBOutlet weak var episodesList: UITableView!
-    @IBOutlet weak var criticList: UITableView!
-
+    
     @IBOutlet weak var labelEpisodes: UILabel!
-    @IBOutlet weak var labelCritiques: UILabel!
     @IBOutlet weak var labelDiffuseurs: UILabel!
+    @IBOutlet weak var labelSaison: UILabel!
+    @IBOutlet weak var labelSaisons: UILabel!
 
     @IBOutlet weak var diffuseur1: UIImageView!
     @IBOutlet weak var diffuseur2: UIImageView!
     @IBOutlet weak var diffuseur3: UIImageView!
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,18 +48,31 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
         graphe.setNeedsDisplay()
         
-        trakt.getEpisodes(uneSerie: serie)
+        graphSaisons.setSerie(serie: self.serie, saison: self.saison)
+        graphSaisons.setType(type: 1)
+        graphSaisons.setNeedsDisplay()
 
+        trakt.getEpisodes(uneSerie: serie)
+        
+        var manqueTVdbID = false
+        
         for unEpisode in serie.saisons[saison-1].episodes {
             if ((unEpisode.idIMdb) == "" && (unEpisode.date.compare(Date()) == .orderedAscending)) {
                 unEpisode.idIMdb = imdb.getEpisodeID(serieID: serie.idIMdb, saison: saison, episode: unEpisode.episode)
                 if (unEpisode.idIMdb == "") { print("No IMDB id for \(serie.serie) saison: \(saison) episode: \(unEpisode.episode)") }
             }
+            
+            if ((unEpisode.idTVdb == 0) && (unEpisode.date.compare(Date()) == .orderedAscending)) {
+                manqueTVdbID = true
+            }
         }
         
+        if (manqueTVdbID) { theTVdb.getEpisodesDetailsAndRating(uneSerie: serie)}
+        
         arrondirLabel(texte: labelEpisodes, radius: 10)
-        arrondirLabel(texte: labelCritiques, radius: 10)
         arrondirLabel(texte: labelDiffuseurs, radius: 10)
+        arrondirLabel(texte: labelSaison, radius: 10)
+        arrondirLabel(texte: labelSaisons, radius: 10)
 
         arrondir(fenetre: diffuseur1, radius: 4)
         arrondir(fenetre: diffuseur2, radius: 4)
@@ -69,45 +83,40 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         if (allStreamers.count > 0) { self.diffuseur1.image = loadImage(allStreamers[0]) }
         if (allStreamers.count > 1) { self.diffuseur2.image = loadImage(allStreamers[1]) }
         if (allStreamers.count > 2) { self.diffuseur3.image = loadImage(allStreamers[2]) }
-
+        
         
         let queue : OperationQueue = OperationQueue()
-
-        if (UIDevice.current.userInterfaceIdiom == .pad) {
-            let opeCritics = BlockOperation(block: {
-                self.allCritics.append(contentsOf: rottenTomatoes.getCritics(serie: self.serie.serie, saison: self.saison))
-                OperationQueue.main.addOperation({
-                    self.criticList.reloadData()
-                    self.criticList.setNeedsLayout()
-                } )
-                
-                self.allCritics.append(contentsOf: metaCritic.getCritics(serie: self.serie.serie, saison: self.saison))
-                OperationQueue.main.addOperation({
-                    self.criticList.reloadData()
-                    self.criticList.setNeedsLayout()
-                } )
-            } )
-            queue.addOperation(opeCritics)
-        }
         
         let opeLoadBetaSeries = BlockOperation(block: {
             if (self.serie.idTVdb != "") { betaSeries.getEpisodesRatings(self.serie) }
-            self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
-            OperationQueue.main.addOperation({ self.graphe.setNeedsDisplay() } )
+
+            OperationQueue.main.addOperation({
+                self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
+                self.graphSaisons.setSerie(serie: self.serie, saison: self.saison)
+                self.episodesList.reloadData()
+                self.graphe.setNeedsDisplay()
+                self.graphSaisons.setNeedsDisplay()
+                self.episodesList.setNeedsLayout()
+            } )
         } )
         queue.addOperation(opeLoadBetaSeries)
-
+        
         let opeLoadMovieDB = BlockOperation(block: {
             if (self.serie.idMoviedb != "") { theMoviedb.getEpisodesRatings(self.serie) }
-            self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
-            OperationQueue.main.addOperation({ self.graphe.setNeedsDisplay() } )
         } )
         queue.addOperation(opeLoadMovieDB)
-
+        
         let opeLoadIMDB = BlockOperation(block: {
             imdb.getEpisodesRatings(self.serie)
-            self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
-            OperationQueue.main.addOperation({ self.graphe.setNeedsDisplay() } )
+            
+            OperationQueue.main.addOperation({
+                self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
+                self.graphSaisons.setSerie(serie: self.serie, saison: self.saison)
+                self.episodesList.reloadData()
+                self.graphe.setNeedsDisplay()
+                self.graphSaisons.setNeedsDisplay()
+                self.episodesList.setNeedsLayout()
+            } )
         } )
         queue.addOperation(opeLoadIMDB)
         
@@ -116,16 +125,26 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         } )
         queue.addOperation(opeLoadTVmaze)
         
+        let opeLoadEpisodeDurations = BlockOperation(block: {
+            self.durees = tvMaze.getEpisodesDurations(idTVMaze: self.serie.idTVmaze, saison: self.saison)
+            
+            OperationQueue.main.addOperation({
+                self.episodesList.reloadData()
+                self.episodesList.setNeedsLayout()
+            } )
+        } )
+        queue.addOperation(opeLoadEpisodeDurations)
+        
         let opeLoadRottenT = BlockOperation(block: {
             rottenTomatoes.getEpisodesRatings(self.serie)
         } )
         queue.addOperation(opeLoadRottenT)
-
+        
         let opeLoadMetaCritic = BlockOperation(block: {
             metaCritic.getEpisodesRatings(self.serie)
         } )
         queue.addOperation(opeLoadMetaCritic)
-
+        
         let opeFinalise = BlockOperation(block: {
             db.saveDB()
         } )
@@ -136,7 +155,7 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         opeFinalise.addDependency(opeLoadRottenT)
         opeFinalise.addDependency(opeLoadMetaCritic)
         queue.addOperation(opeFinalise)
-
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -153,40 +172,29 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if (tableView == episodesList) { return serie.saisons[saison - 1].episodes.count }
-        else { return allCritics.count }
+        return serie.saisons[saison - 1].episodes.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        if (tableView == episodesList) {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "CellEpisode", for: indexPath) as! CellEpisode
-            
-            cell.numero.text = String(indexPath.row + 1)
-            cell.titre.text = serie.saisons[saison - 1].episodes[indexPath.row].titre
-            
-            if (serie.saisons[saison - 1].episodes[indexPath.row].date == ZeroDate) { cell.date.text = "TBD" }
-            else { cell.date.text = dateFormShort.string(from: serie.saisons[saison - 1].episodes[indexPath.row].date) }
-            
-            if ( (indexPath.row + 1) > serie.saisons[saison - 1].nbWatchedEps) { cell.vu.isHidden = true }
-            else { cell.vu.isHidden = false }
-            
-            return cell
-        }
-        else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "CellComment", for: indexPath) as! CellComment
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CellEpisode", for: indexPath) as! CellEpisode
+        
+        cell.numero.text = String(indexPath.row + 1)
+        cell.titre.text = serie.saisons[saison - 1].episodes[indexPath.row].titre
+        
+        if (serie.saisons[saison - 1].episodes[indexPath.row].date == ZeroDate) { cell.date.text = "TBD" }
+        else { cell.date.text = dateFormShort.string(from: serie.saisons[saison - 1].episodes[indexPath.row].date) }
+        
+        if ( (indexPath.row + 1) > serie.saisons[saison - 1].nbWatchedEps) { cell.titre.textColor = .darkText }
+        else { cell.titre.textColor = .systemGray }
+        
+        if (durees.count > indexPath.row) { cell.duree.text = String(durees[indexPath.row]) + " min" }
+        else { cell.duree.text = "" }
+        
+        cell.graphe.setEpisode(eps: serie.saisons[saison - 1].episodes[indexPath.row])
+        cell.graphe.setNeedsDisplay()
 
-            cell.comment.text = allCritics[indexPath.row].texte
-            cell.date.text = allCritics[indexPath.row].date
-            cell.journal.text = allCritics[indexPath.row].journal
-            cell.auteur.text = allCritics[indexPath.row].auteur
-
-            if (allCritics[indexPath.row].source == srcMetaCritic) { cell.logo.image = #imageLiteral(resourceName: "metacritic.png") }
-            if (allCritics[indexPath.row].source == srcRottenTom) { cell.logo.image = #imageLiteral(resourceName: "rottentomatoes.ico") }
-            if (allCritics[indexPath.row].source == srcAlloCine) { cell.logo.image = #imageLiteral(resourceName: "allocine.ico") }
-
-            return cell
-        }
+        return cell
     }
     
 }

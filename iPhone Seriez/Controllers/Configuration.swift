@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SeriesCommon
 
 class Configuration: UIViewController
 {
@@ -41,6 +40,16 @@ class Configuration: UIViewController
     @IBOutlet weak var viewIMDBids: UIView!
     @IBOutlet weak var viewIMDBratings: UIView!
     
+    @IBOutlet weak var viewData: UIView!
+    @IBOutlet weak var viewSources: UIView!
+    @IBOutlet weak var viewUpdates: UIView!
+    
+    
+    @IBOutlet weak var updateTrakt: UILabel!
+    @IBOutlet weak var updateIMDB: UILabel!
+    @IBOutlet weak var updateTVMaze: UILabel!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         progresData.isHidden = true
@@ -53,6 +62,27 @@ class Configuration: UIViewController
         makeGradiant(carre: viewIMDBids, couleur : "Gris")
         makeGradiant(carre: viewIMDBratings, couleur : "Gris")
 
+        // iPad spécific
+        if (UIDevice.current.userInterfaceIdiom == .pad) {
+            makeGradiant(carre: viewData, couleur: "Blanc")
+            makeGradiant(carre: viewSources, couleur: "Blanc")
+            makeGradiant(carre: viewUpdates, couleur: "Blanc")
+            
+            
+            var infosSaved : InfosRefresh = InfosRefresh(refreshDates: ZeroDate, refreshIMDB: ZeroDate, refreshViewed: ZeroDate)
+            
+            if let data = UserDefaults(suiteName: "group.Series")!.value(forKey:"Refresh") as? Data {
+                infosSaved = try! PropertyListDecoder().decode(InfosRefresh.self, from: data)
+            }
+
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "d MMM à HH:mm"
+
+            updateTrakt.text = dateFormatter.string(from: infosSaved.refreshViewed)
+            updateIMDB.text = dateFormatter.string(from: infosSaved.refreshIMDB)
+            updateTVMaze.text = dateFormatter.string(from: infosSaved.refreshDates)
+        }
+        
         makePrettyColorViews(view: colTrakt, couleur: colorTrakt)
         makePrettyColorViews(view: colTVdb, couleur: colorTVdb)
         makePrettyColorViews(view: colBetaSeries, couleur: colorBetaSeries)

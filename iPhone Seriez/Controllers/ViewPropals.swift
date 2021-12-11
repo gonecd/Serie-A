@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SeriesCommon
 
 
 class SrcProposition {
@@ -268,6 +267,13 @@ class ViewPropals: UIViewController, UICollectionViewDataSource, UICollectionVie
         cell.note.text = String(displayedSeries[indexPath.row].getGlobalRating()) + " %"
         arrondir(texte: cell.note, radius: 8.0)
         
+        let noteGlobale : Double = Double(displayedSeries[indexPath.row].getGlobalRating())/10.0
+        cell.note.text = "👍🏼 " + String(noteGlobale)
+        cell.note.layer.borderColor = UIColor.systemBlue.cgColor
+        cell.note.layer.borderWidth = 2
+        cell.note.layer.cornerRadius = 8
+        cell.note.layer.masksToBounds = true
+
         cell.graph.sendNotes(rateTrakt: displayedSeries[indexPath.row].getFairGlobalRatingTrakt(),
                              rateBetaSeries: displayedSeries[indexPath.row].getFairGlobalRatingBetaSeries(),
                              rateMoviedb: displayedSeries[indexPath.row].getFairGlobalRatingMoviedb(),

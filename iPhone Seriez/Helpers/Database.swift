@@ -7,7 +7,8 @@
 //
 
 import Foundation
-import SeriesCommon
+import Mon_activitéExtension
+
 
 class Database : NSObject {
     var shows : [Serie] = []
@@ -173,7 +174,7 @@ class Database : NSObject {
         db.shows[db.index["Desperate Housewives"]!].saisons[1].nbEpisodes = db.shows[db.index["Desperate Housewives"]!].saisons[1].nbWatchedEps
         db.shows[db.index["Kaamelott"]!].saisons[3].nbEpisodes = db.shows[db.index["Kaamelott"]!].saisons[3].nbWatchedEps
         db.shows[db.index["Lost"]!].saisons[0].nbEpisodes = db.shows[db.index["Lost"]!].saisons[0].nbWatchedEps
-        
+
         updateCompteurs()
     }
     
@@ -217,70 +218,44 @@ class Database : NSObject {
     
     
     func shareWithWidget() {
-        var sharedInfos : [InfosEnCours] = []
-        
+        var monActivite : [Data4MonActivite] = []
+
         for uneSerie in db.shows {
             if (uneSerie.watching()) {
                 for uneSaison in uneSerie.saisons {
                     if(uneSaison.nbWatchedEps > 0) && (uneSaison.nbWatchedEps < uneSaison.nbEpisodes) {
-                        let info : InfosEnCours = InfosEnCours(serie: uneSerie.serie,
-                                                               channel: uneSerie.network,
-                                                               saison: uneSaison.saison,
-                                                               nbEps: uneSaison.nbEpisodes,
-                                                               nbWatched: uneSaison.nbWatchedEps,
-                                                               poster: uneSerie.poster,
-                                                               rateGlobal: uneSerie.getGlobalRating(),
-                                                               rateTrakt: uneSerie.getFairGlobalRatingTrakt(),
-                                                               rateIMDB: uneSerie.getFairGlobalRatingIMdb(),
-                                                               rateMovieDB: uneSerie.getFairGlobalRatingMoviedb(),
-                                                               rateTVmaze: uneSerie.getFairGlobalRatingTVmaze(),
-                                                               rateRottenTomatoes: uneSerie.getFairGlobalRatingRottenTomatoes(),
-                                                               rateBetaSeries: uneSerie.getFairGlobalRatingBetaSeries())
+                        let infoActivite : Data4MonActivite = Data4MonActivite(serie: uneSerie.serie,
+                                                                   channel: uneSerie.network,
+                                                                   saison: uneSaison.saison,
+                                                                   nbEps: uneSaison.nbEpisodes,
+                                                                   nbWatched: uneSaison.nbWatchedEps,
+                                                                   poster: uneSerie.poster,
+                                                                   rateGlobal: uneSerie.getGlobalRating(),
+                                                                   rateTrakt: uneSerie.getFairGlobalRatingTrakt(),
+                                                                   rateIMDB: uneSerie.getFairGlobalRatingIMdb(),
+                                                                   rateMovieDB: uneSerie.getFairGlobalRatingMoviedb(),
+                                                                   rateTVmaze: uneSerie.getFairGlobalRatingTVmaze(),
+                                                                   rateRottenTomatoes: uneSerie.getFairGlobalRatingRottenTomatoes(),
+                                                                   rateBetaSeries: uneSerie.getFairGlobalRatingBetaSeries())
                         
-                        sharedInfos.append(info)
+                        monActivite.append(infoActivite)
                     }
                 }
             }
         }
         
         let sharedContainer = UserDefaults(suiteName: "group.Series")
-        sharedContainer?.set(try? PropertyListEncoder().encode(sharedInfos), forKey: "Series")
-        
-        print ("Shared last infos with widget")
+        sharedContainer?.set(try? PropertyListEncoder().encode(monActivite), forKey: "MonActivite")
     }
     
     
-    func shareRefreshWithWidget(newInfo : InfosRefresh) {
-        var sharedInfos : [InfosRefresh] = []
-        
-        if let data = UserDefaults(suiteName: "group.Series")!.value(forKey:"Refresh") as? Data {
-            sharedInfos = try! PropertyListDecoder().decode(Array<InfosRefresh>.self, from: data)
-        }
-
-        if (sharedInfos.count == 0) {
-            sharedInfos.append(newInfo)
-        }
-        else {
-            let lastInfo : InfosRefresh = sharedInfos[sharedInfos.count - 1]
-            
-            if (lastInfo.timestamp == newInfo.timestamp) {
-                sharedInfos[sharedInfos.count - 1] = newInfo
-            }
-            else {
-                sharedInfos.append(newInfo)
-            }
-        }
-        
-        if (sharedInfos.count > 10) {
-            sharedInfos.removeFirst()
-        }
-
+    func saveRefreshInfo(info : InfosRefresh) {
         let sharedContainer = UserDefaults(suiteName: "group.Series")
-        sharedContainer?.set(try? PropertyListEncoder().encode(sharedInfos), forKey: "Refresh")
+        sharedContainer?.set(try? PropertyListEncoder().encode(info), forKey: "Refresh")
         
-        print ("Shared last refresh with widget")
+        print ("Saved last refresh infos")
     }
-    
+
     
     func merge(_ db : [Serie], adds : [Serie]) -> [Serie] {
         var merged : Bool = false

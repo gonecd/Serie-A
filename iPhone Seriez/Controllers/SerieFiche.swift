@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SeriesCommon
 
 class CellSaison: UITableViewCell {
     @IBOutlet weak var saison: UILabel!
@@ -147,8 +146,14 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
         annee.text = String(serie.year)
         resume.text = serie.resume
         banniere.image = image
-        note.text = String(serie.getGlobalRating()) + " %"
         
+        let noteGlobale : Double = Double(serie.getGlobalRating())/10.0
+        note.text = "👍🏼 " + String(noteGlobale)
+        note.layer.borderColor = UIColor.systemBlue.cgColor
+        note.layer.borderWidth = 2
+        note.layer.cornerRadius = 10
+        note.layer.masksToBounds = true
+
         // Masquer les liens s'il n'y a pas de page derrière ...
         if (rottenTomatoes.getPath(serie: serie.serie) == "") { bRotTom.isHidden = true }
         if (metaCritic.getPath(serie: serie.serie) == "") { bMetaCritic.isHidden = true }
@@ -174,7 +179,6 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
         arrondirLabel(texte: drapeauBgd, radius: 8)
         arrondirLabel(texte: genre, radius: 8)
         arrondirLabel(texte: annee, radius: 8)
-        arrondirLabel(texte: note, radius: 10)
 
         if (UIDevice.current.userInterfaceIdiom == .pad) {
             arrondir(fenetre: viewDiffuseurs, radius: 10)

@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SeriesCommon
 
 
 class CellSerieListe: UITableViewCell {
@@ -59,8 +58,15 @@ class ViewSerieListe: UITableViewController {
         cell.titre.text = viewList[indexPath.row].serie
         cell.saison.text =  String(viewList[indexPath.row].nbSaisons) + " Saisons - " + String(viewList[indexPath.row].nbEpisodes) + " Epiosdes - " + String(viewList[indexPath.row].runtime) + " min"
         
-        cell.globalRating.text = String(viewList[indexPath.row].getGlobalRating()) + " %"
-        arrondir(texte: cell.globalRating, radius: 12.0)
+//        cell.globalRating.text = String(viewList[indexPath.row].getGlobalRating()) + " %"
+//        arrondir(texte: cell.globalRating, radius: 12.0)
+        
+        let note : Double = Double(viewList[indexPath.row].getGlobalRating())/10.0
+        cell.globalRating.text = "👍🏼 " + String(note)
+        cell.globalRating.layer.borderColor = UIColor.systemBlue.cgColor
+        cell.globalRating.layer.borderWidth = 2
+        cell.globalRating.layer.cornerRadius = 12
+        cell.globalRating.layer.masksToBounds = true
 
         cell.myRating.textColor = UIColor.init(red: 1.0, green: 153.0/255.0, blue: 1.0, alpha: 1.0)
 

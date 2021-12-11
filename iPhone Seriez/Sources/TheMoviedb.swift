@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import SeriesCommon
 
 class TheMoviedb : NSObject {
     var chrono : TimeInterval = 0
@@ -76,7 +75,7 @@ class TheMoviedb : NSObject {
         var cpt : Int = 0
         
         var buildURL : String = "https://api.themoviedb.org/3/discover/tv?api_key=\(TheMoviedbUserkey)&language=en-US&sort_by=popularity.desc"
-        
+
         if (genreIncl != "") {
             buildURL = buildURL + "&with_genres="
             for unGenre in genreIncl.split(separator: ",") { buildURL = buildURL + String(genresMovieDB[unGenre] as? Int ?? 0) + "," }
@@ -178,9 +177,11 @@ class TheMoviedb : NSObject {
             uneSerie.nbEpisodes = reqResult.object(forKey: "number_of_episodes") as? Int ?? 0
             
             for i in 0..<((reqResult.object(forKey: "genres") as? NSArray ?? []).count) {
-                uneSerie.genres.append((((reqResult.object(forKey: "genres") as? NSArray ?? []).object(at: i) as! NSDictionary).object(forKey: "name")) as? String ?? "")
+                
+                let unGenre : String = (((reqResult.object(forKey: "genres") as? NSArray ?? []).object(at: i) as! NSDictionary).object(forKey: "name")) as? String ?? ""
+                uneSerie.genres.append(unGenre)
             }
-            
+
             for i in 0..<((reqResult.object(forKey: "seasons") as? NSArray ?? []).count) {
                 let readSaison : Int = (((reqResult.object(forKey: "seasons") as? NSArray ?? []).object(at: i) as! NSDictionary).object(forKey: "season_number")) as? Int ?? 0
                 if (readSaison != 0) {
@@ -310,4 +311,20 @@ class TheMoviedb : NSObject {
         
         return serieListe
     }
+    
+    
+    func getGenres() {
+        let reqResult : NSDictionary = loadAPI(reqAPI: "https://api.themoviedb.org/3/genre/tv/list?api_key=\(TheMoviedbUserkey)&language=en-US") as? NSDictionary ?? NSDictionary()
+        
+        if (reqResult.object(forKey: "genres") != nil) {
+            for oneGenre in (reqResult.object(forKey: "genres") as! NSArray) {
+                let name : String = ((oneGenre as! NSDictionary).object(forKey: "name")) as? String ?? ""
+                let id : String = String(((oneGenre as! NSDictionary).object(forKey: "id")) as? Int ?? 0)
+                
+                print("    \"\(name)\" : \(id),")
+            }
+        }
+    }
+    
+
 }

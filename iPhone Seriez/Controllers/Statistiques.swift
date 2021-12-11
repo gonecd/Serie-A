@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SeriesCommon
 
 class Statistiques: UIViewController {
     // Stats chiffrées

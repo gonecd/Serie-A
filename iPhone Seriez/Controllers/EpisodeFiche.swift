@@ -8,7 +8,6 @@
 
 
 import UIKit
-import SeriesCommon
 
 class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource {
     
@@ -145,7 +144,7 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
     @IBAction func vuUnEpisode(_ sender: Any) {
         if (episode <= serie.saisons[saison - 1].nbEpisodes) {
             
-            if (trakt.addToHistory(tvdbID: serie.saisons[saison - 1].episodes[episode - 1].idTVdb)) {
+            if (trakt.addToHistory(tvdbID: serie.saisons[saison - 1].episodes[episode - 1].idTVdb, imdbID: serie.saisons[saison - 1].episodes[episode - 1].idIMdb)) {
                 serie.saisons[saison - 1].nbWatchedEps = serie.saisons[saison - 1].nbWatchedEps + 1
                 if (serie.unfollowed) { serie.unfollowed = false }
                 if (serie.watchlist) { serie.watchlist = false }
@@ -154,6 +153,9 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
 
                 db.updateCompteurs()
                 db.saveDB()
+            }
+            else {
+                print("\(serie.serie) S\(saison)E\(episode) : Failed to mark as viewed")
             }
         }
     }

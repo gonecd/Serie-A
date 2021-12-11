@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SeriesCommon
 
 class ViewAccueil: UIViewController  {
     
@@ -30,6 +29,12 @@ class ViewAccueil: UIViewController  {
     @IBOutlet weak var cadreConseil: UIView!
     @IBOutlet weak var cadreConfiguration: UIView!
     @IBOutlet weak var cadreReload: UIView!
+    @IBOutlet weak var cadreDashboard: UIView!
+
+    @IBOutlet weak var cadreSeries: UIView!
+    @IBOutlet weak var cadreSaisons: UIView!
+    @IBOutlet weak var cadreDecouverte: UIView!
+    @IBOutlet weak var cadreDivers: UIView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,7 +46,6 @@ class ViewAccueil: UIViewController  {
         dateFormLong.dateFormat = "dd MMM yyyy"
         dateFormSource.locale = Locale.current
         dateFormSource.dateFormat = "yyyy-MM-dd"
-        dateFormTrakt.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSX"
         
         checkDirectories()
         
@@ -60,6 +64,12 @@ class ViewAccueil: UIViewController  {
         // iPad spécific
         if (UIDevice.current.userInterfaceIdiom == .pad) {
             makeGradiant(carre: cadreConseil, couleur : "Vert")
+            makeGradiant(carre: cadreDashboard, couleur : "Gris")
+            
+            makeGradiant(carre: cadreSeries, couleur: "Blanc")
+            makeGradiant(carre: cadreSaisons, couleur: "Blanc")
+            makeGradiant(carre: cadreDecouverte, couleur: "Blanc")
+            makeGradiant(carre: cadreDivers, couleur: "Blanc")
         }
 
         // Faire des jolis compteurs à coins ronds
@@ -116,7 +126,8 @@ class ViewAccueil: UIViewController  {
         let targetController : UIViewController
         
         if (UIDevice.current.userInterfaceIdiom == .pad) {
-            targetController = segue.destination.children[0]
+//            targetController = segue.destination.children[0]
+            targetController = segue.destination
         }
         else {
             targetController = segue.destination
@@ -257,6 +268,16 @@ class ViewAccueil: UIViewController  {
 //        print ("tt7134908 saison 3 épisode 5 = \(imdb.getEpisodeID(serieID: "tt7134908", saison: 3, episode: 5))")
         
         
+        
+        // Initiate Refresh Infos
+//        var infoZero : InfosRefresh = InfosRefresh(refreshDates: ZeroDate, refreshIMDB: ZeroDate, refreshViewed: ZeroDate)
+//        db.saveRefreshInfo(info: infoZero)
+        
+        
+        
+        // Liste des genres dans TheMovieDB
+        //theMoviedb.getGenres()
+        
         db.quickRefresh()
         db.finaliseDB()
         db.shareWithWidget()
@@ -273,16 +294,3 @@ class ViewAccueil: UIViewController  {
         
 }
 
-/*
-
-TVmaze::error 404 received for req=http://api.tvmaze.com/lookup/shows?imdb=tt10875696
-TVmaze::error 404 received for req=http://api.tvmaze.com/lookup/shows?imdb=tt9844334
-TVmaze::error 404 received for req=http://api.tvmaze.com/lookup/shows?thetvdb=361041
-TVmaze::error 404 received for req=http://api.tvmaze.com/lookup/shows?imdb=tt10970552
-
- 
-TVmaze::getSeasonsDates failed : no ID
-RottenTomatoes getCritics failed for Call My Agent!: The file “reviews” couldn’t be opened.
-
- 
- */

@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import SeriesCommon
 
 class TheTVdb : NSObject {
     var chrono : TimeInterval = 0
@@ -124,8 +123,10 @@ class TheTVdb : NSObject {
                             
                             uneSerie.saisons[laSaison - 1].episodes[lEpisode - 1].ratingTVdb = Int(10 * ((fiche as AnyObject).object(forKey: "siteRating") as? Double ?? 0.0))
                             uneSerie.saisons[laSaison - 1].episodes[lEpisode - 1].ratersTVdb = (fiche as AnyObject).object(forKey: "siteRatingCount") as? Int ?? 0
-                            uneSerie.saisons[laSaison - 1].episodes[lEpisode - 1].idIMdb = (fiche as AnyObject).object(forKey: "imdbId") as? String ?? ""
                             uneSerie.saisons[laSaison - 1].episodes[lEpisode - 1].idTVdb = (fiche as AnyObject).object(forKey: "id") as? Int ?? 0
+                            
+                            let tmpIMDB : String = (fiche as AnyObject).object(forKey: "imdbId") as? String ?? ""
+                            if (tmpIMDB != "") { uneSerie.saisons[laSaison - 1].episodes[lEpisode - 1].idIMdb = tmpIMDB }
                             
                             let stringDate : String = (fiche as AnyObject).object(forKey: "firstAired") as? String ?? ""
                             if (stringDate ==  "") {

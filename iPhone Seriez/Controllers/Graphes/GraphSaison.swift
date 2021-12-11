@@ -6,11 +6,11 @@
 //  Copyright © 2017 Home. All rights reserved.
 //
 import UIKit
-import SeriesCommon
 
 class GraphSaison: UIView {
 
     var theSaison : Saison = Saison(serie:"", saison:0)
+    let origineX : CGFloat = 5.0
 
     override func draw(_ dirtyRect: CGRect) {
         super.draw(dirtyRect)
@@ -29,10 +29,9 @@ class GraphSaison: UIView {
     }
 
     func background() {
-        let origineX : CGFloat = 30.0
         let origineY :CGFloat = self.frame.height - 30.0
-        let hauteur : CGFloat = (self.frame.height - 30.0 - 10.0)
-        let largeur : CGFloat = (self.frame.width - origineX - 10.0)
+        let hauteur : CGFloat = (self.frame.height - 30.0 - 5.0)
+        let largeur : CGFloat = (self.frame.width - origineX - 5.0)
         let textAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 10), NSAttributedString.Key.foregroundColor: colorAxis]
         let nbEpisodes : Int = theSaison.nbEpisodes
 
@@ -41,6 +40,7 @@ class GraphSaison: UIView {
 
         // Cadre
         let path : UIBezierPath = UIBezierPath()
+        path.lineWidth = 0.5
         path.move(to: CGPoint(x: origineX, y: origineY))
         path.addLine(to: CGPoint(x:origineX, y:origineY-hauteur))
         path.addLine(to: CGPoint(x:origineX+largeur, y:origineY-hauteur))
@@ -51,6 +51,7 @@ class GraphSaison: UIView {
         // Lignes achurées horizontales
         for i:Int in 1 ..< 4 {
             let pathLine : UIBezierPath = UIBezierPath()
+            pathLine.lineWidth = 0.5
             pathLine.move(to: CGPoint(x: origineX, y: origineY - (hauteur * CGFloat(i)/4)))
             pathLine.addLine(to: CGPoint(x: origineX + largeur, y: origineY - (hauteur * CGFloat(i)/4)))
 
@@ -59,10 +60,10 @@ class GraphSaison: UIView {
         }
 
         // Légende en Y
-        for i:Int in 0 ..< 5 {
-            let episode : NSString = String(i*25) as NSString
-            episode.draw(in: CGRect(x: 8, y: origineY - (hauteur * CGFloat(i)/4) - 7, width: 30, height: 10), withAttributes: textAttributes)
-        }
+//        for i:Int in 0 ..< 5 {
+//            let episode : NSString = String(i*25) as NSString
+//            episode.draw(in: CGRect(x: 8, y: origineY - (hauteur * CGFloat(i)/4) - 7, width: 30, height: 10), withAttributes: textAttributes)
+//        }
 
         // Coches verticales
         for i:Int in 0 ..< nbEpisodes {
@@ -74,7 +75,7 @@ class GraphSaison: UIView {
 
         if (nbEpisodes < 1) { return }
 
-        // Lignes hachurées verticale
+        // Lignes hachurées verticales
         for i:Int in 1 ..< nbEpisodes {
             let pathLine : UIBezierPath = UIBezierPath()
             pathLine.move(to: CGPoint(x: origineX + (largeur * CGFloat(i) / CGFloat(nbEpisodes)), y: origineY))
@@ -88,16 +89,13 @@ class GraphSaison: UIView {
 
     func traceGraphePoints() {
         let nbEpisodes : Int = theSaison.nbEpisodes
-        let origineX : CGFloat = 30.0
         let largeur : CGFloat = (self.frame.width - origineX - 10.0)
 
         for i:Int in 0 ..< theSaison.episodes.count {
             let offset : CGFloat = (largeur * (CGFloat(i)+0.5) / CGFloat(nbEpisodes))
 
-            //traceUnPoint(theSaison.episodes[i].getFairRatingTVdb(), uneCouleur: colorTVdb, offsetEpisode: offset, offsetSource: 2, nbRaters : theSaison.episodes[i].ratersTVdb)
             traceUnPoint(theSaison.episodes[i].getFairRatingTrakt(), uneCouleur: colorTrakt, offsetEpisode: offset, offsetSource: 4, nbRaters : theSaison.episodes[i].ratersTrakt)
             traceUnPoint(theSaison.episodes[i].getFairRatingBetaSeries(), uneCouleur: colorBetaSeries, offsetEpisode: offset, offsetSource: 6, nbRaters : theSaison.episodes[i].ratersBetaSeries)
-            //traceUnPoint(theSaison.episodes[i].getFairRatingMoviedb(), uneCouleur: colorMoviedb, offsetEpisode: offset, offsetSource: 8, nbRaters : theSaison.episodes[i].ratersMoviedb)
             traceUnPoint(theSaison.episodes[i].getFairRatingIMdb(), uneCouleur: colorIMDB, offsetEpisode: offset, offsetSource: 10, nbRaters : theSaison.episodes[i].ratersIMdb)
         }
     }
@@ -105,7 +103,6 @@ class GraphSaison: UIView {
 
     func traceUnPoint(_ uneNote: Int, uneCouleur: UIColor, offsetEpisode: CGFloat, offsetSource: CGFloat, nbRaters : Int) {
         let diametre : CGFloat = 6.0
-        let origineX : CGFloat = 30.0
         let origineY :CGFloat = self.frame.height - 30.0
         let hauteur : CGFloat = (self.frame.height - 30.0 - 10.0)
         var note : Int = uneNote

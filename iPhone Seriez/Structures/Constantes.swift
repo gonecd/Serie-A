@@ -16,7 +16,6 @@ let IMdbDir : URL = AppDir.appendingPathComponent("imdb")
 let dateFormShort   = DateFormatter()
 let dateFormLong    = DateFormatter()
 let dateFormSource  = DateFormatter()
-let dateFormTrakt   = DateFormatter()
 
 // Structures globales
 var trakt          : Trakt          = Trakt.init()
@@ -70,45 +69,23 @@ let categAbandonnees    : Int = 2
 let categSuivies        : Int = 3
 let categFinies         : Int = 4
 
+
 // Genres on MovieDB
 let genresMovieDB: NSDictionary = [
-    "Action" : 28,
-    "Adventure" : 12,
+    "Action & Adventure" : 10759,
     "Animation" : 16,
     "Comedy" : 35,
     "Crime" : 80,
-    "Documentary" : 99,
     "Drama" : 18,
-    "Family" : 10751,
-    "Fantasy" : 14,
-    "History" : 36,
-    "Horror" : 27,
-    "Music" : 10402,
     "Mystery" : 9648,
-    "Romance" : 10749,
-    "Science Fiction" : 878,
-    "TV Movie" : 10770,
-    "Thriller" : 53,
-    "War" : 10752,
+    "Sci-Fi & Fantasy" : 10765,
+    "War & Politics" : 10768,
     "Western" : 37
 ]
 
+ 
 let genreDocumentaire   : Int = 99
 let genreAnimation      : Int = 16
-
-// Années on MovieDB
-let anneesMovieDB: NSDictionary = [
-    "N/A" : 0,
-    "2010" : 2010,
-    "2011" : 2011,
-    "2012" : 2012,
-    "2013" : 2013,
-    "2014" : 2014,
-    "2015" : 2015,
-    "2016" : 2016,
-    "2017" : 2017,
-    "2018" : 2018
-]
 
 // Networks on MovieDB
 let networksMovieDB: NSDictionary = [
@@ -135,21 +112,6 @@ let networksMovieDB: NSDictionary = [
     "BBC Four" : 100
 ]
 
-// Networks on MovieDB
-let languesMovieDB: NSDictionary = [
-    "French" : "fr",
-    "English" : "en",
-    "Danish" : "da",
-    "German" : "de",
-    "Italian" : "it",
-    "Japanese" : "ja",
-    "Dutch" : "nl",
-    "Norwegian" : "no",
-    "Russian" : "ru",
-    "Spanish" : "es",
-    "Swedish" : "sv"
-]
-
 // Modes d'affichage de la view Série
 let modeFinie       : Int = 1
 let modeEnCours     : Int = 2
@@ -157,3 +119,34 @@ let modeAbandon     : Int = 3
 let modeWatchlist   : Int = 4
 let modeRecherche   : Int = 5
 
+
+// Corrections statistiques pour les séries
+var moyenneIMDB         : Int       = 80
+var ecartTypeIMDB       : Double    = 6.511
+var moyenneTrakt        : Int       = 80
+var ecartTypeTrakt      : Double    = 6.174
+var moyenneMovieDB      : Int       = 76
+var ecartTypeMovieDB    : Double    = 6.742
+var moyenneBetaSeries   : Int       = 84
+var ecartTypeBetaSeries : Double    = 7.937
+var moyenneTVmaze       : Int       = 80
+var ecartTypeTVmaze     : Double    = 6.206
+var moyenneRottenTomatoes   : Int       = 84
+var ecartTypeRottenTomatoes : Double    = 12.699
+var moyenneMetaCritic   : Int       = 75
+var ecartTypeMetaCritic : Double    = 8.158
+var moyenneAlloCine     : Int       = 79
+var ecartTypeAlloCine   : Double    = 8.731
+
+
+// Corrections statistiques pour les épisodes NEW ONES
+var moyenneIMDBeps         : Int       = 84
+var ecartTypeIMDBeps       : Double    = 9.331
+var moyenneTrakteps        : Int       = 78
+var ecartTypeTrakteps      : Double    = 2.971
+var moyenneBetaSerieseps   : Int       = 86
+var ecartTypeBetaSerieseps : Double    = 3.723
+
+
+let notesMid    : Double = 64.0
+let notesRange  : Double = 16.0

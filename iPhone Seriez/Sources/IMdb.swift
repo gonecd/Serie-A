@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import SeriesCommon
 import SwiftSoup
 import Gzip
 
@@ -15,10 +14,11 @@ class IMdb : NSObject {
     var IMDBrates : NSMutableDictionary = NSMutableDictionary()
     var IMDBepisodes: NSMutableDictionary = NSMutableDictionary()
     var chrono : TimeInterval = 0
-    
-        
+    let dateFormIMDB   = DateFormatter()
+
     override init() {
         super.init()
+        dateFormIMDB.dateFormat = "dd MMM yyyy"
     }
 
     func downloadData() {
@@ -211,9 +211,12 @@ class IMdb : NSObject {
                 uneCritique.journal = try oneComment.select("[class='title']").text()
                 uneCritique.auteur = try oneComment.select("[class='display-name-link']").text()
                 uneCritique.texte = try oneComment.select("div [class='text']").text()
-                uneCritique.date = try oneComment.select("[class='review-date']").text()
                 uneCritique.note = try oneComment.select("[class='rating-other-user-rating']").text()
-                
+
+                let dateString : String = try oneComment.select("[class='review-date']").text()
+                let dateTmp : Date = dateFormIMDB.date(from: dateString) ?? ZeroDate
+                uneCritique.date = dateFormLong.string(from: dateTmp)
+
                 result.append(uneCritique)
             }
         }

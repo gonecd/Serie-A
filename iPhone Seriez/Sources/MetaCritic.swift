@@ -11,12 +11,13 @@ import Foundation
 
 import Foundation
 import SwiftSoup
-import SeriesCommon
 
 class MetaCritic {
     var chrono : TimeInterval = 0
-    
+    let dateFormMetaCritic = DateFormatter()
+
     init() {
+        dateFormMetaCritic.dateFormat = "MMM dd, yyyy"
     }
     
     
@@ -130,6 +131,7 @@ class MetaCritic {
         case "Catch-22":                                return "https://www.metacritic.com/tv/catch-22-2019"
         case "What We Do in the Shadows":               return "https://www.metacritic.com/tv/what-we-do-in-the-shadows-2019"
         case "War of the Worlds":                       return "https://www.metacritic.com/tv/war-of-the-worlds-2020"
+        case "The Outsider":                            return "https://www.metacritic.com/tv/the-outsider-2020"
 
         case "Absolutely Fabulous":                     return "https://www.metacritic.com/tv/absolutely-fabulous-uk"
         case "The IT Crowd":                            return "https://www.metacritic.com/tv/the-it-crowd-uk"
@@ -143,6 +145,8 @@ class MetaCritic {
         case "The Marvelous Mrs. Maisel":               return "https://www.metacritic.com/tv/the-marvelous-mrs-maisel"
         case "Rick and Morty":                          return "https://www.metacritic.com/tv/rick-morty"
         case "Locke & Key":                             return "https://www.metacritic.com/tv/locke-key"
+        case "The Queen's Gambit":                      return "https://www.metacritic.com/tv/the-queens-gambit"
+        case "Love, Death & Robots":                    return "https://www.metacritic.com/tv/love-death-robots"
 
         case "Hero Corp",
              "Call My Agent",
@@ -177,7 +181,15 @@ class MetaCritic {
              "Caliphate",
              "The Crimson Rivers",
              "One-Punch Man",
-             "How to Sell Drugs Online (Fast)":
+             "How to Sell Drugs Online (Fast)",
+             
+             "En thérapie",
+             "OVNI(s)",
+             "Sky Rojo",
+             "Curon",
+             "Kuroko's Basketball",
+             "Hunter x Hunter",
+             "The Seven Deadly Sins":
             return ""
             
         default:
@@ -209,8 +221,11 @@ class MetaCritic {
                 uneCritique.journal = try oneCritic.select("div [class='title pad_btm_half']").select("img").attr("title")
                 uneCritique.logo = try oneCritic.select("div [class='title pad_btm_half']").select("img").attr("src")
                 uneCritique.auteur = try oneCritic.select("div [class='title pad_btm_half']").select("[class='author']").text()
-                uneCritique.date = try oneCritic.select("div [class='title pad_btm_half']").select("[class='date']").text()
                 uneCritique.saison = Int(try oneCritic.select("[class='season-des']").text().replacingOccurrences(of: "Season ", with: "").replacingOccurrences(of: " Review:", with: "")) ?? 0
+
+                let dateString : String = try oneCritic.select("div [class='title pad_btm_half']").select("[class='date']").text()
+                let dateTmp : Date = dateFormMetaCritic.date(from: dateString) ?? ZeroDate
+                uneCritique.date = dateFormLong.string(from: dateTmp)
 
                 if (try oneCritic.select("div [class='summary']").select("a").count > 0) {
                     uneCritique.texte = try oneCritic.select("div [class='summary']").select("a")[0].text().replacingOccurrences(of: "Season " + String(uneCritique.saison) + " Review: ", with: "")

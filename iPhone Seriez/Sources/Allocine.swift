@@ -8,7 +8,6 @@
 
 import Foundation
 import SwiftSoup
-import SeriesCommon
 
 class AlloCine : NSObject {
     var chrono : TimeInterval = 0
@@ -23,7 +22,9 @@ class AlloCine : NSObject {
         "Fargo" : 11042,
         "Fear the Walking Dead" : 16958,
         "How to Sell Drugs Online (Fast)" : 24940,
+        "Hunter x Hunter" : 25429,
         "Into the Night" : 25585,
+        "Kuroko's Basketball" : 19589,
         "Lost in Space" : 18240,
         "Maniac" : 20388,
         "Marco Polo" : 10841,
@@ -36,6 +37,7 @@ class AlloCine : NSObject {
         "Savages" : 24290,
         "Shameless" : 7634,
         "Spiral" : 538,
+        "The 4400" : 251,
         "The Americans" : 10790,
         "The Bureau" : 17907,
         "The Collapse" : 25687,
@@ -44,7 +46,9 @@ class AlloCine : NSObject {
         "The Haunting" : 21978,
         "The Man in the High Castle" : 9359,
         "The Office" : 199,
+        "The Queen's Gambit" : 24971,
         "The Returned" : 4138,
+        "The Seven Deadly Sins" : 19946,
         "Under the Dome" : 7834,
         "What We Do in the Shadows" : 23200,
         "WorkinGirls" : 10289

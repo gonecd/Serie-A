@@ -8,7 +8,6 @@
 
 import Foundation
 import SwiftSoup
-import SeriesCommon
 
 class TVmaze {
     var chrono : TimeInterval = 0
@@ -112,6 +111,34 @@ class TVmaze {
     }
     
     
+
+    func getEpisodesDurations(idTVMaze : String, saison : Int) -> [Int] {
+        var reqURL : String = ""
+        var result : [Int] = []
+
+        if (idTVMaze != "")     { reqURL = "https://api.tvmaze.com/shows/\(idTVMaze)?embed=episodes"}
+        else                    { return result }
+        
+        let reqResult : NSDictionary = loadAPI(reqAPI: reqURL) as? NSDictionary ?? NSDictionary()
+        
+        if (reqResult.object(forKey: "_embedded") != nil) {
+            if ((reqResult.object(forKey: "_embedded") as! NSDictionary).object(forKey: "episodes") != nil) {
+                for unEpisode in ((reqResult.object(forKey: "_embedded") as! NSDictionary).object(forKey: "episodes") as! NSArray) {
+                    
+                    let season : Int = ((unEpisode as! NSDictionary).object(forKey: "season")) as? Int ?? 0
+                    let duree : Int = ((unEpisode as! NSDictionary).object(forKey: "runtime")) as? Int ?? 0
+
+                    if (season == saison) {
+                        result.append(duree)
+                    }
+                }
+            }
+        }
+
+        return result
+    }
+    
+    
     func getPath(serie : String, id : String) -> String {
         if (id == "") { return ""}
         return "https://www.tvmaze.com/shows/" + id + "/Hello/episodes?all=1"
@@ -126,6 +153,11 @@ class TVmaze {
         
         if (idTVmaze == "") {
             print("TVmaze::getSeasonsDates failed : no ID")
+            return (foundSaisons, foundEps, foundDebuts, foundFins)
+        }
+        
+        if (idTVmaze == "27436") {
+            print("TVmaze::getSeasonsDates failed : tout pourri pour Casa de Papel")
             return (foundSaisons, foundEps, foundDebuts, foundFins)
         }
         

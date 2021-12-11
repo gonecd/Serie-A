@@ -9,7 +9,6 @@
 //
 
 import UIKit
-import SeriesCommon
 
 class ViewSearchNew: UIViewController
 {

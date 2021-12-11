@@ -6,7 +6,6 @@
 //  Copyright © 2017 Home. All rights reserved.
 //
 import UIKit
-import SeriesCommon
 
 class GraphMiniSaison: UIView {
     
@@ -97,6 +96,8 @@ class GraphMiniSaison: UIView {
         if ((nbPrevSeasons == 0) || (totalPrevSeasons == 0) ) { return 50 }
         
         let moyPrevSeasons : Int = Int( Double(totalPrevSeasons) / Double(nbPrevSeasons) )
+        if (moyPrevSeasons == 0) { return 50 }
+
         let difference : Int = Int((Double((noteCurrentSeason - moyPrevSeasons)) / Double(moyPrevSeasons)) * 100 )
         
         return (50 + difference)

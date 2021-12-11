@@ -7,7 +7,8 @@
 //
 
 import Foundation
-import SeriesCommon
+import UIKit
+
 
 class Trakt : NSObject {
     var chrono : TimeInterval = 0
@@ -18,9 +19,11 @@ class Trakt : NSObject {
     var Token : String = ""
     var RefreshToken : String = ""
     var TokenExpiration : Date!
-    
+    let dateFormTrakt   = DateFormatter()
+
     override init() {
         super.init()
+        dateFormTrakt.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSX"
     }
     
     
@@ -190,7 +193,6 @@ class Trakt : NSObject {
 
     
     func getIDs(serie: Serie) -> Bool {
-        let uneSerie : Serie = Serie(serie: "")
         var request : String = ""
         var found : Bool = false
         
@@ -269,8 +271,18 @@ class Trakt : NSObject {
     }
     
     
-    func addToHistory(tvdbID : Int) -> Bool {
-        return postAPI(reqAPI: "https://api.trakt.tv/sync/history", body: "{ \"episodes\": [ { \"ids\": { \"tvdb\": \(tvdbID) } } ]}")
+    func addToHistory(tvdbID : Int, imdbID : String) -> Bool {
+        var result : Bool = false
+        
+        if (imdbID != "") {
+            result = postAPI(reqAPI: "https://api.trakt.tv/sync/history", body: "{ \"episodes\": [ { \"ids\": { \"imdb\": \"\(imdbID)\" } } ]}")
+        }
+        
+        if ((result == false) && (tvdbID != 0)) {
+            result = postAPI(reqAPI: "https://api.trakt.tv/sync/history", body: "{ \"episodes\": [ { \"ids\": { \"tvdb\": \(tvdbID) } } ]}")
+        }
+
+        return result
     }
     
     
@@ -375,11 +387,13 @@ class Trakt : NSObject {
             serie.idMoviedb = String((((fiche as AnyObject).object(forKey: "show")! as AnyObject).object(forKey: "ids")! as AnyObject).object(forKey: "tmdb") as? Int ?? 0)
             
             for fichesaisons in (fiche as AnyObject).object(forKey: "seasons") as! NSArray {
-                let uneSaison : Saison = Saison(serie: ((fiche as AnyObject).object(forKey: "show")! as AnyObject).object(forKey: "title") as! String,
-                                                saison: (fichesaisons as AnyObject).object(forKey: "number") as! Int)
-                uneSaison.nbWatchedEps = ((fichesaisons as AnyObject).object(forKey: "episodes") as! NSArray).count
-                
-                serie.saisons.append(uneSaison)
+                if ( ((fichesaisons as AnyObject).object(forKey: "number") as! Int) != 0 ) {
+                    let uneSaison : Saison = Saison(serie: ((fiche as AnyObject).object(forKey: "show")! as AnyObject).object(forKey: "title") as! String,
+                                                    saison: (fichesaisons as AnyObject).object(forKey: "number") as! Int)
+                    uneSaison.nbWatchedEps = ((fichesaisons as AnyObject).object(forKey: "episodes") as! NSArray).count
+                    
+                    serie.saisons.append(uneSaison)
+                }
             }
             
             returnSeries.append(serie)
@@ -468,7 +482,7 @@ class Trakt : NSObject {
                             ficheEpisode.idIMdb = ((unEpisode as! NSDictionary).object(forKey: "ids")! as AnyObject).object(forKey: "imdb") as? String ?? ""
                             ficheEpisode.idTVdb = ((unEpisode as! NSDictionary).object(forKey: "ids")! as AnyObject).object(forKey: "tvdb") as? Int ?? 0
                             ficheEpisode.resume = (unEpisode as! NSDictionary).object(forKey: "overview")! as? String ?? ""
-                            
+
                             let stringDate : String = (unEpisode as! NSDictionary).object(forKey: "first_aired")! as? String ?? ""
                             if (stringDate ==  "") {
                                 ficheEpisode.date = ZeroDate
@@ -574,17 +588,22 @@ class Trakt : NSObject {
             
             uneCritique.source = srcTrakt
             uneCritique.texte = ((oneComment as! NSDictionary).object(forKey: "comment")) as? String ?? ""
-            uneCritique.date = ((oneComment as! NSDictionary).object(forKey: "created_at")) as? String ?? ""
+            uneCritique.auteur = (((oneComment as! NSDictionary).object(forKey: "user") as! NSDictionary).object(forKey: "username")) as? String ?? ""
+            uneCritique.journal = "Trakt user comment"
             //uneCritique.hasSpoiler = ((oneComment as! NSDictionary).object(forKey: "spoiler")) as? Bool ?? false
             //uneCritique.isReview = ((oneComment as! NSDictionary).object(forKey: "review")) as? Bool ?? false
             //uneCritique.nbLikes = ((oneComment as! NSDictionary).object(forKey: "likes")) as? Int ?? 0
-            
+
+            let dateString : String = ((oneComment as! NSDictionary).object(forKey: "created_at")) as? String ?? ""
+            let dateTmp : Date = dateFormTrakt.date(from: dateString) ?? ZeroDate
+            uneCritique.date = dateFormLong.string(from: dateTmp)
+                
             result.append(uneCritique)
         }
         
         return result
     }
-    
+
     func getMyRatings() -> [String:Int] {
         var results : Dictionary = [String:Int]()
 

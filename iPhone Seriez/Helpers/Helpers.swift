@@ -7,11 +7,9 @@
 //
 
 import UIKit
-import Reachability
-import CoreTelephony
+
 
 var imagesCache : NSCache = NSCache<NSString, UIImage>()
-
 
 func checkDirectories() {
     do {
@@ -83,7 +81,10 @@ func getDrapeau(country : String) -> UIImage {
     case "BE": return #imageLiteral(resourceName: "Flag_of_Belgium.png")
     case "IT": return #imageLiteral(resourceName: "Flag_of_Italy.png")
     case "MX": return #imageLiteral(resourceName: "Flag_of_Mexico.png")
-        
+    case "DK": return #imageLiteral(resourceName: "Flag_of_Denmark.png")
+    case "KR": return #imageLiteral(resourceName: "Flag_of_South_Korea.png")
+    case "NZ": return #imageLiteral(resourceName: "Flag_of_New_Zealand.png")
+
     case "": return UIImage()
 
     default:
@@ -179,48 +180,6 @@ func daysBetweenDates(startDate: Date, endDate: Date) -> Int {
     let components = calendar.dateComponents([Calendar.Component.day], from: startDate, to: endDate)
     
     return components.day!
-}
-
-
-func getNetWork() -> String {
-    do {
-        let reachability: Reachability = try Reachability()
-        
-        try reachability.startNotifier()
-        
-        switch reachability.connection {
-        case .unavailable : return "No net"
-        case .wifi: return "WiFi"
-        case .cellular: return getCellType()
-        default : return "Undef"
-        }
-    } catch {
-        print("Reachability: ERROR")
-        return "No net"
-    }
-}
-
-
-func getCellType() -> String {
-    guard let currentRadioAccessTechnology = CTTelephonyNetworkInfo().currentRadioAccessTechnology else { return "Undef" }
-    switch currentRadioAccessTechnology {
-    case CTRadioAccessTechnologyGPRS,
-         CTRadioAccessTechnologyEdge,
-         CTRadioAccessTechnologyCDMA1x:
-        return "2G"
-    case CTRadioAccessTechnologyWCDMA,
-         CTRadioAccessTechnologyHSDPA,
-         CTRadioAccessTechnologyHSUPA,
-         CTRadioAccessTechnologyCDMAEVDORev0,
-         CTRadioAccessTechnologyCDMAEVDORevA,
-         CTRadioAccessTechnologyCDMAEVDORevB,
-         CTRadioAccessTechnologyeHRPD:
-        return "3G"
-    case CTRadioAccessTechnologyLTE:
-        return "4G"
-    default:
-        return "Undef"
-    }
 }
 
 
