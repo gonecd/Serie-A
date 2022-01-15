@@ -15,11 +15,24 @@ class Statistiques: UIViewController {
     @IBOutlet weak var graphe1: Stat1!
     @IBOutlet weak var graphe2: UIView!
     @IBOutlet weak var graphe3: Stat3!
+    @IBOutlet weak var graphe4: StatRates!
     
     @IBOutlet weak var nbEpisodes: UILabel!
     @IBOutlet weak var nbSaisons: UILabel!
     @IBOutlet weak var nbSeries: UILabel!
     
+    @IBOutlet weak var bRate1: UIButton!
+    @IBOutlet weak var bRate2: UIButton!
+    @IBOutlet weak var bRate3: UIButton!
+    @IBOutlet weak var bRate4: UIButton!
+    @IBOutlet weak var bRate5: UIButton!
+    @IBOutlet weak var bRate6: UIButton!
+    @IBOutlet weak var bRate7: UIButton!
+    @IBOutlet weak var bRate8: UIButton!
+    @IBOutlet weak var bRate9: UIButton!
+    @IBOutlet weak var bRateNone: UIButton!
+    
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,8 +44,52 @@ class Statistiques: UIViewController {
         makeGradiant(carre: graphe1, couleur: "Blanc")
         makeGradiant(carre: graphe2, couleur: "Blanc")
         makeGradiant(carre: graphe3, couleur: "Blanc")
-        
+        makeGradiant(carre: graphe4, couleur: "Blanc")
+
+        // Boutons des ratings
+        arrondirButton(texte: bRate1, radius: 6.0)
+        bRate1.setTitleColor(UIColor.systemBackground, for: .normal)
+        bRate1.backgroundColor = colorGradient(borneInf: 0.0, borneSup: 10.0, valeur: 1.0)
+
+        arrondirButton(texte: bRate2, radius: 6.0)
+        bRate2.setTitleColor(UIColor.systemBackground, for: .normal)
+        bRate2.backgroundColor = colorGradient(borneInf: 0.0, borneSup: 10.0, valeur: 2.0)
+
+        arrondirButton(texte: bRate3, radius: 6.0)
+        bRate3.setTitleColor(UIColor.systemBackground, for: .normal)
+        bRate3.backgroundColor = colorGradient(borneInf: 0.0, borneSup: 10.0, valeur: 3.0)
+
+        arrondirButton(texte: bRate4, radius: 6.0)
+        bRate4.setTitleColor(UIColor.systemBackground, for: .normal)
+        bRate4.backgroundColor = colorGradient(borneInf: 0.0, borneSup: 10.0, valeur: 4.0)
+
+        arrondirButton(texte: bRate5, radius: 6.0)
+        bRate5.setTitleColor(UIColor.systemBackground, for: .normal)
+        bRate5.backgroundColor = colorGradient(borneInf: 0.0, borneSup: 10.0, valeur: 5.0)
+
+        arrondirButton(texte: bRate6, radius: 6.0)
+        bRate6.setTitleColor(UIColor.systemBackground, for: .normal)
+        bRate6.backgroundColor = colorGradient(borneInf: 0.0, borneSup: 10.0, valeur: 6.0)
+
+        arrondirButton(texte: bRate7, radius: 6.0)
+        bRate7.setTitleColor(UIColor.systemBackground, for: .normal)
+        bRate7.backgroundColor = colorGradient(borneInf: 0.0, borneSup: 10.0, valeur: 7.0)
+
+        arrondirButton(texte: bRate8, radius: 6.0)
+        bRate8.setTitleColor(UIColor.systemBackground, for: .normal)
+        bRate8.backgroundColor = colorGradient(borneInf: 0.0, borneSup: 10.0, valeur: 8.0)
+
+        arrondirButton(texte: bRate9, radius: 6.0)
+        bRate9.setTitleColor(UIColor.systemBackground, for: .normal)
+        bRate9.backgroundColor = colorGradient(borneInf: 0.0, borneSup: 10.0, valeur: 9.0)
+
+        arrondirButton(texte: bRateNone, radius: 6.0)
+        bRateNone.setTitleColor(UIColor.systemBackground, for: .normal)
+        bRateNone.backgroundColor = .systemGray
+
+
         graphe1.setNeedsDisplay()
+        graphe4.setNeedsDisplay()
         
         for uneSerie in db.shows {
             var serieDejaComptee : Bool = false
@@ -56,6 +113,26 @@ class Statistiques: UIViewController {
         nbSaisons.text = String(db.valSaisonsDiffusees)
         nbEpisodes.text = String(nbEpisodesToSee)
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let viewController = segue.destination as! ViewSerieListe
+        var rate: Int = Int(String((sender as! UIButton).titleLabel?.text ?? "")) ?? 0
+        var buildList = [Serie]()
+
+        viewController.title = "Séries notées \(rate)"
+        if (rate == 0) {
+            rate = -1
+            viewController.title = "Séries non notées"
+        }
+        
+        for uneSerie in db.shows {
+            if (uneSerie.myRating == rate) { buildList.append(uneSerie) }
+        }
+        viewController.viewList = buildList
+        viewController.modeAffichage = modeParRate
+
+    }
+    
 }
 
 
@@ -82,7 +159,8 @@ class Stat3: UIView  {
         let paragraph = NSMutableParagraphStyle()
         paragraph.alignment = .center
         let textAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 10),
-                              NSAttributedString.Key.paragraphStyle: paragraph]
+                              NSAttributedString.Key.paragraphStyle: paragraph,
+                              NSAttributedString.Key.foregroundColor: colorAxis]
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "LLLL"
         let now = Date()
@@ -117,6 +195,7 @@ class Stat3: UIView  {
             let xFirstDay = origineX + largeur * CGFloat(Calendar.current.dateComponents([.day], from: borneDebut, to: firstDayOfMonth).day!)
                                                 / CGFloat(Calendar.current.dateComponents([.day], from: borneDebut, to: borneFin).day!)
             let subAxis : UIBezierPath = UIBezierPath()
+            colorAxis.setStroke()
 
             subAxis.move(to: CGPoint(x: xFirstDay, y: origineY))
             subAxis.addLine(to: CGPoint(x: xFirstDay, y: origineY - hauteur))
@@ -237,86 +316,138 @@ class Stat1: UIView  {
         
         let total : Int = db.valSeriesAbandonnees + db.valSeriesFinies + db.valWatchList + db.valSeriesEnCours
         
-        centreX = self.frame.height / 2
-        centreY = self.frame.height / 2
-        rayon = self.frame.height * 4 / 10
+        centreX = 110.0
+        centreY = 130.0
+        rayon = 80.0
         
-        traceUnCercle(color: .systemGray, debut: 0.0, fin: CGFloat(db.valSeriesFinies)/CGFloat(total))
-        traceUnCercle(color: .systemBlue, debut: CGFloat(db.valSeriesFinies)/CGFloat(total), fin: CGFloat(db.valSeriesFinies + db.valSeriesEnCours)/CGFloat(total))
-        traceUnCercle(color: .systemRed, debut: CGFloat(db.valSeriesFinies + db.valSeriesEnCours)/CGFloat(total), fin: CGFloat(db.valSeriesFinies + db.valSeriesEnCours + db.valSeriesAbandonnees)/CGFloat(total))
-        traceUnCercle(color: .systemGreen, debut: CGFloat(db.valSeriesFinies + db.valSeriesEnCours + db.valSeriesAbandonnees)/CGFloat(total), fin: 1.0)
+        traceUnArc(color: .systemGray, debut: 0.0, fin: CGFloat(db.valSeriesFinies)/CGFloat(total))
+        traceUnArc(color: .systemBlue, debut: CGFloat(db.valSeriesFinies)/CGFloat(total), fin: CGFloat(db.valSeriesFinies + db.valSeriesEnCours)/CGFloat(total))
+        traceUnArc(color: .systemRed, debut: CGFloat(db.valSeriesFinies + db.valSeriesEnCours)/CGFloat(total), fin: CGFloat(db.valSeriesFinies + db.valSeriesEnCours + db.valSeriesAbandonnees)/CGFloat(total))
+        traceUnArc(color: .systemGreen, debut: CGFloat(db.valSeriesFinies + db.valSeriesEnCours + db.valSeriesAbandonnees)/CGFloat(total), fin: 1.0)
         
-        let x_label : CGFloat = self.frame.height
-        let y_label : CGFloat = self.frame.height / 6
-        let size : CGFloat = self.frame.height * 2 / 25
+        let x_label : CGFloat = 215.0
+        let y_label : CGFloat = 40.0
+        let size : CGFloat = 18.0
         
         var textAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: size), NSAttributedString.Key.foregroundColor: UIColor.systemGray]
-        "\(db.valSeriesFinies) séries finies".draw(in: CGRect(x: x_label, y: y_label, width: 300, height: 25), withAttributes: textAttributes)
+        "\(db.valSeriesFinies) finies".draw(in: CGRect(x: x_label, y: y_label + 20.0, width: 300, height: 20), withAttributes: textAttributes)
         textAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: size), NSAttributedString.Key.foregroundColor: UIColor.systemBlue]
-        "\(db.valSeriesEnCours) séries en cours".draw(in: CGRect(x: x_label, y: y_label * 2, width: 300, height: 25), withAttributes: textAttributes)
+        "\(db.valSeriesEnCours) en cours".draw(in: CGRect(x: x_label, y: y_label * 2 + 20.0, width: 300, height: 20), withAttributes: textAttributes)
         textAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: size), NSAttributedString.Key.foregroundColor: UIColor.systemRed]
-        "\(db.valSeriesAbandonnees) séries abandonnées".draw(in: CGRect(x: x_label, y: y_label * 3, width: 300, height: 25), withAttributes: textAttributes)
+        "\(db.valSeriesAbandonnees) abandonnées".draw(in: CGRect(x: x_label, y: y_label * 3 + 20.0, width: 300, height: 20), withAttributes: textAttributes)
         textAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: size), NSAttributedString.Key.foregroundColor: UIColor.systemGreen]
-        "\(db.valWatchList) séries à voir ?".draw(in: CGRect(x: x_label, y: y_label * 4, width: 300, height: 25), withAttributes: textAttributes)
+        "\(db.valWatchList) à voir ?".draw(in: CGRect(x: x_label, y: y_label * 4 + 20.0, width: 300, height: 20), withAttributes: textAttributes)
+    }
+    
+    func traceUnArc(color: UIColor, debut: CGFloat, fin: CGFloat) {
+        UIColor.systemBackground.setStroke()
+        color.withAlphaComponent(0.70).setFill()
+        
+        let path : UIBezierPath = UIBezierPath()
+        path.lineWidth = 2.0
+        path.move(to: CGPoint(x: centreX, y: centreY))
+        path.addArc(withCenter: CGPoint(x: centreX, y: centreY),
+                    radius: rayon,
+                    startAngle: 2 * .pi * debut,
+                    endAngle: 2 * .pi * fin,
+                    clockwise: true)
+        path.fill()
+        path.stroke()
+    }
+
+}
+
+class StatRates: UIView  {
+    
+    override func draw(_ dirtyRect: CGRect) {
+        super.draw(dirtyRect)
+        
+        let statsAbandonnees    : [Int]
+        let statsWatchList      : [Int]
+        let statsFinies         : [Int]
+        let statsEnCours        : [Int]
+
+        (statsAbandonnees, statsWatchList, statsFinies, statsEnCours) = db.computeStatsPerRate()
+        
+        for i in 0 ... 9 {
+            traceOneRate(index: i, abandonnees: statsAbandonnees[i], watchlist: statsWatchList[i], finies: statsFinies[i], encours: statsEnCours[i])
+        }
     }
     
     
-    func traceUnCercle(color: UIColor, debut: CGFloat, fin: CGFloat) {
-        UIColor.systemBackground.setStroke()
-        color.setFill()
+    func traceOneRate(index: Int, abandonnees: Int, watchlist: Int, finies: Int, encours: Int) {
+        let largeurUnitaire : CGFloat = 5.0
+        var newdebut : CGFloat = 40.0
+        let origineY : CGFloat = 5.0
+        let hauteur : CGFloat = self.frame.height - 40.0
+        let paragraph = NSMutableParagraphStyle()
+        paragraph.alignment = .center
+        let textAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 10),
+                              NSAttributedString.Key.paragraphStyle: paragraph,
+                              NSAttributedString.Key.foregroundColor: colorAxis]
+
+        // Lignes
+        colorAxis.setStroke()
         
+        // Cadre
         let path : UIBezierPath = UIBezierPath()
-        path.lineWidth = 3.0
-        if (fin - debut < 0.5) {
-            path.addArc(withCenter: CGPoint(x: centreX, y: centreY),
-                        radius: rayon,
-                        startAngle: 2 * .pi * debut,
-                        endAngle: 2 * .pi * fin,
-                        clockwise: true)
-            path.move(to: CGPoint(x: centreX + rayon*cos(2 * .pi * debut), y:centreY + rayon*sin(2 * .pi * debut)))
-            path.addLine(to: CGPoint(x: centreX, y: centreY))
-            path.addLine(to: CGPoint(x: centreX + rayon*cos(2 * .pi * fin), y:centreY + rayon*sin(2 * .pi * fin)))
-            path.fill()
-            path.stroke()
+        path.move(to: CGPoint(x: newdebut, y: origineY))
+        path.addLine(to: CGPoint(x:newdebut, y: origineY + hauteur))
+        path.addLine(to: CGPoint(x:self.frame.width - 5.0, y: origineY + hauteur))
+        path.addLine(to: CGPoint(x:self.frame.width - 5.0, y: origineY))
+        path.addLine(to: CGPoint(x:newdebut, y: origineY))
+        path.stroke()
+        
+        // Lignes achurées verticales
+        for i:Int in 0 ..< Int((self.frame.height - 40.0)/10) {
+            let cran = newdebut + CGFloat(10*i) * largeurUnitaire
+            
+            let subAxis : UIBezierPath = UIBezierPath()
+            colorAxis.setStroke()
+
+            subAxis.move(to: CGPoint(x: cran, y: origineY))
+            subAxis.addLine(to: CGPoint(x: cran, y: origineY + hauteur))
+            subAxis.setLineDash([10.0,10.0], count: 2, phase: 5.0)
+            subAxis.stroke()
+
+            String(10*i).draw(in: CGRect(x: cran - 15.0, y: origineY + hauteur + 5.0, width: 30, height: 12), withAttributes: textAttributes)
         }
-        else{
-            color.setStroke()
-            
-            let pathTmp1 : UIBezierPath = UIBezierPath()
-            pathTmp1.addArc(withCenter: CGPoint(x: centreX, y: centreY),
-                            radius: rayon,
-                            startAngle: 2 * .pi * debut,
-                            endAngle: 2 * .pi * (debut+0.5),
-                            clockwise: true)
-            pathTmp1.move(to: CGPoint(x: centreX + rayon*cos(2 * .pi * debut), y:centreY + rayon*sin(2 * .pi * debut)))
-            pathTmp1.addLine(to: CGPoint(x: centreX, y: centreY))
-            pathTmp1.addLine(to: CGPoint(x: centreX + rayon*cos(2 * .pi * (debut+0.5) ), y:centreY + rayon*sin(2 * .pi * (debut+0.5))))
-            pathTmp1.fill()
-            pathTmp1.stroke()
-            
-            let pathTmp2 : UIBezierPath = UIBezierPath()
-            pathTmp2.addArc(withCenter: CGPoint(x: centreX, y: centreY),
-                            radius: rayon,
-                            startAngle: 2 * .pi * (debut+0.5),
-                            endAngle: 2 * .pi * fin,
-                            clockwise: true)
-            pathTmp2.move(to: CGPoint(x: centreX + rayon*cos(2 * .pi * (debut+0.5)), y:centreY + rayon*sin(2 * .pi * (debut+0.5))))
-            pathTmp2.addLine(to: CGPoint(x: centreX, y: centreY))
-            pathTmp2.addLine(to: CGPoint(x: centreX + rayon*cos(2 * .pi * fin), y:centreY + rayon*sin(2 * .pi * fin)))
-            pathTmp2.fill()
-            pathTmp2.stroke()
-            
-            UIColor.systemBackground.setStroke()
-            path.addArc(withCenter: CGPoint(x: centreX, y: centreY),
-                        radius: rayon,
-                        startAngle: 2 * .pi * debut,
-                        endAngle: 2 * .pi * fin,
-                        clockwise: true)
-            path.move(to: CGPoint(x: centreX + rayon*cos(2 * .pi * debut), y:centreY + rayon*sin(2 * .pi * debut)))
-            path.addLine(to: CGPoint(x: centreX, y: centreY))
-            path.addLine(to: CGPoint(x: centreX + rayon*cos(2 * .pi * fin), y:centreY + rayon*sin(2 * .pi * fin)))
-            path.stroke()
-        }
+
+        
+        // Series finies
+        traceUnRectangle(xdebut: newdebut, xfin: newdebut + CGFloat(finies) * largeurUnitaire, index : index, color: .systemGray)
+        newdebut = newdebut + CGFloat(finies) * largeurUnitaire
+
+        // Series en cours
+        traceUnRectangle(xdebut: newdebut, xfin: newdebut + CGFloat(encours) * largeurUnitaire, index : index, color: .systemBlue)
+        newdebut = newdebut + CGFloat(encours) * largeurUnitaire
+
+        // Series abandonnees
+        traceUnRectangle(xdebut: newdebut, xfin: newdebut + CGFloat(abandonnees) * largeurUnitaire, index : index, color: .systemRed)
+        newdebut = newdebut + CGFloat(abandonnees) * largeurUnitaire
+
+        // Series a voir
+        traceUnRectangle(xdebut: newdebut, xfin: newdebut + CGFloat(watchlist) * largeurUnitaire, index : index, color: .systemGreen)
+    }
+    
+    
+    func traceUnRectangle(xdebut: CGFloat, xfin: CGFloat, index : Int, color: UIColor) {
+        let origineY : CGFloat = 219.0
+        let interligne : CGFloat = 22.0
+        let epaisseur : CGFloat = 8.0
+
+        let path : UIBezierPath = UIBezierPath()
+
+        color.setStroke()
+        color.withAlphaComponent(0.50).setFill()
+        
+        path.move(to: CGPoint(x: xdebut, y: origineY - CGFloat(index) * interligne ))
+        path.addLine(to: CGPoint(x: xfin, y: origineY - CGFloat(index) * interligne ))
+        path.addLine(to: CGPoint(x: xfin, y: origineY - CGFloat(index) * interligne - epaisseur ))
+        path.addLine(to: CGPoint(x: xdebut, y: origineY - CGFloat(index) * interligne - epaisseur ))
+        path.addLine(to: CGPoint(x: xdebut, y: origineY - CGFloat(index) * interligne ))
+        path.stroke()
+        path.fill()
     }
     
 }

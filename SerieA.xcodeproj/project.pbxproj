@@ -186,6 +186,8 @@
 		F13B52AD2753D6AF00EA976B /* Flag_of_New_Zealand.png in Resources */ = {isa = PBXBuildFile; fileRef = F13B52AB2753D6AF00EA976B /* Flag_of_New_Zealand.png */; };
 		F13B52AF2753D71100EA976B /* Flag_of_Denmark.png in Resources */ = {isa = PBXBuildFile; fileRef = F13B52AE2753D71100EA976B /* Flag_of_Denmark.png */; };
 		F13B52B02753D71100EA976B /* Flag_of_Denmark.png in Resources */ = {isa = PBXBuildFile; fileRef = F13B52AE2753D71100EA976B /* Flag_of_Denmark.png */; };
+		F14B477E276510E9000655C4 /* Capture d’écran 2018-11-03 à 14.41.14.png in Resources */ = {isa = PBXBuildFile; fileRef = F14B477D276510E9000655C4 /* Capture d’écran 2018-11-03 à 14.41.14.png */; };
+		F14B477F276510E9000655C4 /* Capture d’écran 2018-11-03 à 14.41.14.png in Resources */ = {isa = PBXBuildFile; fileRef = F14B477D276510E9000655C4 /* Capture d’écran 2018-11-03 à 14.41.14.png */; };
 		F16F63132763C92C008E459E /* Saison.swift in Sources */ = {isa = PBXBuildFile; fileRef = F16F63102763C92C008E459E /* Saison.swift */; };
 		F16F63142763C92C008E459E /* Saison.swift in Sources */ = {isa = PBXBuildFile; fileRef = F16F63102763C92C008E459E /* Saison.swift */; };
 		F16F63152763C92C008E459E /* Episode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F16F63112763C92C008E459E /* Episode.swift */; };
@@ -361,6 +363,7 @@
 		F13B52A82753D67D00EA976B /* Flag_of_South_Korea.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_South_Korea.png; sourceTree = "<group>"; };
 		F13B52AB2753D6AF00EA976B /* Flag_of_New_Zealand.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_New_Zealand.png; sourceTree = "<group>"; };
 		F13B52AE2753D71100EA976B /* Flag_of_Denmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_Denmark.png; sourceTree = "<group>"; };
+		F14B477D276510E9000655C4 /* Capture d’écran 2018-11-03 à 14.41.14.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Capture d’écran 2018-11-03 à 14.41.14.png"; sourceTree = "<group>"; };
 		F16F63102763C92C008E459E /* Saison.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Saison.swift; sourceTree = "<group>"; };
 		F16F63112763C92C008E459E /* Episode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Episode.swift; sourceTree = "<group>"; };
 		F16F63122763C92C008E459E /* Serie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Serie.swift; sourceTree = "<group>"; };
@@ -491,6 +494,7 @@
 		624D874D204332BC00AFDA06 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				F14B477D276510E9000655C4 /* Capture d’écran 2018-11-03 à 14.41.14.png */,
 				F1FBCD87265026B2003075D3 /* 2021_05_13_0uk_Kleki.png */,
 				F1FBCD89265026B2003075D3 /* 2021_05_13_0ux_Kleki.png */,
 				F1FBCD88265026B2003075D3 /* 2021_05_15_0te_Kleki.png */,
@@ -819,6 +823,7 @@
 				628A13C2236F38E8006B2AD4 /* Flag_of_Spain.png in Resources */,
 				628A13C3236F38E8006B2AD4 /* iPhone.storyboard in Resources */,
 				F13B52AD2753D6AF00EA976B /* Flag_of_New_Zealand.png in Resources */,
+				F14B477F276510E9000655C4 /* Capture d’écran 2018-11-03 à 14.41.14.png in Resources */,
 				628A13C4236F38E8006B2AD4 /* Eye-icon.png in Resources */,
 				F125F2C626235F0B00D012DA /* Flag_of_Mexico.png in Resources */,
 				628A13C5236F38E8006B2AD4 /* Idea-icon.png in Resources */,
@@ -882,6 +887,7 @@
 				62B087C3207BEBC6007703FF /* Flag_of_Spain.png in Resources */,
 				62BB4F37236F32640095DE4B /* iPhone.storyboard in Resources */,
 				62FF97D02039016B007B658E /* Eye-icon.png in Resources */,
+				F14B477E276510E9000655C4 /* Capture d’écran 2018-11-03 à 14.41.14.png in Resources */,
 				62B087AF207A7938007703FF /* Idea-icon.png in Resources */,
 				62921B5522BEBEFE00A2BE94 /* Sandbox.xml in Resources */,
 				F1FBCD8F265026B3003075D3 /* 2021_05_15_0te_Kleki.png in Resources */,

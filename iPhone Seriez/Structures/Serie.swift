@@ -20,6 +20,7 @@ public class Serie : NSObject, NSCoding {
     public var idMoviedb : String = String()
     public var idTVmaze : String = String()
     public var idAlloCine : String = String()
+    public var idBetaSeries : String = String()
 
     
     public var unfollowed : Bool = false
@@ -87,6 +88,7 @@ public class Serie : NSObject, NSCoding {
         self.idMoviedb = decoder.decodeObject(forKey: "idMoviedb") as? String ?? ""
         self.idTVmaze = decoder.decodeObject(forKey: "idTVmaze") as? String ?? ""
         self.idAlloCine = decoder.decodeObject(forKey: "idAlloCine") as? String ?? ""
+        self.idBetaSeries = decoder.decodeObject(forKey: "idBetaSeries") as? String ?? ""
 
         self.unfollowed = decoder.decodeBool(forKey: "unfollowed")
         self.watchlist = decoder.decodeBool(forKey: "watchlist")
@@ -133,6 +135,7 @@ public class Serie : NSObject, NSCoding {
         coder.encode(self.idMoviedb, forKey: "idMoviedb")
         coder.encode(self.idTVmaze, forKey: "idTVmaze")
         coder.encode(self.idAlloCine, forKey: "idAlloCine")
+        coder.encode(self.idBetaSeries, forKey: "idBetaSeries")
 
         coder.encode(self.unfollowed, forKey: "unfollowed")
         coder.encode(self.watchlist, forKey: "watchlist")
@@ -183,6 +186,7 @@ public class Serie : NSObject, NSCoding {
         if (uneSerie.idMoviedb != "")       { self.idMoviedb = uneSerie.idMoviedb }
         if (uneSerie.idTVmaze != "")        { self.idTVmaze = uneSerie.idTVmaze }
         if (uneSerie.idAlloCine != "")      { self.idAlloCine = uneSerie.idAlloCine }
+        if (uneSerie.idBetaSeries != "")    { self.idBetaSeries = uneSerie.idBetaSeries }
         if (uneSerie.unfollowed != false)   { self.unfollowed = uneSerie.unfollowed }
         if (uneSerie.watchlist != false)    { self.watchlist = uneSerie.watchlist }
         
@@ -249,14 +253,18 @@ public class Serie : NSObject, NSCoding {
         if (Trakt.idIMdb != "") { self.idIMdb = Trakt.idIMdb }
         else if (Moviedb.idIMdb != "") { self.idIMdb = Moviedb.idIMdb }
         else if (BetaSeries.idIMdb != "") { self.idIMdb = BetaSeries.idIMdb }
+        else if (TVmaze.idIMdb != "") { self.idIMdb = TVmaze.idIMdb }
         else { self.idIMdb = TVdb.idIMdb }
         
         if (Trakt.idTrakt != "") { self.idTrakt = Trakt.idTrakt }
         if (AlloCine.idAlloCine != "") { self.idAlloCine = AlloCine.idAlloCine }
 
+        if (BetaSeries.idBetaSeries != "") { self.idBetaSeries = BetaSeries.idTrakt }
+
         if (Trakt.idTVdb != "") { self.idTVdb = Trakt.idTVdb }
         else if (TVdb.idTVdb != "") { self.idTVdb = TVdb.idTVdb }
         else if (Moviedb.idTVdb != "") { self.idTVdb = Moviedb.idTVdb }
+        else if (TVmaze.idTVdb != "") { self.idTVdb = TVmaze.idTVdb }
         else { self.idTVdb = BetaSeries.idTVdb }
         
         if (Moviedb.idMoviedb != "") { self.idMoviedb = Moviedb.idMoviedb }
@@ -283,8 +291,10 @@ public class Serie : NSObject, NSCoding {
         else { self.poster = BetaSeries.poster }
         
         if (Trakt.year != 0) { self.year = Trakt.year }
-        else { self.year = BetaSeries.year }
-        
+        else if (BetaSeries.year != 0) { self.year = BetaSeries.year }
+        else if (Moviedb.year != 0) { self.year = Moviedb.year }
+        else if (TVmaze.year != 0) { self.year = TVmaze.year }
+
         if (Trakt.homepage != "") { self.homepage = Trakt.homepage }
         else { self.homepage = Moviedb.homepage }
         

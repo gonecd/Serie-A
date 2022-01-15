@@ -224,7 +224,7 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
 
         // MyRating de la série
         if (serie.myRating < 1) {
-            boutonMyRating.setTitle("", for: .normal)
+            boutonMyRating.setTitle("-", for: .normal)
             boutonMyRating.backgroundColor = UIColor.systemGray
         }
         else {
@@ -311,37 +311,39 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
         let titleNoAbandon = NSAttributedString(string: "       Abandon", attributes: attributes)
         let titleNoWatchlist = NSAttributedString(string: "       Watchlist", attributes: attributes)
 
+        boutonDiffuseurs.isHidden = false
+
         switch mode {
         case modeFinie:
-            boutonDiffuseurs.isHidden = false
             boutonNoter.isHidden = false
             boutonWatchlist.isHidden = true
             boutonAbandon.isHidden = true
             break
         case modeEnCours:
-            boutonDiffuseurs.isHidden = false
             boutonNoter.isHidden = false
             boutonWatchlist.isHidden = true
             boutonAbandon.isHidden = false
             break
         case modeAbandon:
-            boutonDiffuseurs.isHidden = false
             boutonNoter.isHidden = false
             boutonWatchlist.isHidden = true
             boutonAbandon.isHidden = false
             sousBoutonAbandon.setAttributedTitle(titleNoAbandon, for: .normal)
             break
         case modeWatchlist:
-            boutonDiffuseurs.isHidden = false
             boutonNoter.isHidden = true
             boutonWatchlist.isHidden = false
             boutonAbandon.isHidden = true
             sousBoutonWatchlist.setAttributedTitle(titleNoWatchlist, for: .normal)
             break
         case modeRecherche:
-            boutonDiffuseurs.isHidden = false
             boutonNoter.isHidden = true
             boutonWatchlist.isHidden = false
+            boutonAbandon.isHidden = true
+            break
+        case modeParRate:
+            boutonNoter.isHidden = true
+            boutonWatchlist.isHidden = true
             boutonAbandon.isHidden = true
             break
             

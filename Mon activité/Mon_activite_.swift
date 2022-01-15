@@ -13,19 +13,19 @@ import SwiftUI
 let nbSources : Int = 6
 
 let snapshotData = Data4MonActivite (
-    serie: "Shameless US",
-    channel: "Canal+",
+    serie: "The Americans",
+    channel: "FX",
     saison: 2,
-    nbEps: 8,
-    nbWatched: 6,
-    poster: "Chicagoan Frank Gallagher is the proud single dad of six smart, industrious, independent kids",
-    rateGlobal: 1,
-    rateTrakt: 2,
-    rateIMDB: 3,
-    rateMovieDB: 4,
-    rateTVmaze: 5,
-    rateRottenTomatoes: 6,
-    rateBetaSeries: 7
+    nbEps: 13,
+    nbWatched: 8,
+    poster: "https://image.tmdb.org/t/p/w92/qB7WPVQnmODg2mZ1xUmPOrCa0wL.jpg",
+    rateGlobal: 77,
+    rateTrakt: 83,
+    rateIMDB: 84,
+    rateMovieDB: 79,
+    rateTVmaze: 85,
+    rateRottenTomatoes: 96,
+    rateBetaSeries: 90
 )
 
 
@@ -35,7 +35,12 @@ struct MonActiviteProvider: TimelineProvider {
     }
     
     func getSnapshot(in context: Context, completion: @escaping (MonActiviteData) -> ()) {
-        let entry = MonActiviteData(dataWidget: snapshotData)
+        var entry = MonActiviteData(dataWidget: snapshotData)
+        
+        let url : URL = URL(string: entry.data.poster)!
+        let imageData = try? Data(contentsOf: url)
+        entry.posterImage = UIImage(data: imageData!)!
+
         completion(entry)
     }
     

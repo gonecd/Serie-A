@@ -58,6 +58,7 @@ class Database : NSObject {
                 // Nouvelle série on l'ajoute telle que
                 index[uneSerie.serie] = shows.count
                 downloadGlobalInfo(serie: uneSerie)
+                uneSerie.unfollowed = true
                 shows.append(uneSerie)
             }
             else {
@@ -73,6 +74,7 @@ class Database : NSObject {
                 // Nouvelle série on l'ajoute telle que
                 index[uneSerie.serie] = shows.count
                 downloadGlobalInfo(serie: uneSerie)
+                uneSerie.watchlist = true
                 shows.append(uneSerie)
             }
             else {
@@ -96,7 +98,7 @@ class Database : NSObject {
         var dataIMDB        : Serie = Serie(serie: "")
 
         queue.addOperation(BlockOperation(block: { dataTVdb = theTVdb.getSerieGlobalInfos(idTVdb: serie.idTVdb) } ) )
-        queue.addOperation(BlockOperation(block: { dataBetaSeries = betaSeries.getSerieGlobalInfos(idTVDB : serie.idTVdb, idIMDB : serie.idIMdb) } ) )
+        queue.addOperation(BlockOperation(block: { dataBetaSeries = betaSeries.getSerieGlobalInfos(idTVDB : serie.idTVdb, idIMDB : serie.idIMdb, idBetaSeries: serie.idBetaSeries) } ) )
         queue.addOperation(BlockOperation(block: { dataMoviedb = theMoviedb.getSerieGlobalInfos(idMovieDB: serie.idMoviedb) } ) )
         queue.addOperation(BlockOperation(block: { dataIMDB = imdb.getSerieGlobalInfos(idIMDB: serie.idIMdb) } ) )
         queue.addOperation(BlockOperation(block: { dataTrakt = trakt.getSerieGlobalInfos(idTraktOrIMDB: serie.idIMdb) } ) )
@@ -112,7 +114,6 @@ class Database : NSObject {
     
     
     func downloadDetailInfo(serie : Serie) {
-        //killtvdb theTVdb.getEpisodesDetailsAndRating(uneSerie: serie)
         trakt.getEpisodes(uneSerie: serie)
         
         for uneSaison in serie.saisons {
@@ -128,7 +129,6 @@ class Database : NSObject {
         
         queue.addOperation(BlockOperation(block: { if (serie.idTVdb != "") { betaSeries.getEpisodesRatingsBis(serie) } } ) )
         queue.addOperation(BlockOperation(block: { imdb.getEpisodesRatings(serie) } ) )
-        //killtvdb queue.addOperation(BlockOperation(block: { if (serie.idTrakt != "") { trakt.getEpisodesRatings(serie) } } ) )
         
         queue.waitUntilAllOperationsAreFinished()
     }
@@ -138,6 +138,7 @@ class Database : NSObject {
         // TV Maze est buggué pour Death Note & Lupin
         if (serie.serie == "Death Note") { return }
         if (serie.serie == "Lupin") { return }
+        if (serie.serie == "Money Heist") { return }
 
         let tvMazeResults : (saisons : [Int], nbEps : [Int], debuts : [Date], fins : [Date]) = tvMaze.getSeasonsDates(idTVmaze: serie.idTVmaze)
         
@@ -150,9 +151,6 @@ class Database : NSObject {
                 if (tvMazeResults.nbEps[i] != 0) { serie.saisons[seasonIdx].nbEpisodes = tvMazeResults.nbEps[i] }
             }
             else {
-                // TV Maze est buggué pour Money Heist : il compte une saison en trop
-                if (serie.serie == "Money Heist") { return }
-                
                 // Ajout de la saison et de ses informations
                 let newSaison : Saison = Saison(serie: serie.serie, saison: seasonIdx+1)
                 newSaison.starts = tvMazeResults.debuts[i]
@@ -316,6 +314,38 @@ class Database : NSObject {
                 { valSaisonsAnnoncees = valSaisonsAnnoncees + 1 }
             }
         }
+    }
+    
+    
+    func computeStatsPerRate() -> ([Int], [Int], [Int], [Int]) {
+        var statsAbandonnees : [Int] = [Int](0...9)
+        var statsWatchList : [Int] = [Int](0...9)
+        var statsFinies : [Int] = [Int](0...9)
+        var statsEnCours : [Int] = [Int](0...9)
+
+        for i in 0 ... 9 {
+            statsAbandonnees[i] = 0
+            statsWatchList[i] = 0
+            statsFinies[i] = 0
+            statsEnCours[i] = 0
+        }
+        
+        for uneSerie in db.shows {
+            var rating : Int = uneSerie.myRating
+            
+            if (uneSerie.myRating < 0) { rating = 0 }
+            
+            if (uneSerie.unfollowed) { statsAbandonnees[rating] = statsAbandonnees[rating] + 1 }
+            if (uneSerie.watchlist) { statsWatchList[rating] = statsWatchList[rating] + 1 }
+            if (uneSerie.saisons.count > 0) {
+                let lastSaison : Saison = uneSerie.saisons[uneSerie.saisons.count - 1]
+                
+                if ( (lastSaison.watched() == true) && (uneSerie.status == "Ended") ) { statsFinies[rating] = statsFinies[rating] + 1 }
+                if ( ((lastSaison.watched() == false) || (uneSerie.status != "Ended")) && (uneSerie.unfollowed == false) && (uneSerie.watchlist == false) ) { statsEnCours[rating] = statsEnCours[rating] + 1 }
+            }
+        }
+        
+        return (statsAbandonnees, statsWatchList, statsFinies, statsEnCours)
     }
     
     func computeFairRates() {

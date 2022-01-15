@@ -8,9 +8,17 @@
 
 import Foundation
 
+
+class Casting {
+    var name        : String = ""
+    var personnage  : String = ""
+    var photo       : String = ""
+}
+
+
 class BetaSeries : NSObject {
     var chrono : TimeInterval = 0
-
+    
     let BetaSeriesUserkey : String = "aa6120d2cf7e"
     
     override init() {
@@ -122,14 +130,15 @@ class BetaSeries : NSObject {
             }
         }
     }
-
     
-    func getSerieGlobalInfos(idTVDB : String, idIMDB : String) -> Serie {
+    
+    func getSerieGlobalInfos(idTVDB : String, idIMDB : String, idBetaSeries : String) -> Serie {
         let uneSerie : Serie = Serie(serie: "")
         var reqURL : String = ""
         
-        if (idIMDB != "")       { reqURL = "https://api.betaseries.com/shows/display?v=3.0&imdb_id=\(idIMDB)" }
-        else if (idTVDB != "")  { reqURL = "https://api.betaseries.com/shows/display?v=3.0&thetvdb_id=\(idTVDB)" }
+        if (idIMDB != "")            { reqURL = "https://api.betaseries.com/shows/display?v=3.0&imdb_id=\(idIMDB)" }
+        else if (idTVDB != "")       { reqURL = "https://api.betaseries.com/shows/display?v=3.0&thetvdb_id=\(idTVDB)" }
+        else if (idBetaSeries != "") { reqURL = "https://api.betaseries.com/shows/display?v=3.0&id=\(idBetaSeries)" }
         else                    { return uneSerie }
         
         let reqResult : NSDictionary = loadAPI(reqAPI: reqURL) as? NSDictionary ?? NSDictionary()
@@ -140,6 +149,7 @@ class BetaSeries : NSObject {
         uneSerie.serie = show.object(forKey: "title") as? String ?? ""
         uneSerie.idIMdb = show.object(forKey: "imdb_id") as? String ?? ""
         uneSerie.idTVdb = String(show.object(forKey: "thetvdb_id") as? Int ?? 0)
+        uneSerie.idBetaSeries = String(show.object(forKey: "id") as? Int ?? 0)
         uneSerie.resume = show.object(forKey: "description") as? String ?? ""
         uneSerie.network = show.object(forKey: "network") as? String ?? ""
         uneSerie.banner = (show.object(forKey: "images")! as AnyObject).object(forKey: "banner") as? String ?? ""
@@ -158,60 +168,60 @@ class BetaSeries : NSObject {
         return uneSerie
     }
     
-
     
-        func getDiffuseurs(idTVDB : String, idIMDB : String) -> [Diffuseur] {
-            var reqURL : String = ""
-            var result : [Diffuseur] = []
-
-            if (idIMDB != "")       { reqURL = "https://api.betaseries.com/shows/display?v=3.0&imdb_id=\(idIMDB)" }
-            else if (idTVDB != "")  { reqURL = "https://api.betaseries.com/shows/display?v=3.0&thetvdb_id=\(idTVDB)" }
-            else                    { return result }
+    
+    func getDiffuseurs(idTVDB : String, idIMDB : String) -> [Diffuseur] {
+        var reqURL : String = ""
+        var result : [Diffuseur] = []
+        
+        if (idIMDB != "")       { reqURL = "https://api.betaseries.com/shows/display?v=3.0&imdb_id=\(idIMDB)" }
+        else if (idTVDB != "")  { reqURL = "https://api.betaseries.com/shows/display?v=3.0&thetvdb_id=\(idTVDB)" }
+        else                    { return result }
+        
+        let reqResult : NSDictionary = loadAPI(reqAPI: reqURL) as? NSDictionary ?? NSDictionary()
+        if (reqResult.count == 0) { return result }
+        
+        let show = reqResult.object(forKey: "show") as! NSDictionary
+        
+        if ((show.object(forKey: "platforms") != nil) && !(show.object(forKey: "platforms") is NSNull)) {
+            let platforms = show.object(forKey: "platforms") as! NSDictionary
             
-            let reqResult : NSDictionary = loadAPI(reqAPI: reqURL) as? NSDictionary ?? NSDictionary()
-            if (reqResult.count == 0) { return result }
-            
-            let show = reqResult.object(forKey: "show") as! NSDictionary
-            
-            if ((show.object(forKey: "platforms") != nil) && !(show.object(forKey: "platforms") is NSNull)) {
-                let platforms = show.object(forKey: "platforms") as! NSDictionary
-                
-                if (platforms.object(forKey: "vod") != nil) {
-                    for unePlateforme in (platforms.object(forKey: "vod")! as? NSArray ?? NSArray()) {
-                        let unDiffuseur : Diffuseur = Diffuseur.init()
-                        unDiffuseur.mode = "VOD"
-                        unDiffuseur.name = ((unePlateforme as! NSDictionary).object(forKey: "name")) as? String ?? ""
-                        let Id : String = ((unePlateforme as! NSDictionary).object(forKey: "id")) as? String ?? "0"
-                        unDiffuseur.logo = "https://pictures.betaseries.com/platforms/" + Id + ".jpg"
-                        
-                        result.append(unDiffuseur)
-                    }
-                }
-
-                if (platforms.object(forKey: "svods") != nil) {
-                    for unePlateforme in (platforms.object(forKey: "svods")! as! NSArray) {
-                        let unDiffuseur : Diffuseur = Diffuseur.init()
-                        unDiffuseur.mode = "SVOD"
-                        unDiffuseur.name = ((unePlateforme as! NSDictionary).object(forKey: "name")) as? String ?? ""
-                        unDiffuseur.logo = ((unePlateforme as! NSDictionary).object(forKey: "logo")) as? String ?? ""
-                        unDiffuseur.contenu = "?"
-                        
-                        if ((unePlateforme as! NSDictionary).object(forKey: "available") != nil) {
-                            let dernier : Int = ((((unePlateforme as! NSDictionary).object(forKey: "available"))! as AnyObject).object(forKey: "last")) as? Int ?? 0
-                            let premier : Int = ((((unePlateforme as! NSDictionary).object(forKey: "available"))! as AnyObject).object(forKey: "first")) as? Int ?? dernier
-                            
-                            if (premier == dernier) { unDiffuseur.contenu = "Saison " + String(dernier) }
-                            else                    { unDiffuseur.contenu = "Saisons " + String(premier) + " - " + String(dernier) }
-                        }
-                        
-                        result.append(unDiffuseur)
-                    }
+            if (platforms.object(forKey: "vod") != nil) {
+                for unePlateforme in (platforms.object(forKey: "vod")! as? NSArray ?? NSArray()) {
+                    let unDiffuseur : Diffuseur = Diffuseur.init()
+                    unDiffuseur.mode = "VOD"
+                    unDiffuseur.name = ((unePlateforme as! NSDictionary).object(forKey: "name")) as? String ?? ""
+                    let Id : String = ((unePlateforme as! NSDictionary).object(forKey: "id")) as? String ?? "0"
+                    unDiffuseur.logo = "https://pictures.betaseries.com/platforms/" + Id + ".jpg"
+                    
+                    result.append(unDiffuseur)
                 }
             }
             
-            return result
+            if (platforms.object(forKey: "svods") != nil) {
+                for unePlateforme in (platforms.object(forKey: "svods")! as! NSArray) {
+                    let unDiffuseur : Diffuseur = Diffuseur.init()
+                    unDiffuseur.mode = "SVOD"
+                    unDiffuseur.name = ((unePlateforme as! NSDictionary).object(forKey: "name")) as? String ?? ""
+                    unDiffuseur.logo = ((unePlateforme as! NSDictionary).object(forKey: "logo")) as? String ?? ""
+                    unDiffuseur.contenu = "?"
+                    
+                    if ((unePlateforme as! NSDictionary).object(forKey: "available") != nil) {
+                        let dernier : Int = ((((unePlateforme as! NSDictionary).object(forKey: "available"))! as AnyObject).object(forKey: "last")) as? Int ?? 0
+                        let premier : Int = ((((unePlateforme as! NSDictionary).object(forKey: "available"))! as AnyObject).object(forKey: "first")) as? Int ?? dernier
+                        
+                        if (premier == dernier) { unDiffuseur.contenu = "Saison " + String(dernier) }
+                        else                    { unDiffuseur.contenu = "Saisons " + String(premier) + " - " + String(dernier) }
+                    }
+                    
+                    result.append(unDiffuseur)
+                }
+            }
         }
-
+        
+        return result
+    }
+    
     
     
     func getSimilarShows(TVDBid : String) -> (names : [String], ids : [String]) {
@@ -256,7 +266,7 @@ class BetaSeries : NSObject {
         
         return (showNames, showIds)
     }
-        
+    
     
     func rechercheParTitre(serieArechercher : String) -> [Serie] {
         var serieListe : [Serie] = []
@@ -290,6 +300,159 @@ class BetaSeries : NSObject {
         
         return serieListe
     }
-
+    
+    
+    func chercher(genres: String, anneeBeg: String, anneeEnd: String, duree: String, streamers: String) -> ([Serie], Int) {
+        var listeSeries : [Serie] = []
+        var cpt : Int = 0
+        
+        var buildURL : String = "https://api.betaseries.com/search/shows?v=3.0&order=popularity"
+        
+        if (genres != "") {
+            buildURL = buildURL + "&genres="
+            for unGenre in genres.split(separator: ",") { buildURL = buildURL + (genresBetaSeries[unGenre] as? String ?? "") + "," }
+            buildURL.removeLast()
+        }
+        
+        if (streamers != "") {
+            buildURL = buildURL + "&svods="
+            for streamer in streamers.split(separator: ",") { buildURL = buildURL + String(platformsBetaSeries[streamer] as? Int ?? 0) + "," }
+            buildURL.removeLast()
+        }
+        
+        if (duree != "") {
+            buildURL = buildURL + "&duration=" + (dureesBetaSeries[duree] as? String ?? "")
+        }
+        
+        if ( (anneeBeg != "") || (anneeEnd != "") ) {
+            let anneeDebut : Int = Int(anneeBeg) ?? 2000
+            let anneeFin   : Int = Int(anneeEnd) ?? Calendar.current.component(.year, from: Date())
+            
+            buildURL = buildURL + "&creations="
+            for uneAnnee in anneeDebut...anneeFin { buildURL = buildURL + String(uneAnnee) + "," }
+            buildURL.removeLast()
+        }
+        
+        let reqResult : NSDictionary = loadAPI(reqAPI: buildURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!) as? NSDictionary ?? NSDictionary()
+        
+        if (reqResult.object(forKey: "total") != nil) {
+            cpt = reqResult.object(forKey: "total") as? Int ?? 0
+            
+            if (reqResult.object(forKey: "shows") != nil) {
+                for uneSerie in reqResult.object(forKey: "shows")! as! NSArray {
+                    let newSerie : Serie = Serie(serie: ((uneSerie as AnyObject).object(forKey: "title") as! String))
+                    newSerie.year = (uneSerie as AnyObject).object(forKey: "release_date") as? Int ?? 0
+                    newSerie.poster = (uneSerie as AnyObject).object(forKey: "poster") as? String ?? ""
+                    newSerie.idBetaSeries = String((uneSerie as AnyObject).object(forKey: "id") as? Int ?? 0)
+                    
+                    listeSeries.append(newSerie)
+                }
+            }
+        }
+        
+        return (listeSeries, cpt)
+    }
+    
+    
+    func getEpisodeCast(idTVDB : Int) -> [Casting] {
+        var reqURL : String = ""
+        var result : [Casting] = []
+        
+        if (idTVDB != 0) { reqURL = "https://api.betaseries.com/episodes/display?v=3.0&thetvdb_id=\(idTVDB)" }
+        else             { return result }
+        
+        let reqResult : NSDictionary = loadAPI(reqAPI: reqURL) as? NSDictionary ?? NSDictionary()
+        if (reqResult.count == 0) { return result }
+        
+        let episode = reqResult.object(forKey: "episode") as! NSDictionary
+        
+        if ((episode.object(forKey: "characters") != nil) && !(episode.object(forKey: "characters") is NSNull)) {
+            let casting = episode.object(forKey: "characters") as? NSArray ?? []
+            
+            if (casting.count != 0) {
+                for oneCast in casting {
+                    let unActeur : Casting = Casting.init()
+                    unActeur.personnage = ((oneCast as! NSDictionary).object(forKey: "name")) as? String ?? ""
+                    unActeur.name = ((oneCast as! NSDictionary).object(forKey: "actor")) as? String ?? ""
+                    unActeur.photo = ((oneCast as! NSDictionary).object(forKey: "picture")) as? String ?? ""
+                    
+                    if (unActeur.name != "") { result.append(unActeur) }
+                }
+            }
+        }
+        
+        return result
+    }
 }
 
+
+let platformsBetaSeries: NSDictionary = [
+    "Netflix" : 1,
+    "Canal+" : 278,
+    "Amazon Prime" : 3,
+    "OCS Go" : 2,
+    "Disney+" : 246,
+    "Apple TV+" : 255
+]
+
+
+let genresBetaSeries: NSDictionary = [
+    "Comédie": "Comedy",
+    "Drame": "Drama",
+    "Crime": "Crime",
+    "Horreur": "Horror",
+    "Anime": "Anime",
+    "Action": "Action",
+    "Aventure": "Adventure",
+    "Fantastique": "Fantasy",
+    "Animation": "Animation",
+    "Science-fiction": "Science_Fiction",
+    "Mini-série": "Mini-Series",
+    "Romance": "Romance",
+    "Western": "Western",
+    "Thriller": "Thriller",
+    "Soap": "Soap",
+    "Enfant": "Children",
+    "Famille": "Family",
+    "Mystère": "Mystery",
+    "Sport": "Sport",
+    "Suspense": "Suspense",
+    "Histoire": "History",
+    
+    "Indie": "Indie",
+    "Comédie musicale": "Musical",
+    "Guerre": "War",
+    "Arts martiaux": "Martial_Arts",
+    
+    "Documentaire": "Documentary",
+    "Télé-réalité": "Reality",
+    "Talk Show": "Talk_Show",
+    "Game Show": "Game-Show",
+    "Cuisine": "Food",
+    "Maison et jardinage": "Home_and_Garden",
+    "Actualité": "News",
+    "Intérêt particulier": "Special_Interest",
+    "Sport": "Sport",
+    "Voyage": "Travel",
+    "Podcast": "Podcast"
+]
+
+let dureesBetaSeries: NSDictionary = [
+    "moins de 20 min": "1-19",
+    "20 à 30 min": "20-30",
+    "30 à 40 min": "31-40",
+    "40 à 50 min": "41-50",
+    "50 à 60 min": "51-60",
+    "plus de 60 min": "61"
+]
+
+/*
+ 
+ genres : Genres séparés par une virgule (doivent correspondre aux clés retournées par shows/genres)
+ duration : Durée d'un épisode (1-19, 20-30, 31-40, 41-50, 51-60, 61)
+ svods : Ids des plateformes SVoD séparés par une virgule
+ creations : Années séparées par une virgule
+ pays : Pays d'origine des séries séparés par une virgule (doit être le code à 2 lettres du pays)
+ chaines : Chaînes de diffusion séparées par une virgule
+ 
+ */

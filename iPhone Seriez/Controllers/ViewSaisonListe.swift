@@ -73,9 +73,6 @@ class ViewSaisonListe: UITableViewController {
         if (uneSaison.ends == ZeroDate) { cell.fin.text = "TBD" }
         else { cell.fin.text = dateFormLong.string(from: uneSaison.ends) }
         
-//        cell.globalRating.text = String(viewList[indexPath.row].getGlobalRating()) + " 👏🏻 %"
-//        arrondir(texte: cell.globalRating, radius: 18.0)
-
         let note : Double = Double(viewList[indexPath.row].getGlobalRating())/10.0
         cell.globalRating.text = "👍🏼 " + String(note)
         cell.globalRating.layer.borderColor = UIColor.systemBlue.cgColor
@@ -192,6 +189,7 @@ class ViewSaisonListe: UITableViewController {
     override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let reload = UIContextualAction(style: .destructive, title: "Reload") {  (contextualAction, view, boolValue) in
             db.downloadGlobalInfo(serie: self.viewList[indexPath.row])
+            db.downloadDates(serie: self.viewList[indexPath.row])
             db.saveDB()
             self.liste.reloadData()
             self.view.setNeedsDisplay()

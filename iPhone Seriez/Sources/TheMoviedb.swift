@@ -112,6 +112,11 @@ class TheMoviedb : NSObject {
                         newSerie.year = Int(dateTexte.split(separator: "-")[0])!
                     }
                     
+                    newSerie.poster = (uneSerie as AnyObject).object(forKey: "poster_path") as? String ?? ""
+                    if (newSerie.poster != "") { newSerie.poster = "https://image.tmdb.org/t/p/w92" + newSerie.poster }
+                    
+                    _ = getIDs(serie: newSerie)
+                    
                     listeSeries.append(newSerie)
                 }
             }
@@ -207,7 +212,6 @@ class TheMoviedb : NSObject {
         var compteur : Int = 0
         
         let reqResult : NSDictionary = loadAPI(reqAPI: "https://api.themoviedb.org/3/tv/\(movieDBid)/similar?api_key=\(TheMoviedbUserkey)&language=en-US&page=1")  as? NSDictionary ?? NSDictionary()
-        //let reqResult : NSDictionary = loadAPI(reqAPI: "https://api.themoviedb.org/3/tv/\(movieDBid)/recommendations?api_key=\(TheMoviedbUserkey)&language=en-US&page=1") as! NSDictionary
         
         if (reqResult.object(forKey: "results") != nil) {
             for oneShow in (reqResult.object(forKey: "results") as! NSArray) {
@@ -300,6 +304,11 @@ class TheMoviedb : NSObject {
                     newSerie.country = (oneShow.object(forKey: "origin_country") as! NSArray).object(at: 0) as? String ?? ""
                 }
                 
+                let dateTexte : String = oneShow.object(forKey: "first_air_date") as? String ?? ""
+                if (dateTexte.count > 3) {
+                    newSerie.year = Int(dateTexte.split(separator: "-")[0])!
+                }
+
                 newSerie.poster = oneShow.object(forKey: "poster_path") as? String ?? ""
                 if (newSerie.poster != "") { newSerie.poster = "https://image.tmdb.org/t/p/w92" + newSerie.poster }
                 
@@ -325,6 +334,47 @@ class TheMoviedb : NSObject {
             }
         }
     }
-    
-
 }
+
+
+// Genres on MovieDB
+let genresMovieDB: NSDictionary = [
+    "Action & Adventure" : 10759,
+    "Animation" : 16,
+    "Comedy" : 35,
+    "Crime" : 80,
+    "Drama" : 18,
+    "Mystery" : 9648,
+    "Sci-Fi & Fantasy" : 10765,
+    "War & Politics" : 10768,
+    "Western" : 37
+]
+
+ 
+let genreDocumentaire   : Int = 99
+let genreAnimation      : Int = 16
+
+// Networks on MovieDB
+let networksMovieDB: NSDictionary = [
+    "ABC" : 18,
+    "CBS" : 16,
+    "FOX" : 19,
+    "FX" : 88,
+    "HBO" : 49,
+    "NBC" : 6,
+    "Netflix" : 213,
+    "Showtime" : 67,
+    "Starz" : 318,
+    "The CW" : 71,
+    "TF1" : 290,
+    "France 2" : 361,
+    "France 3" : 249,
+    "Canal+" : 285,
+    "Arte" : 662,
+    "M6" : 712,
+    "Channel 4" : 21,
+    "BBC One" : 4,
+    "BBC Two" : 332,
+    "BBC Three" : 3,
+    "BBC Four" : 100
+]

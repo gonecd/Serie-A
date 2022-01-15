@@ -281,24 +281,19 @@ class GraphMiniSerie: UIView {
 
     
     func tracePetitsCerclesBkgd() {
-        for x in 0..<3 {
-            for y in 0..<3 {
-                if ((x == 1) && (y == 1)) { continue }
-                traceUnPetitCercle(note: 100, color: UIColor.lightGray.withAlphaComponent(0.3), x: x, y: y)
-            }
-        }
+        let logoSize :CGFloat = 14.0
+        let A1 : CGFloat = 08.0
+        let A2 : CGFloat = 43.0
+        let A3 : CGFloat = 78.0
         
-        let logoSize :CGFloat = 12.0
-        
-        #imageLiteral(resourceName: "trakt.ico").draw(in: CGRect(x: 09.0, y: 09.0, width: logoSize, height: logoSize))
-        #imageLiteral(resourceName: "betaseries.png").draw(in: CGRect(x: 44.0, y: 09.0, width: logoSize, height: logoSize))
-        #imageLiteral(resourceName: "imdb.ico").draw(in: CGRect(x: 79.0, y: 09.0, width: logoSize, height: logoSize))
-        #imageLiteral(resourceName: "themoviedb.ico").draw(in: CGRect(x: 09.0, y: 44.0, width: logoSize, height: logoSize))
-        #imageLiteral(resourceName: "tvmaze.ico").draw(in: CGRect(x: 79.0, y: 44.0, width: logoSize, height: logoSize))
-        #imageLiteral(resourceName: "rottentomatoes.ico").draw(in: CGRect(x: 09.0, y: 79.0, width: logoSize, height: logoSize))
-        #imageLiteral(resourceName: "metacritic.png").draw(in: CGRect(x: 44.0, y: 79.0, width: logoSize, height: logoSize))
-        #imageLiteral(resourceName: "allocine.ico").draw(in: CGRect(x: 79.0, y: 79.0, width: logoSize, height: logoSize))
-
+        #imageLiteral(resourceName: "trakt.ico").draw(in: CGRect(x: A1, y: A1, width: logoSize, height: logoSize))
+        #imageLiteral(resourceName: "betaseries.png").draw(in: CGRect(x: A2, y: A1, width: logoSize, height: logoSize))
+        #imageLiteral(resourceName: "imdb.ico").draw(in: CGRect(x: A3, y: A1, width: logoSize, height: logoSize))
+        #imageLiteral(resourceName: "themoviedb.ico").draw(in: CGRect(x: A1, y: A2, width: logoSize, height: logoSize))
+        #imageLiteral(resourceName: "tvmaze.ico").draw(in: CGRect(x: A3, y: A2, width: logoSize, height: logoSize))
+        #imageLiteral(resourceName: "rottentomatoes.ico").draw(in: CGRect(x: A1, y: A3, width: logoSize, height: logoSize))
+        #imageLiteral(resourceName: "metacritic.png").draw(in: CGRect(x: A2, y: A3, width: logoSize, height: logoSize))
+        #imageLiteral(resourceName: "allocine.ico").draw(in: CGRect(x: A3, y: A3, width: logoSize, height: logoSize))
     }
 
     
@@ -315,29 +310,26 @@ class GraphMiniSerie: UIView {
     
     
     func traceUnPetitCercle(note: Int, color: UIColor, x: Int, y: Int) {
-     
-        color.setStroke()
-        color.withAlphaComponent(0.4).setFill()
-        
-        // Cadre
+
+        UIColor.lightGray.setStroke()
         let path : UIBezierPath = UIBezierPath()
         path.lineWidth = 1.0
         path.addArc(withCenter: CGPoint(x: 15+(CGFloat(x)*35), y: 15+(CGFloat(y)*35)),
-                    radius: 15,
+                    radius: 13,
+                    startAngle: 0,
+                    endAngle: (2 * .pi),
+                    clockwise: true)
+        path.stroke()
+
+        color.setStroke()
+        let path2 : UIBezierPath = UIBezierPath()
+        path2.lineWidth = 3.0
+        path2.addArc(withCenter: CGPoint(x: 15+(CGFloat(x)*35), y: 15+(CGFloat(y)*35)),
+                    radius: 13,
                     startAngle: (-1) * (.pi / 2),
                     endAngle: (-1) * (.pi / 2) + (2 * .pi * CGFloat(note) / 100),
                     clockwise: true)
-
-        path.addArc(withCenter: CGPoint(x: 15+(CGFloat(x)*35), y: 15+(CGFloat(y)*35)),
-                    radius: 10,
-                    startAngle: (-1) * (.pi / 2) + (2 * .pi * CGFloat(note) / 100),
-                    endAngle: (-1) * (.pi / 2),
-                    clockwise: false)
-        path.addLine(to: CGPoint(x: 15+(CGFloat(x)*35), y: (CGFloat(y)*35)))
-        path.stroke()
-        path.fill()
+        path2.stroke()
 
     }
-    
-    
 }

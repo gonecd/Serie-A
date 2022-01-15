@@ -70,54 +70,13 @@ let categSuivies        : Int = 3
 let categFinies         : Int = 4
 
 
-// Genres on MovieDB
-let genresMovieDB: NSDictionary = [
-    "Action & Adventure" : 10759,
-    "Animation" : 16,
-    "Comedy" : 35,
-    "Crime" : 80,
-    "Drama" : 18,
-    "Mystery" : 9648,
-    "Sci-Fi & Fantasy" : 10765,
-    "War & Politics" : 10768,
-    "Western" : 37
-]
-
- 
-let genreDocumentaire   : Int = 99
-let genreAnimation      : Int = 16
-
-// Networks on MovieDB
-let networksMovieDB: NSDictionary = [
-    "ABC" : 18,
-    "CBS" : 16,
-    "FOX" : 19,
-    "FX" : 88,
-    "HBO" : 49,
-    "NBC" : 6,
-    "Netflix" : 213,
-    "Showtime" : 67,
-    "Starz" : 318,
-    "The CW" : 71,
-    "TF1" : 290,
-    "France 2" : 361,
-    "France 3" : 249,
-    "Canal+" : 285,
-    "Arte" : 662,
-    "M6" : 712,
-    "Channel 4" : 21,
-    "BBC One" : 4,
-    "BBC Two" : 332,
-    "BBC Three" : 3,
-    "BBC Four" : 100
-]
-
 // Modes d'affichage de la view Série
 let modeFinie       : Int = 1
 let modeEnCours     : Int = 2
 let modeAbandon     : Int = 3
 let modeWatchlist   : Int = 4
 let modeRecherche   : Int = 5
+let modeParRate     : Int = 6
 
 
 // Corrections statistiques pour les séries

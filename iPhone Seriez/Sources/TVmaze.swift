@@ -156,11 +156,6 @@ class TVmaze {
             return (foundSaisons, foundEps, foundDebuts, foundFins)
         }
         
-        if (idTVmaze == "27436") {
-            print("TVmaze::getSeasonsDates failed : tout pourri pour Casa de Papel")
-            return (foundSaisons, foundEps, foundDebuts, foundFins)
-        }
-        
         let reqResult : NSArray = loadAPI(reqAPI: "http://api.tvmaze.com/shows/\(idTVmaze)/seasons") as! NSArray
 
         for uneSaison in reqResult {
@@ -204,6 +199,11 @@ class TVmaze {
             newSerie.homepage = oneShow.object(forKey: "url") as? String ?? ""
             newSerie.ratingTVmaze = Int(10 * ((oneShow.object(forKey: "rating")! as AnyObject).object(forKey: "average") as? Double ?? 0.0))
             newSerie.watchlist = true
+            
+            let dateTexte : String = oneShow.object(forKey: "premiered") as? String ?? ""
+            if (dateTexte.count > 3) {
+                newSerie.year = Int(dateTexte.split(separator: "-")[0])!
+            }
             
             serieListe.append(newSerie)
         }

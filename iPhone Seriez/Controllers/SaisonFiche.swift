@@ -160,11 +160,12 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let viewController = segue.destination as! EpisodeFiche
-        let collectionCell : CellEpisode = sender as! CellEpisode
+        let ficheEpisode : CellEpisode = sender as! CellEpisode
+        
         viewController.serie = serie
         viewController.saison = saison
         viewController.image = image
-        viewController.episode = Int(collectionCell.numero.text!)!
+        viewController.episode = Int(ficheEpisode.numero.text!)!
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {

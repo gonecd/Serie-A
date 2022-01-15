@@ -28,9 +28,9 @@ class CellSerieListe: UITableViewCell {
 class ViewSerieListe: UITableViewController {
     
     var viewList: [Serie] = [Serie]()
-    var allSaisons: [Int] = [Int]()
     var grapheType : Int = 0
-
+    var triType : Int = 0
+    
     @IBOutlet var liste: UITableView!
     var modeAffichage : Int = 0
     
@@ -58,9 +58,6 @@ class ViewSerieListe: UITableViewController {
         cell.titre.text = viewList[indexPath.row].serie
         cell.saison.text =  String(viewList[indexPath.row].nbSaisons) + " Saisons - " + String(viewList[indexPath.row].nbEpisodes) + " Epiosdes - " + String(viewList[indexPath.row].runtime) + " min"
         
-//        cell.globalRating.text = String(viewList[indexPath.row].getGlobalRating()) + " %"
-//        arrondir(texte: cell.globalRating, radius: 12.0)
-        
         let note : Double = Double(viewList[indexPath.row].getGlobalRating())/10.0
         cell.globalRating.text = "👍🏼 " + String(note)
         cell.globalRating.layer.borderColor = UIColor.systemBlue.cgColor
@@ -71,7 +68,7 @@ class ViewSerieListe: UITableViewController {
         cell.myRating.textColor = UIColor.init(red: 1.0, green: 153.0/255.0, blue: 1.0, alpha: 1.0)
 
         if (viewList[indexPath.row].myRating < 1) {
-            cell.myRating.text = ""
+            cell.myRating.text = "-"
             cell.myRating.backgroundColor = UIColor.systemGray
         }
         else {
@@ -90,9 +87,15 @@ class ViewSerieListe: UITableViewController {
         
         // Affichage du status
         arrondir(texte: cell.status, radius: 8.0)
-        cell.status.text = computeSerieStatus(serie : viewList[indexPath.row]).label
-        cell.status.textColor = computeSerieStatus(serie : viewList[indexPath.row]).couleur
-
+        if (modeAffichage == modeParRate) {
+            cell.status.text = computeSerieListe(serie : viewList[indexPath.row]).label
+            cell.status.textColor = computeSerieListe(serie : viewList[indexPath.row]).couleur
+        }
+        else {
+            cell.status.text = computeSerieStatus(serie : viewList[indexPath.row]).label
+            cell.status.textColor = computeSerieStatus(serie : viewList[indexPath.row]).couleur
+        }
+        
         // Affichage du drapeau
         cell.drapeau.image = getDrapeau(country: viewList[indexPath.row].country)
         
@@ -124,6 +127,16 @@ class ViewSerieListe: UITableViewController {
     }
     
     
+    func computeSerieListe(serie : Serie) -> (label: String, couleur: UIColor) {
+        
+        if (serie.watchlist) { return ("Watchlist", .systemGreen) }
+        if (serie.unfollowed) { return ("Série abandonnée", .systemRed) }
+        if (serie.enCours()) { return ("Série en cours", .systemBlue) }
+
+        return ("Série finie", .systemGray2)
+    }
+    
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
     }
@@ -140,6 +153,7 @@ class ViewSerieListe: UITableViewController {
     override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let reload = UIContextualAction(style: .destructive, title: "Refresh") {  (contextualAction, view, boolValue) in
             db.downloadGlobalInfo(serie: self.viewList[indexPath.row])
+            db.downloadDates(serie: self.viewList[indexPath.row])
             db.saveDB()
             self.liste.reloadData()
             self.view.setNeedsDisplay()
@@ -158,6 +172,26 @@ class ViewSerieListe: UITableViewController {
         if (grapheType == 0) { grapheType = 1 }
         else if (grapheType == 1) { grapheType = 2 }
         else { grapheType = 0 }
+        
+        self.liste.reloadData()
+        self.view.setNeedsDisplay()
+    }
+    
+    
+    @IBAction func trier(_ sender: Any) {
+
+        if (triType == 0) {
+            viewList = viewList.sorted(by: { $0.myRating > $1.myRating })
+            triType = 1
+        }
+        else if (triType == 1) {
+            viewList = viewList.sorted(by: { $0.getGlobalRating() > $1.getGlobalRating() })
+            triType = 2
+        }
+        else {
+            viewList = viewList.sorted(by: { $0.serie < $1.serie })
+            triType = 0
+        }
         
         self.liste.reloadData()
         self.view.setNeedsDisplay()

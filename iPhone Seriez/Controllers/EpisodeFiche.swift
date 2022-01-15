@@ -9,13 +9,22 @@
 
 import UIKit
 
-class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource {
+
+class CellCasting : UICollectionViewCell {
+    
+    @IBOutlet weak var poster: UIImageView!
+    @IBOutlet weak var nom: UILabel!
+    @IBOutlet weak var perso: UILabel!
+}
+
+class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDataSource, UICollectionViewDelegate {
     
     var serie : Serie = Serie(serie: "")
     var image : UIImage = UIImage()
     var saison : Int = 0
     var episode : Int = 0
     var allComments : [Critique] = []
+    var allCasting : [Casting] = []
     @IBOutlet weak var boutonVuUnEp: UIView!
 
     @IBOutlet weak var resume: UITextView!
@@ -24,13 +33,15 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
     @IBOutlet weak var banniere: UIImageView!
     
     @IBOutlet weak var viewComments: UITableView!
+    @IBOutlet weak var casting: UICollectionView!
     @IBOutlet weak var graphe: GraphEpisode!
     
     @IBOutlet weak var labelNotes: UILabel!
     @IBOutlet weak var labelResume: UILabel!
     @IBOutlet weak var labelcommentaires: UILabel!
     @IBOutlet weak var labelLiens: UILabel!
-
+    @IBOutlet weak var labelCasting: UILabel!
+    
     @IBOutlet weak var bTrakt: UIButton!
     @IBOutlet weak var bMovieDB: UIButton!
     @IBOutlet weak var bTVMaze: UIButton!
@@ -51,6 +62,7 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
         arrondirLabel(texte: labelResume, radius: 10)
         arrondirLabel(texte: labelcommentaires, radius: 10)
         arrondirLabel(texte: labelLiens, radius: 10)
+        arrondirLabel(texte: labelCasting, radius: 10)
 
         makeGradiant(carre: boutonVuUnEp, couleur: "Rouge")
         if (episode <= serie.saisons[saison - 1].nbWatchedEps) {
@@ -75,7 +87,9 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
         
         graphe.sendEpisode(ep: serie.saisons[saison - 1].episodes[episode - 1])
         
-
+        allCasting = betaSeries.getEpisodeCast(idTVDB: serie.saisons[saison - 1].episodes[episode - 1].idTVdb)
+        casting.setNeedsDisplay()
+        
         let queue : OperationQueue = OperationQueue()
 
         let opeCommentsIMDB = BlockOperation(block: {
@@ -153,10 +167,32 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
 
                 db.updateCompteurs()
                 db.saveDB()
+                db.shareWithWidget()
             }
             else {
                 print("\(serie.serie) S\(saison)E\(episode) : Failed to mark as viewed")
             }
         }
     }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return allCasting.count
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CellActeur", for: indexPath as IndexPath) as! CellCasting
+                
+        cell.poster.image = getImage(allCasting[indexPath.row].photo)
+        cell.perso.text = allCasting[indexPath.row].personnage
+        cell.nom.text = allCasting[indexPath.row].name
+                
+        return cell
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+    }
 }
+

@@ -22,7 +22,7 @@ struct MonActiviteView : View {
             
             Image(uiImage: model.posterImage)
                 .resizable()
-                .frame(width: 70, height: 105, alignment: .center)
+                .frame(width: 70, height: 108, alignment: .center)
 
             VStack(alignment: .leading, spacing: 8) {
                 Text(model.data.serie)
@@ -37,8 +37,8 @@ struct MonActiviteView : View {
                     
                     Spacer()
                     
-                    Text("  👍🏼  " + String(model.data.rateGlobal) + "  ")
-                        .font(.system(size: 14))
+                    Text("  👍🏼  " + String(Double(model.data.rateGlobal)/10) + "  ")
+                        .font(.system(size: 14, weight: .bold))
                         .foregroundColor(.blue)
                         .background(Color.gray.opacity(0.2))
                         .overlay(

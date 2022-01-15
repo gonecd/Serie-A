@@ -21,7 +21,6 @@ public class Saison : NSObject, NSCoding
     public var ends : Date = ZeroDate
     
     
-    
     public init(serie:String, saison:Int)
     {
         self.serie = serie
