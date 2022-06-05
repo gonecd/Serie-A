@@ -56,10 +56,14 @@ class GraphMiniSerie: UIView {
             self.traceGrapheBarre()
             self.backgroundBarres()
         }
-        else {
+        else if (grapheType == 2) {
             self.tracePetitsCerclesBkgd()
             self.tracePetitsCercles()
         }
+        else if (grapheType == 3) {
+            self.traceSpider()
+        }
+
     }
     
     
@@ -330,6 +334,85 @@ class GraphMiniSerie: UIView {
                     endAngle: (-1) * (.pi / 2) + (2 * .pi * CGFloat(note) / 100),
                     clockwise: true)
         path2.stroke()
+
+    }
+    
+    
+    func traceSpider() {
+     
+        let nbSource : CGFloat = CGFloat(nbNotes)
+        let spiderRayon = min(centreX, centreY) - (2 * bordure)
+        let spiderLogoSize : CGFloat = 10.0
+        
+        // Couleur des lignes
+        colorAxis.setStroke()
+        
+        // Cadre
+        let path : UIBezierPath = UIBezierPath()
+        path.lineWidth = 0.5
+
+        for i in 1...nbNotes {
+            path.move(to: CGPoint(x: centreX, y: centreY))
+            path.addLine(to: CGPoint(x: centreX + spiderRayon*cos(2 * .pi * CGFloat(i-1) / nbSource), y:centreY + spiderRayon*sin(2 * .pi * CGFloat(i-1) / nbSource)))
+            path.addLine(to: CGPoint(x: centreX + spiderRayon*cos(2 * .pi * CGFloat(i) / nbSource), y:centreY + spiderRayon*sin(2 * .pi * CGFloat(i) / nbSource)))
+            path.stroke()
+        }
+
+
+        var notes : [CGFloat] = []
+        var logos : [UIImage] = []
+
+        if (noteTrakt > 0) {
+            notes.append(CGFloat(noteTrakt))
+            logos.append(#imageLiteral(resourceName: "trakt.ico"))
+        }
+        
+        if (noteBetaSeries > 0) {
+            notes.append(CGFloat(noteBetaSeries))
+            logos.append(#imageLiteral(resourceName: "betaseries.png"))
+        }
+        if (noteIMDB > 0) {
+            notes.append(CGFloat(noteIMDB))
+            logos.append(#imageLiteral(resourceName: "imdb.ico"))
+        }
+        if (noteTVmaze > 0) {
+            notes.append(CGFloat(noteTVmaze))
+            logos.append(#imageLiteral(resourceName: "tvmaze.ico"))
+        }
+        if (noteMoviedb > 0) {
+            notes.append(CGFloat(noteMoviedb))
+            logos.append(#imageLiteral(resourceName: "themoviedb.ico"))
+        }
+        if (noteRottenTomatoes > 0) {
+            notes.append(CGFloat(noteRottenTomatoes))
+            logos.append(#imageLiteral(resourceName: "rottentomatoes.ico"))
+        }
+        if (noteMetaCritic > 0) {
+            notes.append(CGFloat(noteMetaCritic))
+            logos.append(#imageLiteral(resourceName: "metacritic.png"))
+        }
+        if (noteAlloCine > 0) {
+            notes.append(CGFloat(noteAlloCine))
+            logos.append(#imageLiteral(resourceName: "allocine.ico"))
+        }
+        
+        UIColor.systemBlue.setStroke()
+        UIColor.systemBlue.withAlphaComponent(0.4).setFill()
+        let path2 : UIBezierPath = UIBezierPath()
+        path2.lineWidth = 2.0
+
+        path2.move(to: CGPoint(x: centreX + spiderRayon*notes[0] / 100, y:centreY))
+        logos[0].draw(in: CGRect(x: centreX - 5.0 + rayon, y: centreY - 5.0, width: spiderLogoSize, height: spiderLogoSize))
+
+        for i in 1...nbNotes-1 {
+            path2.addLine(to: CGPoint(x: centreX + spiderRayon*notes[i]*cos(2 * .pi * CGFloat(i) / nbSource) / 100, y:centreY + spiderRayon*notes[i]*sin(2 * .pi * CGFloat(i) / nbSource) / 100))
+            logos[i].draw(in: CGRect(x: centreX - 5.0 + rayon*cos(2 * .pi * CGFloat(i) / nbSource), y: centreY - 5.0 + rayon*sin(2 * .pi * CGFloat(i) / nbSource), width: spiderLogoSize, height: spiderLogoSize))
+
+        }
+        
+        path2.addLine(to: CGPoint(x: centreX + spiderRayon*notes[0] / 100, y:centreY))
+        path2.stroke()
+        path2.fill()
 
     }
 }
