@@ -62,7 +62,6 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
         arrondirLabel(texte: labelResume, radius: 10)
         arrondirLabel(texte: labelcommentaires, radius: 10)
         arrondirLabel(texte: labelLiens, radius: 10)
-        arrondirLabel(texte: labelCasting, radius: 10)
 
         makeGradiant(carre: boutonVuUnEp, couleur: "Rouge")
         if (episode <= serie.saisons[saison - 1].nbWatchedEps) {
@@ -87,8 +86,11 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
         
         graphe.sendEpisode(ep: serie.saisons[saison - 1].episodes[episode - 1])
         
+    if (UIDevice.current.userInterfaceIdiom == .pad) {
+        arrondirLabel(texte: labelCasting, radius: 10)
         allCasting = betaSeries.getEpisodeCast(idTVDB: serie.saisons[saison - 1].episodes[episode - 1].idTVdb)
         casting.setNeedsDisplay()
+    }
         
         let queue : OperationQueue = OperationQueue()
 
@@ -118,6 +120,15 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
             } )
         } )
         queue.addOperation(opeCommentsRotten)
+        
+        let opeCommentsBetaSeries = BlockOperation(block: {
+            self.allComments.append(contentsOf: betaSeries.getComments(episodeID: self.serie.saisons[self.saison-1].episodes[self.episode-1].idBetaSeries).prefix(5))
+            OperationQueue.main.addOperation({
+                self.viewComments.reloadData()
+                self.viewComments.setNeedsLayout()
+            } )
+        } )
+        queue.addOperation(opeCommentsBetaSeries)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -138,6 +149,7 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
         if (allComments[indexPath.row].source == srcTrakt) { cell.logo.image = #imageLiteral(resourceName: "trakt.ico") }
         if (allComments[indexPath.row].source == srcIMdb) { cell.logo.image = #imageLiteral(resourceName: "imdb.ico") }
         if (allComments[indexPath.row].source == srcRottenTom) { cell.logo.image = #imageLiteral(resourceName: "rottentomatoes.ico") }
+        if (allComments[indexPath.row].source == srcBetaSeries) { cell.logo.image = #imageLiteral(resourceName: "betaseries.png") }
 
         return cell
     }

@@ -8,6 +8,7 @@
 
 import UIKit
 import UserNotifications
+import WidgetKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -88,6 +89,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         loadStatuses()
         infosSaved.refreshViewed = Date()
         db.saveRefreshInfo(info: infosSaved)
+        WidgetCenter.shared.reloadTimelines(ofKind: "Mon_activite_")
 
         completionHandler(.newData)
     }

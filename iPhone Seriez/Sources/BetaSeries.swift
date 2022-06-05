@@ -18,11 +18,13 @@ class Casting {
 
 class BetaSeries : NSObject {
     var chrono : TimeInterval = 0
-    
+    let dateFormBetaSeries   = DateFormatter()
+
     let BetaSeriesUserkey : String = "aa6120d2cf7e"
     
     override init() {
         super.init()
+        dateFormBetaSeries.dateFormat = "yyyy-MM-dd HH:mm:ss"
     }
     
     
@@ -84,6 +86,7 @@ class BetaSeries : NSObject {
                         if (saison.episodes[numEpisode].date.compare(today) == .orderedAscending) {
                             saison.episodes[numEpisode].ratingBetaSeries = Int(20 * (((unEpisode as AnyObject).object(forKey: "note")! as AnyObject).object(forKey: "mean") as? Double ?? 0.0))
                             saison.episodes[numEpisode].ratersBetaSeries = ((unEpisode as AnyObject).object(forKey: "note")! as AnyObject).object(forKey: "total") as? Int ?? 0
+                            saison.episodes[numEpisode].idBetaSeries = (unEpisode as AnyObject).object(forKey: "id") as? Int ?? 0
                         }
                         
                     }
@@ -378,6 +381,39 @@ class BetaSeries : NSObject {
                     
                     if (unActeur.name != "") { result.append(unActeur) }
                 }
+            }
+        }
+        
+        return result
+    }
+    
+    
+    func getComments(episodeID : Int) -> [Critique] {
+        var reqURL : String = ""
+        var result : [Critique] = []
+        
+        if (episodeID == 0) { return result }
+        
+        if (episodeID != 0) { reqURL = "https://api.betaseries.com/comments/comments?v=3.0&id=\(episodeID)&type=episode&replies=0&order=desc" }
+        else                { return result }
+
+        let reqResult : NSDictionary = loadAPI(reqAPI: reqURL) as? NSDictionary ?? NSDictionary()
+        if (reqResult.count == 0) { return result }
+
+        if (reqResult.object(forKey: "comments") != nil) {
+            for oneComment in reqResult.object(forKey: "comments")! as! NSArray {
+                let uneCritique : Critique = Critique()
+                
+                uneCritique.source = srcBetaSeries
+                uneCritique.texte = ((oneComment as! NSDictionary).object(forKey: "text")) as? String ?? ""
+                uneCritique.auteur = ((oneComment as! NSDictionary).object(forKey: "login")) as? String ?? ""
+                uneCritique.journal = "BetaSeries user comment"
+                
+                let dateString : String = ((oneComment as! NSDictionary).object(forKey: "date")) as? String ?? ""
+                let dateTmp : Date = dateFormBetaSeries.date(from: dateString) ?? ZeroDate
+                uneCritique.date = dateFormLong.string(from: dateTmp)
+                
+                result.append(uneCritique)
             }
         }
         

@@ -12,11 +12,14 @@ import UIKit
 
 struct MonActiviteData : TimelineEntry {
     var date        : Date      = Date()
-    var posterImage : UIImage   = UIImage()
-    let data        : Data4MonActivite
-    
-    public init(dataWidget : Data4MonActivite) {
-        self.data = dataWidget
+    var poster1     : UIImage   = UIImage()
+    let data1       : Data4MonActivite
+    var poster2     : UIImage   = UIImage()
+    let data2       : Data4MonActivite
+
+    public init(dataWidget1 : Data4MonActivite, dataWidget2 : Data4MonActivite) {
+        self.data1 = dataWidget1
+        self.data2 = dataWidget2
     }
 }
 

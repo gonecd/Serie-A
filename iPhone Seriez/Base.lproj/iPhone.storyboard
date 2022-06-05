@@ -525,7 +525,7 @@
                     </tableView>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="Amb-VJ-nfZ">
-                        <barButtonItem key="rightBarButtonItem" title="Item" image="Chart-icon.png" id="HeW-XI-bHT">
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="chart.bar" catalog="system" id="HeW-XI-bHT">
                             <connections>
                                 <action selector="changeGraphe:" destination="g0p-Qf-KTM" id="s8z-k5-bCS"/>
                             </connections>
@@ -720,7 +720,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Découverte" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jIt-Wj-atI">
-                                <rect key="frame" x="38" y="482" width="170" height="36"/>
+                                <rect key="frame" x="38" y="482" width="202" height="36"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="30"/>
                                 <color key="textColor" red="0.0" green="0.315249329008642" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -895,7 +895,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LVN-Ba-hTa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-390" y="-308"/>
+            <point key="canvasLocation" x="-391.304347826087" y="-308.03571428571428"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="vsA-DO-XvI">
@@ -1818,11 +1818,18 @@
                         </barButtonItem>
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="Series TableView" id="grz-03-VM5">
-                        <barButtonItem key="rightBarButtonItem" image="Chart-icon.png" id="yll-Dt-cir">
-                            <connections>
-                                <action selector="changeGraphe:" destination="fqA-tO-WRq" id="IHQ-Ie-ppb"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem image="chart.pie" catalog="system" id="yll-Dt-cir">
+                                <connections>
+                                    <action selector="changeGraphe:" destination="fqA-tO-WRq" id="IHQ-Ie-ppb"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem image="arrow.down.circle" catalog="system" id="Pmo-Re-hJz">
+                                <connections>
+                                    <action selector="trier:" destination="fqA-tO-WRq" id="A4P-4C-2Mk"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
@@ -1858,7 +1865,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Recherche textuelle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="067-Q7-5Ei">
-                                <rect key="frame" x="22" y="36" width="292" height="36"/>
+                                <rect key="frame" x="22" y="36" width="344" height="36"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="30"/>
                                 <nil key="textColor"/>
@@ -1874,19 +1881,18 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="M7I-0T-fVN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1132" y="-1216"/>
+            <point key="canvasLocation" x="1131.8840579710145" y="-1216.0714285714284"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="pq9-Mm-aFb"/>
-        <segue reference="si9-zD-4Gf"/>
+        <segue reference="kVk-dp-Uur"/>
+        <segue reference="ARf-YV-fBT"/>
         <segue reference="WRr-5V-a2r"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="Air-icon.png" width="48" height="48"/>
         <image name="Bio-Hazard-icon.png" width="128" height="128"/>
         <image name="Calendar-icon.png" width="48" height="48"/>
-        <image name="Chart-icon.png" width="24" height="24"/>
         <image name="Eye-icon.png" width="128" height="128"/>
         <image name="List-icon.png" width="128" height="128"/>
         <image name="Magnifi-icon.png" width="128" height="128"/>
@@ -1896,7 +1902,10 @@
         <image name="TV-icon.png" width="48" height="48"/>
         <image name="Trash-icon.png" width="128" height="128"/>
         <image name="allocine.ico" width="32" height="32"/>
+        <image name="arrow.down.circle" catalog="system" width="128" height="121"/>
         <image name="betaseries.png" width="32" height="32"/>
+        <image name="chart.bar" catalog="system" width="128" height="90"/>
+        <image name="chart.pie" catalog="system" width="128" height="121"/>
         <image name="imdb.ico" width="48" height="48"/>
         <image name="metacritic.png" width="73" height="73"/>
         <image name="rottentomatoes.ico" width="64" height="64"/>

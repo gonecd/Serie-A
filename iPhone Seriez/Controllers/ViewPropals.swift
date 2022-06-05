@@ -282,7 +282,7 @@ class ViewPropals: UIViewController, UICollectionViewDataSource, UICollectionVie
                              rateRottenTomatoes: displayedSeries[indexPath.row].getFairGlobalRatingRottenTomatoes(),
                              rateMetaCritic: displayedSeries[indexPath.row].getFairGlobalRatingMetaCritic(),
                              rateAlloCine: displayedSeries[indexPath.row].getFairGlobalRatingAlloCine() )
-        cell.graph.setType(type: 0)
+        cell.graph.setType(type: 3)
         cell.graph.setNeedsDisplay()
         
         let sugg : Suggestion = findSuggestion(serie: displayedSeries[indexPath.row].serie)

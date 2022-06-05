@@ -8,7 +8,7 @@
 
 import Foundation
 import Mon_activitéExtension
-
+import WidgetKit
 
 class Database : NSObject {
     var shows : [Serie] = []
@@ -244,6 +244,8 @@ class Database : NSObject {
         
         let sharedContainer = UserDefaults(suiteName: "group.Series")
         sharedContainer?.set(try? PropertyListEncoder().encode(monActivite), forKey: "MonActivite")
+        
+        WidgetCenter.shared.reloadTimelines(ofKind: "Mon_activite_")
     }
     
     
@@ -443,18 +445,6 @@ class Database : NSObject {
         var ecartIMDBEps : Double = 0.0
         var ecartTraktEps : Double = 0.0
         var ecartBetaSeriesEps : Double = 0.0
-
-        // Moyennes simples
-//        for uneSerie in shows {
-//            for uneSaison in uneSerie.saisons {
-//                for unEpisode in uneSaison.episodes {
-//                    if (unEpisode.ratingIMdb != 0) {  moyIMDBEps = moyIMDBEps + Double(unEpisode.ratingIMdb); nbIMDBEps = nbIMDBEps + 1; ecartIMDBEps = ecartIMDBEps + Double(unEpisode.ratingIMdb * unEpisode.ratingIMdb) }
-//                    if (unEpisode.ratingTrakt != 0) {  moyTraktEps = moyTraktEps + Double(unEpisode.ratingTrakt); nbTraktEps = nbTraktEps + 1; ecartTraktEps = ecartTraktEps + Double(unEpisode.ratingTrakt * unEpisode.ratingTrakt) }
-//                    if (unEpisode.ratingBetaSeries != 0) {  moyBetaSeriesEps = moyBetaSeriesEps + Double(unEpisode.ratingBetaSeries); nbBetaSeriesEps = nbBetaSeriesEps + 1; ecartBetaSeriesEps = ecartBetaSeriesEps + Double(unEpisode.ratingBetaSeries * unEpisode.ratingBetaSeries) }
-//                }
-//
-//            }
-//        }
 
         // Moyennes pondérées par nombre de votants
         for uneSerie in shows {

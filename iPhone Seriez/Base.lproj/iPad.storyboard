@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="gWB-BH-bVK">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="gWB-BH-bVK">
     <device id="ipad10_2" orientation="landscape" layout="fullscreen" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -3415,7 +3415,7 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <navigationItem key="navigationItem" title="Propositions" id="wyI-mF-87U">
-                        <barButtonItem key="rightBarButtonItem" title="Item" image="Chart-icon.png" id="7Uq-w8-PLe">
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="chart.pie" catalog="system" id="7Uq-w8-PLe">
                             <connections>
                                 <action selector="showGraphe:" destination="Sqs-pE-xe0" id="aqS-Ti-4Nd"/>
                             </connections>
@@ -4131,7 +4131,7 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="ARf-YV-fBT"/>
-        <segue reference="Gjc-Uw-9eJ"/>
+        <segue reference="NrX-k6-d6s"/>
         <segue reference="nsT-uU-s1j"/>
         <segue reference="r4k-zI-mnA"/>
     </inferredMetricsTieBreakers>

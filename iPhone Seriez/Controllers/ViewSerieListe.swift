@@ -171,6 +171,7 @@ class ViewSerieListe: UITableViewController {
     @IBAction func changeGraphe(_ sender: Any) {
         if (grapheType == 0) { grapheType = 1 }
         else if (grapheType == 1) { grapheType = 2 }
+        else if (grapheType == 2) { grapheType = 3 }
         else { grapheType = 0 }
         
         self.liste.reloadData()

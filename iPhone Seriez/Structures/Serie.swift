@@ -334,9 +334,9 @@ public class Serie : NSObject, NSCoding {
         else { self.genres = Trakt.genres }
         
         if (TVdb.status != "") { self.status = TVdb.status }
+        else if (Moviedb.status != "") { self.status = Moviedb.status }
         else if (BetaSeries.status != "") { self.status = BetaSeries.status }
-        else if (Trakt.status != "") { self.status = Trakt.status }
-        else { self.status = Moviedb.status }
+        else { self.status = Trakt.status }
         
         for uneSaison in Moviedb.saisons {
             if (self.saisons.count >= uneSaison.saison) {

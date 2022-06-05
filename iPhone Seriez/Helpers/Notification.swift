@@ -62,24 +62,44 @@ func loadDates() {
             db.downloadDates(serie : uneSerie)
             
             for uneSaison in uneSerie.saisons {
-                if (Calendar.current.isDateInToday(uneSaison.starts)) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) commence aujourd'hui") }
-                if (Calendar.current.isDateInToday(uneSaison.ends)) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) finit aujourd'hui") }
-                
-                if (Calendar.current.isDateInTomorrow(uneSaison.starts)) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) commence demain") }
-                if (Calendar.current.isDateInTomorrow(uneSaison.ends)) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) finit demain") }
-                
-                // La saison n'existait pas
-                if (uneSaison.saison > svgSerie.saisons.count) {
-                    if (uneSaison.starts.compare(today) == .orderedDescending) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) commencera le \(dateFormLong.string(from: uneSaison.starts))") }
-                    if (uneSaison.ends.compare(today) == .orderedDescending) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) finira le \(dateFormLong.string(from: uneSaison.ends))") }
+                if (uneSaison.starts == uneSaison.ends) {
+                    if (Calendar.current.isDateInToday(uneSaison.starts)) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) est diffusée aujourd'hui") }
+                    if (Calendar.current.isDateInTomorrow(uneSaison.starts)) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) sera diffusée demain") }
+                    
+                    // La saison n'existait pas
+                    if (uneSaison.saison > svgSerie.saisons.count) {
+                        if (uneSaison.starts.compare(today) == .orderedDescending) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) sera diffusée le \(dateFormLong.string(from: uneSaison.starts))") }
+                    }
+                    else {
+                        // La saison existait et les dates ont changé
+                        if (uneSaison.starts != svgSerie.saisons[uneSaison.saison-1].starts) {
+                            if (uneSaison.starts.compare(today) == .orderedDescending) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) sera diffusée le \(dateFormLong.string(from: uneSaison.starts))") }
+                        }
+                        if (uneSaison.ends != svgSerie.saisons[uneSaison.saison-1].ends) {
+                            if (uneSaison.ends.compare(today) == .orderedDescending) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) sera diffusée le \(dateFormLong.string(from: uneSaison.ends))") }
+                        }
+                    }
                 }
                 else {
-                    // La saison existait et les dates ont changé
-                    if (uneSaison.starts != svgSerie.saisons[uneSaison.saison-1].starts) {
+                    if (Calendar.current.isDateInToday(uneSaison.starts)) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) commence aujourd'hui") }
+                    if (Calendar.current.isDateInToday(uneSaison.ends)) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) finit aujourd'hui") }
+                    
+                    if (Calendar.current.isDateInTomorrow(uneSaison.starts)) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) commencera demain") }
+                    if (Calendar.current.isDateInTomorrow(uneSaison.ends)) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) finira demain") }
+                    
+                    // La saison n'existait pas
+                    if (uneSaison.saison > svgSerie.saisons.count) {
                         if (uneSaison.starts.compare(today) == .orderedDescending) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) commencera le \(dateFormLong.string(from: uneSaison.starts))") }
-                    }
-                    if (uneSaison.ends != svgSerie.saisons[uneSaison.saison-1].ends) {
                         if (uneSaison.ends.compare(today) == .orderedDescending) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) finira le \(dateFormLong.string(from: uneSaison.ends))") }
+                    }
+                    else {
+                        // La saison existait et les dates ont changé
+                        if (uneSaison.starts != svgSerie.saisons[uneSaison.saison-1].starts) {
+                            if (uneSaison.starts.compare(today) == .orderedDescending) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) commencera le \(dateFormLong.string(from: uneSaison.starts))") }
+                        }
+                        if (uneSaison.ends != svgSerie.saisons[uneSaison.saison-1].ends) {
+                            if (uneSaison.ends.compare(today) == .orderedDescending) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) finira le \(dateFormLong.string(from: uneSaison.ends))") }
+                        }
                     }
                 }
             }

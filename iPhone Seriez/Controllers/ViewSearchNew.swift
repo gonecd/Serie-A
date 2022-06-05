@@ -14,14 +14,14 @@ class ViewSearchNew: UIViewController
 {
     
     @IBOutlet weak var recherche: UITextField!
-    @IBOutlet weak var advanced: UIView!
+//    @IBOutlet weak var advanced: UIView!
     
     var seriesTrouvees : [Serie] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        makeGradiant(carre: advanced, couleur : "Gris")
+//        makeGradiant(carre: advanced, couleur : "Gris")
     }
     
     

@@ -186,6 +186,7 @@
 		F13B52AD2753D6AF00EA976B /* Flag_of_New_Zealand.png in Resources */ = {isa = PBXBuildFile; fileRef = F13B52AB2753D6AF00EA976B /* Flag_of_New_Zealand.png */; };
 		F13B52AF2753D71100EA976B /* Flag_of_Denmark.png in Resources */ = {isa = PBXBuildFile; fileRef = F13B52AE2753D71100EA976B /* Flag_of_Denmark.png */; };
 		F13B52B02753D71100EA976B /* Flag_of_Denmark.png in Resources */ = {isa = PBXBuildFile; fileRef = F13B52AE2753D71100EA976B /* Flag_of_Denmark.png */; };
+		F13C1CA6279334DA004EF536 /* Capture d’écran 2018-11-03 à 14.41.14.png in Resources */ = {isa = PBXBuildFile; fileRef = F14B477D276510E9000655C4 /* Capture d’écran 2018-11-03 à 14.41.14.png */; };
 		F14B477E276510E9000655C4 /* Capture d’écran 2018-11-03 à 14.41.14.png in Resources */ = {isa = PBXBuildFile; fileRef = F14B477D276510E9000655C4 /* Capture d’écran 2018-11-03 à 14.41.14.png */; };
 		F14B477F276510E9000655C4 /* Capture d’écran 2018-11-03 à 14.41.14.png in Resources */ = {isa = PBXBuildFile; fileRef = F14B477D276510E9000655C4 /* Capture d’écran 2018-11-03 à 14.41.14.png */; };
 		F16F63132763C92C008E459E /* Saison.swift in Sources */ = {isa = PBXBuildFile; fileRef = F16F63102763C92C008E459E /* Saison.swift */; };
@@ -918,6 +919,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F1D77730270A0D8000394176 /* Assets.xcassets in Resources */,
+				F13C1CA6279334DA004EF536 /* Capture d’écran 2018-11-03 à 14.41.14.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

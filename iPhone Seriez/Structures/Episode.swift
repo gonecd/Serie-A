@@ -19,6 +19,7 @@ public class Episode : NSObject, NSCoding {
     public var ratersTVdb : Int = 0
     public var idTVdb : Int = 0
     public var idIMdb : String = ""
+    public var idBetaSeries : Int = 0
     public var date : Date = Date.init(timeIntervalSince1970: 0)
     public var titre : String = String()
     public var resume : String = String()
@@ -66,6 +67,7 @@ public class Episode : NSObject, NSCoding {
         self.ratingTVdb = decoder.decodeInteger(forKey: "ratingTVdb")
         self.idTVdb = decoder.decodeInteger(forKey: "idTVdb")
         self.idIMdb = decoder.decodeObject(forKey: "idIMdb") as? String ?? ""
+        self.idBetaSeries = decoder.decodeInteger(forKey: "idBetaSeries")
         self.date = (decoder.decodeObject(forKey: "date") ?? Date.init(timeIntervalSince1970: 0)) as! Date
         self.titre = decoder.decodeObject(forKey: "titre") as? String ?? ""
         self.resume = decoder.decodeObject(forKey: "resume") as? String ?? ""
@@ -93,6 +95,7 @@ public class Episode : NSObject, NSCoding {
         coder.encode(self.ratingTVdb, forKey: "ratingTVdb")
         coder.encodeCInt(Int32(self.idTVdb), forKey: "idTVdb")
         coder.encode(self.idIMdb, forKey: "idIMdb")
+        coder.encodeCInt(Int32(self.idBetaSeries), forKey: "idBetaSeries")
         coder.encode(self.date, forKey: "date")
         coder.encode(self.titre, forKey: "titre")
         coder.encode(self.resume, forKey: "resume")
@@ -163,6 +166,7 @@ public class Episode : NSObject, NSCoding {
         if (unEpisode.ratersTVdb != 0)         { self.ratersTVdb = unEpisode.ratersTVdb }
         if (unEpisode.idTVdb != 0)             { self.idTVdb = unEpisode.idTVdb }
         if (unEpisode.idIMdb != "")            { self.idIMdb = unEpisode.idIMdb }
+        if (unEpisode.idBetaSeries != 0)       { self.idBetaSeries = unEpisode.idBetaSeries }
         if (unEpisode.date != Date.init(timeIntervalSince1970: 0))       { self.date = unEpisode.date }
         if (unEpisode.titre != "")             { self.serie = unEpisode.titre }
         if (unEpisode.resume != "")            { self.serie = unEpisode.resume }
