@@ -113,6 +113,9 @@ class Trakt : NSObject {
     
     
     func webAutenth() {
+        
+        revokeToken()
+        
         let path : String = "https://trakt.tv/oauth/authorize?response_type=code&client_id=\(TraktClientID)&redirect_uri=UneSerie://Trakt"
         let url : URL = URL(string: path.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)!
         UIApplication.shared.open(url)
@@ -192,6 +195,33 @@ class Trakt : NSObject {
     }
 
     
+    func revokeToken () {
+        let url = URL(string: "https://api.trakt.tv/oauth/revoke")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = "{\n  \"token\": \"\(Token)\",\n  \"client_id\": \"\(self.TraktClientID)\",\n  \"client_secret\": \"\(self.TraktClientSecret)\"\n}".data(using: String.Encoding.utf8);
+        
+        let session = URLSession.shared
+        let task = session.dataTask(with: request, completionHandler: { data, response, error in
+            if let data = data, let response = response as? HTTPURLResponse {
+                if (response.statusCode != 200) {
+                    print("Trakt::revokeToken error \(response.statusCode) received ")
+                    return
+                }
+                else {
+                    print("Trakt::revokeToken success \(response.statusCode) received ")
+                }
+                
+            } else {
+                print("Trakt::revokeToken failed: \(error!.localizedDescription)")
+            }
+        })
+        task.resume()
+        while (task.state != URLSessionTask.State.completed) { sleep(1) }
+    }
+
+
     func getIDs(serie: Serie) -> Bool {
         var request : String = ""
         var found : Bool = false
@@ -271,10 +301,14 @@ class Trakt : NSObject {
     }
     
     
-    func addToHistory(tvdbID : Int, imdbID : String) -> Bool {
+    func addToHistory(traktID: Int, tvdbID : Int, imdbID : String) -> Bool {
         var result : Bool = false
         
-        if (imdbID != "") {
+        if ( (result == false) &&  (traktID != 0) ) {
+            result = postAPI(reqAPI: "https://api.trakt.tv/sync/history", body: "{ \"episodes\": [ { \"ids\": { \"trakt\": \"\(traktID)\" } } ]}")
+        }
+        
+        if ( (result == false) &&  (imdbID != "") ) {
             result = postAPI(reqAPI: "https://api.trakt.tv/sync/history", body: "{ \"episodes\": [ { \"ids\": { \"imdb\": \"\(imdbID)\" } } ]}")
         }
         
@@ -297,12 +331,12 @@ class Trakt : NSObject {
     
     
     func addToAbandon(theTVdbId : String) -> Bool {
-        return postAPI(reqAPI: "https://api.trakt.tv/users/gonecd/lists/Abandon/items", body: "{ \"shows\": [ { \"ids\": { \"tvdb\": \(theTVdbId) } } ]}")
+        return postAPI(reqAPI: "https://api.trakt.tv/users/me/lists/Abandon/items", body: "{ \"shows\": [ { \"ids\": { \"tvdb\": \(theTVdbId) } } ]}")
     }
     
     
     func removeFromAbandon(theTVdbId : String) -> Bool {
-        return  postAPI(reqAPI: "https://api.trakt.tv/users/gonecd/lists/Abandon/items/remove", body: "{ \"shows\": [ { \"ids\": { \"tvdb\": \(theTVdbId) } } ]}")
+        return  postAPI(reqAPI: "https://api.trakt.tv/users/me/lists/Abandon/items/remove", body: "{ \"shows\": [ { \"ids\": { \"tvdb\": \(theTVdbId) } } ]}")
     }
     
     
@@ -310,7 +344,7 @@ class Trakt : NSObject {
         var returnSeries: [Serie] = [Serie]()
         var serie: Serie = Serie(serie: "")
         
-        let reqResult : NSArray = loadAPI(reqAPI: "https://api.trakt.tv/users/gonecd/watchlist/shows") as! NSArray
+        let reqResult : NSArray = loadAPI(reqAPI: "https://api.trakt.tv/users/me/watchlist/shows") as! NSArray
         
         for fiche in reqResult {
             serie = Serie.init(serie: ((fiche as AnyObject).object(forKey: "show")! as AnyObject).object(forKey: "title") as! String)
@@ -356,7 +390,7 @@ class Trakt : NSObject {
         var returnSeries: [Serie] = [Serie]()
         var serie: Serie = Serie(serie: "")
 
-        let reqResult : NSArray = loadAPI(reqAPI: "https://api.trakt.tv/users/gonecd/lists/Abandon/items/shows") as! NSArray
+        let reqResult : NSArray = loadAPI(reqAPI: "https://api.trakt.tv/users/me/lists/Abandon/items/shows") as? NSArray ?? NSArray()
         
         for fiche in reqResult {
             serie = Serie.init(serie: ((fiche as AnyObject).object(forKey: "show")! as AnyObject).object(forKey: "title") as! String)
@@ -377,7 +411,7 @@ class Trakt : NSObject {
         var returnSeries: [Serie] = [Serie]()
         var serie: Serie = Serie(serie: "")
 
-        let reqResult : NSArray = loadAPI(reqAPI: "https://api.trakt.tv/sync/watched/shows") as! NSArray
+        let reqResult : NSArray = loadAPI(reqAPI: "https://api.trakt.tv/sync/watched/shows") as? NSArray ?? NSArray()
         
         for fiche in reqResult {
             serie = Serie.init(serie: ((fiche as AnyObject).object(forKey: "show")! as AnyObject).object(forKey: "title") as! String)
@@ -481,6 +515,7 @@ class Trakt : NSObject {
                             ficheEpisode.titre = (unEpisode as! NSDictionary).object(forKey: "title")! as? String ?? ""
                             ficheEpisode.idIMdb = ((unEpisode as! NSDictionary).object(forKey: "ids")! as AnyObject).object(forKey: "imdb") as? String ?? ""
                             ficheEpisode.idTVdb = ((unEpisode as! NSDictionary).object(forKey: "ids")! as AnyObject).object(forKey: "tvdb") as? Int ?? 0
+                            ficheEpisode.idTrakt = ((unEpisode as! NSDictionary).object(forKey: "ids")! as AnyObject).object(forKey: "trakt") as? Int ?? 0
                             ficheEpisode.resume = (unEpisode as! NSDictionary).object(forKey: "overview")! as? String ?? ""
 
                             let stringDate : String = (unEpisode as! NSDictionary).object(forKey: "first_aired")! as? String ?? ""

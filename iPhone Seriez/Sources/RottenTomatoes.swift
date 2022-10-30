@@ -26,7 +26,8 @@ class RottenTomatoes {
         var request : URLRequest = URLRequest(url: URL(string: reqAPI)!)
         request.httpMethod = "GET"
         request.addValue("application/json", forHTTPHeaderField: "Accept")
-        
+        request.addValue("keep-alive", forHTTPHeaderField: "Connection")
+
         let task = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
             if let data = data, let response = response as? HTTPURLResponse {
                 do {
@@ -34,7 +35,7 @@ class RottenTomatoes {
                     result = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSObject
                     ended = true
                     
-                } catch let error as NSError { print("RottenTomatoes::failed \(error.localizedDescription) for req=\(reqAPI)"); ended = true; }
+                } catch let error as NSError { print("RottenTomatoes::failed \(error.localizedDescription) for req=\(reqAPI) - error \(response.statusCode)"); ended = true; }
             } else { print(error as Any); ended = true; }
         })
         
@@ -83,7 +84,6 @@ class RottenTomatoes {
                 return uneSerie
             }
         }
-
         return uneSerie
     }
 

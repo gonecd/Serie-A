@@ -342,7 +342,7 @@ class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
             for i in 0..<dataTVMaze.count { if (uneSerieTrakt.idIMdb == dataTVMaze[i].idIMdb) { uneSerieTVMaze = dataTVMaze[i]; source.TVMaze = true; break; } }
             
             uneSerie.cleverMerge(TVdb: emptySerie, Moviedb: uneSerieMovieDB, Trakt: uneSerieTrakt, BetaSeries: uneSerieBetaSeries,
-                                 IMDB: uneSerieIMDB, RottenTomatoes: emptySerie, TVmaze: uneSerieTVMaze, MetaCritic: emptySerie, AlloCine: emptySerie)
+                                 IMDB: uneSerieIMDB, RottenTomatoes: emptySerie, TVmaze: uneSerieTVMaze, MetaCritic: emptySerie, YAQCS: emptySerie)
             
             traitees.append(uneSerie.serie)
             result.append(uneSerie)
@@ -366,7 +366,7 @@ class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
             for i in 0..<dataTVMaze.count { if (uneSerieBetaSeries.idIMdb == dataTVMaze[i].idIMdb) { uneSerieTVMaze = dataTVMaze[i]; source.TVMaze = true; break; } }
             
             uneSerie.cleverMerge(TVdb: emptySerie, Moviedb: uneSerieMovieDB, Trakt: emptySerie, BetaSeries: uneSerieBetaSeries,
-                                 IMDB: uneSerieIMDB, RottenTomatoes: emptySerie, TVmaze: uneSerieTVMaze, MetaCritic: emptySerie, AlloCine: emptySerie)
+                                 IMDB: uneSerieIMDB, RottenTomatoes: emptySerie, TVmaze: uneSerieTVMaze, MetaCritic: emptySerie, YAQCS: emptySerie)
             
             traitees.append(uneSerie.serie)
             result.append(uneSerie)
@@ -388,7 +388,7 @@ class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
             for i in 0..<dataTheMovieDB.count { if (uneSerieTVMaze.serie == dataTheMovieDB[i].serie) { uneSerieMovieDB = dataTheMovieDB[i]; source.MovieDB = true; break; } }
             
             uneSerie.cleverMerge(TVdb: emptySerie, Moviedb: uneSerieMovieDB, Trakt: emptySerie, BetaSeries: emptySerie,
-                                 IMDB: uneSerieIMDB, RottenTomatoes: emptySerie, TVmaze: uneSerieTVMaze, MetaCritic: emptySerie, AlloCine: emptySerie)
+                                 IMDB: uneSerieIMDB, RottenTomatoes: emptySerie, TVmaze: uneSerieTVMaze, MetaCritic: emptySerie, YAQCS: emptySerie)
             
             traitees.append(uneSerie.serie)
             result.append(uneSerie)

@@ -17,6 +17,7 @@ class GraphMiniSerie: UIView {
     var noteMoviedb : Int = 0
     var noteMetaCritic : Int = 0
     var noteAlloCine : Int = 0
+    var noteSensCritique : Int = 0
 
     var nbNotes : Int = 0
     
@@ -71,7 +72,7 @@ class GraphMiniSerie: UIView {
         grapheType = type
     }
     
-    func sendNotes(rateTrakt : Int, rateBetaSeries : Int, rateMoviedb : Int, rateIMdb : Int, rateTVmaze : Int, rateRottenTomatoes : Int, rateMetaCritic : Int, rateAlloCine : Int) {
+    func sendNotes(rateTrakt : Int, rateBetaSeries : Int, rateMoviedb : Int, rateIMdb : Int, rateTVmaze : Int, rateRottenTomatoes : Int, rateMetaCritic : Int, rateAlloCine : Int, rateSensCritique : Int) {
         nbNotes = 0
         
         if (rateTrakt > 0) { nbNotes = nbNotes + 1 }
@@ -82,6 +83,7 @@ class GraphMiniSerie: UIView {
         if (rateMoviedb > 0) { nbNotes = nbNotes + 1 }
         if (rateMetaCritic > 0) { nbNotes = nbNotes + 1 }
         if (rateAlloCine > 0) { nbNotes = nbNotes + 1 }
+        if (rateSensCritique > 0) { nbNotes = nbNotes + 1 }
         if (nbNotes == 0) { nbNotes = 1 }
 
         noteTrakt = rateTrakt
@@ -92,6 +94,7 @@ class GraphMiniSerie: UIView {
         noteMoviedb = rateMoviedb
         noteMetaCritic = rateMetaCritic
         noteAlloCine = rateAlloCine
+        noteSensCritique = rateSensCritique
     }
     
     func backgroundCercles() {
@@ -193,6 +196,10 @@ class GraphMiniSerie: UIView {
             offset = offset + 1
             traceUneBarre(noteAlloCine, color: colorAlloCine, offset: offset)
         }
+        if (noteSensCritique > 0) {
+            offset = offset + 1
+            traceUneBarre(noteSensCritique, color: colorSensCritique, offset: offset)
+        }
     }
     
     
@@ -255,6 +262,10 @@ class GraphMiniSerie: UIView {
         if (noteAlloCine > 0) {
             offset = offset + 1
             traceUnCercle(noteAlloCine, color: colorAlloCine, offset: offset)
+        }
+        if (noteSensCritique > 0) {
+            offset = offset + 1
+            traceUnCercle(noteSensCritique, color: colorSensCritique, offset: offset)
         }
     }
     
@@ -395,7 +406,11 @@ class GraphMiniSerie: UIView {
             notes.append(CGFloat(noteAlloCine))
             logos.append(#imageLiteral(resourceName: "allocine.ico"))
         }
-        
+        if (noteSensCritique > 0) {
+            notes.append(CGFloat(noteSensCritique))
+            logos.append(#imageLiteral(resourceName: "senscritique.png"))
+        }
+
         UIColor.systemBlue.setStroke()
         UIColor.systemBlue.withAlphaComponent(0.4).setFill()
         let path2 : UIBezierPath = UIBezierPath()
@@ -404,10 +419,11 @@ class GraphMiniSerie: UIView {
         path2.move(to: CGPoint(x: centreX + spiderRayon*notes[0] / 100, y:centreY))
         logos[0].draw(in: CGRect(x: centreX - 5.0 + rayon, y: centreY - 5.0, width: spiderLogoSize, height: spiderLogoSize))
 
-        for i in 1...nbNotes-1 {
-            path2.addLine(to: CGPoint(x: centreX + spiderRayon*notes[i]*cos(2 * .pi * CGFloat(i) / nbSource) / 100, y:centreY + spiderRayon*notes[i]*sin(2 * .pi * CGFloat(i) / nbSource) / 100))
-            logos[i].draw(in: CGRect(x: centreX - 5.0 + rayon*cos(2 * .pi * CGFloat(i) / nbSource), y: centreY - 5.0 + rayon*sin(2 * .pi * CGFloat(i) / nbSource), width: spiderLogoSize, height: spiderLogoSize))
-
+        if (nbNotes > 1) {
+            for i in 1...nbNotes-1 {
+                path2.addLine(to: CGPoint(x: centreX + spiderRayon*notes[i]*cos(2 * .pi * CGFloat(i) / nbSource) / 100, y:centreY + spiderRayon*notes[i]*sin(2 * .pi * CGFloat(i) / nbSource) / 100))
+                logos[i].draw(in: CGRect(x: centreX - 5.0 + rayon*cos(2 * .pi * CGFloat(i) / nbSource), y: centreY - 5.0 + rayon*sin(2 * .pi * CGFloat(i) / nbSource), width: spiderLogoSize, height: spiderLogoSize))
+            }
         }
         
         path2.addLine(to: CGPoint(x: centreX + spiderRayon*notes[0] / 100, y:centreY))

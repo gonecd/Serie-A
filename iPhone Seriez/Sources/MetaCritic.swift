@@ -43,7 +43,6 @@ class MetaCritic {
         return uneSerie
     }
     
-    
     func getEpisodesRatings(_ uneSerie: Serie) {
         let startChrono : Date = Date()
         let webPage : String = getPath(serie: uneSerie.serie).addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
@@ -58,7 +57,6 @@ class MetaCritic {
                 for oneNote in allNotes {
                     let rate : String = try oneNote.select("div").text()
                     let note = Int(10.0 * (Double(rate) ?? 0.0))
-                    //let note = Int(10.0 * (Double(rate.components(separatedBy: CharacterSet.decimalDigits.inverted).first!) ?? 0.0))
                     let episodeString : String = try oneNote.select("a").text()
                     var episode : Int = 0
                     if (episodeString.components(separatedBy: ":E").count > 1) {

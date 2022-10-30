@@ -95,44 +95,44 @@ class BetaSeries : NSObject {
         }
     }
     
-    func getEpisodesRatingsBis(_ uneSerie: Serie) {
-        let today : Date = Date()
-        var listeEpisodes: String = ""
-        
-        // Création de la liste de tous les épisodes
-        for saison in uneSerie.saisons {
-            for episode in saison.episodes {
-                if (episode.idTVdb != 0) {
-                    if (listeEpisodes != "") { listeEpisodes = listeEpisodes+"," }
-                    listeEpisodes = listeEpisodes+String(episode.idTVdb)
-                }
-            }
-        }
-        
-        if (listeEpisodes == "") {
-            print("BetaSeries::getEpisodesRatingsBis - No episode ID to load for \(uneSerie.serie)")
-            return
-        }
-        
-        let reqResult : NSDictionary = loadAPI(reqAPI: "https://api.betaseries.com/episodes/display?thetvdb_id=\(listeEpisodes)") as? NSDictionary ?? NSDictionary()
-        
-        if (reqResult.object(forKey: "episodes") != nil) {
-            for unEpisode in reqResult.object(forKey: "episodes")! as! NSArray {
-                let numSaison: Int = ((unEpisode as AnyObject).object(forKey: "season")! as! Int)-1
-                let numEpisode: Int = ((unEpisode as AnyObject).object(forKey: "episode")! as! Int)-1
-                
-                if (numSaison < uneSerie.saisons.count) {
-                    if (numEpisode < uneSerie.saisons[numSaison].episodes.count) {
-                        if (uneSerie.saisons[numSaison].episodes[numEpisode].date.compare(today) == .orderedAscending) {
-                            uneSerie.saisons[numSaison].episodes[numEpisode].ratingBetaSeries = Int(20 * (((unEpisode as AnyObject).object(forKey: "note")! as AnyObject).object(forKey: "mean") as? Double ?? 0.0))
-                            uneSerie.saisons[numSaison].episodes[numEpisode].ratersBetaSeries = ((unEpisode as AnyObject).object(forKey: "note")! as AnyObject).object(forKey: "total") as? Int ?? 0
-                        }
-                        
-                    }
-                }
-            }
-        }
-    }
+//    func getEpisodesRatingsBis(_ uneSerie: Serie) {
+//        let today : Date = Date()
+//        var listeEpisodes: String = ""
+//
+//        // Création de la liste de tous les épisodes
+//        for saison in uneSerie.saisons {
+//            for episode in saison.episodes {
+//                if (episode.idTVdb != 0) {
+//                    if (listeEpisodes != "") { listeEpisodes = listeEpisodes+"," }
+//                    listeEpisodes = listeEpisodes+String(episode.idTVdb)
+//                }
+//            }
+//        }
+//
+//        if (listeEpisodes == "") {
+//            print("BetaSeries::getEpisodesRatingsBis - No episode ID to load for \(uneSerie.serie)")
+//            return
+//        }
+//
+//        let reqResult : NSDictionary = loadAPI(reqAPI: "https://api.betaseries.com/episodes/display?thetvdb_id=\(listeEpisodes)") as? NSDictionary ?? NSDictionary()
+//
+//        if (reqResult.object(forKey: "episodes") != nil) {
+//            for unEpisode in reqResult.object(forKey: "episodes")! as! NSArray {
+//                let numSaison: Int = ((unEpisode as AnyObject).object(forKey: "season")! as! Int)-1
+//                let numEpisode: Int = ((unEpisode as AnyObject).object(forKey: "episode")! as! Int)-1
+//
+//                if (numSaison < uneSerie.saisons.count) {
+//                    if (numEpisode < uneSerie.saisons[numSaison].episodes.count) {
+//                        if (uneSerie.saisons[numSaison].episodes[numEpisode].date.compare(today) == .orderedAscending) {
+//                            uneSerie.saisons[numSaison].episodes[numEpisode].ratingBetaSeries = Int(20 * (((unEpisode as AnyObject).object(forKey: "note")! as AnyObject).object(forKey: "mean") as? Double ?? 0.0))
+//                            uneSerie.saisons[numSaison].episodes[numEpisode].ratersBetaSeries = ((unEpisode as AnyObject).object(forKey: "note")! as AnyObject).object(forKey: "total") as? Int ?? 0
+//                        }
+//
+//                    }
+//                }
+//            }
+//        }
+//    }
     
     
     func getSerieGlobalInfos(idTVDB : String, idIMDB : String, idBetaSeries : String) -> Serie {

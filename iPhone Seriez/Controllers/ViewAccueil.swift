@@ -275,8 +275,15 @@ class ViewAccueil: UIViewController  {
         
         
         
+//        let uneSerie : Serie = Serie(serie: "Stranger Things")
+//        db.downloadGlobalInfo(serie: uneSerie)
+        
+        //yaqcs.getAllInfos(title: "Stranger Things", idIMDB: "", idAlloCine: "", idSensCritique: "")
+        
         // Liste des genres dans TheMovieDB
         //theMoviedb.getGenres()
+        
+//        db.checkSeasonDates()
         
         db.quickRefresh()
         db.finaliseDB()
@@ -293,4 +300,3 @@ class ViewAccueil: UIViewController  {
     }
         
 }
-

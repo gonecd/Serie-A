@@ -96,7 +96,8 @@ class TVmaze {
                     
                     if ( (numSais > 0) && (numSais < uneSerie.saisons.count+1) ) {
                         if ( (numEps > 0) && (numEps < uneSerie.saisons[numSais-1].episodes.count+1) ) {
-                            if (try! oneEpisode.select("div [class='dropdown-pane small']").text() != "(waiting for more votes)") {
+                            if (try! oneEpisode.select("div [class='dropdown-pane small']").text().components(separatedBy: " ").count > 1) {
+//                                if ( (try! oneEpisode.select("div [class='dropdown-pane small']").text() != "(waiting for more votes)") && (try! oneEpisode.select("div [class='dropdown-pane small']").text() != "") ) {
                                 uneSerie.saisons[numSais-1].episodes[numEps-1].ratingTVMaze = Int(10.0*(Double(try! oneEpisode.select("div [class='dropdown-pane small']").text().components(separatedBy: " ")[0]) ?? 0.0))
                                 uneSerie.saisons[numSais-1].episodes[numEps-1].ratersTVMaze  = Int(try! oneEpisode.select("div [class='dropdown-pane small']").text().components(separatedBy: " ")[1].replacingOccurrences(of: "(", with: "")) ?? 0
                             }

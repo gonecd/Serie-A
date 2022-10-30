@@ -19,8 +19,7 @@ public class Saison : NSObject, NSCoding
     public var nbWatchedEps : Int = 0
     public var starts : Date = ZeroDate
     public var ends : Date = ZeroDate
-    
-    
+
     public init(serie:String, saison:Int)
     {
         self.serie = serie

@@ -28,6 +28,10 @@ var rottenTomatoes : RottenTomatoes = RottenTomatoes.init()
 var metaCritic     : MetaCritic     = MetaCritic.init()
 var alloCine       : AlloCine       = AlloCine.init()
 var justWatch      : JustWatch      = JustWatch.init()
+var sensCritique   : SensCritique   = SensCritique.init()
+var yaqcs          : YaQuoiCommeSerie = YaQuoiCommeSerie()
+
+
 
 var db : Database   = Database.init()
 
@@ -58,6 +62,7 @@ let colorTVmaze         : UIColor = .systemTeal
 let colorRottenTomatoes : UIColor = .systemPurple
 let colorMetaCritic     : UIColor = .systemIndigo
 let colorAlloCine       : UIColor = .systemYellow
+let colorSensCritique   : UIColor = .systemGray2
 
 let colorAxis       : UIColor = UIColor.systemGray2
 
@@ -80,22 +85,24 @@ let modeParRate     : Int = 6
 
 
 // Corrections statistiques pour les séries
-var moyenneIMDB         : Int       = 80
-var ecartTypeIMDB       : Double    = 6.511
-var moyenneTrakt        : Int       = 80
-var ecartTypeTrakt      : Double    = 6.174
-var moyenneMovieDB      : Int       = 76
-var ecartTypeMovieDB    : Double    = 6.742
-var moyenneBetaSeries   : Int       = 84
-var ecartTypeBetaSeries : Double    = 7.937
-var moyenneTVmaze       : Int       = 80
-var ecartTypeTVmaze     : Double    = 6.206
-var moyenneRottenTomatoes   : Int       = 84
-var ecartTypeRottenTomatoes : Double    = 12.699
-var moyenneMetaCritic   : Int       = 75
-var ecartTypeMetaCritic : Double    = 8.158
-var moyenneAlloCine     : Int       = 79
-var ecartTypeAlloCine   : Double    = 8.731
+var moyenneIMDB             : Int       = 80
+var ecartTypeIMDB           : Double    = 6.743
+var moyenneTrakt            : Int       = 80
+var ecartTypeTrakt          : Double    = 6.005
+var moyenneMovieDB          : Int       = 77
+var ecartTypeMovieDB        : Double    = 5.981
+var moyenneBetaSeries       : Int       = 83
+var ecartTypeBetaSeries     : Double    = 7.627
+var moyenneTVmaze           : Int       = 79
+var ecartTypeTVmaze         : Double    = 6.285
+var moyenneRottenTomatoes   : Int       = 85
+var ecartTypeRottenTomatoes : Double    = 12.284
+var moyenneMetaCritic       : Int       = 74
+var ecartTypeMetaCritic     : Double    = 8.127
+var moyenneAlloCine         : Int       = 79
+var ecartTypeAlloCine       : Double    = 8.516
+var moyenneSensCritique     : Int       = 69
+var ecartTypeSensCritique   : Double    = 8.370
 
 
 // Corrections statistiques pour les épisodes NEW ONES

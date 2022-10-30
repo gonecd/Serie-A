@@ -17,9 +17,11 @@ public class Episode : NSObject, NSCoding {
     // Source TheTVdb
     public var ratingTVdb : Int = 0
     public var ratersTVdb : Int = 0
+    
     public var idTVdb : Int = 0
     public var idIMdb : String = ""
     public var idBetaSeries : Int = 0
+    public var idTrakt : Int = 0
     public var date : Date = Date.init(timeIntervalSince1970: 0)
     public var titre : String = String()
     public var resume : String = String()
@@ -52,7 +54,10 @@ public class Episode : NSObject, NSCoding {
     public var ratingMetaCritic : Int = 0
     public var ratersMetaCritic : Int = 0
     
+    // Source SensCritique
+    public var ratingSensCritique : Int = 0
     
+
     
     public required init(serie:String, fichier:String, saison:Int, episode:Int) {
         self.serie = serie
@@ -68,6 +73,7 @@ public class Episode : NSObject, NSCoding {
         self.idTVdb = decoder.decodeInteger(forKey: "idTVdb")
         self.idIMdb = decoder.decodeObject(forKey: "idIMdb") as? String ?? ""
         self.idBetaSeries = decoder.decodeInteger(forKey: "idBetaSeries")
+        self.idTrakt = decoder.decodeInteger(forKey: "idTrakt")
         self.date = (decoder.decodeObject(forKey: "date") ?? Date.init(timeIntervalSince1970: 0)) as! Date
         self.titre = decoder.decodeObject(forKey: "titre") as? String ?? ""
         self.resume = decoder.decodeObject(forKey: "resume") as? String ?? ""
@@ -86,6 +92,7 @@ public class Episode : NSObject, NSCoding {
         self.ratersRottenTomatoes = decoder.decodeInteger(forKey: "ratersRottenTomatoes")
         self.ratingMetaCritic = decoder.decodeInteger(forKey: "ratingMetaCritic")
         self.ratersMetaCritic = decoder.decodeInteger(forKey: "ratersMetaCritic")
+        self.ratingSensCritique = decoder.decodeInteger(forKey: "ratingSensCritique")
     }
     
     public func encode(with coder: NSCoder) {
@@ -96,6 +103,7 @@ public class Episode : NSObject, NSCoding {
         coder.encodeCInt(Int32(self.idTVdb), forKey: "idTVdb")
         coder.encode(self.idIMdb, forKey: "idIMdb")
         coder.encodeCInt(Int32(self.idBetaSeries), forKey: "idBetaSeries")
+        coder.encodeCInt(Int32(self.idTrakt), forKey: "idTrakt")
         coder.encode(self.date, forKey: "date")
         coder.encode(self.titre, forKey: "titre")
         coder.encode(self.resume, forKey: "resume")
@@ -114,6 +122,7 @@ public class Episode : NSObject, NSCoding {
         coder.encodeCInt(Int32(self.ratersRottenTomatoes), forKey: "ratersRottenTomatoes")
         coder.encode(self.ratingMetaCritic, forKey: "ratingMetaCritic")
         coder.encodeCInt(Int32(self.ratersMetaCritic), forKey: "ratersMetaCritic")
+        coder.encodeCInt(Int32(self.ratingSensCritique), forKey: "ratingSensCritique")
     }
     
     init(fichier:String) {
@@ -167,6 +176,7 @@ public class Episode : NSObject, NSCoding {
         if (unEpisode.idTVdb != 0)             { self.idTVdb = unEpisode.idTVdb }
         if (unEpisode.idIMdb != "")            { self.idIMdb = unEpisode.idIMdb }
         if (unEpisode.idBetaSeries != 0)       { self.idBetaSeries = unEpisode.idBetaSeries }
+        if (unEpisode.idTrakt != 0)            { self.idTrakt = unEpisode.idTrakt }
         if (unEpisode.date != Date.init(timeIntervalSince1970: 0))       { self.date = unEpisode.date }
         if (unEpisode.titre != "")             { self.serie = unEpisode.titre }
         if (unEpisode.resume != "")            { self.serie = unEpisode.resume }
@@ -184,5 +194,6 @@ public class Episode : NSObject, NSCoding {
         if (unEpisode.ratersRottenTomatoes != 0)       { self.ratersRottenTomatoes = unEpisode.ratersRottenTomatoes }
         if (unEpisode.ratingMetaCritic != 0)   { self.ratingMetaCritic = unEpisode.ratingMetaCritic }
         if (unEpisode.ratersMetaCritic != 0)   { self.ratersMetaCritic = unEpisode.ratersMetaCritic }
+        if (unEpisode.ratingSensCritique != 0) { self.ratingSensCritique = unEpisode.ratingSensCritique }
     }
 }

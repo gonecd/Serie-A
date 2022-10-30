@@ -21,6 +21,7 @@ public class Serie : NSObject, NSCoding {
     public var idTVmaze : String = String()
     public var idAlloCine : String = String()
     public var idBetaSeries : String = String()
+    public var idSensCritique : String = String()
 
     
     public var unfollowed : Bool = false
@@ -48,6 +49,7 @@ public class Serie : NSObject, NSCoding {
     public var ratingRottenTomatoes : Int = 0
     public var ratingMetaCritic : Int = 0
     public var ratingAlloCine : Int = 0
+    public var ratingSensCritique : Int = 0
 
     public var myRating : Int = 0
 
@@ -89,6 +91,7 @@ public class Serie : NSObject, NSCoding {
         self.idTVmaze = decoder.decodeObject(forKey: "idTVmaze") as? String ?? ""
         self.idAlloCine = decoder.decodeObject(forKey: "idAlloCine") as? String ?? ""
         self.idBetaSeries = decoder.decodeObject(forKey: "idBetaSeries") as? String ?? ""
+        self.idSensCritique = decoder.decodeObject(forKey: "idSensCritique") as? String ?? ""
 
         self.unfollowed = decoder.decodeBool(forKey: "unfollowed")
         self.watchlist = decoder.decodeBool(forKey: "watchlist")
@@ -114,6 +117,7 @@ public class Serie : NSObject, NSCoding {
         self.ratingRottenTomatoes = decoder.decodeInteger(forKey: "ratingRottenTomatoes")
         self.ratingMetaCritic = decoder.decodeInteger(forKey: "ratingMetaCritic")
         self.ratingAlloCine = decoder.decodeInteger(forKey: "ratingAlloCine")
+        self.ratingSensCritique = decoder.decodeInteger(forKey: "ratingSensCritique")
 
         self.myRating = decoder.decodeInteger(forKey: "myRating")
 
@@ -136,6 +140,7 @@ public class Serie : NSObject, NSCoding {
         coder.encode(self.idTVmaze, forKey: "idTVmaze")
         coder.encode(self.idAlloCine, forKey: "idAlloCine")
         coder.encode(self.idBetaSeries, forKey: "idBetaSeries")
+        coder.encode(self.idSensCritique, forKey: "idSensCritique")
 
         coder.encode(self.unfollowed, forKey: "unfollowed")
         coder.encode(self.watchlist, forKey: "watchlist")
@@ -161,6 +166,7 @@ public class Serie : NSObject, NSCoding {
         coder.encodeCInt(Int32(self.ratingRottenTomatoes), forKey: "ratingRottenTomatoes")
         coder.encodeCInt(Int32(self.ratingMetaCritic), forKey: "ratingMetaCritic")
         coder.encodeCInt(Int32(self.ratingAlloCine), forKey: "ratingAlloCine")
+        coder.encodeCInt(Int32(self.ratingSensCritique), forKey: "ratingSensCritique")
 
         coder.encodeCInt(Int32(self.myRating), forKey: "myRating")
 
@@ -187,6 +193,7 @@ public class Serie : NSObject, NSCoding {
         if (uneSerie.idTVmaze != "")        { self.idTVmaze = uneSerie.idTVmaze }
         if (uneSerie.idAlloCine != "")      { self.idAlloCine = uneSerie.idAlloCine }
         if (uneSerie.idBetaSeries != "")    { self.idBetaSeries = uneSerie.idBetaSeries }
+        if (uneSerie.idSensCritique != "")  { self.idSensCritique = uneSerie.idSensCritique }
         if (uneSerie.unfollowed != false)   { self.unfollowed = uneSerie.unfollowed }
         if (uneSerie.watchlist != false)    { self.watchlist = uneSerie.watchlist }
         
@@ -204,6 +211,7 @@ public class Serie : NSObject, NSCoding {
         if (uneSerie.ratingRottenTomatoes != 0)      { self.ratingRottenTomatoes = uneSerie.ratingRottenTomatoes }
         if (uneSerie.ratingMetaCritic != 0) { self.ratingMetaCritic = uneSerie.ratingMetaCritic }
         if (uneSerie.ratingAlloCine != 0)   { self.ratingAlloCine = uneSerie.ratingAlloCine }
+        if (uneSerie.ratingSensCritique != 0)        { self.ratingSensCritique = uneSerie.ratingSensCritique }
 
         if (uneSerie.myRating != 0)         { self.myRating = uneSerie.myRating }
 
@@ -236,7 +244,8 @@ public class Serie : NSObject, NSCoding {
         if (getFairGlobalRatingRottenTomatoes() != 0)   { nb = nb + 1; total = total + getFairGlobalRatingRottenTomatoes() }
         if (getFairGlobalRatingMetaCritic() != 0)       { nb = nb + 1; total = total + getFairGlobalRatingMetaCritic() }
         if (getFairGlobalRatingAlloCine() != 0)         { nb = nb + 1; total = total + getFairGlobalRatingAlloCine() }
-        
+        if (getFairGlobalRatingSensCritique() != 0)     { nb = nb + 1; total = total + getFairGlobalRatingSensCritique() }
+
         if (nb > 0) {
             return Int(Double(total) / Double(nb))
         } else {
@@ -244,7 +253,7 @@ public class Serie : NSObject, NSCoding {
         }
     }
     
-    public func cleverMerge(TVdb : Serie, Moviedb : Serie, Trakt : Serie, BetaSeries : Serie, IMDB : Serie, RottenTomatoes : Serie, TVmaze : Serie, MetaCritic : Serie, AlloCine : Serie) {
+    public func cleverMerge(TVdb : Serie, Moviedb : Serie, Trakt : Serie, BetaSeries : Serie, IMDB : Serie, RottenTomatoes : Serie, TVmaze : Serie, MetaCritic : Serie, YAQCS: Serie) {
         if (Trakt.serie != "") { self.serie = Trakt.serie }
         else if (Moviedb.serie != "") { self.serie = Moviedb.serie }
         else if (BetaSeries.serie != "") { self.serie = BetaSeries.serie }
@@ -254,12 +263,12 @@ public class Serie : NSObject, NSCoding {
         else if (Moviedb.idIMdb != "") { self.idIMdb = Moviedb.idIMdb }
         else if (BetaSeries.idIMdb != "") { self.idIMdb = BetaSeries.idIMdb }
         else if (TVmaze.idIMdb != "") { self.idIMdb = TVmaze.idIMdb }
+        else if (YAQCS.idIMdb != "") { self.idIMdb = YAQCS.idIMdb }
         else { self.idIMdb = TVdb.idIMdb }
         
         if (Trakt.idTrakt != "") { self.idTrakt = Trakt.idTrakt }
-        if (AlloCine.idAlloCine != "") { self.idAlloCine = AlloCine.idAlloCine }
-
-        if (BetaSeries.idBetaSeries != "") { self.idBetaSeries = BetaSeries.idTrakt }
+        if (YAQCS.idAlloCine != "") { self.idAlloCine = YAQCS.idAlloCine }
+        if (BetaSeries.idBetaSeries != "") { self.idBetaSeries = BetaSeries.idBetaSeries }
 
         if (Trakt.idTVdb != "") { self.idTVdb = Trakt.idTVdb }
         else if (TVdb.idTVdb != "") { self.idTVdb = TVdb.idTVdb }
@@ -271,15 +280,17 @@ public class Serie : NSObject, NSCoding {
         else { self.idMoviedb = Trakt.idMoviedb }
 
         if (TVmaze.idTVmaze != "") { self.idTVmaze = TVmaze.idTVmaze }
+        if (YAQCS.idSensCritique != "") { self.idSensCritique = YAQCS.idSensCritique }
 
         self.ratingTrakt = Trakt.ratingTrakt
-        self.ratingBetaSeries = BetaSeries.ratingBetaSeries
+        if (BetaSeries.ratingBetaSeries != 0) { self.ratingBetaSeries = BetaSeries.ratingBetaSeries } else { self.ratingBetaSeries = YAQCS.ratingBetaSeries }
         self.ratingMovieDB = Moviedb.ratingMovieDB
-        self.ratingIMDB = IMDB.ratingIMDB
+        if (IMDB.ratingIMDB != 0) { self.ratingIMDB = IMDB.ratingIMDB } else { self.ratingIMDB = YAQCS.ratingIMDB }
         self.ratingTVmaze = TVmaze.ratingTVmaze
         self.ratingRottenTomatoes = RottenTomatoes.ratingRottenTomatoes
         self.ratingMetaCritic = MetaCritic.ratingMetaCritic
-        self.ratingAlloCine = AlloCine.ratingAlloCine
+        self.ratingAlloCine = YAQCS.ratingAlloCine
+        self.ratingSensCritique = YAQCS.ratingSensCritique
 
         if (Trakt.country != "") { self.country = Trakt.country }
         else { self.country = Moviedb.country }
@@ -346,7 +357,6 @@ public class Serie : NSObject, NSCoding {
                 self.saisons.append(uneSaison)
             }
         }
-
     }
     
     public func getFairGlobalRatingTrakt() -> Int {
@@ -425,6 +435,16 @@ public class Serie : NSObject, NSCoding {
         if (ratingAlloCine == 0) { return 0 }
 
         if (val < 0) { return 0}
+        else if (val > 100) { return 100 }
+        else { return val }
+    }
+    
+    public func getFairGlobalRatingSensCritique() -> Int {
+        let val : Int =  Int( notesMid + (notesRange * Double(ratingSensCritique - moyenneSensCritique) / ecartTypeSensCritique))
+        
+        if (ratingSensCritique == 0) { return 0 }
+
+        if (val < 0) { return 0 }
         else if (val > 100) { return 100 }
         else { return val }
     }

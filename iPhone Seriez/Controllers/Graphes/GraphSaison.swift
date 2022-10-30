@@ -59,12 +59,6 @@ class GraphSaison: UIView {
             pathLine.stroke()
         }
 
-        // Légende en Y
-//        for i:Int in 0 ..< 5 {
-//            let episode : NSString = String(i*25) as NSString
-//            episode.draw(in: CGRect(x: 8, y: origineY - (hauteur * CGFloat(i)/4) - 7, width: 30, height: 10), withAttributes: textAttributes)
-//        }
-
         // Coches verticales
         for i:Int in 0 ..< nbEpisodes {
             let saison : NSString = String(i+1) as NSString

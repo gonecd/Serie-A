@@ -67,7 +67,6 @@ class TheTVdb : NSObject {
                     do {
                         let jsonToken : NSDictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
                         self.Token = jsonToken.object(forKey: "token") as? String ?? ""
-                        print("Token = \(self.Token)")
                     } catch let error as NSError { print("TheTVdb::getToken failed: \(error.localizedDescription)") }
                 }
                 else { print("TheTVdb::getToken error code \(response.statusCode)") }

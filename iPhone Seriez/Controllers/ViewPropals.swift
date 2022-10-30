@@ -281,7 +281,8 @@ class ViewPropals: UIViewController, UICollectionViewDataSource, UICollectionVie
                              rateTVmaze: displayedSeries[indexPath.row].getFairGlobalRatingTVmaze(),
                              rateRottenTomatoes: displayedSeries[indexPath.row].getFairGlobalRatingRottenTomatoes(),
                              rateMetaCritic: displayedSeries[indexPath.row].getFairGlobalRatingMetaCritic(),
-                             rateAlloCine: displayedSeries[indexPath.row].getFairGlobalRatingAlloCine() )
+                             rateAlloCine: displayedSeries[indexPath.row].getFairGlobalRatingAlloCine(),
+                             rateSensCritique: displayedSeries[indexPath.row].getFairGlobalRatingSensCritique() )
         cell.graph.setType(type: 3)
         cell.graph.setNeedsDisplay()
         

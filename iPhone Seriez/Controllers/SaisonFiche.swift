@@ -23,6 +23,7 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
     var image : UIImage = UIImage()
     var saison : Int = 0
     var durees : [Int] = []
+    var allStreamers : [String] = []
     
     @IBOutlet weak var banniere: UIImageView!
     @IBOutlet weak var graphe: GraphSaison!
@@ -79,14 +80,21 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         arrondir(fenetre: diffuseur3, radius: 4)
         
         // Récupération des diffuseurs en mode streaming
-        let allStreamers : [String] = getStreamers(serie: self.serie.serie, idTVDB: self.serie.idTVdb, idIMDB: self.serie.idIMdb, saison: self.saison)
-        if (allStreamers.count > 0) { self.diffuseur1.image = loadImage(allStreamers[0]) }
-        if (allStreamers.count > 1) { self.diffuseur2.image = loadImage(allStreamers[1]) }
-        if (allStreamers.count > 2) { self.diffuseur3.image = loadImage(allStreamers[2]) }
         
         
         let queue : OperationQueue = OperationQueue()
         
+        let opeStreamers = BlockOperation(block: {
+            self.allStreamers = getStreamers(serie: self.serie.serie, idTVDB: self.serie.idTVdb, idIMDB: self.serie.idIMdb, saison: self.saison)
+
+            OperationQueue.main.addOperation({
+                if (self.allStreamers.count > 0) { self.diffuseur1.image = loadImage(self.allStreamers[0]) }
+                if (self.allStreamers.count > 1) { self.diffuseur2.image = loadImage(self.allStreamers[1]) }
+                if (self.allStreamers.count > 2) { self.diffuseur3.image = loadImage(self.allStreamers[2]) }
+            } )
+        } )
+        queue.addOperation(opeStreamers)
+
         let opeLoadBetaSeries = BlockOperation(block: {
             if (self.serie.idTVdb != "") { betaSeries.getEpisodesRatings(self.serie) }
 
@@ -145,6 +153,11 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         } )
         queue.addOperation(opeLoadMetaCritic)
         
+        let opeLoadSensCritique = BlockOperation(block: {
+            sensCritique.getEpisodesRatings(serie: self.serie)
+        } )
+        queue.addOperation(opeLoadSensCritique)
+        
         let opeFinalise = BlockOperation(block: {
             db.saveDB()
         } )
@@ -154,6 +167,7 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         opeFinalise.addDependency(opeLoadTVmaze)
         opeFinalise.addDependency(opeLoadRottenT)
         opeFinalise.addDependency(opeLoadMetaCritic)
+        opeFinalise.addDependency(opeLoadSensCritique)
         queue.addOperation(opeFinalise)
         
     }

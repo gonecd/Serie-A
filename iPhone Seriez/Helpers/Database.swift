@@ -94,8 +94,8 @@ class Database : NSObject {
         var dataTVmaze      : Serie = Serie(serie: "")
         var dataRotten      : Serie = Serie(serie: "")
         var dataMetaCritic  : Serie = Serie(serie: "")
-        var dataAlloCine    : Serie = Serie(serie: "")
         var dataIMDB        : Serie = Serie(serie: "")
+        var dataYAQCS       : Serie = Serie(serie: "")
 
         queue.addOperation(BlockOperation(block: { dataTVdb = theTVdb.getSerieGlobalInfos(idTVdb: serie.idTVdb) } ) )
         queue.addOperation(BlockOperation(block: { dataBetaSeries = betaSeries.getSerieGlobalInfos(idTVDB : serie.idTVdb, idIMDB : serie.idIMdb, idBetaSeries: serie.idBetaSeries) } ) )
@@ -105,11 +105,11 @@ class Database : NSObject {
         queue.addOperation(BlockOperation(block: { dataTVmaze = tvMaze.getSerieGlobalInfos(idTVDB : serie.idTVdb, idIMDB : serie.idIMdb) } ) )
         queue.addOperation(BlockOperation(block: { dataRotten = rottenTomatoes.getSerieGlobalInfos(serie : serie.serie) } ) )
         queue.addOperation(BlockOperation(block: { dataMetaCritic = metaCritic.getSerieGlobalInfos(serie: serie.serie) } ) )
-        queue.addOperation(BlockOperation(block: { dataAlloCine = alloCine.getSerieGlobalInfos(serie: serie.serie) } ) )
+        queue.addOperation(BlockOperation(block: { dataYAQCS = yaqcs.getAllInfos(title: serie.serie, idIMDB: serie.idIMdb, idAlloCine: serie.idAlloCine, idSensCritique: serie.idSensCritique) } ) )
 
         queue.waitUntilAllOperationsAreFinished()
         
-        serie.cleverMerge(TVdb: dataTVdb, Moviedb: dataMoviedb, Trakt: dataTrakt, BetaSeries: dataBetaSeries, IMDB: dataIMDB, RottenTomatoes: dataRotten, TVmaze: dataTVmaze, MetaCritic: dataMetaCritic, AlloCine: dataAlloCine)
+        serie.cleverMerge(TVdb: dataTVdb, Moviedb: dataMoviedb, Trakt: dataTrakt, BetaSeries: dataBetaSeries, IMDB: dataIMDB, RottenTomatoes: dataRotten, TVmaze: dataTVmaze, MetaCritic: dataMetaCritic, YAQCS: dataYAQCS)
     }
     
     
@@ -127,7 +127,7 @@ class Database : NSObject {
 
         let queue : OperationQueue = OperationQueue()
         
-        queue.addOperation(BlockOperation(block: { if (serie.idTVdb != "") { betaSeries.getEpisodesRatingsBis(serie) } } ) )
+        queue.addOperation(BlockOperation(block: { if (serie.idTVdb != "") { betaSeries.getEpisodesRatings(serie) } } ) )
         queue.addOperation(BlockOperation(block: { imdb.getEpisodesRatings(serie) } ) )
         
         queue.waitUntilAllOperationsAreFinished()
@@ -160,6 +160,14 @@ class Database : NSObject {
                 serie.saisons.append(newSaison)
             }
         }
+        
+        for i:Int in 0..<serie.saisons.count {
+            if (serie.saisons[i].ends == ZeroDate) {
+                if (serie.saisons[i].episodes.count > 0) {
+                    serie.saisons[i].ends = serie.saisons[i].episodes[serie.saisons[i].episodes.count - 1].date
+                }
+            }
+        }
     }
     
     
@@ -167,12 +175,23 @@ class Database : NSObject {
         db.shows = db.shows.sorted(by: { $0.serie < $1.serie })
         db.fillIndex()
         
-        db.shows[db.index["Absolutely Fabulous"]!].saisons[3].nbEpisodes = db.shows[db.index["Absolutely Fabulous"]!].saisons[3].nbWatchedEps
-        db.shows[db.index["Absolutely Fabulous"]!].saisons[4].nbEpisodes = db.shows[db.index["Absolutely Fabulous"]!].saisons[4].nbWatchedEps
-        db.shows[db.index["Desperate Housewives"]!].saisons[1].nbEpisodes = db.shows[db.index["Desperate Housewives"]!].saisons[1].nbWatchedEps
-        db.shows[db.index["Kaamelott"]!].saisons[3].nbEpisodes = db.shows[db.index["Kaamelott"]!].saisons[3].nbWatchedEps
-        db.shows[db.index["Lost"]!].saisons[0].nbEpisodes = db.shows[db.index["Lost"]!].saisons[0].nbWatchedEps
-
+        if (db.index["Absolutely Fabulous"] != nil) {
+            db.shows[db.index["Absolutely Fabulous"]!].saisons[3].nbEpisodes = db.shows[db.index["Absolutely Fabulous"]!].saisons[3].nbWatchedEps
+            db.shows[db.index["Absolutely Fabulous"]!].saisons[4].nbEpisodes = db.shows[db.index["Absolutely Fabulous"]!].saisons[4].nbWatchedEps
+        }
+        
+        if (db.index["Desperate Housewives"] != nil) {
+            db.shows[db.index["Desperate Housewives"]!].saisons[1].nbEpisodes = db.shows[db.index["Desperate Housewives"]!].saisons[1].nbWatchedEps
+        }
+        
+        if (db.index["Kaamelott"] != nil) {
+            db.shows[db.index["Kaamelott"]!].saisons[3].nbEpisodes = db.shows[db.index["Kaamelott"]!].saisons[3].nbWatchedEps
+        }
+        
+        if (db.index["Lost"] != nil) {
+            db.shows[db.index["Lost"]!].saisons[0].nbEpisodes = db.shows[db.index["Lost"]!].saisons[0].nbWatchedEps
+        }
+        
         updateCompteurs()
     }
     
@@ -350,16 +369,38 @@ class Database : NSObject {
         return (statsAbandonnees, statsWatchList, statsFinies, statsEnCours)
     }
     
+    func checkSeasonDates() {
+        var jump : Bool = false
+        
+        for uneSerie in shows {
+            for uneSaison in uneSerie.saisons {
+                if (uneSaison.episodes.count > 0) {
+                    
+                    let delta : TimeInterval = uneSaison.episodes[uneSaison.episodes.count-1].date.timeIntervalSince(uneSaison.ends)
+                    
+                    print("  \(delta) sec ==> \(uneSerie.serie) saison \(uneSaison.saison) finit le \(uneSaison.ends), et le dernier épisode est diffusé le \(uneSaison.episodes[uneSaison.episodes.count-1].date)")
+                    jump = true
+                }
+            }
+            if (jump) {
+                print("")
+                jump = false
+            }
+        }
+    }
+    
     func computeFairRates() {
         // Load Data
         for uneSerie in shows {
             print("Loading \(uneSerie.serie)")
             downloadGlobalInfo(serie: uneSerie)
-            downloadDates(serie: uneSerie)
-            downloadDetailInfo(serie: uneSerie)
+            //downloadDates(serie: uneSerie)
+            //downloadDetailInfo(serie: uneSerie)
+            
+            sleep(1)
         }
 
-        saveDB()
+        //saveDB()
         
         // Calcule moyenne et écart type pour les ssaisons
         var moyIMDB : Double = 0.0
@@ -370,6 +411,7 @@ class Database : NSObject {
         var moyRottenTom : Double = 0.0
         var moyMetaCritic : Double = 0.0
         var moyAlloCine : Double = 0.0
+        var moySensCritique : Double = 0.0
 
         var nbIMDB : Int = 0
         var nbTrakt : Int = 0
@@ -379,6 +421,7 @@ class Database : NSObject {
         var nbRottenTom : Int = 0
         var nbMetaCritic : Int = 0
         var nbAlloCine : Int = 0
+        var nbSensCritique : Int = 0
 
         var ecartIMDB : Double = 0.0
         var ecartTrakt : Double = 0.0
@@ -388,6 +431,7 @@ class Database : NSObject {
         var ecartRottenTom : Double = 0.0
         var ecartMetaCritic : Double = 0.0
         var ecartAlloCine : Double = 0.0
+        var ecartSensCritique : Double = 0.0
 
 
         for uneSerie in shows {
@@ -400,6 +444,7 @@ class Database : NSObject {
             if (uneSerie.ratingMetaCritic != 0) {  moyMetaCritic = moyMetaCritic + Double(uneSerie.ratingMetaCritic); nbMetaCritic = nbMetaCritic + 1; ecartMetaCritic = ecartMetaCritic + Double(uneSerie.ratingMetaCritic * uneSerie.ratingMetaCritic) }
             if (uneSerie.ratingAlloCine != 0) {  moyAlloCine = moyAlloCine + Double(uneSerie.ratingAlloCine); nbAlloCine = nbAlloCine + 1; ecartAlloCine = ecartAlloCine + Double(uneSerie.ratingAlloCine * uneSerie.ratingAlloCine) }
             if (uneSerie.ratingIMDB != 0) {  moyIMDB = moyIMDB + Double(uneSerie.ratingIMDB); nbIMDB = nbIMDB + 1; ecartIMDB = ecartIMDB + Double(uneSerie.ratingIMDB * uneSerie.ratingIMDB) }
+            if (uneSerie.ratingSensCritique != 0) {  moySensCritique = moySensCritique + Double(uneSerie.ratingSensCritique); nbSensCritique = nbSensCritique + 1; ecartSensCritique = ecartSensCritique + Double(uneSerie.ratingSensCritique * uneSerie.ratingSensCritique) }
         }
         moyIMDB = moyIMDB / Double(nbIMDB)
         moyTrakt = moyTrakt / Double(nbTrakt)
@@ -409,6 +454,7 @@ class Database : NSObject {
         moyRottenTom = moyRottenTom / Double(nbRottenTom)
         moyMetaCritic = moyMetaCritic / Double(nbMetaCritic)
         moyAlloCine = moyAlloCine / Double(nbAlloCine)
+        moySensCritique = moySensCritique / Double(nbSensCritique)
 
         ecartIMDB = sqrt( ( ecartIMDB / Double(nbIMDB) ) - (moyIMDB * moyIMDB) )
         ecartTrakt = sqrt( ( ecartTrakt / Double(nbTrakt) ) - (moyTrakt * moyTrakt) )
@@ -418,6 +464,7 @@ class Database : NSObject {
         ecartRottenTom = sqrt( ( ecartRottenTom / Double(nbRottenTom) ) - (moyRottenTom * moyRottenTom) )
         ecartMetaCritic = sqrt( ( ecartMetaCritic / Double(nbMetaCritic) ) - (moyMetaCritic * moyMetaCritic) )
         ecartAlloCine = sqrt( ( ecartAlloCine / Double(nbAlloCine) ) - (moyAlloCine * moyAlloCine) )
+        ecartSensCritique = sqrt( ( ecartSensCritique / Double(nbSensCritique) ) - (moySensCritique * moySensCritique) )
 
         print("Coefficients pour les séries ")
         print("-----------------------------")
@@ -430,8 +477,11 @@ class Database : NSObject {
         print("RottenTom      Moyenne = \(moyRottenTom) et Ecart = \(ecartRottenTom)")
         print("MetaCritic     Moyenne = \(moyMetaCritic) et Ecart = \(ecartMetaCritic)")
         print("AlloCine       Moyenne = \(moyAlloCine) et Ecart = \(ecartAlloCine)")
+        print("SensCritique   Moyenne = \(moySensCritique) et Ecart = \(ecartSensCritique)")
         print()
         print()
+        
+        return
         
         // Calcule moyenne et écart type pour les épisodes
         var moyIMDBEps : Double = 0.0

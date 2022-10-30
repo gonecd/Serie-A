@@ -182,7 +182,6 @@ class TheMoviedb : NSObject {
             uneSerie.nbEpisodes = reqResult.object(forKey: "number_of_episodes") as? Int ?? 0
             
             for i in 0..<((reqResult.object(forKey: "genres") as? NSArray ?? []).count) {
-                
                 let unGenre : String = (((reqResult.object(forKey: "genres") as? NSArray ?? []).object(at: i) as! NSDictionary).object(forKey: "name")) as? String ?? ""
                 uneSerie.genres.append(unGenre)
             }
@@ -321,6 +320,50 @@ class TheMoviedb : NSObject {
         return serieListe
     }
     
+    
+    func getCasting(idMovieDB: String, saison: Int, episode: Int) -> [Casting] {
+        var reqURL : String = ""
+        var result : [Casting] = []
+        
+        if (idMovieDB == "") { return result }
+        
+        if (saison == 0) { reqURL = "https://api.themoviedb.org/3/tv/\(idMovieDB)/credits?api_key=\(TheMoviedbUserkey)" }
+        else             { reqURL = "https://api.themoviedb.org/3/tv/\(idMovieDB)/season/\(saison)/episode/\(episode)/credits?api_key=\(TheMoviedbUserkey)" }
+        
+        let reqResult : NSDictionary = loadAPI(reqAPI: reqURL) as? NSDictionary ?? NSDictionary()
+        if (reqResult.count == 0) { return result }
+        
+        var casting = reqResult.object(forKey: "cast") as? NSArray ?? []
+        
+        if (casting.count != 0) {
+            for oneCast in casting {
+                let unActeur : Casting = Casting.init()
+                unActeur.personnage = ((oneCast as! NSDictionary).object(forKey: "character")) as? String ?? ""
+                unActeur.name = ((oneCast as! NSDictionary).object(forKey: "name")) as? String ?? ""
+                unActeur.photo = ((oneCast as! NSDictionary).object(forKey: "profile_path")) as? String ?? ""
+                unActeur.photo = "https://image.tmdb.org/t/p/w500" + unActeur.photo
+                
+                if (unActeur.name != "") { result.append(unActeur) }
+            }
+        }
+        
+        casting = reqResult.object(forKey: "guest_stars") as? NSArray ?? []
+        
+        if (casting.count != 0) {
+            for oneCast in casting {
+                let unActeur : Casting = Casting.init()
+                unActeur.personnage = ((oneCast as! NSDictionary).object(forKey: "character")) as? String ?? ""
+                unActeur.name = ((oneCast as! NSDictionary).object(forKey: "name")) as? String ?? ""
+                unActeur.photo = ((oneCast as! NSDictionary).object(forKey: "profile_path")) as? String ?? ""
+                unActeur.photo = "https://image.tmdb.org/t/p/w500" + unActeur.photo
+                
+                if (unActeur.name != "") { result.append(unActeur) }
+            }
+        }
+        
+        return result
+    }
+
     
     func getGenres() {
         let reqResult : NSDictionary = loadAPI(reqAPI: "https://api.themoviedb.org/3/genre/tv/list?api_key=\(TheMoviedbUserkey)&language=en-US") as? NSDictionary ?? NSDictionary()

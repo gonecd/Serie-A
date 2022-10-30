@@ -139,7 +139,7 @@ class Configuration: UIViewController
                 
                 db.downloadGlobalInfo(serie: uneSerie)
                 db.downloadDates(serie: uneSerie)
-                
+
                 if ( (uneSerie.watchlist == false) && (uneSerie.unfollowed == false) ) {
                     if (uneSerie.saisons[uneSerie.saisons.count - 1].watched() == false) {
                         db.downloadDetailInfo(serie: uneSerie)

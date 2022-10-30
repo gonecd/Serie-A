@@ -17,6 +17,15 @@ class CellCasting : UICollectionViewCell {
     @IBOutlet weak var perso: UILabel!
 }
 
+class CellComment: UITableViewCell {
+    @IBOutlet weak var comment: UITextView!
+    @IBOutlet weak var logo: UIImageView!
+    @IBOutlet weak var date: UILabel!
+    @IBOutlet weak var journal: UILabel!
+    @IBOutlet weak var auteur: UILabel!
+}
+
+
 class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDataSource, UICollectionViewDelegate {
     
     var serie : Serie = Serie(serie: "")
@@ -26,7 +35,7 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
     var allComments : [Critique] = []
     var allCasting : [Casting] = []
     @IBOutlet weak var boutonVuUnEp: UIView!
-
+    
     @IBOutlet weak var resume: UITextView!
     @IBOutlet weak var titre: UILabel!
     @IBOutlet weak var date: UILabel!
@@ -50,7 +59,7 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
     @IBOutlet weak var bBetaSeries: UIButton!
     @IBOutlet weak var bMetaCritic: UIButton!
     @IBOutlet weak var bAlloCine: UIButton!
-
+    
     
     
     override func viewDidLoad() {
@@ -62,12 +71,12 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
         arrondirLabel(texte: labelResume, radius: 10)
         arrondirLabel(texte: labelcommentaires, radius: 10)
         arrondirLabel(texte: labelLiens, radius: 10)
-
+        
         makeGradiant(carre: boutonVuUnEp, couleur: "Rouge")
         if (episode <= serie.saisons[saison - 1].nbWatchedEps) {
             boutonVuUnEp.isHidden = true
         }
-
+        
         // Masquer les liens s'il n'y a pas de page derrière ... (version iPad only)
         if (UIDevice.current.userInterfaceIdiom == .pad) {
             if (serie.idTrakt == "") { bTrakt.isHidden = true }
@@ -86,14 +95,24 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
         
         graphe.sendEpisode(ep: serie.saisons[saison - 1].episodes[episode - 1])
         
-    if (UIDevice.current.userInterfaceIdiom == .pad) {
-        arrondirLabel(texte: labelCasting, radius: 10)
-        allCasting = betaSeries.getEpisodeCast(idTVDB: serie.saisons[saison - 1].episodes[episode - 1].idTVdb)
-        casting.setNeedsDisplay()
-    }
+        if (UIDevice.current.userInterfaceIdiom == .pad) {
+            arrondirLabel(texte: labelCasting, radius: 10)
+        }
         
         let queue : OperationQueue = OperationQueue()
-
+        
+        if (UIDevice.current.userInterfaceIdiom == .pad) {
+            let opeCasting = BlockOperation(block: {
+                //        allCasting = betaSeries.getEpisodeCast(idTVDB: serie.saisons[saison - 1].episodes[episode - 1].idTVdb)
+                self.allCasting = theMoviedb.getCasting(idMovieDB: self.serie.idMoviedb, saison: self.saison, episode: self.episode)
+                OperationQueue.main.addOperation({
+                    self.casting.reloadData()
+                    self.casting.setNeedsLayout()
+                } )
+            } )
+            queue.addOperation(opeCasting)
+        }
+        
         let opeCommentsIMDB = BlockOperation(block: {
             self.allComments.append(contentsOf: imdb.getComments(IMDBid: self.serie.saisons[self.saison-1].episodes[self.episode-1].idIMdb).prefix(5))
             OperationQueue.main.addOperation({
@@ -102,7 +121,7 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
             } )
         } )
         queue.addOperation(opeCommentsIMDB)
-
+        
         let opeCommentsTrakt = BlockOperation(block: {
             self.allComments.append(contentsOf: trakt.getComments(IMDBid: self.serie.idIMdb, season: self.saison, episode: self.episode).prefix(5))
             OperationQueue.main.addOperation({
@@ -145,12 +164,12 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
         cell.date.text = allComments[indexPath.row].date
         cell.journal.text = allComments[indexPath.row].journal
         cell.auteur.text = allComments[indexPath.row].auteur
-
+        
         if (allComments[indexPath.row].source == srcTrakt) { cell.logo.image = #imageLiteral(resourceName: "trakt.ico") }
         if (allComments[indexPath.row].source == srcIMdb) { cell.logo.image = #imageLiteral(resourceName: "imdb.ico") }
         if (allComments[indexPath.row].source == srcRottenTom) { cell.logo.image = #imageLiteral(resourceName: "rottentomatoes.ico") }
         if (allComments[indexPath.row].source == srcBetaSeries) { cell.logo.image = #imageLiteral(resourceName: "betaseries.png") }
-
+        
         return cell
     }
     
@@ -161,22 +180,22 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
     @IBAction func webAlloCine(_ sender: Any) { UIApplication.shared.open(URL(string: "http://www.allocine.fr/series/ficheserie_gen_cserie=" + serie.idAlloCine + ".html")!) }
     @IBAction func webTVMaze(_ sender: Any) { UIApplication.shared.open(URL(string: "https://www.tvmaze.com/shows/\(serie.idTVmaze)")!) }
     @IBAction func webTheMovieDB(_ sender: Any) { UIApplication.shared.open(URL(string: "https://www.themoviedb.org/tv/\(serie.idMoviedb)/season/\(saison)/episode/\(episode)")!) }
-
+    
     @IBAction func webBetaSeries(_ sender: AnyObject) {
         let myURL : String = "https://www.betaseries.com/episode/\(serie.serie.lowercased().replacingOccurrences(of: "'", with: "").replacingOccurrences(of: " ", with: "-"))" + String(format: "/s%02de%02d", saison, episode)
         UIApplication.shared.open(URL(string: myURL)!)
     }
-
+    
     @IBAction func vuUnEpisode(_ sender: Any) {
         if (episode <= serie.saisons[saison - 1].nbEpisodes) {
             
-            if (trakt.addToHistory(tvdbID: serie.saisons[saison - 1].episodes[episode - 1].idTVdb, imdbID: serie.saisons[saison - 1].episodes[episode - 1].idIMdb)) {
+            if (trakt.addToHistory(traktID: serie.saisons[saison - 1].episodes[episode - 1].idTrakt, tvdbID: serie.saisons[saison - 1].episodes[episode - 1].idTVdb, imdbID: serie.saisons[saison - 1].episodes[episode - 1].idIMdb)) {
                 serie.saisons[saison - 1].nbWatchedEps = serie.saisons[saison - 1].nbWatchedEps + 1
                 if (serie.unfollowed) { serie.unfollowed = false }
                 if (serie.watchlist) { serie.watchlist = false }
                 
                 boutonVuUnEp.isHidden = true
-
+                
                 db.updateCompteurs()
                 db.saveDB()
                 db.shareWithWidget()
@@ -194,11 +213,11 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CellActeur", for: indexPath as IndexPath) as! CellCasting
-                
+        
         cell.poster.image = getImage(allCasting[indexPath.row].photo)
         cell.perso.text = allCasting[indexPath.row].personnage
         cell.nom.text = allCasting[indexPath.row].name
-                
+        
         return cell
     }
     
