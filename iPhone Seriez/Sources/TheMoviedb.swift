@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import SeriesCommon
 
 class TheMoviedb : NSObject {
     var chrono : TimeInterval = 0
@@ -58,11 +57,14 @@ class TheMoviedb : NSObject {
                     for unEpisode in reqResult.object(forKey: "episodes")! as! NSArray {
                         let epIndex: Int = ((unEpisode as AnyObject).object(forKey: "episode_number")! as! Int)-1
                         
-                        if ( (epIndex < saison.episodes.count) && (epIndex > 0) ) {
+                        if ( (epIndex < saison.episodes.count) && (epIndex >= 0) ) {
                             if (saison.episodes[epIndex].date.compare(today) == .orderedAscending) {
                                 saison.episodes[epIndex].ratingMoviedb = Int(10 * (((unEpisode as AnyObject).object(forKey: "vote_average")! as AnyObject) as? Double ?? 0.0))
                                 saison.episodes[epIndex].ratersMoviedb = ((unEpisode as AnyObject).object(forKey: "vote_count")! as AnyObject) as? Int ?? 0
                             }
+                            
+                            saison.episodes[epIndex].photo = ((unEpisode as AnyObject).object(forKey: "still_path")! as AnyObject) as? String ?? ""
+                            saison.episodes[epIndex].photo = "https://image.tmdb.org/t/p/w500" + saison.episodes[epIndex].photo
                         }
                     }
                 }
@@ -76,7 +78,7 @@ class TheMoviedb : NSObject {
         var cpt : Int = 0
         
         var buildURL : String = "https://api.themoviedb.org/3/discover/tv?api_key=\(TheMoviedbUserkey)&language=en-US&sort_by=popularity.desc"
-        
+
         if (genreIncl != "") {
             buildURL = buildURL + "&with_genres="
             for unGenre in genreIncl.split(separator: ",") { buildURL = buildURL + String(genresMovieDB[unGenre] as? Int ?? 0) + "," }
@@ -113,6 +115,11 @@ class TheMoviedb : NSObject {
                         newSerie.year = Int(dateTexte.split(separator: "-")[0])!
                     }
                     
+                    newSerie.poster = (uneSerie as AnyObject).object(forKey: "poster_path") as? String ?? ""
+                    if (newSerie.poster != "") { newSerie.poster = "https://image.tmdb.org/t/p/w92" + newSerie.poster }
+                    
+                    _ = getIDs(serie: newSerie)
+                    
                     listeSeries.append(newSerie)
                 }
             }
@@ -137,7 +144,7 @@ class TheMoviedb : NSObject {
             found = true
             serie.idTVdb = String(reqResult.object(forKey: "tvdb_id") as? Int ?? 0)
         }
-        
+
         return found
     }
     
@@ -150,7 +157,7 @@ class TheMoviedb : NSObject {
             return uneSerie
         }
         
-        let reqResult : NSDictionary = loadAPI(reqAPI: "https://api.themoviedb.org/3/tv/\(idMovieDB)?api_key=\(TheMoviedbUserkey)&language=en-US&append_to_response=external_ids,content_ratings") as? NSDictionary ?? NSDictionary()
+        let reqResult : NSDictionary = loadAPI(reqAPI: "https://api.themoviedb.org/3/tv/\(idMovieDB)?api_key=\(TheMoviedbUserkey)&language=en-US&append_to_response=external_ids") as? NSDictionary ?? NSDictionary()
         
         if (reqResult.object(forKey: "external_ids") != nil) {
             uneSerie.serie = reqResult.object(forKey: "name") as? String ?? ""
@@ -159,7 +166,13 @@ class TheMoviedb : NSObject {
             uneSerie.idMoviedb = String(reqResult.object(forKey: "id") as? Int ?? 0)
             if ((reqResult.object(forKey: "networks") != nil) && ((reqResult.object(forKey: "networks") as! NSArray).count > 0) ) {
                 uneSerie.network = ((reqResult.object(forKey: "networks") as! NSArray).object(at: 0) as! NSDictionary).object(forKey: "name") as? String ?? ""
+                let tmp : String = ((reqResult.object(forKey: "networks") as! NSArray).object(at: 0) as! NSDictionary).object(forKey: "logo_path") as? String ?? ""
+
+                if (tmp != "") {
+                    uneSerie.networkLogo = "https://image.tmdb.org/t/p/w92" + tmp
+                }
             }
+            
             uneSerie.poster = reqResult.object(forKey: "poster_path") as? String ?? ""
             if (uneSerie.poster != "") { uneSerie.poster = "https://image.tmdb.org/t/p/w92" + uneSerie.poster }
             uneSerie.status = reqResult.object(forKey: "status") as? String ?? ""
@@ -178,9 +191,10 @@ class TheMoviedb : NSObject {
             uneSerie.nbEpisodes = reqResult.object(forKey: "number_of_episodes") as? Int ?? 0
             
             for i in 0..<((reqResult.object(forKey: "genres") as? NSArray ?? []).count) {
-                uneSerie.genres.append((((reqResult.object(forKey: "genres") as? NSArray ?? []).object(at: i) as! NSDictionary).object(forKey: "name")) as? String ?? "")
+                let unGenre : String = (((reqResult.object(forKey: "genres") as? NSArray ?? []).object(at: i) as! NSDictionary).object(forKey: "name")) as? String ?? ""
+                uneSerie.genres.append(unGenre)
             }
-            
+
             for i in 0..<((reqResult.object(forKey: "seasons") as? NSArray ?? []).count) {
                 let readSaison : Int = (((reqResult.object(forKey: "seasons") as? NSArray ?? []).object(at: i) as! NSDictionary).object(forKey: "season_number")) as? Int ?? 0
                 if (readSaison != 0) {
@@ -206,7 +220,6 @@ class TheMoviedb : NSObject {
         var compteur : Int = 0
         
         let reqResult : NSDictionary = loadAPI(reqAPI: "https://api.themoviedb.org/3/tv/\(movieDBid)/similar?api_key=\(TheMoviedbUserkey)&language=en-US&page=1")  as? NSDictionary ?? NSDictionary()
-        //let reqResult : NSDictionary = loadAPI(reqAPI: "https://api.themoviedb.org/3/tv/\(movieDBid)/recommendations?api_key=\(TheMoviedbUserkey)&language=en-US&page=1") as! NSDictionary
         
         if (reqResult.object(forKey: "results") != nil) {
             for oneShow in (reqResult.object(forKey: "results") as! NSArray) {
@@ -243,13 +256,7 @@ class TheMoviedb : NSObject {
                 let titre : String = ((oneShow as! NSDictionary).object(forKey: "name")) as? String ?? ""
                 let idMovieDB : String = String(((oneShow as! NSDictionary).object(forKey: "id")) as? Int ?? 0)
                 
-                var exclure : Bool = false
-                for i in 0..<((((oneShow as! NSDictionary).object(forKey: "genre_ids")) as? NSArray ?? []).count) {
-                    let unGenre : Int = (((oneShow as! NSDictionary).object(forKey: "genre_ids")) as? NSArray ?? []).object(at: i) as? Int ?? 0
-                    if ((unGenre == genreAnimation) || (unGenre == genreDocumentaire) ) { exclure = true }
-                }
-                
-                if ( (exclure == false) && (compteur < popularShowsPerSource) ) {
+                if (compteur < popularShowsPerSource) {
                     compteur = compteur + 1
                     showNames.append(titre)
                     showIds.append(idMovieDB)
@@ -273,13 +280,7 @@ class TheMoviedb : NSObject {
                 let titre : String = ((oneShow as! NSDictionary).object(forKey: "name")) as? String ?? ""
                 let idMovieDB : String = String(((oneShow as! NSDictionary).object(forKey: "id")) as? Int ?? 0)
                 
-                var exclure : Bool = false
-                for i in 0..<((((oneShow as! NSDictionary).object(forKey: "genre_ids")) as? NSArray ?? []).count) {
-                    let unGenre : Int = (((oneShow as! NSDictionary).object(forKey: "genre_ids")) as? NSArray ?? []).object(at: i) as? Int ?? 0
-                    if ((unGenre == genreAnimation) || (unGenre == genreDocumentaire) ) { exclure = true }
-                }
-                
-                if ( (exclure == false) && (compteur < popularShowsPerSource) ) {
+                if (compteur < popularShowsPerSource) {
                     compteur = compteur + 1
                     showNames.append(titre)
                     showIds.append(idMovieDB)
@@ -311,6 +312,11 @@ class TheMoviedb : NSObject {
                     newSerie.country = (oneShow.object(forKey: "origin_country") as! NSArray).object(at: 0) as? String ?? ""
                 }
                 
+                let dateTexte : String = oneShow.object(forKey: "first_air_date") as? String ?? ""
+                if (dateTexte.count > 3) {
+                    newSerie.year = Int(dateTexte.split(separator: "-")[0])!
+                }
+
                 newSerie.poster = oneShow.object(forKey: "poster_path") as? String ?? ""
                 if (newSerie.poster != "") { newSerie.poster = "https://image.tmdb.org/t/p/w92" + newSerie.poster }
                 
@@ -322,4 +328,105 @@ class TheMoviedb : NSObject {
         
         return serieListe
     }
+    
+    
+    func getCasting(idMovieDB: String, saison: Int, episode: Int) -> [Casting] {
+        var reqURL : String = ""
+        var result : [Casting] = []
+        
+        if (idMovieDB == "") { return result }
+        
+        if (saison == 0) { reqURL = "https://api.themoviedb.org/3/tv/\(idMovieDB)/credits?api_key=\(TheMoviedbUserkey)" }
+        else             { reqURL = "https://api.themoviedb.org/3/tv/\(idMovieDB)/season/\(saison)/episode/\(episode)/credits?api_key=\(TheMoviedbUserkey)" }
+        
+        let reqResult : NSDictionary = loadAPI(reqAPI: reqURL) as? NSDictionary ?? NSDictionary()
+        if (reqResult.count == 0) { return result }
+        
+        var casting = reqResult.object(forKey: "cast") as? NSArray ?? []
+        
+        if (casting.count != 0) {
+            for oneCast in casting {
+                let unActeur : Casting = Casting.init()
+                unActeur.personnage = ((oneCast as! NSDictionary).object(forKey: "character")) as? String ?? ""
+                unActeur.name = ((oneCast as! NSDictionary).object(forKey: "name")) as? String ?? ""
+                unActeur.photo = ((oneCast as! NSDictionary).object(forKey: "profile_path")) as? String ?? ""
+                unActeur.photo = "https://image.tmdb.org/t/p/w500" + unActeur.photo
+                
+                if (unActeur.name != "") { result.append(unActeur) }
+            }
+        }
+        
+        casting = reqResult.object(forKey: "guest_stars") as? NSArray ?? []
+        
+        if (casting.count != 0) {
+            for oneCast in casting {
+                let unActeur : Casting = Casting.init()
+                unActeur.personnage = ((oneCast as! NSDictionary).object(forKey: "character")) as? String ?? ""
+                unActeur.name = ((oneCast as! NSDictionary).object(forKey: "name")) as? String ?? ""
+                unActeur.photo = ((oneCast as! NSDictionary).object(forKey: "profile_path")) as? String ?? ""
+                unActeur.photo = "https://image.tmdb.org/t/p/w500" + unActeur.photo
+                
+                if (unActeur.name != "") { result.append(unActeur) }
+            }
+        }
+        
+        return result
+    }
+
+    
+    func getGenres() {
+        let reqResult : NSDictionary = loadAPI(reqAPI: "https://api.themoviedb.org/3/genre/tv/list?api_key=\(TheMoviedbUserkey)&language=en-US") as? NSDictionary ?? NSDictionary()
+        
+        if (reqResult.object(forKey: "genres") != nil) {
+            for oneGenre in (reqResult.object(forKey: "genres") as! NSArray) {
+                let name : String = ((oneGenre as! NSDictionary).object(forKey: "name")) as? String ?? ""
+                let id : String = String(((oneGenre as! NSDictionary).object(forKey: "id")) as? Int ?? 0)
+                
+                print("    \"\(name)\" : \(id),")
+            }
+        }
+    }
 }
+
+
+// Genres on MovieDB
+let genresMovieDB: NSDictionary = [
+    "Action & Adventure" : 10759,
+    "Animation" : 16,
+    "Comedy" : 35,
+    "Crime" : 80,
+    "Drama" : 18,
+    "Mystery" : 9648,
+    "Sci-Fi & Fantasy" : 10765,
+    "War & Politics" : 10768,
+    "Western" : 37
+]
+
+ 
+let genreDocumentaire   : Int = 99
+let genreAnimation      : Int = 16
+
+// Networks on MovieDB
+let networksMovieDB: NSDictionary = [
+    "ABC" : 18,
+    "CBS" : 16,
+    "FOX" : 19,
+    "FX" : 88,
+    "HBO" : 49,
+    "NBC" : 6,
+    "Netflix" : 213,
+    "Showtime" : 67,
+    "Starz" : 318,
+    "The CW" : 71,
+    "TF1" : 290,
+    "France 2" : 361,
+    "France 3" : 249,
+    "Canal+" : 285,
+    "Arte" : 662,
+    "M6" : 712,
+    "Channel 4" : 21,
+    "BBC One" : 4,
+    "BBC Two" : 332,
+    "BBC Three" : 3,
+    "BBC Four" : 100
+]

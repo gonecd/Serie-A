@@ -8,7 +8,8 @@
 
 import UIKit
 import UserNotifications
-import SeriesCommon
+
+
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -62,61 +63,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
+    
     // Support for background fetch
     func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        
-        var start : Date = Date()
-        let defaults = UserDefaults.standard
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd/MM/yyyy HH:mm"
-        let dateFormatter2 = DateFormatter()
-        dateFormatter2.dateFormat = "dd/MM HH:mm"
-
-        var reloadDates : Date = Date.init(timeIntervalSince1970: 0)
-        var reloadIMDB  : Date = Date.init(timeIntervalSince1970: 0)
-
-        if (defaults.object(forKey: "RefreshDates") != nil) { reloadDates = dateFormatter.date(from: defaults.string(forKey: "RefreshDates")!)! }
-        if (defaults.object(forKey: "RefreshIMDB") != nil) { reloadIMDB = dateFormatter.date(from: defaults.string(forKey: "RefreshIMDB")!)! }
-        
-        var info : InfosRefresh = InfosRefresh(timestamp: dateFormatter2.string(from: start),
-                                               network: getNetWork(),
-                                               wifi: "Undef",
-                                               refreshDates: "No",
-                                               refreshIMDB: "No",
-                                               refreshViewed: "No")
-        db.shareRefreshWithWidget(newInfo: info)
+        var dataUpdates : DataUpdatesEntry = db.loadDataUpdates()
         
         // Dates TV Maze (une fois par jour)
-        if (Calendar.current.isDateInToday(reloadDates) == false) {
+        if (Calendar.current.isDateInToday(dataUpdates.TVMaze_Dates) == false) {
             loadDates()
-            let end : Date = Date()
-
-            defaults.set(dateFormatter.string(from: start), forKey: "RefreshDates")
-            info.refreshDates = String(format : "%.2f s", end.timeIntervalSince(start))
-            db.shareRefreshWithWidget(newInfo: info)
-            
-            start = end
+            dataUpdates.TVMaze_Dates = Date()
+            checkComingUp()
+            db.saveDataUpdates(dataUpdates: dataUpdates)
         }
-        
+
         // Ratings IMDB (une fois par jpur)
-        if ( (Calendar.current.isDateInToday(reloadIMDB) == false) && (info.network == "WiFi") ) {
+        if ( Calendar.current.isDateInToday(dataUpdates.IMDB_Episodes) == false ) {
             loadIMDB()
-            let end : Date = Date()
-
-            defaults.set(dateFormatter.string(from: start), forKey: "RefreshIMDB")
-            info.refreshIMDB = String(format : "%.2f s", end.timeIntervalSince(start))
-            db.shareRefreshWithWidget(newInfo: info)
-
-            start = end
+            dataUpdates.IMDB_Rates = Date()
+            db.saveDataUpdates(dataUpdates: dataUpdates)
         }
-        
-        // Statuses Trakt
-        loadStatuses()
-        let end : Date = Date()
-        
-        info.refreshViewed = String(format : "%.2f s", end.timeIntervalSince(start))
-        db.shareRefreshWithWidget(newInfo: info)
 
+        // Statuses Trakt
+        db.quickRefresh()
+        db.finaliseDB()
+        dataUpdates.Trakt_Viewed = Date()
+        db.saveDataUpdates(dataUpdates: dataUpdates)
+
+        db.saveDB()
         completionHandler(.newData)
     }
     
@@ -134,8 +107,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             trakt.downloadToken(key: params?.first?.value ?? "")
             break
             
+        case "ASuivre1":
+            let navigationController = window!.rootViewController! as! UINavigationController
+            navigationController.viewControllers.first?.performSegue(withIdentifier: "Go1", sender: nil)
+            break
+            
+        case "ASuivre2":
+            let navigationController = window!.rootViewController! as! UINavigationController
+            navigationController.viewControllers.first?.performSegue(withIdentifier: "Go2", sender: nil)
+            break
+        
+        case "ASuivre3":
+            let navigationController = window!.rootViewController! as! UINavigationController
+            navigationController.viewControllers.first?.performSegue(withIdentifier: "Go3", sender: nil)
+            break
+            
         default:
-            print("Callback URL scheme : Source inconnue = \(source ?? "")")
+            break
         }
         
         return true
@@ -146,7 +134,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 extension AppDelegate: UNUserNotificationCenterDelegate
 {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        completionHandler([.alert, .sound])
+        completionHandler([.list, .banner, .sound])
         // Ca permet d'afficher l'alerte meme si l'application est en train de tourner (ou de la gérer depuis l'appli le cas échéant)
     }
 }

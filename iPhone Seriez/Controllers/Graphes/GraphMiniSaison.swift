@@ -6,14 +6,16 @@
 //  Copyright © 2017 Home. All rights reserved.
 //
 import UIKit
-import SeriesCommon
 
 class GraphMiniSaison: UIView {
     
     var noteTrakt : Int = 0
     var noteBetaSeries : Int = 0
     var noteIMdb : Int = 0
-    
+    var noteTVMaze : Int = 0
+    var noteSensCritique: Int = 0
+    var noteMovieDB : Int = 0
+
     var theSerie : Serie = Serie(serie: "")
     var theSaison : Int = 0
     var grapheType : Int = 0
@@ -21,7 +23,10 @@ class GraphMiniSaison: UIView {
     var moyTrakt : Int = 0
     var moyBetaSeries : Int = 0
     var moyIMdb : Int = 0
-    
+    var moyTVMaze : Int = 0
+    var moySensCritique : Int = 0
+    var moyMovieDB : Int = 0
+
     var origineX : CGFloat = 0.0
     var origineY :CGFloat = 0.0
     var hauteur : CGFloat = 0.0
@@ -35,9 +40,6 @@ class GraphMiniSaison: UIView {
         origineY = (self.frame.height - bordure)
         hauteur  = (self.frame.height - bordure - bordure)
         largeur  = (self.frame.width - origineX - bordure)
-        
-        self.layer.cornerRadius = 5;
-        self.layer.masksToBounds = true
         
         // Drawing code here.
         if (grapheType == 0) {
@@ -71,11 +73,18 @@ class GraphMiniSaison: UIView {
         noteTrakt = theSerie.saisons[theSaison-1].getFairRatingTrakt()
         noteBetaSeries = theSerie.saisons[theSaison-1].getFairRatingBetaSeries()
         noteIMdb = theSerie.saisons[theSaison-1].getFairRatingIMdb()
+        noteTVMaze = theSerie.saisons[theSaison-1].getFairRatingTVMaze()
+        noteSensCritique = theSerie.saisons[theSaison-1].getFairRatingSensCritique()
+        noteMovieDB = theSerie.saisons[theSaison-1].getFairRatingMovieDB()
 
+        
         // Calcul des moyennes des saisons précédentes
         var totBetaSeriesMoy : Int = 0
         var totTraktMoy : Int = 0
         var totIMdbMoy : Int = 0
+        var totSensCritiqueMoy : Int = 0
+        var totTVMazeMoy : Int = 0
+        var totMovieDBMoy : Int = 0
         var nbSeasons = 0
 
         for loopSaison in theSerie.saisons {
@@ -83,6 +92,9 @@ class GraphMiniSaison: UIView {
                 totBetaSeriesMoy = totBetaSeriesMoy + loopSaison.getFairRatingBetaSeries()
                 totTraktMoy = totTraktMoy + loopSaison.getFairRatingTrakt()
                 totIMdbMoy = totIMdbMoy + loopSaison.getFairRatingIMdb()
+                totSensCritiqueMoy = totSensCritiqueMoy + loopSaison.getFairRatingSensCritique()
+                totTVMazeMoy = totTVMazeMoy + loopSaison.getFairRatingTVMaze()
+                totMovieDBMoy = totMovieDBMoy + loopSaison.getFairRatingMovieDB()
                 nbSeasons = nbSeasons + 1
             }
         }
@@ -90,6 +102,9 @@ class GraphMiniSaison: UIView {
         moyTrakt = computeValue(noteCurrentSeason : noteTrakt, totalPrevSeasons : totTraktMoy, nbPrevSeasons : nbSeasons)
         moyBetaSeries = computeValue(noteCurrentSeason : noteBetaSeries, totalPrevSeasons : totBetaSeriesMoy, nbPrevSeasons : nbSeasons)
         moyIMdb = computeValue(noteCurrentSeason : noteIMdb, totalPrevSeasons : totIMdbMoy, nbPrevSeasons : nbSeasons)
+        moyTVMaze = computeValue(noteCurrentSeason : noteTVMaze, totalPrevSeasons : totTVMazeMoy, nbPrevSeasons : nbSeasons)
+        moySensCritique = computeValue(noteCurrentSeason : noteSensCritique, totalPrevSeasons : totSensCritiqueMoy, nbPrevSeasons : nbSeasons)
+        moyMovieDB = computeValue(noteCurrentSeason : noteMovieDB, totalPrevSeasons : totMovieDBMoy, nbPrevSeasons : nbSeasons)
     }
     
     
@@ -97,6 +112,8 @@ class GraphMiniSaison: UIView {
         if ((nbPrevSeasons == 0) || (totalPrevSeasons == 0) ) { return 50 }
         
         let moyPrevSeasons : Int = Int( Double(totalPrevSeasons) / Double(nbPrevSeasons) )
+        if (moyPrevSeasons == 0) { return 50 }
+
         let difference : Int = Int((Double((noteCurrentSeason - moyPrevSeasons)) / Double(moyPrevSeasons)) * 100 )
         
         return (50 + difference)
@@ -179,24 +196,30 @@ class GraphMiniSaison: UIView {
         path.addLine(to: CGPoint(x:origineX, y:origineY))
         path.stroke()
         
+        let offset : CGFloat = hauteur / 5
+        
         // Quadrillage
         let path2 : UIBezierPath = UIBezierPath()
         path2.lineWidth = 0.5
         path2.setLineDash([5.0,5.0], count: 2, phase: 5.0)
-        path2.move(to: CGPoint(x: origineX, y: origineY - (hauteur / 2)))
-        path2.addLine(to: CGPoint(x: origineX + largeur, y: origineY - (hauteur / 2)))
+        path2.move(to: CGPoint(x: origineX, y: origineY - offset))
+        path2.addLine(to: CGPoint(x: origineX + largeur, y: origineY - offset))
         path2.stroke()
         
-        path2.move(to: CGPoint(x: origineX, y: origineY - (hauteur / 2) - (hauteur / 4)))
-        path2.addLine(to: CGPoint(x: origineX + largeur, y: origineY - (hauteur / 2) - (hauteur / 4)))
+        path2.move(to: CGPoint(x: origineX, y: origineY - 2*offset))
+        path2.addLine(to: CGPoint(x: origineX + largeur, y: origineY - 2*offset))
         path2.stroke()
         
-        path2.move(to: CGPoint(x: origineX, y: origineY - (hauteur / 4)))
-        path2.addLine(to: CGPoint(x: origineX + largeur, y: origineY - (hauteur / 4)))
+        path2.move(to: CGPoint(x: origineX, y: origineY - 3*offset))
+        path2.addLine(to: CGPoint(x: origineX + largeur, y: origineY - 3*offset))
+        path2.stroke()
+
+        path2.move(to: CGPoint(x: origineX, y: origineY - 4*offset))
+        path2.addLine(to: CGPoint(x: origineX + largeur, y: origineY - 4*offset))
         path2.stroke()
 
         path2.move(to: CGPoint(x: origineX + (largeur / 2), y: origineY))
-        path2.addLine(to: CGPoint(x: origineX + (largeur / 2), y: origineY - hauteur ))
+        path2.addLine(to: CGPoint(x: origineX + (largeur / 2), y: origineY - hauteur))
         path2.stroke()
     }
     
@@ -223,10 +246,14 @@ class GraphMiniSaison: UIView {
     
     
     func traceAllEpisodes() {
+        let today : Date = Date()
+        
         for unEpisode in theSerie.saisons[theSaison-1].episodes {
-            traceUnPoint(note: unEpisode.getFairRatingTrakt(), ligne: 1, color: colorTrakt)
-            traceUnPoint(note: unEpisode.getFairRatingBetaSeries(), ligne: 2, color: colorBetaSeries)
-            traceUnPoint(note: unEpisode.getFairRatingIMdb(), ligne: 3, color: colorIMDB)
+            if ( (unEpisode.date.compare(today) == .orderedAscending) && (unEpisode.date.compare(ZeroDate) != .orderedSame) ) {
+                traceUnPoint(note: unEpisode.getFairRatingTrakt(), ligne: 1, color: colorTrakt)
+                traceUnPoint(note: unEpisode.getFairRatingBetaSeries(), ligne: 2, color: colorBetaSeries)
+                traceUnPoint(note: unEpisode.getFairRatingIMdb(), ligne: 3, color: colorIMDB)
+            }
         }
     }
     
@@ -235,25 +262,41 @@ class GraphMiniSaison: UIView {
         var minTrakt : Int = 100
         var minBetaSeries : Int = 100
         var minIMdb : Int = 100
-        
+        var minMovieDB : Int = 100
+        var minSensCritique : Int = 100
+
         var maxTrakt : Int = 0
         var maxBetaSeries : Int = 0
         var maxIMdb : Int = 0
+        var maxMovieDB : Int = 0
+        var maxSensCritique : Int = 0
 
+        let today : Date = Date()
+        
         for unEpisode in theSerie.saisons[theSaison-1].episodes {
-            if ((unEpisode.getFairRatingTrakt() < minTrakt) && (unEpisode.ratingTrakt != 0) ) { minTrakt = unEpisode.getFairRatingTrakt() }
-            if (unEpisode.getFairRatingTrakt() > maxTrakt) { maxTrakt = unEpisode.getFairRatingTrakt() }
-
-            if ((unEpisode.getFairRatingBetaSeries() < minBetaSeries) && (unEpisode.ratingBetaSeries != 0) ) { minBetaSeries = unEpisode.getFairRatingBetaSeries() }
-            if (unEpisode.getFairRatingBetaSeries() > maxBetaSeries) { maxBetaSeries = unEpisode.getFairRatingBetaSeries() }
-
-            if ((unEpisode.getFairRatingIMdb() < minIMdb) && (unEpisode.ratingIMdb != 0) ) { minIMdb = unEpisode.getFairRatingIMdb() }
-            if (unEpisode.getFairRatingIMdb() > maxIMdb) { maxIMdb = unEpisode.getFairRatingIMdb() }
+            if ( (unEpisode.date.compare(today) == .orderedAscending) && (unEpisode.date.compare(ZeroDate) != .orderedSame) ) {
+                if ((unEpisode.getFairRatingTrakt() < minTrakt) && (unEpisode.ratingTrakt != 0) ) { minTrakt = unEpisode.getFairRatingTrakt() }
+                if (unEpisode.getFairRatingTrakt() > maxTrakt) { maxTrakt = unEpisode.getFairRatingTrakt() }
+                
+                if ((unEpisode.getFairRatingBetaSeries() < minBetaSeries) && (unEpisode.ratingBetaSeries != 0) ) { minBetaSeries = unEpisode.getFairRatingBetaSeries() }
+                if (unEpisode.getFairRatingBetaSeries() > maxBetaSeries) { maxBetaSeries = unEpisode.getFairRatingBetaSeries() }
+                
+                if ((unEpisode.getFairRatingIMdb() < minIMdb) && (unEpisode.ratingIMdb != 0) ) { minIMdb = unEpisode.getFairRatingIMdb() }
+                if (unEpisode.getFairRatingIMdb() > maxIMdb) { maxIMdb = unEpisode.getFairRatingIMdb() }
+                
+                if ((unEpisode.getFairRatingMovieDB() < minMovieDB) && (unEpisode.ratingMoviedb != 0) ) { minMovieDB = unEpisode.getFairRatingMovieDB() }
+                if (unEpisode.getFairRatingMovieDB() > maxMovieDB) { maxMovieDB = unEpisode.getFairRatingMovieDB() }
+                
+                if ((unEpisode.getFairRatingSensCritique() < minSensCritique) && (unEpisode.ratingSensCritique != 0) ) { minSensCritique = unEpisode.getFairRatingSensCritique() }
+                if (unEpisode.getFairRatingSensCritique() > maxSensCritique) { maxSensCritique = unEpisode.getFairRatingSensCritique() }
+            }
         }
-
+        
         traceUneBox(min: minTrakt, max: maxTrakt, moy: theSerie.saisons[theSaison-1].getFairRatingTrakt(), ligne: 1, color: colorTrakt)
         traceUneBox(min: minBetaSeries, max: maxBetaSeries, moy: theSerie.saisons[theSaison-1].getFairRatingBetaSeries(), ligne: 2, color: colorBetaSeries)
         traceUneBox(min: minIMdb, max: maxIMdb, moy: theSerie.saisons[theSaison-1].getFairRatingIMdb(), ligne: 3, color: colorIMDB)
+//        traceUneBox(min: minSensCritique, max: maxSensCritique, moy: theSerie.saisons[theSaison-1].getFairRatingSensCritique(), ligne: 4, color: colorSensCritique)
+        traceUneBox(min: minMovieDB, max: maxMovieDB, moy: theSerie.saisons[theSaison-1].getFairRatingMovieDB(), ligne: 4, color: colorMoviedb)
     }
     
     
@@ -298,6 +341,9 @@ class GraphMiniSaison: UIView {
         traceUnPoint(noteX: noteTrakt,          noteY: moyTrakt,       color: colorTrakt)
         traceUnPoint(noteX: noteBetaSeries,     noteY: moyBetaSeries,  color: colorBetaSeries)
         traceUnPoint(noteX: noteIMdb,           noteY: moyIMdb,        color: colorIMDB)
+        traceUnPoint(noteX: noteTVMaze,         noteY: moyTVMaze,      color: colorTVmaze)
+        traceUnPoint(noteX: noteSensCritique,   noteY: moySensCritique,color: colorSensCritique)
+        traceUnPoint(noteX: noteMovieDB,        noteY: moyMovieDB,     color: colorMoviedb)
     }
     
     
@@ -364,20 +410,20 @@ class GraphMiniSaison: UIView {
         color.setStroke()
         color.withAlphaComponent(0.25).setFill()
 
-        path.move(to: CGPoint(x: origineX + (largeur * CGFloat(mymin) / 100), y: origineY - size - (hauteur * CGFloat(25*ligne) / 100)))
-        path.addLine(to: CGPoint(x: origineX + (largeur * CGFloat(mymax) / 100), y: origineY - size - (hauteur * CGFloat(25*ligne) / 100)))
-        path.addLine(to: CGPoint(x: origineX + (largeur * CGFloat(mymax) / 100), y: origineY + size - (hauteur * CGFloat(25*ligne) / 100)))
-        path.addLine(to: CGPoint(x: origineX + (largeur * CGFloat(mymin) / 100), y: origineY + size - (hauteur * CGFloat(25*ligne) / 100)))
-        path.addLine(to: CGPoint(x: origineX + (largeur * CGFloat(mymin) / 100), y: origineY - size - (hauteur * CGFloat(25*ligne) / 100)))
+        path.move(to: CGPoint(x: origineX + (largeur * CGFloat(mymin) / 100), y: origineY - size - (hauteur * CGFloat(20*ligne) / 100)))
+        path.addLine(to: CGPoint(x: origineX + (largeur * CGFloat(mymax) / 100), y: origineY - size - (hauteur * CGFloat(20*ligne) / 100)))
+        path.addLine(to: CGPoint(x: origineX + (largeur * CGFloat(mymax) / 100), y: origineY + size - (hauteur * CGFloat(20*ligne) / 100)))
+        path.addLine(to: CGPoint(x: origineX + (largeur * CGFloat(mymin) / 100), y: origineY + size - (hauteur * CGFloat(20*ligne) / 100)))
+        path.addLine(to: CGPoint(x: origineX + (largeur * CGFloat(mymin) / 100), y: origineY - size - (hauteur * CGFloat(20*ligne) / 100)))
         path.stroke()
         path.fill()
         
         let path2 : UIBezierPath = UIBezierPath()
-        path2.move(to: CGPoint(x: origineX + (largeur * CGFloat(mymoy-1) / 100), y: origineY - size - size - (hauteur * CGFloat(25*ligne) / 100)))
-        path2.addLine(to: CGPoint(x: origineX + (largeur * CGFloat(mymoy+1) / 100), y: origineY - size - size - (hauteur * CGFloat(25*ligne) / 100)))
-        path2.addLine(to: CGPoint(x: origineX + (largeur * CGFloat(mymoy+1) / 100), y: origineY + size + size - (hauteur * CGFloat(25*ligne) / 100)))
-        path2.addLine(to: CGPoint(x: origineX + (largeur * CGFloat(mymoy-1) / 100), y: origineY + size + size - (hauteur * CGFloat(25*ligne) / 100)))
-        path2.addLine(to: CGPoint(x: origineX + (largeur * CGFloat(mymoy-1) / 100), y: origineY - size - size - (hauteur * CGFloat(25*ligne) / 100)))
+        path2.move(to: CGPoint(x: origineX + (largeur * CGFloat(mymoy-1) / 100), y: origineY - size - size - (hauteur * CGFloat(20*ligne) / 100)))
+        path2.addLine(to: CGPoint(x: origineX + (largeur * CGFloat(mymoy+1) / 100), y: origineY - size - size - (hauteur * CGFloat(20*ligne) / 100)))
+        path2.addLine(to: CGPoint(x: origineX + (largeur * CGFloat(mymoy+1) / 100), y: origineY + size + size - (hauteur * CGFloat(20*ligne) / 100)))
+        path2.addLine(to: CGPoint(x: origineX + (largeur * CGFloat(mymoy-1) / 100), y: origineY + size + size - (hauteur * CGFloat(20*ligne) / 100)))
+        path2.addLine(to: CGPoint(x: origineX + (largeur * CGFloat(mymoy-1) / 100), y: origineY - size - size - (hauteur * CGFloat(20*ligne) / 100)))
         path2.stroke()
         color.setFill()
         path2.fill()

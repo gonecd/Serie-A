@@ -8,7 +8,6 @@
 
 import Foundation
 import SwiftSoup
-import SeriesCommon
 
 class TVmaze {
     var chrono : TimeInterval = 0
@@ -47,11 +46,14 @@ class TVmaze {
     func getSerieGlobalInfos(idTVDB : String, idIMDB : String) -> Serie {
         let uneSerie : Serie = Serie(serie: "")
         var reqURL : String = ""
+                
+        if (idIMDB != "")                             { reqURL = "http://api.tvmaze.com/lookup/shows?imdb=\(idIMDB)" }
+        else if ( (idTVDB != "") && (idTVDB != "0") ) { reqURL = "http://api.tvmaze.com/lookup/shows?thetvdb=\(idTVDB)" }
+        else                                          { return uneSerie }
         
-        if (idIMDB != "")       { reqURL = "http://api.tvmaze.com/lookup/shows?imdb=\(idIMDB)" }
-        else if (idTVDB != "")  { reqURL = "http://api.tvmaze.com/lookup/shows?thetvdb=\(idTVDB)" }
-        else                    { return uneSerie }
-        
+        if (idIMDB == "tt9844334")  { reqURL = "http://api.tvmaze.com/lookup/shows?thetvdb=340792" }  // Vernon subutex
+        if (idIMDB == "tt16357872") { return uneSerie }                                               // La meilleure version de moi meme
+
         let reqResult : NSDictionary = loadAPI(reqAPI: reqURL) as? NSDictionary ?? NSDictionary()
         
         if (reqResult.object(forKey: "id") != nil) {
@@ -82,7 +84,7 @@ class TVmaze {
         if (webPage == "") { return }
         
         do {
-            let page : String = try String(contentsOf: URL(string : webPage)!)
+            let page : String = try String(contentsOf: URL(string : webPage)!, encoding: .utf8)
             let doc : Document = try SwiftSoup.parse(page)
             let regex = try! NSRegularExpression(pattern: ".*-([0-9]{1,2})x([0-9]{1,2}).*?", options: NSRegularExpression.Options.caseInsensitive)
             let epidodeList : Array<Element> = try doc.select("article [class='grid-x episode-row']").array()
@@ -97,7 +99,7 @@ class TVmaze {
                     
                     if ( (numSais > 0) && (numSais < uneSerie.saisons.count+1) ) {
                         if ( (numEps > 0) && (numEps < uneSerie.saisons[numSais-1].episodes.count+1) ) {
-                            if (try! oneEpisode.select("div [class='dropdown-pane small']").text() != "(waiting for more votes)") {
+                            if (try! oneEpisode.select("div [class='dropdown-pane small']").text().components(separatedBy: " ").count > 1) {
                                 uneSerie.saisons[numSais-1].episodes[numEps-1].ratingTVMaze = Int(10.0*(Double(try! oneEpisode.select("div [class='dropdown-pane small']").text().components(separatedBy: " ")[0]) ?? 0.0))
                                 uneSerie.saisons[numSais-1].episodes[numEps-1].ratersTVMaze  = Int(try! oneEpisode.select("div [class='dropdown-pane small']").text().components(separatedBy: " ")[1].replacingOccurrences(of: "(", with: "")) ?? 0
                             }
@@ -112,28 +114,54 @@ class TVmaze {
     }
     
     
+
+    func getEpisodesDurations(idTVMaze : String, saison : Int) -> [Int] {
+        var reqURL : String = ""
+        var result : [Int] = []
+
+        if (idTVMaze != "")     { reqURL = "https://api.tvmaze.com/shows/\(idTVMaze)?embed=episodes"}
+        else                    { return result }
+        
+        let reqResult : NSDictionary = loadAPI(reqAPI: reqURL) as? NSDictionary ?? NSDictionary()
+        
+        if (reqResult.object(forKey: "_embedded") != nil) {
+            if ((reqResult.object(forKey: "_embedded") as! NSDictionary).object(forKey: "episodes") != nil) {
+                for unEpisode in ((reqResult.object(forKey: "_embedded") as! NSDictionary).object(forKey: "episodes") as! NSArray) {
+                    
+                    let season : Int = ((unEpisode as! NSDictionary).object(forKey: "season")) as? Int ?? 0
+                    let duree : Int = ((unEpisode as! NSDictionary).object(forKey: "runtime")) as? Int ?? 0
+
+                    if (season == saison) {
+                        result.append(duree)
+                    }
+                }
+            }
+        }
+
+        return result
+    }
+    
+    
     func getPath(serie : String, id : String) -> String {
         if (id == "") { return ""}
         return "https://www.tvmaze.com/shows/" + id + "/Hello/episodes?all=1"
     }
     
     
-    func getSeasonsDates(idTVmaze : String) -> (saisons : [Int], nbEps : [Int], debuts : [Date], fins : [Date]) {
+    func getSeasonsDates(idTVmaze : String) -> (saisons : [Int], debuts : [Date], fins : [Date]) {
         var foundSaisons : [Int] = []
-        var foundEps : [Int] = []
         var foundDebuts : [Date] = []
         var foundFins : [Date] = []
         
         if (idTVmaze == "") {
             print("TVmaze::getSeasonsDates failed : no ID")
-            return (foundSaisons, foundEps, foundDebuts, foundFins)
+            return (foundSaisons, foundDebuts, foundFins)
         }
         
         let reqResult : NSArray = loadAPI(reqAPI: "http://api.tvmaze.com/shows/\(idTVmaze)/seasons") as! NSArray
 
         for uneSaison in reqResult {
             let saison : Int = ((uneSaison as! NSDictionary).object(forKey: "number")) as? Int ?? 0
-            let nbEp : Int = ((uneSaison as! NSDictionary).object(forKey: "episodeOrder")) as? Int ?? 0
             
             let debutStr : String = ((uneSaison as! NSDictionary).object(forKey: "premiereDate")) as? String ?? ""
             var debutDate : Date = ZeroDate
@@ -144,12 +172,11 @@ class TVmaze {
             if (finStr !=  "") { finDate = dateFormSource.date(from: finStr)! }
             
             foundSaisons.append(saison)
-            foundEps.append(nbEp)
             foundDebuts.append(debutDate)
             foundFins.append(finDate)
         }
         
-        return (foundSaisons, foundEps, foundDebuts, foundFins)
+        return (foundSaisons, foundDebuts, foundFins)
     }
     
     
@@ -173,6 +200,11 @@ class TVmaze {
             newSerie.ratingTVmaze = Int(10 * ((oneShow.object(forKey: "rating")! as AnyObject).object(forKey: "average") as? Double ?? 0.0))
             newSerie.watchlist = true
             
+            let dateTexte : String = oneShow.object(forKey: "premiered") as? String ?? ""
+            if (dateTexte.count > 3) {
+                newSerie.year = Int(dateTexte.split(separator: "-")[0])!
+            }
+            
             serieListe.append(newSerie)
         }
         
@@ -189,7 +221,7 @@ class TVmaze {
         var showIds : [String] = []
         
         do {
-            let page : String = try String(contentsOf: URL(string : url)!)
+            let page : String = try String(contentsOf: URL(string : url)!, encoding: .utf8)
             let doc : Document = try SwiftSoup.parse(page)
             let showList = try doc.select("div [class='card primary grid-x']")
             

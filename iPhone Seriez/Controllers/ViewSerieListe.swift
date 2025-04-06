@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SeriesCommon
 
 
 class CellSerieListe: UITableViewCell {
@@ -19,8 +18,8 @@ class CellSerieListe: UITableViewCell {
     @IBOutlet weak var genres: UITextView!
     @IBOutlet weak var globalRating: UITextField!
     @IBOutlet weak var myRating: UITextField!
-    @IBOutlet weak var status: UITextField!
     @IBOutlet weak var drapeau: UIImageView!
+    @IBOutlet weak var network: UIImageView!
     
     var index: Int = 0
 }
@@ -29,16 +28,15 @@ class CellSerieListe: UITableViewCell {
 class ViewSerieListe: UITableViewController {
     
     var viewList: [Serie] = [Serie]()
-    var allSaisons: [Int] = [Int]()
     var grapheType : Int = 0
-
+    
     @IBOutlet var liste: UITableView!
     var modeAffichage : Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
     }
-    
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -54,18 +52,24 @@ class ViewSerieListe: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CellSerieListe", for: indexPath) as! CellSerieListe
         
+        cell.backgroundColor = indexPath.row % 2 == 0 ? SerieColor2 : SerieColor1
+
         cell.banniereSerie?.image = getImage(viewList[indexPath.row].poster)
         cell.index = indexPath.row
         cell.titre.text = viewList[indexPath.row].serie
-        cell.saison.text =  String(viewList[indexPath.row].nbSaisons) + " Saisons - " + String(viewList[indexPath.row].nbEpisodes) + " Epiosdes - " + String(viewList[indexPath.row].runtime) + " min"
+        cell.saison.text =  String(viewList[indexPath.row].nbSaisons) + " saisons - " + String(viewList[indexPath.row].nbEpisodes) + " épiosdes - " + String(viewList[indexPath.row].runtime) + " min"
         
-        cell.globalRating.text = String(viewList[indexPath.row].getGlobalRating()) + " %"
-        arrondir(texte: cell.globalRating, radius: 12.0)
-
+        let note : Double = Double(viewList[indexPath.row].getGlobalRating())/10.0
+        cell.globalRating.text = "👍🏼 " + String(note)
+        cell.globalRating.layer.borderColor = UIColor.systemBlue.cgColor
+        cell.globalRating.layer.borderWidth = 2
+        cell.globalRating.layer.cornerRadius = 12
+        cell.globalRating.layer.masksToBounds = true
+        
         cell.myRating.textColor = UIColor.init(red: 1.0, green: 153.0/255.0, blue: 1.0, alpha: 1.0)
 
         if (viewList[indexPath.row].myRating < 1) {
-            cell.myRating.text = ""
+            cell.myRating.text = "-"
             cell.myRating.backgroundColor = UIColor.systemGray
         }
         else {
@@ -82,20 +86,13 @@ class ViewSerieListe: UITableViewController {
         }
         cell.genres.text = allGenres
         
-        // Affichage du status
-        arrondir(texte: cell.status, radius: 8.0)
-        if (viewList[indexPath.row].status == "Ended") {
-            cell.status.text = "FINIE"
-            cell.status.textColor = UIColor.black
-        }
-        else {
-            cell.status.text = "EN COURS"
-            cell.status.textColor = .systemBlue
-        }
-        
         // Affichage du drapeau
         cell.drapeau.image = getDrapeau(country: viewList[indexPath.row].country)
         
+        // Affichage du network
+        cell.network.image = getLogoDiffuseur(diffuseur: viewList[indexPath.row].diffuseur)
+        arrondir(fenetre: cell.network, radius: 4)
+
         // Affichage du mini graphe
         cell.miniGraphe.sendNotes(rateTrakt: viewList[indexPath.row].getFairGlobalRatingTrakt(),
                                   rateBetaSeries: viewList[indexPath.row].getFairGlobalRatingBetaSeries(),
@@ -104,7 +101,10 @@ class ViewSerieListe: UITableViewController {
                                   rateTVmaze: viewList[indexPath.row].getFairGlobalRatingTVmaze(),
                                   rateRottenTomatoes: viewList[indexPath.row].getFairGlobalRatingRottenTomatoes(),
                                   rateMetaCritic: viewList[indexPath.row].getFairGlobalRatingMetaCritic(),
-                                  rateAlloCine: viewList[indexPath.row].getFairGlobalRatingAlloCine() )
+                                  rateAlloCine: viewList[indexPath.row].getFairGlobalRatingAlloCine(),
+                                  rateSensCritique: viewList[indexPath.row].getFairGlobalRatingSensCritique(),
+                                  rateSIMKL: viewList[indexPath.row].getFairGlobalRatingSIMKL() )
+
         cell.miniGraphe.setType(type: grapheType)
         cell.miniGraphe.setNeedsDisplay()
         
@@ -112,8 +112,16 @@ class ViewSerieListe: UITableViewController {
     }
     
     
+    func computeSerieListe(serie : Serie) -> (label: String, couleur: UIColor) {
+        if (serie.watchlist) { return ("Watchlist", .systemGreen) }
+        if (serie.unfollowed) { return ("Série abandonnée", .systemRed) }
+        if (serie.enCours()) { return ("Série en cours", .systemBlue) }
+
+        return ("Série finie", .systemGray2)
+    }
+    
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -127,36 +135,21 @@ class ViewSerieListe: UITableViewController {
     
     override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let reload = UIContextualAction(style: .destructive, title: "Refresh") {  (contextualAction, view, boolValue) in
+
+            let oldSerie : Serie = self.viewList[indexPath.row].partialCopy()
+            
             db.downloadGlobalInfo(serie: self.viewList[indexPath.row])
+            db.downloadDates(serie: self.viewList[indexPath.row])
+            db.downloadDetailInfo(serie: self.viewList[indexPath.row])
+
+            db.checkForUpdates(newSerie: self.viewList[indexPath.row], oldSerie: oldSerie, methode: funcSerie)
+
             db.saveDB()
             self.liste.reloadData()
             self.view.setNeedsDisplay()
         }
         reload.backgroundColor = .systemGreen
         return UISwipeActionsConfiguration(actions: [reload])
-        
-//        let remove = UIContextualAction(style: .destructive, title: "Remove") {  (contextualAction, view, boolValue) in
-//            if (self.supprimerUneSerieDansLaWatchlistTrakt(uneSerie: self.viewList[indexPath.row])) {
-//                self.viewList.remove(at: indexPath.row)
-//                self.liste.reloadData()
-//                self.view.setNeedsDisplay()
-//            }
-//        }
-//        remove.backgroundColor = .systemRed
-//
-//        let addWatchlist = UIContextualAction(style: .destructive, title: "Add to watchlist") {  (contextualAction, view, boolValue) in
-//            if (trakt.addToWatchlist(theTVdbId: self.viewList[indexPath.row].idTVdb)) {
-//                db.downloadGlobalInfo(serie: self.viewList[indexPath.row])
-//                self.viewList[indexPath.row].watchlist = true
-//                db.shows.append(self.viewList[indexPath.row])
-//                db.saveDB()
-//            }
-//        }
-//        addWatchlist.backgroundColor = .systemPurple
-//
-//        if (self.modeAffichage == modeWatchlist) { return UISwipeActionsConfiguration(actions: [reload, remove]) }
-//        else if (self.modeAffichage == modeRecherche) { return UISwipeActionsConfiguration(actions: [addWatchlist]) }
-//        else { return UISwipeActionsConfiguration(actions: [reload]) }
     }
     
     
@@ -166,23 +159,10 @@ class ViewSerieListe: UITableViewController {
     
     
     @IBAction func changeGraphe(_ sender: Any) {
-        if (grapheType == 0) { grapheType = 1 }
-        else if (grapheType == 1) { grapheType = 2 }
-        else { grapheType = 0 }
+        if (grapheType == 0) { grapheType = 3 }
+        else if (grapheType == 3) { grapheType = 0 }
         
         self.liste.reloadData()
         self.view.setNeedsDisplay()
     }
-    
-//    func supprimerUneSerieDansLaWatchlistTrakt(uneSerie: Serie) -> Bool {
-//        if (trakt.removeFromWatchlist(theTVdbId: uneSerie.idTVdb)) {
-//            db.shows.remove(at: db.shows.firstIndex(of: uneSerie)!)
-//            db.saveDB()
-//            //TODO : updateCompteurs()
-//
-//            return true
-//        }
-//        return false
-//    }
-    
 }

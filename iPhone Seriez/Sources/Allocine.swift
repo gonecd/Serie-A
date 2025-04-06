@@ -8,46 +8,50 @@
 
 import Foundation
 import SwiftSoup
-import SeriesCommon
 
 class AlloCine : NSObject {
     var chrono : TimeInterval = 0
-
+    
     let indexWebPage: Dictionary = [
         "A Very Secret Service" : 10224,
+        "All the Way Up" : 24293,
         "Bref." : 10520,
+        "Borgen - Power & Glory" : 31831,
         "Call My Agent!" : 5019,
+        "Cheeky Business" : 24639,
         "Crashing" : 20473,
         "Dirk Gently's Holistic Detective Agency" : 20395,
         "Elite" : 22373,
         "Fargo" : 11042,
-        "Fear the Walking Dead" : 16958,
-        "How to Sell Drugs Online (Fast)" : 24940,
-        "Into the Night" : 25585,
-        "Lost in Space" : 18240,
+        "House of the Dragon" : 25633,
+        "Jordskott" : 19051,
+        "Lioness" : 27407,
         "Maniac" : 20388,
+        "Marianne" : 24219,
         "Marco Polo" : 10841,
-        "Mindhunter" : 20143,
         "Money Heist" : 21504,
+        "Of Money and Blood" : 25647,
         "One-Punch Man" : 20669,
-        "Person of Interest" : 9290,
+        "Parasyte: The Grey" : 32655,
         "Real Humans" : 10946,
         "Revolution" : 10591,
         "Savages" : 24290,
-        "Shameless" : 7634,
-        "Spiral" : 538,
-        "The Americans" : 10790,
+        "Shambles" : 31886,
+        "Star Wars: Andor" : 24440,
+        "State of Happiness" : 23413,
+        "The 4400" : 251,
         "The Bureau" : 17907,
         "The Collapse" : 25687,
-        "The Crimson Rivers" : 20108,
-        "The End of the F***ing World" : 22881,
-        "The Haunting" : 21978,
-        "The Man in the High Castle" : 9359,
-        "The Office" : 199,
-        "The Returned" : 4138,
-        "Under the Dome" : 7834,
-        "What We Do in the Shadows" : 23200,
-        "WorkinGirls" : 10289
+        "The Queen's Gambit" : 24971,
+        "UFOs" : 25457,
+        "Attack on Titan" : 17425,
+        "Boss" : 9488,
+        "Miskina, Poor Thing" : 28813,
+        "Nothing" : 31587,
+        "Standing Up" : 26113,
+        "The Bridge" : 11138,
+        "The Frog" : 35982,
+        "The Seven Deadly Sins" : 19946
     ]
     
     override init() {
@@ -99,7 +103,7 @@ class AlloCine : NSObject {
         let webPage : String = "http://www.allocine.fr/series/ficheserie_gen_cserie=" + uneSerie.idAlloCine + ".html"
         
         do {
-            let page : String = try String(contentsOf: URL(string : webPage)!)
+            let page : String = try String(contentsOf: URL(string : webPage)!, encoding: .utf8)
             let doc : Document = try SwiftSoup.parse(page)
             
             let textRatings : String = try doc.select("div [class^='rating-holder rating-holder-']").text()
@@ -122,21 +126,23 @@ class AlloCine : NSObject {
         return uneSerie
     }
     
-
+    
     func getID(serie: String) -> String {
         let reqURL : String = "https://www.allocine.fr/_/autocomplete/\(serie.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) ?? "toto")"
         
-        let reqResult : NSDictionary = loadAPI(reqAPI: reqURL) as! NSDictionary
-
-        for oneResult in (reqResult.object(forKey: "results") as! NSArray) {
-            if ((((oneResult as! NSDictionary).object(forKey: "entity_type")) as? String ?? "") == "series") {
-                let label : String = ((oneResult as! NSDictionary).object(forKey: "original_label")) as? String ?? "???"
-                let id : String = ((oneResult as! NSDictionary).object(forKey: "entity_id")) as? String ?? "---"
-
-                if (label == serie) {return id}
+        let reqResult : NSDictionary = loadAPI(reqAPI: reqURL) as? NSDictionary ?? NSDictionary()
+        
+        if (reqResult.object(forKey: "results") != nil) {
+            for oneResult in (reqResult.object(forKey: "results") as! NSArray) {
+                if ((((oneResult as! NSDictionary).object(forKey: "entity_type")) as? String ?? "") == "series") {
+                    let label : String = ((oneResult as! NSDictionary).object(forKey: "original_label")) as? String ?? "???"
+                    let id : String = ((oneResult as! NSDictionary).object(forKey: "entity_id")) as? String ?? "---"
+                    
+                    if (label.lowercased() == serie.lowercased()) {return id}
+                }
             }
         }
-
+        
         return "0"
     }
     
@@ -147,7 +153,7 @@ class AlloCine : NSObject {
         var showIds : [String] = []
         
         do {
-            let page : String = try String(contentsOf: URL(string : "http://www.allocine.fr/series/meilleures/")!)
+            let page : String = try String(contentsOf: URL(string : "http://www.allocine.fr/series/meilleures/")!, encoding: .utf8)
             let doc : Document = try SwiftSoup.parse(page)
             let showList = try doc.select("div [class='data_box']")
             
@@ -172,7 +178,7 @@ class AlloCine : NSObject {
         var showIds : [String] = []
         
         do {
-            let page : String = try String(contentsOf: URL(string : "http://www.allocine.fr/series/top/")!)
+            let page : String = try String(contentsOf: URL(string : "http://www.allocine.fr/series/top/")!, encoding: .utf8)
             let doc : Document = try SwiftSoup.parse(page)
             let showList = try doc.select("div [class='card entity-card entity-card-list cf']")
             
@@ -205,7 +211,7 @@ class AlloCine : NSObject {
         let webPage : String = "http://www.allocine.fr/series/ficheserie-" + idAlloCine + "/critiques/presse/"
         
         do {
-            let page : String = try String(contentsOf: URL(string : webPage)!)
+            let page : String = try String(contentsOf: URL(string : webPage)!, encoding: .utf8)
             let doc : Document = try SwiftSoup.parse(page)
             
             let critics = try doc.select("div [class='item hred']")

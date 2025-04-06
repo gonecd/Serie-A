@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Une série ?</string>
+	<string>Une série iPad</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -59,6 +59,8 @@
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>iPhone</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Necessaire a la gestion des Advisors de Serie</string>
 	<key>UIMainStoryboardFile~ipad</key>
 	<string>iPad</string>
 	<key>UIRequiredDeviceCapabilities</key>

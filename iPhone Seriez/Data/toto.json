@@ -1,0 +1,201 @@
+{"operationName":
+    "GetUrlTitleDetails",
+    "variables":{
+        "platform":"WEB",
+        "fullPath":"/fr/serie/fargo",
+        "language":"fr","country":"FR",
+        "episodeMaxLimit":20,
+        "allowSponsoredRecommendations":{
+            "pageType":"VIEW_TITLE_DETAIL",
+            "placement":"DETAIL_PAGE",
+            "language":"fr","country":"FR",
+            "applicationContext":{
+                "appID":"3.9.2-webapp#3a41ece",
+                "platform":"webapp",
+                "version":"3.9.2",
+                "build":"3a41ece",
+                "isTestBuild":false
+            },
+            "appId":"3.9.2-webapp#3a41ece",
+            "platform":"WEB",
+            "supportedFormats":["IMAGE","VIDEO"],
+            "supportedObjectTypes":[
+                "MOVIE",
+                "SHOW",
+                "GENERIC_TITLE_LIST",
+                "SHOW_SEASON"
+            ],
+            "alwaysReturnBidID":true,
+            "testingModeForceHoldoutGroup":false,
+            "testingMode":false
+        }
+    },
+    "query":"query GetUrlTitleDetails($fullPath: String!, $country: Country!, $language: Language!, $episodeMaxLimit: Int, $platform: Platform! = WEB, $allowSponsoredRecommendations: SponsoredRecommendationsInput, $format: ImageFormat, $backdropProfile: BackdropProfile, $streamingChartsFilter: StreamingChartsFilter) 
+    
+    { urlV2(fullPath: $fullPath)
+        {
+            id
+            metaDescription
+            metaKeywords
+            metaRobots
+            metaTitle
+            heading1
+            heading2
+            htmlContent
+            node
+            { ...TitleDetails }
+        }
+    }
+    fragment TitleDetails on Node
+    {
+        id ... on MovieOrShowOrSeason
+        {
+            plexPlayerOffers: offers( country: $country platform: $platform filter: {packages: [\"pxp\"]} ) 
+                { ...WatchNowOffer }
+            justwatchTVOffers: offers( country: $country platform: $platform filter: {packages: [\"jwt\"]} ) 
+            { ...WatchNowOffer }
+            maxOfferUpdatedAt(country: $country, platform: WEB)
+            appleOffers: offers( country: $country platform: $platform filter: {packages: [\"atp\", \"itu\"]} ) 
+                { ...TitleOffer }
+            disneyOffersCount: offerCount( country: $country platform: $platform filter: {packages: [\"dnp\"]} )
+            starOffersCount: offerCount( country: $country platform: $platform filter: {packages: [\"srp\"]} ) 
+                objectType objectId offerCount(country: $country, platform: $platform) uniqueOfferCount: offerCount( country: $country platform: $platform filter: {bestOnly: true} ) offers(country: $country, platform: $platform) { ...TitleOffer } watchNowOffer(country: $country, platform: $platform) { ...WatchNowOffer } promotedBundles(country: $country, platform: $platform) { promotionUrl } availableTo(country: $country, platform: $platform) { availableCountDown(country: $country) availableToDate package { id shortName } } fallBackClips: content(country: $country, language: \"en\") { clips { ...TrailerClips } videobusterClips: clips(providers: [VIDEOBUSTER]) { ...TrailerClips } dailymotionClips: clips(providers: [DAILYMOTION]) { ...TrailerClips } } content(country: $country, language: $language) { backdrops { backdropUrl } fullBackdrops: backdrops(profile: S1920, format: JPG) { backdropUrl } clips { ...TrailerClips } videobusterClips: clips(providers: [VIDEOBUSTER]) { ...TrailerClips } dailymotionClips: clips(providers: [DAILYMOTION]) { ...TrailerClips } externalIds { imdbId } fullPath posterUrl fullPosterUrl: posterUrl(profile: S718, format: JPG) runtime isReleased scoring { imdbScore imdbVotes tmdbPopularity tmdbScore jwRating tomatoMeter certifiedFresh } shortDescription title originalReleaseYear originalReleaseDate upcomingReleases { releaseCountDown(country: $country) releaseDate releaseType label package { id packageId shortName clearName monetizationTypes icon(profile: S100) iconWide(profile: S160) hasRectangularIcon(country: $country, platform: WEB) planOffers(country: $country, platform: $platform) { retailPrice(language: $language) durationDays presentationType isTrial retailPriceValue currency } } } genres { shortName translation(language: $language) } subgenres { content(country: $country, language: $language) { shortName name } } ... on MovieOrShowOrSeasonContent { subgenres { content(country: $country, language: $language) { url: moviesUrl { fullPath } } } } ... on MovieOrShowContent { originalTitle ageCertification credits { role name characterName personId } interactions { dislikelistAdditions likelistAdditions votesNumber } productionCountries } ... on SeasonContent { seasonNumber interactions { dislikelistAdditions likelistAdditions votesNumber } } } popularityRank(country: $country) { rank trend trendDifference } streamingCharts(country: $country, filter: $streamingChartsFilter) { edges { streamingChartInfo { rank trend trendDifference updatedAt daysInTop10 daysInTop100 daysInTop1000 daysInTop3 topRank } } } } ... on MovieOrShowOrSeason { likelistEntry { createdAt } dislikelistEntry { createdAt } } ... on MovieOrShow { watchlistEntryV2 { createdAt } customlistEntries { createdAt genericTitleList { id } } similarTitlesV2( country: $country allowSponsoredRecommendations: $allowSponsoredRecommendations ) { sponsoredAd { ...SponsoredAd } } } ... on Movie { permanentAudiences seenlistEntry { createdAt } } ... on Show { permanentAudiences totalSeasonCount seenState(country: $country) { progress seenEpisodeCount } tvShowTrackingEntry { createdAt } seasons(sortDirection: DESC) { id objectId objectType totalEpisodeCount availableTo(country: $country, platform: $platform) { availableToDate availableCountDown(country: $country) package { id shortName } } content(country: $country, language: $language) { posterUrl seasonNumber fullPath title upcomingReleases { releaseDate releaseCountDown(country: $country) } isReleased originalReleaseYear } show { id objectId objectType watchlistEntryV2 { createdAt } content(country: $country, language: $language) { title } } fallBackClips: content(country: $country, language: \"en\") { clips { ...TrailerClips } videobusterClips: clips(providers: [VIDEOBUSTER]) { ...TrailerClips } dailymotionClips: clips(providers: [DAILYMOTION]) { ...TrailerClips } } } recentEpisodes: episodes( sortDirection: DESC limit: 3 releasedInCountry: $country ) { ...Episode } } ... on Season { totalEpisodeCount episodes(limit: $episodeMaxLimit) { ...Episode } show { id objectId objectType totalSeasonCount customlistEntries { createdAt genericTitleList { id } } tvShowTrackingEntry { createdAt } fallBackClips: content(country: $country, language: \"en\") { clips { ...TrailerClips } videobusterClips: clips(providers: [VIDEOBUSTER]) { ...TrailerClips } dailymotionClips: clips(providers: [DAILYMOTION]) { ...TrailerClips } } content(country: $country, language: $language) { title ageCertification fullPath genres { shortName } credits { role name characterName personId } productionCountries externalIds { imdbId } upcomingReleases { releaseDate releaseType package { id shortName planOffers(country: $country, platform: $platform) { retailPrice(language: $language) durationDays presentationType isTrial retailPriceValue currency } } } backdrops { backdropUrl } posterUrl isReleased videobusterClips: clips(providers: [VIDEOBUSTER]) { ...TrailerClips } dailymotionClips: clips(providers: [DAILYMOTION]) { ...TrailerClips } } seenState(country: $country) { progress } watchlistEntryV2 { createdAt } dislikelistEntry { createdAt } likelistEntry { createdAt } similarTitlesV2( country: $country allowSponsoredRecommendations: $allowSponsoredRecommendations ) { sponsoredAd { ...SponsoredAd } } } seenState(country: $country) { progress } } } fragment WatchNowOffer on Offer { id standardWebURL streamUrl package { id icon packageId clearName shortName technicalName iconWide hasRectangularIcon(country: $country, platform: WEB) } retailPrice(language: $language) retailPriceValue lastChangeRetailPriceValue currency presentationType monetizationType availableTo } 
+                
+                fragment TitleOffer on Offer
+                {
+                    id
+                    presentationType
+                    monetizationType
+                    retailPrice(language: $language)
+                    retailPriceValue
+                    currency
+                    lastChangeRetailPriceValue
+                    type
+                    package
+                    {
+                        id
+                        packageId
+                        clearName
+                        shortName
+                        technicalName
+                        icon(profile: S100)
+                        iconWide(profile: S160)
+                        planOffers(country: $country, platform: WEB)
+                        {
+                            title
+                            retailPrice(language: $language)
+                            isTrial
+                            durationDays
+                            retailPriceValue
+                            children
+                            {
+                                title
+                                retailPrice(language: $language)
+                                isTrial
+                                durationDays
+                                retailPriceValue
+                            }
+                        }
+                        hasRectangularIcon(country: $country, platform: WEB)
+                    }
+                    standardWebURL
+                    streamUrl
+                    elementCount
+                    availableTo
+                    deeplinkRoku: deeplinkURL(platform: ROKU_OS)
+                    subtitleLanguages
+                    videoTechnology
+                    audioTechnology
+                    audioLanguages(language: $language)
+                }
+                
+                fragment TrailerClips on Clip { sourceUrl externalId provider name } fragment SponsoredAd on SponsoredRecommendationAd { bidId holdoutGroup campaign { name backgroundImages { imageURL size } countdownTimer creativeType disclaimerText externalTrackers { type data } hideDetailPageButton hideImdbScore hideJwScore hideRatings hideContent posterOverride promotionalImageUrl promotionalVideo { url } promotionalTitle promotionalText promotionalProviderLogo promotionalProviderWideLogo watchNowLabel watchNowOffer { ...WatchNowOffer } nodeOverrides { nodeId promotionalImageUrl watchNowOffer { standardWebURL } } node { nodeId: id ... on MovieOrShowOrSeason { content(country: $country, language: $language) { fullPath posterUrl title originalReleaseYear scoring { imdbScore jwRating } genres { shortName translation(language: $language) } externalIds { imdbId } backdrops(format: $format, profile: $backdropProfile) { backdropUrl } isReleased } objectId objectType offers(country: $country, platform: $platform) { monetizationType presentationType package { id packageId } id } } ... on MovieOrShow { watchlistEntryV2 { createdAt } } ... on Show { seenState(country: $country) { seenEpisodeCount } } ... on Season { content(country: $country, language: $language) { seasonNumber } show { id objectId objectType content(country: $country, language: $language) { originalTitle } watchlistEntryV2 { createdAt } } } ... on GenericTitleList { followedlistEntry { createdAt name } id type content(country: $country, language: $language) { name visibility } titles(country: $country, first: 40) { totalCount edges { cursor node: nodeV2 { content(country: $country, language: $language) { fullPath posterUrl title originalReleaseYear scoring { imdbVotes imdbScore tomatoMeter certifiedFresh jwRating } isReleased } id objectId objectType } } } } } } } fragment Episode on Episode { id objectId objectType seenlistEntry { createdAt } uniqueOfferCount: offerCount( country: $country platform: $platform filter: {bestOnly: true} ) flatrate: offers( country: $country platform: $platform filter: {monetizationTypes: [FLATRATE_AND_BUY, FLATRATE, ADS, CINEMA, FREE], bestOnly: true} ) { id package { id clearName packageId } } buy: offers( country: $country platform: $platform filter: {monetizationTypes: [BUY], bestOnly: true} ) { id package { id clearName packageId } } rent: offers( country: $country platform: $platform filter: {monetizationTypes: [RENT], bestOnly: true} ) { id package { id clearName packageId } } free: offers( country: $country platform: $platform filter: {monetizationTypes: [ADS, FREE], bestOnly: true} ) { id package { id clearName packageId } } fast: offers( country: $country platform: $platform filter: {monetizationTypes: [FAST], bestOnly: true} ) { id package { id clearName packageId } } content(country: $country, language: $language) { title shortDescription episodeNumber seasonNumber isReleased runtime upcomingReleases { releaseDate label package { id packageId } } } } "}
+
+
+
+{"operationName":"GetUrlTitleDetails","variables":{"platform":"WEB","fullPath":"/fr/serie/fargo","language":"fr","country":"FR","episodeMaxLimit":20,"allowSponsoredRecommendations":{"pageType":"VIEW_TITLE_DETAIL","placement":"DETAIL_PAGE","language":"fr","country":"FR","applicationContext":{"appID":"3.9.2-webapp#3a41ece","platform":"webapp","version":"3.9.2","build":"3a41ece","isTestBuild":false},"appId":"3.9.2-webapp#3a41ece","platform":"WEB","supportedFormats":["IMAGE","VIDEO"],"supportedObjectTypes":["MOVIE","SHOW","GENERIC_TITLE_LIST","SHOW_SEASON"],"alwaysReturnBidID":true,"testingModeForceHoldoutGroup":false,"testingMode":false}},"query":"query GetUrlTitleDetails($fullPath: String!, $country: Country!, $language: Language!, $episodeMaxLimit: Int, $platform: Platform! = WEB, $allowSponsoredRecommendations: SponsoredRecommendationsInput, $format: ImageFormat, $backdropProfile: BackdropProfile, $streamingChartsFilter: StreamingChartsFilter) { urlV2(fullPath: $fullPath) { heading1 node { ...TitleDetails } } } fragment TitleDetails on Node { id ... on MovieOrShowOrSeason { offers(country: $country, platform: $platform) { ...TitleOffer } } } } "}
+
+
+
+"offers": [
+                   {
+                       "id": "b2Z8dHM4MzQ1OkZSOjM4MTpmbGF0cmF0ZTpzZA==",
+                       "presentationType": "SD",
+                       "monetizationType": "FLATRATE",
+                       "retailPrice": null,
+                       "retailPriceValue": null,
+                       "currency": "EUR",
+                       "lastChangeRetailPriceValue": null,
+                       "type": "AGGREGATED",
+                       "package": {
+                           "id": "cGF8Mzgx",
+                           "packageId": 381,
+                           "clearName": "Canal+",
+                           "shortName": "cpd",
+                           "technicalName": "canalplus",
+                           "icon": "/icon/306893908/s100/canalplus.{format}",
+                           "iconWide": "/icon_wide/322151512/s160/canalplus.{format}",
+                           "planOffers": [
+                               {
+                                   "title": "Canal+ monthly",
+                                   "retailPrice": "19,99€",
+                                   "isTrial": false,
+                                   "durationDays": 30,
+                                   "retailPriceValue": 19.98,
+                                   "children": [],
+                                   "__typename": "PackagePlanOffer"
+                               },
+                               {
+                                   "title": "CANAL+ & EUROPEAN CUP PASS",
+                                   "retailPrice": "29,99€",
+                                   "isTrial": false,
+                                   "durationDays": 30,
+                                   "retailPriceValue": 29.99,
+                                   "children": [],
+                                   "__typename": "PackagePlanOffer"
+                               },
+                               {
+                                   "title": "Canal+ Cinema Series with Cine+ OCS",
+                                   "retailPrice": "29,99€",
+                                   "isTrial": false,
+                                   "durationDays": 30,
+                                   "retailPriceValue": 29.99,
+                                   "children": [],
+                                   "__typename": "PackagePlanOffer"
+                               },
+                               {
+                                   "title": "Canal+ sport",
+                                   "retailPrice": "34,99€",
+                                   "isTrial": false,
+                                   "durationDays": 30,
+                                   "retailPriceValue": 34.99,
+                                   "children": [],
+                                   "__typename": "PackagePlanOffer"
+                               },
+                               {
+                                   "title": "Canal+ friends and family with Cine+ OCS",
+                                   "retailPrice": "64,99€",
+                                   "isTrial": false,
+                                   "durationDays": 30,
+                                   "retailPriceValue": 64.98,
+                                   "children": [],
+                                   "__typename": "PackagePlanOffer"
+                               }
+                           ],
+                           "hasRectangularIcon": true,
+                           "__typename": "Package"
+                       },
+                       "standardWebURL": "https://www.canalplus.com/series/fargo/h/23644924_50076",
+                       "streamUrl": null,
+                       "elementCount": 5,
+                       "availableTo": null,
+                       "deeplinkRoku": null,
+                       "subtitleLanguages": [],
+                       "videoTechnology": [],
+                       "audioTechnology": [],
+                       "audioLanguages": [],
+                       "__typename": "Offer"
+                   },
+
+
+{"operationName":"GetUrlTitleDetails","variables":{"platform":"WEB","fullPath":"/fr/serie/arcane","country":"FR"},"query":"query GetUrlTitleDetails($fullPath: String!, $country: Country!, $platform: Platform! = WEB) { urlV2(fullPath: $fullPath) { heading1 node { ...TitleDetails } } } fragment TitleDetails on Node { id ... on Show { offers(country: $country, platform: $platform) { presentationType monetizationType elementCount package { clearName icon(profile: S100, format:PNG) } } } } "}

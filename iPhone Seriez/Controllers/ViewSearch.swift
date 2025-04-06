@@ -7,45 +7,64 @@
 //
 
 import UIKit
-import SeriesCommon
 
-class ViewSearch: UIViewController
-{
+
+class CellResult: UITableViewCell {
+    @IBOutlet weak var titre: UILabel!
+    @IBOutlet weak var annee: UILabel!
+    @IBOutlet weak var poster: UIImageView!
     
-    @IBOutlet weak var subViewAnnee: UIView!
-    @IBOutlet weak var subViewTitre: UIView!
-    @IBOutlet weak var subViewTexteLoc: UIView!
-    @IBOutlet weak var subViewGenre: UIView!
-    @IBOutlet weak var subViewNetwork: UIView!
-    @IBOutlet weak var subViewLangue: UIView!
+    @IBOutlet weak var sourceTVMaze: UIImageView!
+    @IBOutlet weak var sourceBetaSeries: UIImageView!
+    @IBOutlet weak var sourceTrakt: UIImageView!
+    @IBOutlet weak var sourceMovieDB: UIImageView!
     
-    @IBOutlet weak var carreResults: UIView!
-    @IBOutlet weak var carreDetails: UIView!
+    var index: Int = 0
+}
+
+
+struct SourceRecherche {
+    var TVMaze      : Bool = false
+    var BetaSeries  : Bool = false
+    var Trakt       : Bool = false
+    var MovieDB     : Bool = false
+    
+    public init(foundTVMaze : Bool, foundBetaSeries : Bool, foundTrakt : Bool, foundMovieDB : Bool) {
+        self.TVMaze = foundTVMaze
+        self.BetaSeries = foundBetaSeries
+        self.Trakt = foundTrakt
+        self.MovieDB = foundMovieDB
+    }
+}
+
+class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    @IBOutlet weak var quickSearch: UIView!
+    @IBOutlet weak var traktSearch: UIView!
+    @IBOutlet weak var moviedbSearch: UIView!
+    @IBOutlet weak var betaSeriesSearch: UIView!
+    @IBOutlet weak var viewRecherche: UIView!
+    @IBOutlet weak var viewResultats: UIView!
+    @IBOutlet weak var selectBarre: UISegmentedControl!
+    
+    // Entete
     @IBOutlet weak var cptResults: UITextField!
-    @IBOutlet weak var cptDetails: UITextField!
-    @IBOutlet weak var roueResults: UIActivityIndicatorView!
-    @IBOutlet weak var roueDetails: UIActivityIndicatorView!
-    
-    @IBOutlet weak var labelTitre: UILabel!
-    @IBOutlet weak var labelTexteLoc: UILabel!
-    @IBOutlet weak var labelAnnee: UILabel!
-    @IBOutlet weak var labelGenre: UILabel!
-    @IBOutlet weak var labelNetwork: UILabel!
-    @IBOutlet weak var labelLangue: UILabel!
-    
+    @IBOutlet weak var cptResultsTotal: UITextField!
     @IBOutlet weak var descriptionTexte: UITextView!
+    @IBOutlet weak var searchResults: UITableView!
     
+    // Quick Search
+    @IBOutlet weak var quickTitre: UITextField!
+    
+    // Trakt Search
+    @IBOutlet weak var titre: UITextField!
     @IBOutlet weak var inTitre: UISwitch!
     @IBOutlet weak var inResume: UISwitch!
     @IBOutlet weak var inCasting: UISwitch!
     
-    @IBOutlet weak var titre: UITextField!
+    // MovieDB Search
     @IBOutlet weak var debut: UITextField!
     @IBOutlet weak var fin: UITextField!
     
-    @IBOutlet weak var ABC: UIButton!
-    @IBOutlet weak var CBS: UIButton!
-    @IBOutlet weak var FOX: UIButton!
     @IBOutlet weak var FX: UIButton!
     @IBOutlet weak var HBO: UIButton!
     @IBOutlet weak var NBC: UIButton!
@@ -55,186 +74,138 @@ class ViewSearch: UIViewController
     @IBOutlet weak var TheCW: UIButton!
     @IBOutlet weak var Canal: UIButton!
     
-    @IBOutlet weak var action: UIButton!
-    @IBOutlet weak var adventure: UIButton!
+    @IBOutlet weak var actionadventure: UIButton!
     @IBOutlet weak var animation: UIButton!
     @IBOutlet weak var comedy: UIButton!
     @IBOutlet weak var crime: UIButton!
-    @IBOutlet weak var documentary: UIButton!
     @IBOutlet weak var drama: UIButton!
-    @IBOutlet weak var family: UIButton!
-    @IBOutlet weak var fantasy: UIButton!
-    @IBOutlet weak var history: UIButton!
-    @IBOutlet weak var horror: UIButton!
-    @IBOutlet weak var music: UIButton!
     @IBOutlet weak var mystery: UIButton!
-    @IBOutlet weak var romance: UIButton!
-    @IBOutlet weak var scienceFiction: UIButton!
-    @IBOutlet weak var tvMovie: UIButton!
-    @IBOutlet weak var thriller: UIButton!
-    @IBOutlet weak var war: UIButton!
+    @IBOutlet weak var scififantasy: UIButton!
+    @IBOutlet weak var warpolitics: UIButton!
     @IBOutlet weak var western: UIButton!
     
     @IBOutlet weak var francais: UIButton!
     @IBOutlet weak var anglais: UIButton!
     
-    var activeSubView : UIView!
-    var seriesTrouvees : [Serie] = []
-    var mode : Int = 2
-    var detailsLoaded : Bool = false
+    // BetaSeries Search
+    @IBOutlet weak var debutBetaSeries: UITextField!
+    @IBOutlet weak var finBetaSeries: UITextField!
+    
+    @IBOutlet weak var duree0020: UIButton!
+    @IBOutlet weak var duree2030: UIButton!
+    @IBOutlet weak var duree3040: UIButton!
+    @IBOutlet weak var duree4050: UIButton!
+    @IBOutlet weak var duree5060: UIButton!
+    @IBOutlet weak var duree60plus: UIButton!
+    
+    @IBOutlet weak var streamNetflix: UIButton!
+    @IBOutlet weak var streamDisney: UIButton!
+    @IBOutlet weak var streamCanal: UIButton!
+    @IBOutlet weak var streamAmazon: UIButton!
+    @IBOutlet weak var streamApple: UIButton!
+    @IBOutlet weak var streamOCS: UIButton!
+    
+    @IBOutlet weak var genreBScomedy: UIButton!
+    @IBOutlet weak var genreBSdrama: UIButton!
+    @IBOutlet weak var genreBSsoap: UIButton!
+    @IBOutlet weak var genreBScrime: UIButton!
+    @IBOutlet weak var genreBShorror: UIButton!
+    @IBOutlet weak var genreBSchild: UIButton!
+    @IBOutlet weak var genreBSanime: UIButton!
+    @IBOutlet weak var genreBSaction: UIButton!
+    @IBOutlet weak var genreBSfamilly: UIButton!
+    @IBOutlet weak var genreBSadventure: UIButton!
+    @IBOutlet weak var genreBSfantasy: UIButton!
+    @IBOutlet weak var genreBSmystery: UIButton!
+    @IBOutlet weak var genreBSanimation: UIButton!
+    @IBOutlet weak var genreBSscify: UIButton!
+    @IBOutlet weak var genreBSsport: UIButton!
+    @IBOutlet weak var genreBSminiserie: UIButton!
+    @IBOutlet weak var genreBSromance: UIButton!
+    @IBOutlet weak var genreBSsuspense: UIButton!
+    @IBOutlet weak var genreBSwestern: UIButton!
+    @IBOutlet weak var genreBSthriller: UIButton!
+    @IBOutlet weak var genreBShistory: UIButton!
+    
+    
+    let viewQuick       : Int = 0
+    let viewTrakt       : Int = 1
+    let viewMovieDB     : Int = 2
+    let viewBetaSeries  : Int = 3
+    
+    let alphaFull  : CGFloat = 1.00
+    let alphaLight : CGFloat = 0.20
+    
+    var seriesTrouvees  : [Serie] = []
+    var sourcesTrouvees  : [SourceRecherche] = []
+    var currentView     : Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleGesture))
-        swipeLeft.direction = .left
-        self.view.addGestureRecognizer(swipeLeft)
+        selectBarre.backgroundColor = mainUIcolor
         
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(handleGesture))
-        swipeRight.direction = .right
-        self.view.addGestureRecognizer(swipeRight)
-        
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
-        view.addGestureRecognizer(tap)
-        
-        labelTitre.transform = CGAffineTransform.init(rotationAngle: ( 3.1415926535/2.0))
-        labelTexteLoc.transform = CGAffineTransform.init(rotationAngle: ( 3.1415926535/2.0))
-        labelAnnee.transform = CGAffineTransform.init(rotationAngle: ( 3.1415926535/2.0))
-        labelGenre.transform = CGAffineTransform.init(rotationAngle: ( 3.1415926535/2.0))
-        labelNetwork.transform = CGAffineTransform.init(rotationAngle: ( 3.1415926535/2.0))
-        labelLangue.transform = CGAffineTransform.init(rotationAngle: ( 3.1415926535/2.0))
-        labelTitre.frame.origin = CGPoint(x: 300.0, y: 10.0)
-        labelTexteLoc.frame.origin = CGPoint(x: 300.0, y: 10.0)
-        labelAnnee.frame.origin = CGPoint(x: 10.0, y: 10.0)
-        labelGenre.frame.origin = CGPoint(x: 10.0, y: 10.0)
-        labelNetwork.frame.origin = CGPoint(x: 10.0, y: 10.0)
-        labelLangue.frame.origin = CGPoint(x: 10.0, y: 10.0)
-        
-        makeGradiant(carre: subViewTitre, couleur: "Rouge")
-        makeGradiant(carre: subViewTexteLoc, couleur: "Vert")
-        makeGradiant(carre: subViewAnnee, couleur: "Vert")
-        makeGradiant(carre: subViewGenre, couleur: "Bleu")
-        makeGradiant(carre: subViewNetwork, couleur: "Rouge")
-        makeGradiant(carre: subViewLangue, couleur: "Vert")
-        
-        makeGradiant(carre: carreResults, couleur: "Vert")
-        makeGradiant(carre: carreDetails, couleur: "Vert")
-        
-        subViewTitre.frame.origin.x = -333
-        subViewTexteLoc.frame.origin.x = -333
-        subViewAnnee.frame.origin.x = 373
-        subViewGenre.frame.origin.x = 373
-        subViewNetwork.frame.origin.x = 373
-        subViewLangue.frame.origin.x = 373
-        
-        activeSubView = nil
-        
+        makeGradiant(carre: traktSearch, couleur: "Blanc")
+        makeGradiant(carre: quickSearch, couleur: "Blanc")
+        makeGradiant(carre: moviedbSearch, couleur: "Blanc")
+        makeGradiant(carre: betaSeriesSearch, couleur: "Blanc")
+        makeGradiant(carre: viewRecherche, couleur: "Blanc")
+        makeGradiant(carre: viewResultats, couleur: "Blanc")
+
         arrondir(texte: cptResults, radius: 10.0)
-        arrondir(texte: cptDetails, radius: 10.0)
-        cptResults.text = "+" + "\u{221E}"
-        cptDetails.text = "+" + "\u{221E}"
+        arrondir(texte: cptResultsTotal, radius: 10.0)
+        cptResults.text = "0"
+        cptResultsTotal.text = "+" + "\u{221E}"
+        currentView = viewQuick
         
         descriptionTexte.text = ""
     }
     
-    
-    @objc func handleGesture(gesture: UISwipeGestureRecognizer) -> Void {
+    @IBAction func searchMode(_ sender: Any) {
+        let toggle : Int = (sender as! UISegmentedControl).selectedSegmentIndex
+        descriptionTexte.text = ""
         
-        // Mode "Par Titre"
-        if (mode == 0)
-        {
-            if gesture.direction == UISwipeGestureRecognizer.Direction.right {
-                if (self.activeSubView == nil) {
-                    if ( (gesture.location(in: self.view).y > 100.0) && (gesture.location(in: self.view).y < 200.0) )
-                    {
-                        UIView.animate(withDuration: 0.7, animations: { self.subViewTitre.frame.origin.x = 0 } )
-                        self.activeSubView = subViewTitre
-                    }
-                    else if ( (gesture.location(in: self.view).y > 200.0) && (gesture.location(in: self.view).y < 350.0) )
-                    {
-                        UIView.animate(withDuration: 0.7, animations: { self.subViewTexteLoc.frame.origin.x = 0 } )
-                        self.activeSubView = subViewTexteLoc
-                    }
-                }
-            }
-            else if gesture.direction == UISwipeGestureRecognizer.Direction.left {
-                if (self.activeSubView != nil) {
-                    UIView.animate(withDuration: 0.7, animations: { self.activeSubView.frame.origin.x = -300 } )
-                    self.activeSubView = nil
-                    self.updateRechercheTitre()
-                }
-            }
-        }
-        
-        
-        // Mode "Par Critères"
-        if (mode == 1)
-        {
-            if gesture.direction == UISwipeGestureRecognizer.Direction.right {
-                if (self.activeSubView != nil) {
-                    UIView.animate(withDuration: 0.7, animations: { self.activeSubView.frame.origin.x = 340 } )
-                    self.activeSubView = nil
-                    self.updateRecherche()
-                }
-            }
-            else if gesture.direction == UISwipeGestureRecognizer.Direction.left {
-                if (self.activeSubView == nil) {
-                    if ( (gesture.location(in: self.view).y > 100.0) && (gesture.location(in: self.view).y < 200.0) )
-                    {
-                        UIView.animate(withDuration: 0.7, animations: { self.subViewAnnee.frame.origin.x = 45 } )
-                        self.activeSubView = subViewAnnee
-                    }
-                    else if ( (gesture.location(in: self.view).y > 200.0) && (gesture.location(in: self.view).y < 300.0) )
-                    {
-                        UIView.animate(withDuration: 0.7, animations: { self.subViewGenre.frame.origin.x = 45 } )
-                        self.activeSubView = subViewGenre
-                    }
-                    else if ( (gesture.location(in: self.view).y > 300.0) && (gesture.location(in: self.view).y < 400.0) )
-                    {
-                        UIView.animate(withDuration: 0.7, animations: { self.subViewNetwork.frame.origin.x = 45 } )
-                        self.activeSubView = subViewNetwork
-                    }
-                    else if ( (gesture.location(in: self.view).y > 400.0) && (gesture.location(in: self.view).y < 500.0) )
-                    {
-                        UIView.animate(withDuration: 0.7, animations: { self.subViewLangue.frame.origin.x = 45 } )
-                        self.activeSubView = subViewLangue
-                    }
-                }
-            }
+        switch toggle {
+        case 0:
+            self.moviedbSearch.isHidden = true
+            self.traktSearch.isHidden = true
+            self.betaSeriesSearch.isHidden = true
+            self.quickSearch.isHidden = false
+            currentView = viewQuick
+            updateRechercheQuick(sender)
+            break
+            
+        case 1:
+            self.moviedbSearch.isHidden = true
+            self.traktSearch.isHidden = false
+            self.betaSeriesSearch.isHidden = true
+            self.quickSearch.isHidden = true
+            currentView = viewTrakt
+            updateRechercheTrakt(sender)
+            break
+            
+        case 2:
+            self.moviedbSearch.isHidden = false
+            self.traktSearch.isHidden = true
+            self.betaSeriesSearch.isHidden = true
+            self.quickSearch.isHidden = true
+            currentView = viewMovieDB
+            updateRechercheCriteres(sender)
+            break
+            
+        case 3:
+            self.moviedbSearch.isHidden = true
+            self.traktSearch.isHidden = true
+            self.betaSeriesSearch.isHidden = false
+            self.quickSearch.isHidden = true
+            currentView = viewBetaSeries
+            updateRechercheBetaSeries(sender)
+            break
+            
+        default:
+            return
         }
     }
-    
-    @IBAction func parTitre(_ sender: Any) {
-        mode = 0
-        
-        UIView.animate(withDuration: 0.7, animations: { self.subViewAnnee.frame.origin.x = 373 } )
-        UIView.animate(withDuration: 0.7, animations: { self.subViewGenre.frame.origin.x = 373 } )
-        UIView.animate(withDuration: 0.7, animations: { self.subViewNetwork.frame.origin.x = 373 } )
-        UIView.animate(withDuration: 0.7, animations: { self.subViewLangue.frame.origin.x = 373 } )
-        
-        UIView.animate(withDuration: 0.7, animations: { self.subViewTitre.frame.origin.x = -300 } )
-        UIView.animate(withDuration: 0.7, animations: { self.subViewTexteLoc.frame.origin.x = -300 } )
-        
-        descriptionTexte.text = ""
-        updateRechercheTitre()
-    }
-    
-    
-    @IBAction func parCriteres(_ sender: Any) {
-        mode = 1
-        
-        UIView.animate(withDuration: 0.7, animations: { self.subViewAnnee.frame.origin.x = 340 } )
-        UIView.animate(withDuration: 0.7, animations: { self.subViewGenre.frame.origin.x = 340 } )
-        UIView.animate(withDuration: 0.7, animations: { self.subViewNetwork.frame.origin.x = 340 } )
-        UIView.animate(withDuration: 0.7, animations: { self.subViewLangue.frame.origin.x = 340 } )
-        
-        UIView.animate(withDuration: 0.7, animations: { self.subViewTitre.frame.origin.x = -333 } )
-        UIView.animate(withDuration: 0.7, animations: { self.subViewTexteLoc.frame.origin.x = -333 } )
-        
-        descriptionTexte.text = ""
-        updateRecherche()
-    }
-    
     
     @IBAction func buttonSelect3States(_ sender: Any) {
         let button : UIButton = sender as! UIButton
@@ -251,19 +222,207 @@ class ViewSearch: UIViewController
             button.setTitleColor(.systemGreen, for: .selected)
             button.isSelected = false
         }
+        
+        updateRechercheCriteres(sender)
     }
     
     @IBAction func buttonSelect2States(_ sender: Any) {
         let button : UIButton = sender as! UIButton
         button.isSelected = !button.isSelected
+        
+        if (currentView == viewMovieDB) { updateRechercheCriteres(sender) }
+        else if (currentView == viewBetaSeries) { updateRechercheBetaSeries(sender) }
     }
     
     @objc func dismissKeyboard() {
         view.endEditing(true)
     }
     
-    func updateRechercheTitre()
-    {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return min(seriesTrouvees.count, 20)
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CellResult", for: indexPath) as! CellResult
+        
+        cell.titre.text = seriesTrouvees[indexPath.row].serie
+        if (seriesTrouvees[indexPath.row].year == 0) { cell.annee.text = "-" }
+        else { cell.annee.text = String(seriesTrouvees[indexPath.row].year) }
+        cell.poster.image = getImage(seriesTrouvees[indexPath.row].poster)
+        cell.index = indexPath.row
+        cell.backgroundColor = indexPath.row % 2 == 0 ? UIcolor2 : UIcolor1
+
+        if (sourcesTrouvees[indexPath.row].TVMaze)      { cell.sourceTVMaze.alpha = alphaFull }      else { cell.sourceTVMaze.alpha = alphaLight }
+        if (sourcesTrouvees[indexPath.row].BetaSeries)  { cell.sourceBetaSeries.alpha = alphaFull }  else { cell.sourceBetaSeries.alpha = alphaLight }
+        if (sourcesTrouvees[indexPath.row].Trakt)       { cell.sourceTrakt.alpha = alphaFull }       else { cell.sourceTrakt.alpha = alphaLight }
+        if (sourcesTrouvees[indexPath.row].MovieDB)     { cell.sourceMovieDB.alpha = alphaFull }     else { cell.sourceMovieDB.alpha = alphaLight }
+        
+        return cell
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let viewController = segue.destination as! SerieFiche
+        let tableCell : CellResult = sender as! CellResult
+        
+        if (self.currentView == viewBetaSeries) { seriesTrouvees[tableCell.index] = betaSeries.getSerieGlobalInfos(idTVDB: seriesTrouvees[tableCell.index].idTVdb, idIMDB: seriesTrouvees[tableCell.index].idIMdb, idBetaSeries: seriesTrouvees[tableCell.index].idBetaSeries) }
+        
+        db.downloadGlobalInfo(serie: seriesTrouvees[tableCell.index])
+        
+        viewController.serie = seriesTrouvees[tableCell.index]
+        viewController.image = getImage(seriesTrouvees[tableCell.index].banner)
+        viewController.modeAffichage = modeRecherche
+    }
+    
+    
+    
+    
+    // ===================================================
+    //
+    //      Recherche Quick
+    //
+    // ===================================================
+    
+    @IBAction func updateRechercheQuick(_ sender: Any) {
+        
+        // Choix du titre
+        if (quickTitre.text == "") { descriptionTexte.text = "Toutes les séries" }
+        else { descriptionTexte.text = "Titres contenant : \n     " + quickTitre.text! }
+        
+        if (quickTitre.text!.count > 2) {
+            let searchString : String = quickTitre.text!
+            
+            var dataTrakt       : [Serie] = []
+            var dataBetaSeries  : [Serie] = []
+            var dataTheMovieDB  : [Serie] = []
+            var dataTVMaze      : [Serie] = []
+            
+            let queue : OperationQueue = OperationQueue()
+            
+            queue.addOperation(BlockOperation(block: { dataBetaSeries = betaSeries.rechercheParTitre(serieArechercher: searchString) } ))
+            queue.addOperation(BlockOperation(block: { dataTheMovieDB = theMoviedb.rechercheParTitre(serieArechercher: searchString) } ))
+            queue.addOperation(BlockOperation(block: { dataTVMaze = tvMaze.rechercheParTitre(serieArechercher: searchString) } ))
+            queue.addOperation(BlockOperation(block: { dataTrakt = trakt.rechercheParTitre(serieArechercher: searchString) } ))
+            
+            queue.waitUntilAllOperationsAreFinished()
+            (seriesTrouvees, sourcesTrouvees) = mergeResults(dataTrakt: dataTrakt, dataBetaSeries: dataBetaSeries, dataTheMovieDB: dataTheMovieDB, dataTVMaze: dataTVMaze)
+            
+            cptResults.text = String(seriesTrouvees.count)
+            cptResultsTotal.text = String(dataTrakt.count + dataBetaSeries.count + dataTheMovieDB.count + dataTVMaze.count)
+        }
+        else {
+            seriesTrouvees = []
+            cptResults.text = "0"
+            cptResultsTotal.text = "+" + "\u{221E}"
+        }
+        
+        searchResults.reloadData()
+    }
+    
+    func mergeResults(dataTrakt :[Serie], dataBetaSeries :[Serie], dataTheMovieDB :[Serie], dataTVMaze :[Serie]) -> ([Serie], [SourceRecherche]) {
+        var result : [Serie] = []
+        var sources : [SourceRecherche] = []
+        
+        var traitees : [String] = []
+        
+        // Merge series found by Trakt
+        for uneSerieTrakt in dataTrakt {
+            let uneSerie : Serie = Serie(serie: "")
+            
+            let emptySerie :Serie = Serie(serie:uneSerieTrakt.serie)
+            var uneSerieBetaSeries : Serie = emptySerie
+            var uneSerieMovieDB : Serie = emptySerie
+            var uneSerieTVMaze : Serie = emptySerie
+            var uneSerieIMDB : Serie = emptySerie
+            uneSerieIMDB = imdb.getSerieGlobalInfos(idIMDB: uneSerieTrakt.idIMdb)
+            var source : SourceRecherche = SourceRecherche.init(foundTVMaze: false, foundBetaSeries: false, foundTrakt: true, foundMovieDB: false)
+            
+            for i in 0..<dataBetaSeries.count { if (uneSerieTrakt.idIMdb == dataBetaSeries[i].idIMdb) { uneSerieBetaSeries = dataBetaSeries[i]; source.BetaSeries = true; break; } }
+            for i in 0..<dataTheMovieDB.count { if (uneSerieTrakt.idMoviedb == dataTheMovieDB[i].idMoviedb) { uneSerieMovieDB = dataTheMovieDB[i]; source.MovieDB = true; break; } }
+            for i in 0..<dataTVMaze.count { if (uneSerieTrakt.idIMdb == dataTVMaze[i].idIMdb) { uneSerieTVMaze = dataTVMaze[i]; source.TVMaze = true; break; } }
+            
+            uneSerie.cleverMerge(TVdb: emptySerie, Moviedb: uneSerieMovieDB, Trakt: uneSerieTrakt, BetaSeries: uneSerieBetaSeries,
+                                 IMDB: uneSerieIMDB, RottenTomatoes: emptySerie, TVmaze: uneSerieTVMaze, MetaCritic: emptySerie,
+                                 AlloCine: emptySerie, SensCritique: emptySerie, SIMKL: emptySerie)
+            
+            traitees.append(uneSerie.serie)
+            result.append(uneSerie)
+            sources.append(source)
+        }
+        
+        // Adding series from BetaSeries
+        for uneSerieBetaSeries in dataBetaSeries {
+            if traitees.contains(uneSerieBetaSeries.serie) { continue }
+            
+            let uneSerie : Serie = Serie(serie: "")
+            
+            let emptySerie :Serie = Serie(serie:uneSerieBetaSeries.serie)
+            var uneSerieMovieDB : Serie = emptySerie
+            var uneSerieTVMaze : Serie = emptySerie
+            var uneSerieIMDB : Serie = emptySerie
+            uneSerieIMDB = imdb.getSerieGlobalInfos(idIMDB: uneSerieBetaSeries.idIMdb)
+            var source : SourceRecherche = SourceRecherche.init(foundTVMaze: false, foundBetaSeries: true, foundTrakt: false, foundMovieDB: false)
+            
+            for i in 0..<dataTheMovieDB.count { if (uneSerieBetaSeries.serie == dataTheMovieDB[i].serie) { uneSerieMovieDB = dataTheMovieDB[i]; source.MovieDB = true; break; } }
+            for i in 0..<dataTVMaze.count { if (uneSerieBetaSeries.idIMdb == dataTVMaze[i].idIMdb) { uneSerieTVMaze = dataTVMaze[i]; source.TVMaze = true; break; } }
+            
+            uneSerie.cleverMerge(TVdb: emptySerie, Moviedb: uneSerieMovieDB, Trakt: emptySerie, BetaSeries: uneSerieBetaSeries,
+                                 IMDB: uneSerieIMDB, RottenTomatoes: emptySerie, TVmaze: uneSerieTVMaze, MetaCritic: emptySerie,
+                                 AlloCine: emptySerie, SensCritique: emptySerie, SIMKL: emptySerie)
+            
+            traitees.append(uneSerie.serie)
+            result.append(uneSerie)
+            sources.append(source)
+        }
+        
+        // Adding series from TVMaze
+        for uneSerieTVMaze in dataTVMaze {
+            if traitees.contains(uneSerieTVMaze.serie) { continue }
+            
+            let uneSerie : Serie = Serie(serie: "")
+            
+            let emptySerie :Serie = Serie(serie:uneSerieTVMaze.serie)
+            var uneSerieMovieDB : Serie = emptySerie
+            var uneSerieIMDB : Serie = emptySerie
+            uneSerieIMDB = imdb.getSerieGlobalInfos(idIMDB: uneSerieTVMaze.idIMdb)
+            var source : SourceRecherche = SourceRecherche.init(foundTVMaze: true, foundBetaSeries: false, foundTrakt: false, foundMovieDB: false)
+            
+            for i in 0..<dataTheMovieDB.count { if (uneSerieTVMaze.serie == dataTheMovieDB[i].serie) { uneSerieMovieDB = dataTheMovieDB[i]; source.MovieDB = true; break; } }
+            
+            uneSerie.cleverMerge(TVdb: emptySerie, Moviedb: uneSerieMovieDB, Trakt: emptySerie, BetaSeries: emptySerie,
+                                 IMDB: uneSerieIMDB, RottenTomatoes: emptySerie, TVmaze: uneSerieTVMaze, MetaCritic: emptySerie,
+                                 AlloCine: emptySerie, SensCritique: emptySerie, SIMKL: emptySerie)
+            
+            traitees.append(uneSerie.serie)
+            result.append(uneSerie)
+            sources.append(source)
+        }
+        
+        // Adding series from MovieDB
+        for uneSerieMovieDB in dataTheMovieDB {
+            if traitees.contains(uneSerieMovieDB.serie) { continue }
+            let source : SourceRecherche = SourceRecherche.init(foundTVMaze: false, foundBetaSeries: false, foundTrakt: false, foundMovieDB: true)
+            result.append(uneSerieMovieDB)
+            sources.append(source)
+        }
+        
+        let arrays_combined = zip(result, sources).sorted(by: {($0.0.ratingTrakt + $0.0.ratingBetaSeries + $0.0.ratingMovieDB + $0.0.ratingTVmaze) > ($1.0.ratingTrakt + $1.0.ratingBetaSeries + $1.0.ratingMovieDB + $1.0.ratingTVmaze)})
+        
+        return (Array(arrays_combined.map {$0.0}.prefix(20)), Array(arrays_combined.map {$0.1}.prefix(20)))
+    }
+    
+    
+    // ===================================================
+    //
+    //      Recherche Trakt
+    //
+    // ===================================================
+    
+    @IBAction func updateRechercheTrakt(_ sender: Any) {
         var chercherDans : String = ""
         
         // Choix du titre
@@ -288,19 +447,34 @@ class ViewSearch: UIViewController
         
         // Recherche sur Trakt
         seriesTrouvees = []
+        sourcesTrouvees = []
         
         if ((titre.text != "") && (chercherDans != "")) {
             chercherDans.removeLast()
             seriesTrouvees = trakt.recherche(serieArechercher: titre.text!, aChercherDans : chercherDans)
         }
         
+        let uneSourceTrakt : SourceRecherche = SourceRecherche.init(foundTVMaze: false, foundBetaSeries: false, foundTrakt: true, foundMovieDB: false)
+        for _ in seriesTrouvees {
+            sourcesTrouvees.append(uneSourceTrakt)
+        }
+        
+        searchResults.reloadData()
+        
         cptResults.text = String(seriesTrouvees.count)
-        cptDetails.text = "-"
-        detailsLoaded = false
+        cptResultsTotal.text = String(seriesTrouvees.count)
     }
     
-    func updateRecherche ()
-    {
+    
+    
+    
+    // ===================================================
+    //
+    //      Recherche Movie DB
+    //
+    // ===================================================
+    
+    @IBAction func updateRechercheCriteres (_ sender: Any) {
         descriptionTexte.text = "Toutes les séries"
         
         // Choix de la periode
@@ -313,29 +487,18 @@ class ViewSearch: UIViewController
             else { descriptionTexte.text = descriptionTexte.text + "\n\ndiffusées entre " + debut.text! + " et " + fin.text! }
         }
         
-        
-        
         // Choix des genres
         var tmpGenres : String = ""
-        if (action.isSelected && (action.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "Action, " }
-        if (adventure.isSelected && (adventure.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "Adventure, " }
+        if (actionadventure.isSelected && (actionadventure.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "Action & Adventure, " }
         if (animation.isSelected && (animation.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "Animation, " }
         if (comedy.isSelected && (comedy.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "Comedy, " }
         if (crime.isSelected && (crime.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "Crime, " }
-        if (documentary.isSelected && (documentary.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "Documentary, " }
         if (drama.isSelected && (drama.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "Drama, " }
-        if (family.isSelected && (family.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "Family, " }
-        if (fantasy.isSelected && (fantasy.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "Fantasy, " }
-        if (history.isSelected && (history.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "History, " }
-        if (horror.isSelected && (horror.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "Horror, " }
-        if (music.isSelected && (music.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "Music, " }
         if (mystery.isSelected && (mystery.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "Mystery, " }
-        if (romance.isSelected && (romance.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "Romance, " }
-        if (scienceFiction.isSelected && (scienceFiction.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "Science Fiction, " }
-        if (tvMovie.isSelected && (tvMovie.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "TV Movie, " }
-        if (thriller.isSelected && (thriller.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "Thriller, " }
-        if (war.isSelected && (war.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "War, " }
+        if (scififantasy.isSelected && (scififantasy.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "Sci-Fi & Fantasy, " }
+        if (warpolitics.isSelected && (warpolitics.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "War & Politics, " }
         if (western.isSelected && (western.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "Western, " }
+        
         if (tmpGenres == "" ) { descriptionTexte.text = descriptionTexte.text + "\n\ntous genres confondus" }
         else {
             tmpGenres.removeLast()
@@ -343,27 +506,18 @@ class ViewSearch: UIViewController
             descriptionTexte.text = descriptionTexte.text + "\n\nde genre " + tmpGenres
         }
         
-        // TODO : exclusions de genres
+        // exclusions de genres
         var tmpGenres2 : String = ""
-        if (action.isSelected && (action.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "Action, " }
-        if (adventure.isSelected && (adventure.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "Adventure, " }
+        if (actionadventure.isSelected && (actionadventure.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "Action & Adventure, " }
         if (animation.isSelected && (animation.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "Animation, " }
         if (comedy.isSelected && (comedy.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "Comedy, " }
         if (crime.isSelected && (crime.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "Crime, " }
-        if (documentary.isSelected && (documentary.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "Documentary, " }
         if (drama.isSelected && (drama.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "Drama, " }
-        if (family.isSelected && (family.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "Family, " }
-        if (fantasy.isSelected && (fantasy.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "Fantasy, " }
-        if (history.isSelected && (history.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "History, " }
-        if (horror.isSelected && (horror.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "Horror, " }
-        if (music.isSelected && (music.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "Music, " }
         if (mystery.isSelected && (mystery.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "Mystery, " }
-        if (romance.isSelected && (romance.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "Romance, " }
-        if (scienceFiction.isSelected && (scienceFiction.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "Science Fiction, " }
-        if (tvMovie.isSelected && (tvMovie.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "TV Movie, " }
-        if (thriller.isSelected && (thriller.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "Thriller, " }
-        if (war.isSelected && (war.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "War, " }
+        if (scififantasy.isSelected && (scififantasy.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "Sci-Fi & Fantasy, " }
+        if (warpolitics.isSelected && (warpolitics.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "War & Politics, " }
         if (western.isSelected && (western.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "Western, " }
+        
         if (tmpGenres2 == "" ) { descriptionTexte.text = descriptionTexte.text + "" }
         else {
             tmpGenres2.removeLast()
@@ -374,9 +528,6 @@ class ViewSearch: UIViewController
         
         // Choix du network de diffusion
         var tmpNetworks : String = ""
-        if (ABC.isSelected) { tmpNetworks = tmpNetworks + "ABC, " }
-        if (CBS.isSelected) { tmpNetworks = tmpNetworks + "CBS, " }
-        if (FOX.isSelected) { tmpNetworks = tmpNetworks + "FOX, " }
         if (FX.isSelected) { tmpNetworks = tmpNetworks + "FX, " }
         if (HBO.isSelected) { tmpNetworks = tmpNetworks + "HBO, " }
         if (NBC.isSelected) { tmpNetworks = tmpNetworks + "NBC, " }
@@ -416,6 +567,7 @@ class ViewSearch: UIViewController
         // Recherche sur TheMovieDB
         var nbSeriesTrouvees : Int = 0
         seriesTrouvees = []
+        sourcesTrouvees = []
         
         (seriesTrouvees, nbSeriesTrouvees) = theMoviedb.chercher(genreIncl: tmpGenres.replacingOccurrences(of: ", ", with: ","),
                                                                  genreExcl: tmpGenres2.replacingOccurrences(of: ", ", with: ","),
@@ -424,74 +576,134 @@ class ViewSearch: UIViewController
                                                                  langue: tmpLangue,
                                                                  network: tmpNetworks.replacingOccurrences(of: ", ", with: ","))
         
-        cptResults.text = String(nbSeriesTrouvees)
-        cptDetails.text = "-"
-        detailsLoaded = false
-    }
-    
-    
-    func doNothing(alertView: UIAlertAction!) {}
-    
-    @IBAction func afficheResults(_ sender: Any) {
-        let actionSheetController: UIAlertController = UIAlertController(title: "Ajouter à ma watchlist", message: nil, preferredStyle: .actionSheet)
-        
-        for uneSerie in seriesTrouvees
-        {
-            let uneAction: UIAlertAction = UIAlertAction(title: uneSerie.serie+" ("+String(uneSerie.year)+")", style: UIAlertAction.Style.default) { action -> Void in
-                if (trakt.addToWatchlist(theTVdbId: uneSerie.idTVdb))
-                {
-                    db.downloadGlobalInfo(serie: uneSerie)
-                    uneSerie.watchlist = true
-                    db.shows.append(uneSerie)
-                    db.saveDB()
-                    //TODO : updateCompteurs()
-                }
-            }
-            actionSheetController.addAction(uneAction)
+        let uneSourceMovieDB : SourceRecherche = SourceRecherche.init(foundTVMaze: false, foundBetaSeries: false, foundTrakt: false, foundMovieDB: true)
+        for _ in seriesTrouvees {
+            sourcesTrouvees.append(uneSourceMovieDB)
         }
         
-        let cancelAction: UIAlertAction = UIAlertAction(title: "Annuler", style: UIAlertAction.Style.cancel, handler: doNothing)
-        actionSheetController.addAction(cancelAction)
+        searchResults.reloadData()
         
-        present(actionSheetController, animated: true, completion: nil)
+        cptResults.text = String(seriesTrouvees.count)
+        cptResultsTotal.text = String(nbSeriesTrouvees)
     }
     
     
-    @IBAction func afficheDetails(_ sender: Any) {
-        var compteur : Int = 0
+    // ===================================================
+    //
+    //      Recherche BetaSeries
+    //
+    // ===================================================
+    
+    @IBAction func buttonSelectDurees(_ sender: Any) {
+        let button : UIButton = sender as! UIButton
+        let tmpStatus : Bool = button.isSelected
         
-        if ((seriesTrouvees != []) && (detailsLoaded == false))
-        {
-            DispatchQueue.global(qos: .utility).async {
-                DispatchQueue.main.async { self.roueDetails.startAnimating() }
-                
-                for uneSerie in self.seriesTrouvees
-                {
-                    theMoviedb.getIDs(serie: uneSerie)
-                    db.downloadGlobalInfo(serie: uneSerie)
-                    compteur = compteur + 1
-                    DispatchQueue.main.async { self.cptDetails.text = String(compteur) }
-                }
-                
-                DispatchQueue.main.async { self.roueDetails.stopAnimating() }
-                self.detailsLoaded = true
-            }
+        duree0020.isSelected = false
+        duree2030.isSelected = false
+        duree3040.isSelected = false
+        duree4050.isSelected = false
+        duree5060.isSelected = false
+        duree60plus.isSelected = false
+        
+        button.isSelected = !tmpStatus
+        
+        updateRechercheBetaSeries(sender)
+    }
+    
+    @IBAction func updateRechercheBetaSeries(_ sender: Any) {
+        descriptionTexte.text = "Toutes les séries"
+        
+        // Choix de la periode
+        if (debutBetaSeries.text == "") {
+            if (finBetaSeries.text == "") { descriptionTexte.text = descriptionTexte.text + "\n\n" }
+            else { descriptionTexte.text = descriptionTexte.text + "\n\ndiffusées avant " + finBetaSeries.text! }
         }
-    }
-    
-    override func shouldPerformSegue(withIdentifier identifier: String?, sender: Any?) -> Bool {
-        return detailsLoaded
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let viewController = segue.destination as! ViewSerieListe
-        
-        if (seriesTrouvees != [])
-        {
-            viewController.title = "Propositions de séries"
-            viewController.viewList = self.seriesTrouvees
-            viewController.modeAffichage = modeRecherche
+        else {
+            if (finBetaSeries.text == "") { descriptionTexte.text = descriptionTexte.text + "\n\ndiffusées après " + debutBetaSeries.text! }
+            else { descriptionTexte.text = descriptionTexte.text + "\n\ndiffusées entre " + debutBetaSeries.text! + " et " + finBetaSeries.text! }
         }
+        
+        // Choix des genres
+        var tmpGenres : String = ""
+        if (genreBScomedy.isSelected) { tmpGenres = tmpGenres + "Comédie, " }
+        if (genreBSdrama.isSelected) { tmpGenres = tmpGenres + "Drame, " }
+        if (genreBSsoap.isSelected) { tmpGenres = tmpGenres + "Soap, " }
+        if (genreBScrime.isSelected) { tmpGenres = tmpGenres + "Crime, " }
+        if (genreBShorror.isSelected) { tmpGenres = tmpGenres + "Horreur, " }
+        if (genreBSchild.isSelected) { tmpGenres = tmpGenres + "Enfant, " }
+        if (genreBSanime.isSelected) { tmpGenres = tmpGenres + "Anime, " }
+        if (genreBSaction.isSelected) { tmpGenres = tmpGenres + "Action, " }
+        if (genreBSfamilly.isSelected) { tmpGenres = tmpGenres + "Famille, " }
+        if (genreBSadventure.isSelected) { tmpGenres = tmpGenres + "Aventure, " }
+        if (genreBSfantasy.isSelected) { tmpGenres = tmpGenres + "Fantastique, " }
+        if (genreBSmystery.isSelected) { tmpGenres = tmpGenres + "Mystère, " }
+        if (genreBSanimation.isSelected) { tmpGenres = tmpGenres + "Animation, " }
+        if (genreBSscify.isSelected) { tmpGenres = tmpGenres + "Science-fiction, " }
+        if (genreBSsport.isSelected) { tmpGenres = tmpGenres + "Sport, " }
+        if (genreBSminiserie.isSelected) { tmpGenres = tmpGenres + "Mini-Series, " }
+        if (genreBSromance.isSelected) { tmpGenres = tmpGenres + "Romance, " }
+        if (genreBSsuspense.isSelected) { tmpGenres = tmpGenres + "Suspense, " }
+        if (genreBSwestern.isSelected) { tmpGenres = tmpGenres + "Western, " }
+        if (genreBSthriller.isSelected) { tmpGenres = tmpGenres + "Thriller, " }
+        if (genreBShistory.isSelected) { tmpGenres = tmpGenres + "Histoire, " }
+        
+        if (tmpGenres == "" ) { descriptionTexte.text = descriptionTexte.text + "\n\ntous genres confondus" }
+        else {
+            tmpGenres.removeLast()
+            tmpGenres.removeLast()
+            descriptionTexte.text = descriptionTexte.text + "\n\nde genre " + tmpGenres
+        }
+        
+        
+        // Choix de la durée d'épisode
+        var tmpDuree : String = ""
+        if (duree0020.isSelected)        { tmpDuree = "moins de 20 min" }
+        else if (duree2030.isSelected)   { tmpDuree = "20 à 30 min" }
+        else if (duree3040.isSelected)   { tmpDuree = "30 à 40 min" }
+        else if (duree4050.isSelected)   { tmpDuree = "40 à 50 min" }
+        else if (duree5060.isSelected)   { tmpDuree = "50 à 60 min" }
+        else if (duree60plus.isSelected) { tmpDuree = "plus de 60 min" }
+        
+        if (tmpDuree == "") { descriptionTexte.text = descriptionTexte.text + "\n\nquelle que soit la durée des épisodes" }
+        else                { descriptionTexte.text = descriptionTexte.text + "\n\navec des épisodes de " + tmpDuree }
+        
+        // Choix du service de Streaming
+        var tmpStreamers : String = ""
+        if (streamNetflix.isSelected) { tmpStreamers = tmpStreamers + "Netflix, " }
+        if (streamDisney.isSelected) { tmpStreamers = tmpStreamers + "Disney+, " }
+        if (streamCanal.isSelected) { tmpStreamers = tmpStreamers + "Canal+, " }
+        if (streamAmazon.isSelected) { tmpStreamers = tmpStreamers + "Amazon Prime, " }
+        if (streamApple.isSelected) { tmpStreamers = tmpStreamers + "Apple TV+, " }
+        if (streamOCS.isSelected) { tmpStreamers = tmpStreamers + "OCS Go, " }
+        if (tmpStreamers == "" ) { descriptionTexte.text = descriptionTexte.text + "\n\n" }
+        else {
+            tmpStreamers.removeLast()
+            tmpStreamers.removeLast()
+            descriptionTexte.text = descriptionTexte.text + "\n\nstreamées par " + tmpStreamers
+        }
+        
+        
+        // Recherche sur BetaSeries
+        var nbSeriesTrouvees : Int = 0
+        seriesTrouvees = []
+        sourcesTrouvees = []
+        
+        (seriesTrouvees, nbSeriesTrouvees) = betaSeries.chercher(genres: tmpGenres.replacingOccurrences(of: ", ", with: ","),
+                                                                 anneeBeg: debutBetaSeries.text!,
+                                                                 anneeEnd: finBetaSeries.text!,
+                                                                 duree: tmpDuree,
+                                                                 streamers: tmpStreamers.replacingOccurrences(of: ", ", with: ","))
+        
+        let uneSourceBetaSeries : SourceRecherche = SourceRecherche.init(foundTVMaze: false, foundBetaSeries: true, foundTrakt: false, foundMovieDB: false)
+        for _ in seriesTrouvees {
+            sourcesTrouvees.append(uneSourceBetaSeries)
+        }
+        
+        searchResults.reloadData()
+        
+        cptResults.text = String(seriesTrouvees.count)
+        cptResultsTotal.text = String(nbSeriesTrouvees)
     }
     
 }
+

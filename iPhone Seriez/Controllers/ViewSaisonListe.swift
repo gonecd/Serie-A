@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SeriesCommon
 
 class CellSaisonListe: UITableViewCell {
     
@@ -24,8 +23,10 @@ class CellSaisonListe: UITableViewCell {
     @IBOutlet weak var jours: UILabel!
     @IBOutlet weak var avantapres: UILabel!
     @IBOutlet weak var diffusion: UILabel!
+    @IBOutlet weak var diffuseur: UIImageView!
     
     @IBOutlet weak var graphBis: GraphMiniSaison!
+    @IBOutlet weak var graphTer: GraphMiniSaison!
     
     var index: Int = 0
 }
@@ -36,11 +37,16 @@ class ViewSaisonListe: UITableViewController {
     var viewList: [Serie] = [Serie]()
     var allSaisons: [Int] = [Int]()
     var grapheType : Int = 0
-
+    
     @IBOutlet var liste: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        liste.reloadData()
+        view.setNeedsDisplay()
     }
     
     override func didReceiveMemoryWarning() {
@@ -62,6 +68,8 @@ class ViewSaisonListe: UITableViewController {
         cell.index = indexPath.row
         cell.titre.text = viewList[indexPath.row].serie
         
+        cell.backgroundColor = indexPath.row % 2 == 0 ? UIcolor2 : UIcolor1
+
         // Affichage du drapeau
         cell.drapeau.image = getDrapeau(country: viewList[indexPath.row].country)
         
@@ -74,8 +82,15 @@ class ViewSaisonListe: UITableViewController {
         if (uneSaison.ends == ZeroDate) { cell.fin.text = "TBD" }
         else { cell.fin.text = dateFormLong.string(from: uneSaison.ends) }
         
-        cell.globalRating.text = String(viewList[indexPath.row].getGlobalRating()) + " %"
-        arrondir(texte: cell.globalRating, radius: 18.0)
+        cell.diffuseur.image = getLogoDiffuseur(diffuseur: viewList[indexPath.row].diffuseur)
+        arrondir(fenetre: cell.diffuseur, radius: 4)
+        
+        let note : Double = Double(viewList[indexPath.row].getGlobalRating())/10.0
+        cell.globalRating.text = "👍🏼 " + String(note)
+        cell.globalRating.layer.borderColor = UIColor.systemBlue.cgColor
+        cell.globalRating.layer.borderWidth = 2
+        cell.globalRating.layer.cornerRadius = 12
+        cell.globalRating.layer.masksToBounds = true
         
         // Affichage du status
         cell.status.layer.cornerRadius = 8
@@ -98,12 +113,14 @@ class ViewSaisonListe: UITableViewController {
             cell.miniGraphe.setSerie(serie: viewList[indexPath.row], saison: allSaisons[indexPath.row])
             cell.miniGraphe.setType(type: grapheType)
             cell.miniGraphe.setNeedsDisplay()
-
-            if (UIDevice.current.userInterfaceIdiom == .pad) {
-                cell.graphBis.setSerie(serie: viewList[indexPath.row], saison: allSaisons[indexPath.row])
-                cell.graphBis.setType(type: 3)
-                cell.graphBis.setNeedsDisplay()
-            }
+            
+            cell.graphBis.setSerie(serie: viewList[indexPath.row], saison: allSaisons[indexPath.row])
+            cell.graphBis.setType(type: 3)
+            cell.graphBis.setNeedsDisplay()
+            
+            cell.graphTer.setSerie(serie: viewList[indexPath.row], saison: allSaisons[indexPath.row])
+            cell.graphTer.setType(type: 1)
+            cell.graphTer.setNeedsDisplay()
         }
         else {
             
@@ -114,7 +131,7 @@ class ViewSaisonListe: UITableViewController {
                     cell.avantapres.isHidden = false
                     cell.diffusion.isHidden = false
                     cell.jours.isHidden = false
-
+                    
                     cell.avantapres.text = "à"
                     cell.diffusion.text = "venir"
                     let nbEps : Int = uneSaison.nbEpisodes - uneSaison.nbEpisodesDiffuses()
@@ -128,21 +145,24 @@ class ViewSaisonListe: UITableViewController {
                     cell.avantapres.isHidden = true
                     cell.diffusion.isHidden = true
                     cell.jours.isHidden = true
-
-                        cell.miniGraphe.setSerie(serie: viewList[indexPath.row], saison: allSaisons[indexPath.row])
-                        cell.miniGraphe.setType(type: grapheType)
-                        cell.miniGraphe.setNeedsDisplay()
+                    
+                    cell.miniGraphe.setSerie(serie: viewList[indexPath.row], saison: allSaisons[indexPath.row])
+                    cell.miniGraphe.setType(type: grapheType)
+                    cell.miniGraphe.setNeedsDisplay()
                 }
-
-                if (UIDevice.current.userInterfaceIdiom == .pad) {
-                    cell.graphBis.setSerie(serie: viewList[indexPath.row], saison: allSaisons[indexPath.row])
-                    cell.graphBis.setType(type: 3)
-                    cell.graphBis.setNeedsDisplay()
-                }
+                
+                cell.graphBis.setSerie(serie: viewList[indexPath.row], saison: allSaisons[indexPath.row])
+                cell.graphBis.setType(type: 3)
+                cell.graphBis.setNeedsDisplay()
+                
+                cell.graphTer.setSerie(serie: viewList[indexPath.row], saison: allSaisons[indexPath.row])
+                cell.graphTer.setType(type: 1)
+                cell.graphTer.setNeedsDisplay()
             }
             else {
                 cell.miniGraphe.isHidden = true
-                if (UIDevice.current.userInterfaceIdiom == .pad) { cell.graphBis.isHidden = true }
+                cell.graphBis.isHidden = true
+                cell.graphTer.isHidden = true
                 cell.avantapres.text = "avant la"
                 cell.diffusion.text = "première"
                 let nbJours : Int = daysBetweenDates(startDate: Date(), endDate: uneSaison.starts)
@@ -170,7 +190,7 @@ class ViewSaisonListe: UITableViewController {
         self.view.setNeedsDisplay()
     }
     
-
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     }
     
@@ -185,7 +205,14 @@ class ViewSaisonListe: UITableViewController {
     
     override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let reload = UIContextualAction(style: .destructive, title: "Reload") {  (contextualAction, view, boolValue) in
+            
+            let oldSerie : Serie = self.viewList[indexPath.row].partialCopy()
+            
             db.downloadGlobalInfo(serie: self.viewList[indexPath.row])
+            db.downloadDates(serie: self.viewList[indexPath.row])
+            db.downloadDetailInfo(serie: self.viewList[indexPath.row])
+
+            db.checkForUpdates(newSerie: self.viewList[indexPath.row], oldSerie: oldSerie, methode: funcSerie)
             db.saveDB()
             self.liste.reloadData()
             self.view.setNeedsDisplay()
@@ -194,8 +221,8 @@ class ViewSaisonListe: UITableViewController {
         
         return UISwipeActionsConfiguration(actions: [reload])
     }
-
-        
+    
+    
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }

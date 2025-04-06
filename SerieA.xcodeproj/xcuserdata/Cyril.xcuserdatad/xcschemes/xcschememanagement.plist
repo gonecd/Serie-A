@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>SchemeUserState</key>
+	<dict>
+		<key>DataUpdatesExtension.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>9</integer>
+		</dict>
+		<key>Mon activitéExtension.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
+		<key>Mon activitéExtension.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>11</integer>
+		</dict>
+		<key>SerieA iPad.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
+		<key>SerieA-iPad copy.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>8</integer>
+		</dict>
+		<key>SerieA.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>0</integer>
+		</dict>
+		<key>SerieNewsExtension.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>10</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>628A1379236F38E8006B2AD4</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>62DD876B1FB766C600A9B9EE</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F1A14E5E2C7A4EEE00082E06</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F1D77726270A0D7700394176</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F1E3B6EA254F06C600496242</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F1F234812D5FADAF00087FF1</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F1FFB3802D8F233D00ED1E4F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+	</dict>
+</dict>
+</plist>
