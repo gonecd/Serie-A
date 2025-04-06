@@ -13,7 +13,6 @@ class CellEpisode: UITableViewCell {
     @IBOutlet weak var titre: UILabel!
     @IBOutlet weak var date: UILabel!
     @IBOutlet weak var duree: UILabel!
-    @IBOutlet weak var graphe: GraphMiniEpisode!
 }
 
 
@@ -22,7 +21,6 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
     var serie : Serie = Serie(serie: "")
     var image : UIImage = UIImage()
     var saison : Int = 0
-    var durees : [Int] = []
     var allStreamers : [String] = []
     
     @IBOutlet weak var banniere: UIImageView!
@@ -39,12 +37,30 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
     @IBOutlet weak var diffuseur2: UIImageView!
     @IBOutlet weak var diffuseur3: UIImageView!
     
+    @IBOutlet weak var viewSaison: UIView!
+    @IBOutlet weak var viewSaisons: UIView!
+    @IBOutlet weak var viewEpisodes: UIView!
+    @IBOutlet weak var viewDiffuseurs: UIView!
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let queue : OperationQueue = OperationQueue()
+
+        title = "\(serie.serie) - Saison " + String(saison)
         
-        title = "Saison " + String(saison)
-        
+        if (appConfig.modeCouleurSerie) {
+            let mainSerieColor : UIColor = extractDominantColor(from: image) ?? .systemRed
+            SerieColor1 = mainSerieColor.withAlphaComponent(0.3)
+            SerieColor2 = mainSerieColor.withAlphaComponent(0.1)
+        }
+
+        seriesBackgrounds(carre: viewSaison)
+        seriesBackgrounds(carre: viewSaisons)
+        seriesBackgrounds(carre: viewEpisodes)
+        seriesBackgrounds(carre: viewDiffuseurs)
+
         banniere.image = image
         self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
         graphe.setNeedsDisplay()
@@ -56,11 +72,11 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         trakt.getEpisodes(uneSerie: serie)
         
         var manqueTVdbID = false
-        
+        var manqueIMdbID = false
+
         for unEpisode in serie.saisons[saison-1].episodes {
             if ((unEpisode.idIMdb) == "" && (unEpisode.date.compare(Date()) == .orderedAscending)) {
-                unEpisode.idIMdb = imdb.getEpisodeID(serieID: serie.idIMdb, saison: saison, episode: unEpisode.episode)
-                if (unEpisode.idIMdb == "") { print("No IMDB id for \(serie.serie) saison: \(saison) episode: \(unEpisode.episode)") }
+                manqueIMdbID = true
             }
             
             if ((unEpisode.idTVdb == 0) && (unEpisode.date.compare(Date()) == .orderedAscending)) {
@@ -69,6 +85,26 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         }
         
         if (manqueTVdbID) { theTVdb.getEpisodesDetailsAndRating(uneSerie: serie)}
+        
+        if (manqueIMdbID) {
+            let opeIMDBids = BlockOperation(block: {
+                imdb.getSerieIDs(uneSerie: self.serie)
+                imdb.getEpisodesRatings(self.serie)
+                
+                OperationQueue.main.addOperation({
+                    self.graphe.sendSaison(self.serie.saisons[self.saison - 1])
+                    self.graphSaisons.setSerie(serie: self.serie, saison: self.saison)
+                    self.episodesList.reloadData()
+                    
+                    self.graphe.setNeedsDisplay()
+                    self.graphSaisons.setNeedsDisplay()
+                    self.episodesList.setNeedsLayout()
+                    
+                    db.saveDB()
+                } )
+            } )
+            queue.addOperation(opeIMDBids)
+        }
         
         arrondirLabel(texte: labelEpisodes, radius: 10)
         arrondirLabel(texte: labelDiffuseurs, radius: 10)
@@ -81,16 +117,13 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         
         // Récupération des diffuseurs en mode streaming
         
-        
-        let queue : OperationQueue = OperationQueue()
-        
         let opeStreamers = BlockOperation(block: {
             self.allStreamers = getStreamers(serie: self.serie.serie, idTVDB: self.serie.idTVdb, idIMDB: self.serie.idIMdb, saison: self.saison)
 
             OperationQueue.main.addOperation({
-                if (self.allStreamers.count > 0) { self.diffuseur1.image = loadImage(self.allStreamers[0]) }
-                if (self.allStreamers.count > 1) { self.diffuseur2.image = loadImage(self.allStreamers[1]) }
-                if (self.allStreamers.count > 2) { self.diffuseur3.image = loadImage(self.allStreamers[2]) }
+                if (self.allStreamers.count > 0) { self.diffuseur1.image = getImage(self.allStreamers[0]) }
+                if (self.allStreamers.count > 1) { self.diffuseur2.image = getImage(self.allStreamers[1]) }
+                if (self.allStreamers.count > 2) { self.diffuseur3.image = getImage(self.allStreamers[2]) }
             } )
         } )
         queue.addOperation(opeStreamers)
@@ -133,26 +166,6 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         } )
         queue.addOperation(opeLoadTVmaze)
         
-        let opeLoadEpisodeDurations = BlockOperation(block: {
-            self.durees = tvMaze.getEpisodesDurations(idTVMaze: self.serie.idTVmaze, saison: self.saison)
-            
-            OperationQueue.main.addOperation({
-                self.episodesList.reloadData()
-                self.episodesList.setNeedsLayout()
-            } )
-        } )
-        queue.addOperation(opeLoadEpisodeDurations)
-        
-        let opeLoadRottenT = BlockOperation(block: {
-            rottenTomatoes.getEpisodesRatings(self.serie)
-        } )
-        queue.addOperation(opeLoadRottenT)
-        
-        let opeLoadMetaCritic = BlockOperation(block: {
-            metaCritic.getEpisodesRatings(self.serie)
-        } )
-        queue.addOperation(opeLoadMetaCritic)
-        
         let opeLoadSensCritique = BlockOperation(block: {
             sensCritique.getEpisodesRatings(serie: self.serie)
         } )
@@ -165,13 +178,18 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         opeFinalise.addDependency(opeLoadMovieDB)
         opeFinalise.addDependency(opeLoadIMDB)
         opeFinalise.addDependency(opeLoadTVmaze)
-        opeFinalise.addDependency(opeLoadRottenT)
-        opeFinalise.addDependency(opeLoadMetaCritic)
         opeFinalise.addDependency(opeLoadSensCritique)
         queue.addOperation(opeFinalise)
         
     }
     
+
+    override func viewDidAppear(_ animated: Bool) {
+        episodesList.reloadData()
+        episodesList.setNeedsLayout()
+    }
+
+        
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let viewController = segue.destination as! EpisodeFiche
         let ficheEpisode : CellEpisode = sender as! CellEpisode
@@ -194,6 +212,8 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "CellEpisode", for: indexPath) as! CellEpisode
         
+        cell.backgroundColor = indexPath.row % 2 == 0 ? SerieColor2 : SerieColor1
+
         cell.numero.text = String(indexPath.row + 1)
         cell.titre.text = serie.saisons[saison - 1].episodes[indexPath.row].titre
         
@@ -203,12 +223,8 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         if ( (indexPath.row + 1) > serie.saisons[saison - 1].nbWatchedEps) { cell.titre.textColor = .darkText }
         else { cell.titre.textColor = .systemGray }
         
-        if (durees.count > indexPath.row) { cell.duree.text = String(durees[indexPath.row]) + " min" }
-        else { cell.duree.text = "" }
+        cell.duree.text = String(serie.saisons[saison - 1].episodes[indexPath.row].duration) + " min"
         
-        cell.graphe.setEpisode(eps: serie.saisons[saison - 1].episodes[indexPath.row])
-        cell.graphe.setNeedsDisplay()
-
         return cell
     }
     

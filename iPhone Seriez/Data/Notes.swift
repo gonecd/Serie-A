@@ -13,23 +13,20 @@ import Foundation
  
  Erreurs de chargement :
  
- TheMoviedb::getSerieInfos failed for Orange Is the New Black saison 6 with error code : 404
- TheTVdb::getSerieInfos failed (poster de The Bureau): code erreur 404
- TheMoviedb::getSerieInfos failed for Angie Tribeca saison 4 with error code : 404
- Trakt::getSerieInfos error 502 received for The Big Bang Theory s5 e21
- Trakt::getSerieInfos error 502 received for The Big Bang Theory s8 e18
- TheMoviedb::getSerieInfos failed for Fargo saison 4 with error code : 404
- TheMoviedb::getSerieInfos failed for WorkinGirls saison 1 with error code : 404
- TheMoviedb::getSerieInfos failed for WorkinGirls saison 2 with error code : 404
- TheMoviedb::getSerieInfos failed for WorkinGirls saison 3 with error code : 404
- TheMoviedb::getSerieInfos failed for WorkinGirls saison 4 with error code : 404
- TheMoviedb::getSerieInfos failed for Better Call Saul saison 4 with error code : 404
- TheTVdb::getSerieInfos failed (poster de Baron Noir): code erreur 404
+ BetaSeries::error 400 received for req=https://api.betaseries.com/shows/display?v=3.0&imdb_id=tt10970552
+ BetaSeries::error 400 received for req=https://api.betaseries.com/shows/display?v=3.0&imdb_id=tt18413548
+ BetaSeries::getEpisodesRatings - No episode ID to load for The Head saison 3
+ 
+ IMDB : getSerieGlobalInfos : Not found for id =
+ IMdb.getEpisodesRatings: Not found for Friends S10E18
+ IMdb.getEpisodesRatings: Not found for Friends S9E24
+ 
+ MetaCritic.getSerieGlobalInfos : Rick and Morty non trouvée
+ MetaCritic.getSerieGlobalInfos : SAS: Rogue Heroes non trouvée
+ MetaCritic.getSerieGlobalInfos : Shōgun non trouvée
+ MetaCritic.getSerieGlobalInfos : Star Wars: Andor non trouvée
+ 
+ TVmaze::error 404 received for req=http://api.tvmaze.com/lookup/shows?imdb=tt29627241
 
- 
- 
- 
- 
- 
- 
  */
+

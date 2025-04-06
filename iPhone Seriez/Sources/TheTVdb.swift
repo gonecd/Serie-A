@@ -82,7 +82,7 @@ class TheTVdb : NSObject {
         var pageToLoad  : Int = 1
         var continuer   : Bool = true
         
-        if (uneSerie.idTVdb == "") { return }
+        if ((uneSerie.idTVdb == "") || (uneSerie.idTVdb == "0")) { return }
 
         while ( continuer ) {
             let reqResult : NSDictionary = loadAPI(reqAPI: "https://api.thetvdb.com/series/\(uneSerie.idTVdb)/episodes?page=\(pageToLoad)") as? NSDictionary ?? NSDictionary()
@@ -149,7 +149,7 @@ class TheTVdb : NSObject {
     func getSerieGlobalInfos(idTVdb : String) -> Serie {
         let uneSerie : Serie = Serie(serie: "")
         
-        if (idTVdb == "") { return uneSerie }
+        if ( (idTVdb == "") || (idTVdb == "0") ) { return uneSerie }
         
         let reqResult : NSDictionary = loadAPI(reqAPI: "https://api.thetvdb.com/series/\(idTVdb)") as? NSDictionary ?? NSDictionary()
         

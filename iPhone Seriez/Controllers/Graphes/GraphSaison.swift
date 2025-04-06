@@ -15,9 +15,6 @@ class GraphSaison: UIView {
     override func draw(_ dirtyRect: CGRect) {
         super.draw(dirtyRect)
 
-        self.layer.cornerRadius = 10;
-        self.layer.masksToBounds = true
-
         // Drawing code here.
         self.background()
         self.traceGraphePoints()
@@ -91,6 +88,9 @@ class GraphSaison: UIView {
             traceUnPoint(theSaison.episodes[i].getFairRatingTrakt(), uneCouleur: colorTrakt, offsetEpisode: offset, offsetSource: 4, nbRaters : theSaison.episodes[i].ratersTrakt)
             traceUnPoint(theSaison.episodes[i].getFairRatingBetaSeries(), uneCouleur: colorBetaSeries, offsetEpisode: offset, offsetSource: 6, nbRaters : theSaison.episodes[i].ratersBetaSeries)
             traceUnPoint(theSaison.episodes[i].getFairRatingIMdb(), uneCouleur: colorIMDB, offsetEpisode: offset, offsetSource: 10, nbRaters : theSaison.episodes[i].ratersIMdb)
+//            traceUnPoint(theSaison.episodes[i].getFairRatingMovieDB(), uneCouleur: colorMoviedb, offsetEpisode: offset, offsetSource: 8, nbRaters : theSaison.episodes[i].ratersMoviedb)
+            traceUnPoint(theSaison.episodes[i].getFairRatingSensCritique(), uneCouleur: colorSensCritique, offsetEpisode: offset, offsetSource: 8, nbRaters : 11)
+//            traceUnPoint(theSaison.episodes[i].getFairRatingTVMaze(), uneCouleur: colorTVmaze, offsetEpisode: offset, offsetSource: 12, nbRaters : theSaison.episodes[i].ratersTVMaze)
         }
     }
 

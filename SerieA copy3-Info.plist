@@ -59,6 +59,8 @@
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>iPhone</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Necessaire a la gestion des Advisors de Serie</string>
 	<key>UIMainStoryboardFile~ipad</key>
 	<string>iPad</string>
 	<key>UIRequiredDeviceCapabilities</key>

@@ -52,7 +52,7 @@ class YaQuoiCommeSerie {
         else if ( title != "" ) { reqURL = reqURL + "title=\(title)" }
         else { return result }
 
-        let reqResult : NSArray = loadAPI(reqAPI: reqURL.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!) as! NSArray
+        let reqResult : NSArray = loadAPI(reqAPI: reqURL.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!) as? NSArray ?? NSArray()
         
         for oneResult in reqResult {
             let ratingAllocine : Double = (((oneResult as AnyObject).object(forKey: "show")! as AnyObject).object(forKey: "allocine")! as AnyObject).object(forKey: "usersRating") as? Double ?? 0.0

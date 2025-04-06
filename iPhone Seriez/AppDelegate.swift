@@ -8,7 +8,8 @@
 
 import UIKit
 import UserNotifications
-import WidgetKit
+
+
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -65,32 +66,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     // Support for background fetch
     func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        var dataUpdates : DataUpdatesEntry = db.loadDataUpdates()
         
-        var infosSaved : InfosRefresh = InfosRefresh(refreshDates: ZeroDate, refreshIMDB: ZeroDate, refreshViewed: ZeroDate)
-        if let data = UserDefaults(suiteName: "group.Series")!.value(forKey:"Refresh") as? Data {
-            infosSaved = try! PropertyListDecoder().decode(InfosRefresh.self, from: data)
-        }
-
         // Dates TV Maze (une fois par jour)
-        if (Calendar.current.isDateInToday(infosSaved.refreshDates) == false) {
+        if (Calendar.current.isDateInToday(dataUpdates.TVMaze_Dates) == false) {
             loadDates()
-            infosSaved.refreshDates = Date()
-            db.saveRefreshInfo(info: infosSaved)
+            dataUpdates.TVMaze_Dates = Date()
+            checkComingUp()
+            db.saveDataUpdates(dataUpdates: dataUpdates)
         }
 
         // Ratings IMDB (une fois par jpur)
-        if ( Calendar.current.isDateInToday(infosSaved.refreshIMDB) == false ) {
+        if ( Calendar.current.isDateInToday(dataUpdates.IMDB_Episodes) == false ) {
             loadIMDB()
-            infosSaved.refreshIMDB = Date()
-            db.saveRefreshInfo(info: infosSaved)
+            dataUpdates.IMDB_Rates = Date()
+            db.saveDataUpdates(dataUpdates: dataUpdates)
         }
 
         // Statuses Trakt
-        loadStatuses()
-        infosSaved.refreshViewed = Date()
-        db.saveRefreshInfo(info: infosSaved)
-        WidgetCenter.shared.reloadTimelines(ofKind: "Mon_activite_")
+        db.quickRefresh()
+        db.finaliseDB()
+        dataUpdates.Trakt_Viewed = Date()
+        db.saveDataUpdates(dataUpdates: dataUpdates)
 
+        db.saveDB()
         completionHandler(.newData)
     }
     
@@ -108,8 +107,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             trakt.downloadToken(key: params?.first?.value ?? "")
             break
             
+        case "ASuivre1":
+            let navigationController = window!.rootViewController! as! UINavigationController
+            navigationController.viewControllers.first?.performSegue(withIdentifier: "Go1", sender: nil)
+            break
+            
+        case "ASuivre2":
+            let navigationController = window!.rootViewController! as! UINavigationController
+            navigationController.viewControllers.first?.performSegue(withIdentifier: "Go2", sender: nil)
+            break
+        
+        case "ASuivre3":
+            let navigationController = window!.rootViewController! as! UINavigationController
+            navigationController.viewControllers.first?.performSegue(withIdentifier: "Go3", sender: nil)
+            break
+            
         default:
-            print("Callback URL scheme : Source inconnue = \(source ?? "")")
+            break
         }
         
         return true

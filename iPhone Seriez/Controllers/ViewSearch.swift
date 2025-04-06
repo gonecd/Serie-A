@@ -42,16 +42,19 @@ class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet weak var traktSearch: UIView!
     @IBOutlet weak var moviedbSearch: UIView!
     @IBOutlet weak var betaSeriesSearch: UIView!
+    @IBOutlet weak var viewRecherche: UIView!
+    @IBOutlet weak var viewResultats: UIView!
+    @IBOutlet weak var selectBarre: UISegmentedControl!
     
     // Entete
     @IBOutlet weak var cptResults: UITextField!
     @IBOutlet weak var cptResultsTotal: UITextField!
     @IBOutlet weak var descriptionTexte: UITextView!
-    @IBOutlet weak var results: UITableView!
-
+    @IBOutlet weak var searchResults: UITableView!
+    
     // Quick Search
     @IBOutlet weak var quickTitre: UITextField!
-
+    
     // Trakt Search
     @IBOutlet weak var titre: UITextField!
     @IBOutlet weak var inTitre: UISwitch!
@@ -87,7 +90,7 @@ class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
     // BetaSeries Search
     @IBOutlet weak var debutBetaSeries: UITextField!
     @IBOutlet weak var finBetaSeries: UITextField!
-
+    
     @IBOutlet weak var duree0020: UIButton!
     @IBOutlet weak var duree2030: UIButton!
     @IBOutlet weak var duree3040: UIButton!
@@ -129,10 +132,10 @@ class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
     let viewTrakt       : Int = 1
     let viewMovieDB     : Int = 2
     let viewBetaSeries  : Int = 3
-
+    
     let alphaFull  : CGFloat = 1.00
     let alphaLight : CGFloat = 0.20
-
+    
     var seriesTrouvees  : [Serie] = []
     var sourcesTrouvees  : [SourceRecherche] = []
     var currentView     : Int = 0
@@ -140,11 +143,14 @@ class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        selectBarre.backgroundColor = mainUIcolor
+        
         makeGradiant(carre: traktSearch, couleur: "Blanc")
         makeGradiant(carre: quickSearch, couleur: "Blanc")
         makeGradiant(carre: moviedbSearch, couleur: "Blanc")
         makeGradiant(carre: betaSeriesSearch, couleur: "Blanc")
-        makeGradiant(carre: results, couleur: "Blanc")
+        makeGradiant(carre: viewRecherche, couleur: "Blanc")
+        makeGradiant(carre: viewResultats, couleur: "Blanc")
 
         arrondir(texte: cptResults, radius: 10.0)
         arrondir(texte: cptResultsTotal, radius: 10.0)
@@ -158,7 +164,7 @@ class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @IBAction func searchMode(_ sender: Any) {
         let toggle : Int = (sender as! UISegmentedControl).selectedSegmentIndex
         descriptionTexte.text = ""
-
+        
         switch toggle {
         case 0:
             self.moviedbSearch.isHidden = true
@@ -177,7 +183,7 @@ class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
             currentView = viewTrakt
             updateRechercheTrakt(sender)
             break
-
+            
         case 2:
             self.moviedbSearch.isHidden = false
             self.traktSearch.isHidden = true
@@ -200,7 +206,7 @@ class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
             return
         }
     }
-
+    
     @IBAction func buttonSelect3States(_ sender: Any) {
         let button : UIButton = sender as! UIButton
         
@@ -216,7 +222,7 @@ class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
             button.setTitleColor(.systemGreen, for: .selected)
             button.isSelected = false
         }
-
+        
         updateRechercheCriteres(sender)
     }
     
@@ -249,6 +255,7 @@ class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
         else { cell.annee.text = String(seriesTrouvees[indexPath.row].year) }
         cell.poster.image = getImage(seriesTrouvees[indexPath.row].poster)
         cell.index = indexPath.row
+        cell.backgroundColor = indexPath.row % 2 == 0 ? UIcolor2 : UIcolor1
 
         if (sourcesTrouvees[indexPath.row].TVMaze)      { cell.sourceTVMaze.alpha = alphaFull }      else { cell.sourceTVMaze.alpha = alphaLight }
         if (sourcesTrouvees[indexPath.row].BetaSeries)  { cell.sourceBetaSeries.alpha = alphaFull }  else { cell.sourceBetaSeries.alpha = alphaLight }
@@ -285,7 +292,7 @@ class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
         // Choix du titre
         if (quickTitre.text == "") { descriptionTexte.text = "Toutes les séries" }
         else { descriptionTexte.text = "Titres contenant : \n     " + quickTitre.text! }
-
+        
         if (quickTitre.text!.count > 2) {
             let searchString : String = quickTitre.text!
             
@@ -302,7 +309,6 @@ class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
             queue.addOperation(BlockOperation(block: { dataTrakt = trakt.rechercheParTitre(serieArechercher: searchString) } ))
             
             queue.waitUntilAllOperationsAreFinished()
-            
             (seriesTrouvees, sourcesTrouvees) = mergeResults(dataTrakt: dataTrakt, dataBetaSeries: dataBetaSeries, dataTheMovieDB: dataTheMovieDB, dataTVMaze: dataTVMaze)
             
             cptResults.text = String(seriesTrouvees.count)
@@ -314,11 +320,9 @@ class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
             cptResultsTotal.text = "+" + "\u{221E}"
         }
         
-        results.reloadData()
-        results.setNeedsLayout()
-            
+        searchResults.reloadData()
     }
-
+    
     func mergeResults(dataTrakt :[Serie], dataBetaSeries :[Serie], dataTheMovieDB :[Serie], dataTVMaze :[Serie]) -> ([Serie], [SourceRecherche]) {
         var result : [Serie] = []
         var sources : [SourceRecherche] = []
@@ -342,7 +346,8 @@ class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
             for i in 0..<dataTVMaze.count { if (uneSerieTrakt.idIMdb == dataTVMaze[i].idIMdb) { uneSerieTVMaze = dataTVMaze[i]; source.TVMaze = true; break; } }
             
             uneSerie.cleverMerge(TVdb: emptySerie, Moviedb: uneSerieMovieDB, Trakt: uneSerieTrakt, BetaSeries: uneSerieBetaSeries,
-                                 IMDB: uneSerieIMDB, RottenTomatoes: emptySerie, TVmaze: uneSerieTVMaze, MetaCritic: emptySerie, YAQCS: emptySerie)
+                                 IMDB: uneSerieIMDB, RottenTomatoes: emptySerie, TVmaze: uneSerieTVMaze, MetaCritic: emptySerie,
+                                 AlloCine: emptySerie, SensCritique: emptySerie, SIMKL: emptySerie)
             
             traitees.append(uneSerie.serie)
             result.append(uneSerie)
@@ -361,12 +366,13 @@ class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
             var uneSerieIMDB : Serie = emptySerie
             uneSerieIMDB = imdb.getSerieGlobalInfos(idIMDB: uneSerieBetaSeries.idIMdb)
             var source : SourceRecherche = SourceRecherche.init(foundTVMaze: false, foundBetaSeries: true, foundTrakt: false, foundMovieDB: false)
-
+            
             for i in 0..<dataTheMovieDB.count { if (uneSerieBetaSeries.serie == dataTheMovieDB[i].serie) { uneSerieMovieDB = dataTheMovieDB[i]; source.MovieDB = true; break; } }
             for i in 0..<dataTVMaze.count { if (uneSerieBetaSeries.idIMdb == dataTVMaze[i].idIMdb) { uneSerieTVMaze = dataTVMaze[i]; source.TVMaze = true; break; } }
             
             uneSerie.cleverMerge(TVdb: emptySerie, Moviedb: uneSerieMovieDB, Trakt: emptySerie, BetaSeries: uneSerieBetaSeries,
-                                 IMDB: uneSerieIMDB, RottenTomatoes: emptySerie, TVmaze: uneSerieTVMaze, MetaCritic: emptySerie, YAQCS: emptySerie)
+                                 IMDB: uneSerieIMDB, RottenTomatoes: emptySerie, TVmaze: uneSerieTVMaze, MetaCritic: emptySerie,
+                                 AlloCine: emptySerie, SensCritique: emptySerie, SIMKL: emptySerie)
             
             traitees.append(uneSerie.serie)
             result.append(uneSerie)
@@ -384,11 +390,12 @@ class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
             var uneSerieIMDB : Serie = emptySerie
             uneSerieIMDB = imdb.getSerieGlobalInfos(idIMDB: uneSerieTVMaze.idIMdb)
             var source : SourceRecherche = SourceRecherche.init(foundTVMaze: true, foundBetaSeries: false, foundTrakt: false, foundMovieDB: false)
-
+            
             for i in 0..<dataTheMovieDB.count { if (uneSerieTVMaze.serie == dataTheMovieDB[i].serie) { uneSerieMovieDB = dataTheMovieDB[i]; source.MovieDB = true; break; } }
             
             uneSerie.cleverMerge(TVdb: emptySerie, Moviedb: uneSerieMovieDB, Trakt: emptySerie, BetaSeries: emptySerie,
-                                 IMDB: uneSerieIMDB, RottenTomatoes: emptySerie, TVmaze: uneSerieTVMaze, MetaCritic: emptySerie, YAQCS: emptySerie)
+                                 IMDB: uneSerieIMDB, RottenTomatoes: emptySerie, TVmaze: uneSerieTVMaze, MetaCritic: emptySerie,
+                                 AlloCine: emptySerie, SensCritique: emptySerie, SIMKL: emptySerie)
             
             traitees.append(uneSerie.serie)
             result.append(uneSerie)
@@ -407,14 +414,14 @@ class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
         
         return (Array(arrays_combined.map {$0.0}.prefix(20)), Array(arrays_combined.map {$0.1}.prefix(20)))
     }
-
+    
     
     // ===================================================
     //
     //      Recherche Trakt
     //
     // ===================================================
-
+    
     @IBAction func updateRechercheTrakt(_ sender: Any) {
         var chercherDans : String = ""
         
@@ -452,13 +459,12 @@ class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
             sourcesTrouvees.append(uneSourceTrakt)
         }
         
-        results.reloadData()
-        results.setNeedsLayout()
-            
+        searchResults.reloadData()
+        
         cptResults.text = String(seriesTrouvees.count)
         cptResultsTotal.text = String(seriesTrouvees.count)
     }
-
+    
     
     
     
@@ -467,7 +473,7 @@ class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
     //      Recherche Movie DB
     //
     // ===================================================
-
+    
     @IBAction func updateRechercheCriteres (_ sender: Any) {
         descriptionTexte.text = "Toutes les séries"
         
@@ -480,7 +486,7 @@ class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
             if (fin.text == "") { descriptionTexte.text = descriptionTexte.text + "\n\ndiffusées après " + debut.text! }
             else { descriptionTexte.text = descriptionTexte.text + "\n\ndiffusées entre " + debut.text! + " et " + fin.text! }
         }
-
+        
         // Choix des genres
         var tmpGenres : String = ""
         if (actionadventure.isSelected && (actionadventure.titleColor(for: .selected) == .systemGreen)) { tmpGenres = tmpGenres + "Action & Adventure, " }
@@ -511,7 +517,7 @@ class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
         if (scififantasy.isSelected && (scififantasy.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "Sci-Fi & Fantasy, " }
         if (warpolitics.isSelected && (warpolitics.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "War & Politics, " }
         if (western.isSelected && (western.titleColor(for: .selected) == .systemRed)) { tmpGenres2 = tmpGenres2 + "Western, " }
-
+        
         if (tmpGenres2 == "" ) { descriptionTexte.text = descriptionTexte.text + "" }
         else {
             tmpGenres2.removeLast()
@@ -569,15 +575,14 @@ class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
                                                                  anneeEnd: fin.text!,
                                                                  langue: tmpLangue,
                                                                  network: tmpNetworks.replacingOccurrences(of: ", ", with: ","))
-
+        
         let uneSourceMovieDB : SourceRecherche = SourceRecherche.init(foundTVMaze: false, foundBetaSeries: false, foundTrakt: false, foundMovieDB: true)
         for _ in seriesTrouvees {
             sourcesTrouvees.append(uneSourceMovieDB)
         }
         
-        results.reloadData()
-        results.setNeedsLayout()
-
+        searchResults.reloadData()
+        
         cptResults.text = String(seriesTrouvees.count)
         cptResultsTotal.text = String(nbSeriesTrouvees)
     }
@@ -588,7 +593,7 @@ class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
     //      Recherche BetaSeries
     //
     // ===================================================
-
+    
     @IBAction func buttonSelectDurees(_ sender: Any) {
         let button : UIButton = sender as! UIButton
         let tmpStatus : Bool = button.isSelected
@@ -599,12 +604,12 @@ class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
         duree4050.isSelected = false
         duree5060.isSelected = false
         duree60plus.isSelected = false
-
+        
         button.isSelected = !tmpStatus
         
         updateRechercheBetaSeries(sender)
     }
-
+    
     @IBAction func updateRechercheBetaSeries(_ sender: Any) {
         descriptionTexte.text = "Toutes les séries"
         
@@ -648,7 +653,7 @@ class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
             tmpGenres.removeLast()
             descriptionTexte.text = descriptionTexte.text + "\n\nde genre " + tmpGenres
         }
-
+        
         
         // Choix de la durée d'épisode
         var tmpDuree : String = ""
@@ -661,7 +666,7 @@ class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
         
         if (tmpDuree == "") { descriptionTexte.text = descriptionTexte.text + "\n\nquelle que soit la durée des épisodes" }
         else                { descriptionTexte.text = descriptionTexte.text + "\n\navec des épisodes de " + tmpDuree }
-
+        
         // Choix du service de Streaming
         var tmpStreamers : String = ""
         if (streamNetflix.isSelected) { tmpStreamers = tmpStreamers + "Netflix, " }
@@ -688,15 +693,14 @@ class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
                                                                  anneeEnd: finBetaSeries.text!,
                                                                  duree: tmpDuree,
                                                                  streamers: tmpStreamers.replacingOccurrences(of: ", ", with: ","))
-
+        
         let uneSourceBetaSeries : SourceRecherche = SourceRecherche.init(foundTVMaze: false, foundBetaSeries: true, foundTrakt: false, foundMovieDB: false)
         for _ in seriesTrouvees {
             sourcesTrouvees.append(uneSourceBetaSeries)
         }
         
-        results.reloadData()
-        results.setNeedsLayout()
-
+        searchResults.reloadData()
+        
         cptResults.text = String(seriesTrouvees.count)
         cptResultsTotal.text = String(nbSeriesTrouvees)
     }

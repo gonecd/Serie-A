@@ -33,10 +33,6 @@ class Graph: UIView {
         let textAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 10), NSAttributedString.Key.foregroundColor: colorAxis]
         let nbSaisons : Int = theSerie.saisons.count
 
-       // Fond
-        self.layer.cornerRadius = 15
-        self.layer.masksToBounds = true
-
         // Lignes
         colorAxis.setStroke()
         
@@ -98,6 +94,7 @@ class Graph: UIView {
             traceUnPoint(theSerie.saisons[i].getFairRatingTrakt(), uneCouleur: colorTrakt, offsetSaison: offset, offsetSource: 0)
             traceUnPoint(theSerie.saisons[i].getFairRatingBetaSeries(), uneCouleur: colorBetaSeries, offsetSaison: offset, offsetSource: 5)
             traceUnPoint(theSerie.saisons[i].getFairRatingIMdb(), uneCouleur: colorIMDB, offsetSaison: offset, offsetSource: 10)
+            traceUnPoint(theSerie.saisons[i].getFairRatingMovieDB(), uneCouleur: colorMoviedb, offsetSaison: offset, offsetSource: 15)
         }
     }
 

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ContactsUI
 
 class CellSaison: UITableViewCell {
     @IBOutlet weak var saison: UILabel!
@@ -21,19 +22,19 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
     
     var serie : Serie = Serie(serie: "")
     var image : UIImage = UIImage()
-    var allCritics : [Critique] = []
+//    var allCritics : [Critique] = []
     var modeAffichage : Int = 0
-    
+    var parentalGuide : NSMutableDictionary = [:]
+
     @IBOutlet weak var resume: UITextView!
     @IBOutlet weak var banniere: UIImageView!
     @IBOutlet weak var graphe: Graph!
     @IBOutlet weak var spiderGraph: GraphMiniSerie!
     
-    @IBOutlet weak var pageControl: UIPageControl!
     @IBOutlet weak var viewResume: UIView!
     @IBOutlet weak var viewInfos: UIView!
-    @IBOutlet weak var viewRatings: UIView!
-    
+    @IBOutlet weak var viewGraphes: UIView!
+    @IBOutlet weak var viewSaisonsUp: UIView!
     @IBOutlet weak var viewSaisons: UITableView!
     
     @IBOutlet weak var boutonMyRating: UIButton!
@@ -45,19 +46,11 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
     @IBOutlet weak var boutonCritiques: UIView!
     @IBOutlet weak var boutonCasting: UIView!
     @IBOutlet weak var boutonRatings: UIView!
-
+    @IBOutlet weak var boutonSaisons: UIView!
+    @IBOutlet weak var boutonAdvisor: UIView!
+    
     @IBOutlet weak var sousBoutonWatchlist: UIButton!
     @IBOutlet weak var sousBoutonAbandon: UIButton!
-    
-    @IBOutlet weak var bRate1: UIButton!
-    @IBOutlet weak var bRate2: UIButton!
-    @IBOutlet weak var bRate3: UIButton!
-    @IBOutlet weak var bRate4: UIButton!
-    @IBOutlet weak var bRate5: UIButton!
-    @IBOutlet weak var bRate6: UIButton!
-    @IBOutlet weak var bRate7: UIButton!
-    @IBOutlet weak var bRate8: UIButton!
-    @IBOutlet weak var bRate9: UIButton!
     
     @IBOutlet weak var network: UILabel!
     @IBOutlet weak var status: UILabel!
@@ -84,27 +77,61 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
     @IBOutlet weak var bMetaCritic: UIButton!
     @IBOutlet weak var bAlloCine: UIButton!
     
+    @IBOutlet weak var labelConseil: UILabel!
+    @IBOutlet weak var imageConseil: UIImageView!
     
+    @IBOutlet weak var parentSex: UILabel!
+    @IBOutlet weak var parentViolence: UILabel!
+    @IBOutlet weak var parentDrugs: UILabel!
+    @IBOutlet weak var parentProfanity: UILabel!
+    @IBOutlet weak var parentFrightened: UILabel!
     
+    @IBOutlet weak var langueFR: UIButton!
+    @IBOutlet weak var langueGB: UIButton!
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         title = serie.serie
         
+        if (appConfig.modeCouleurSerie) {
+            let mainSerieColor : UIColor = extractDominantColor(from: image) ?? .systemRed
+            SerieColor1 = mainSerieColor.withAlphaComponent(0.3)
+            SerieColor2 = mainSerieColor.withAlphaComponent(0.1)
+        }
+
         makeGradiant(carre: boutonDiffuseurs, couleur: "Gris")
         makeGradiant(carre: boutonCritiques, couleur: "Gris")
         makeGradiant(carre: boutonCasting, couleur: "Gris")
         makeGradiant(carre: boutonWatchlist, couleur: "Vert")
-
+        
         if (UIDevice.current.userInterfaceIdiom == .pad) {
             makeGradiant(carre: boutonNoter, couleur: "Bleu")
+            makeGradiant(carre: boutonAdvisor, couleur: "Bleu")
             makeGradiant(carre: boutonAbandon, couleur: "Rouge")
-            
+
+            arrondirLabel(texte: parentSex, radius: 7)
+            arrondirLabel(texte: parentViolence, radius: 7)
+            arrondirLabel(texte: parentDrugs, radius: 7)
+            arrondirLabel(texte: parentProfanity, radius: 7)
+            arrondirLabel(texte: parentFrightened, radius: 7)
+
+            arrondir(fenetre: imageConseil, radius: 30.0)
+            refreshAdvisor(name: serie.nomConseil)
             modeSpecifique(mode: modeAffichage)
+            
+            seriesBackgrounds(carre: viewInfos)
+            seriesBackgrounds(carre: viewResume)
+            seriesBackgrounds(carre: viewGraphes)
+            seriesBackgrounds(carre: viewSaisonsUp)
         }
         else {
+            seriesBackgrounds(carre: view)
+            
             makeGradiant(carre: boutonRatings, couleur: "Gris")
-
+            makeGradiant(carre: boutonSaisons, couleur: "Gris")
+            spiderGraph.isHidden = true
+            
             if (modeAffichage == modeRecherche) {
                 boutonWatchlist.isHidden = false
             }
@@ -113,15 +140,6 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
             }
         }
         
-        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleGesture))
-        swipeLeft.direction = .left
-        self.view.addGestureRecognizer(swipeLeft)
-        
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(handleGesture))
-        swipeRight.direction = .right
-        self.view.addGestureRecognizer(swipeRight)
-        
-        pageControl.addTarget(self, action: #selector(self.changePage(sender:)), for: UIControl.Event.valueChanged)
         
         arrondirLabel(texte: labelInfos, radius: 10)
         arrondirLabel(texte: labelResume, radius: 10)
@@ -129,7 +147,7 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
         arrondirLabel(texte: labelSaisons, radius: 10)
         
         annee.text = String(serie.year)
-        resume.text = serie.resume
+        resume.text = serie.resumeFR
         banniere.image = image
         
         let noteGlobale : Double = Double(serie.getGlobalRating())/10.0
@@ -141,7 +159,7 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
         
         // Masquer les liens s'il n'y a pas de page derrière ...
         if (rottenTomatoes.getPath(serie: serie.serie) == "") { bRotTom.isHidden = true }
-        if (metaCritic.getPath(serie: serie.serie) == "") { bMetaCritic.isHidden = true }
+        if (serie.slugMetaCritic == "") { bMetaCritic.isHidden = true }
         if (serie.homepage == "") { bWebSite.isHidden = true }
         if (serie.idAlloCine == "") { bAlloCine.isHidden = true }
         if (serie.idTVmaze == "") { bTVMaze.isHidden = true }
@@ -165,47 +183,6 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
         arrondirLabel(texte: genre, radius: 8)
         arrondirLabel(texte: annee, radius: 8)
         
-        if (UIDevice.current.userInterfaceIdiom == .pad) {
-            arrondir(fenetre: viewRatings, radius: 10)
-            
-            // Boutons de choix des ratings
-            arrondirButton(texte: bRate1, radius: 20.0)
-            bRate1.setTitleColor(UIColor.systemBackground, for: .normal)
-            bRate1.backgroundColor = colorGradient(borneInf: 0.0, borneSup: 10.0, valeur: 1.0)
-            
-            arrondirButton(texte: bRate2, radius: 20.0)
-            bRate2.setTitleColor(UIColor.systemBackground, for: .normal)
-            bRate2.backgroundColor = colorGradient(borneInf: 0.0, borneSup: 10.0, valeur: 2.0)
-            
-            arrondirButton(texte: bRate3, radius: 20.0)
-            bRate3.setTitleColor(UIColor.systemBackground, for: .normal)
-            bRate3.backgroundColor = colorGradient(borneInf: 0.0, borneSup: 10.0, valeur: 3.0)
-            
-            arrondirButton(texte: bRate4, radius: 20.0)
-            bRate4.setTitleColor(UIColor.systemBackground, for: .normal)
-            bRate4.backgroundColor = colorGradient(borneInf: 0.0, borneSup: 10.0, valeur: 4.0)
-            
-            arrondirButton(texte: bRate5, radius: 20.0)
-            bRate5.setTitleColor(UIColor.systemBackground, for: .normal)
-            bRate5.backgroundColor = colorGradient(borneInf: 0.0, borneSup: 10.0, valeur: 5.0)
-            
-            arrondirButton(texte: bRate6, radius: 20.0)
-            bRate6.setTitleColor(UIColor.systemBackground, for: .normal)
-            bRate6.backgroundColor = colorGradient(borneInf: 0.0, borneSup: 10.0, valeur: 6.0)
-            
-            arrondirButton(texte: bRate7, radius: 20.0)
-            bRate7.setTitleColor(UIColor.systemBackground, for: .normal)
-            bRate7.backgroundColor = colorGradient(borneInf: 0.0, borneSup: 10.0, valeur: 7.0)
-            
-            arrondirButton(texte: bRate8, radius: 20.0)
-            bRate8.setTitleColor(UIColor.systemBackground, for: .normal)
-            bRate8.backgroundColor = colorGradient(borneInf: 0.0, borneSup: 10.0, valeur: 8.0)
-            
-            arrondirButton(texte: bRate9, radius: 20.0)
-            bRate9.setTitleColor(UIColor.systemBackground, for: .normal)
-            bRate9.backgroundColor = colorGradient(borneInf: 0.0, borneSup: 10.0, valeur: 9.0)
-        }
-        
         // MyRating de la série
         if (serie.myRating < 1) {
             boutonMyRating.setTitle("-", for: .normal)
@@ -219,12 +196,12 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
         boutonMyRating.setTitleColor(UIColor.systemBackground, for: .normal)
         
         // Affichage du status
-        if (serie.status == "Ended") {
-            status.text = "FINIE"
-            status.textColor = .black
+        if ( (serie.status == "Ended") || (serie.status == "ended") || (serie.status == "canceled") ){
+            status.text = serie.status
+            status.textColor = .red
         }
         else {
-            status.text = "EN COURS"
+            status.text = serie.status
             status.textColor = .systemBlue
         }
         
@@ -246,10 +223,10 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
                               rateRottenTomatoes: serie.getFairGlobalRatingRottenTomatoes(),
                               rateMetaCritic: serie.getFairGlobalRatingMetaCritic(),
                               rateAlloCine: serie.getFairGlobalRatingAlloCine(),
-                              rateSensCritique: serie.getFairGlobalRatingSensCritique() )
+                              rateSensCritique: serie.getFairGlobalRatingSensCritique(),
+                              rateSIMKL: serie.getFairGlobalRatingSIMKL() )
         spiderGraph.setType(type: 3)
         spiderGraph.setNeedsDisplay()
-        
         
         let queue : OperationQueue = OperationQueue()
         
@@ -260,6 +237,12 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
                 self.graphe.setNeedsDisplay()
             } )
             
+            if (self.serie.idMoviedb != "") { theMoviedb.getEpisodesRatings(self.serie) }
+            OperationQueue.main.addOperation({
+                self.graphe.sendSerie(self.serie)
+                self.graphe.setNeedsDisplay()
+            } )
+
             if (self.serie.idTVdb != "") { betaSeries.getEpisodesRatings(self.serie) }
             OperationQueue.main.addOperation({
                 self.graphe.sendSerie(self.serie)
@@ -267,6 +250,20 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
             } )
         } )
         queue.addOperation(opRates)
+
+        if (UIDevice.current.userInterfaceIdiom == .pad) {
+            let opParental = BlockOperation(block: {
+                self.parentalGuide = imdb.getParentalGuide(IMDBid: self.serie.idIMdb)
+                OperationQueue.main.addOperation({
+                    self.parentSex.backgroundColor = parentguideColor(severity: self.parentalGuide["#nudity"] as? String ?? "None")
+                    self.parentViolence.backgroundColor = parentguideColor(severity: self.parentalGuide["#violence"] as? String ?? "None")
+                    self.parentProfanity.backgroundColor = parentguideColor(severity: self.parentalGuide["#profanity"] as? String ?? "None")
+                    self.parentDrugs.backgroundColor = parentguideColor(severity: self.parentalGuide["#alcohol"] as? String ?? "None")
+                    self.parentFrightened.backgroundColor = parentguideColor(severity: self.parentalGuide["#frightening"] as? String ?? "None")
+                } )
+            } )
+            queue.addOperation(opParental)
+        }
         
         let opeFinalise = BlockOperation(block: {
             db.saveDB()
@@ -277,9 +274,29 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
             } )
         } )
         opeFinalise.addDependency(opRates)
-        //        opeFinalise.addDependency(opeCritics)
         queue.addOperation(opeFinalise)
+    }
+    
+    
+    func refreshAdvisor(name: String) {
+        labelConseil.text = name
         
+        switch name {
+        case "Une Serie ?": imageConseil.image = #imageLiteral(resourceName: "2021_05_15_0u9_Kleki.png")
+        case "Presse & média": imageConseil.image = UIImage(systemName: "newspaper")
+        case "": imageConseil.image = UIImage(systemName: "person.circle")
+        default: imageConseil.image = UIImage(systemName: "person.circle.fill")
+        }
+        
+        let contact : CNContact = getContactFromID(contactID: name)
+        
+        if (contact.familyName != "") {
+            if (contact.nickname == "")     { labelConseil.text = contact.givenName }
+            else                            { labelConseil.text = contact.nickname }
+                
+            if (contact.thumbnailImageData == nil)   { imageConseil.image = UIImage(systemName: "book") }
+            else                                     { imageConseil.image = UIImage(data: contact.thumbnailImageData!) }
+        }
     }
     
     
@@ -318,11 +335,6 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
             boutonWatchlist.isHidden = false
             boutonAbandon.isHidden = true
             break
-        case modeParRate:
-            boutonNoter.isHidden = true
-            boutonWatchlist.isHidden = true
-            boutonAbandon.isHidden = true
-            break
             
         default:
             return
@@ -342,6 +354,8 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
         cell.saison.text = "Saison " + String(indexPath.row + 1)
         cell.episodes.text = String(serie.saisons[indexPath.row].nbEpisodes) + " épisodes"
         
+        cell.backgroundColor = indexPath.row % 2 == 0 ? SerieColor2 : SerieColor1
+
         if (serie.saisons[indexPath.row].starts == ZeroDate) { cell.debut.text = "TBD" }
         else { cell.debut.text = dateFormShort.string(from: serie.saisons[indexPath.row].starts) }
         
@@ -358,7 +372,6 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "ShowSaison") {
             let viewController = segue.destination as! SaisonFiche
-            
             viewController.serie = serie
             viewController.saison = (viewSaisons.indexPathForSelectedRow?.row)! + 1
             viewController.image = getImage(serie.banner)
@@ -383,54 +396,37 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
             viewController.serie = serie
             viewController.detailType = viewController.detailTypeRatings
         }
+        else if (segue.identifier == "ShowDetailsSaisons") {
+            let viewController = segue.destination as! SerieFicheDetails
+            viewController.serie = serie
+            viewController.detailType = viewController.detailTypeSaisons
+        }
+        else if (segue.identifier == "ShowDetailsNotes") {
+            let viewController = segue.destination as! SerieFicheDetails
+            viewController.serie = serie
+            viewController.detailType = viewController.detailTypeNotes
+        }
+        else if (segue.identifier == "ShowDetailsAdvisor") {
+            let viewController = segue.destination as! SerieFicheDetails
+            viewController.serie = serie
+            viewController.detailType = viewController.detailTypeAdvisor
+        }
     }
     
-    @objc func handleGesture(gesture: UISwipeGestureRecognizer) -> Void {
+    @IBAction func unwindToSerieFiche(sender: UIStoryboardSegue) {
+        boutonMyRating.setTitle(String(serie.myRating), for: .normal)
+        boutonMyRating.backgroundColor = colorGradient(borneInf: 0.0, borneSup: 10.0, valeur: CGFloat(serie.myRating))
         
-        if (UIDevice.current.userInterfaceIdiom == .phone) {
-            if gesture.direction == UISwipeGestureRecognizer.Direction.right {
-                pageControl.currentPage = pageControl.currentPage - 1
-            }
-            else {
-                pageControl.currentPage = pageControl.currentPage + 1
-            }
-            
-            self.changePage(sender: self)
-        }
+        refreshAdvisor(name: serie.nomConseil)
+        
+        db.saveDB()
+        db.saveAdvisors()
     }
-    
-    @objc func changePage(sender: AnyObject) -> () {
-        switch (pageControl.currentPage) {
-        case 0:
-            viewResume.isHidden = false
-            viewInfos.isHidden = false
-            viewSaisons.isHidden = true
-            graphe.isHidden = true
-            
-        case 1:
-            viewResume.isHidden = true
-            viewInfos.isHidden = false
-            viewSaisons.isHidden = true
-            graphe.isHidden = false
-            
-        case 2:
-            viewResume.isHidden = true
-            viewInfos.isHidden = true
-            viewSaisons.isHidden = false
-            graphe.isHidden = true
-                       
-        default:
-            viewResume.isHidden = false
-            viewInfos.isHidden = true
-            viewSaisons.isHidden = true
-            graphe.isHidden = true
-        }
-    }
-    
+
     
     @IBAction func webTrakt(_ sender: AnyObject) { UIApplication.shared.open(URL(string: "https://trakt.tv/shows/\(serie.idTrakt)")!) }
     @IBAction func webTVMaze(_ sender: AnyObject) { UIApplication.shared.open(URL(string: "https://www.tvmaze.com/shows/\(serie.idTVmaze)")!) }
-    @IBAction func webMetaCritic(_ sender: AnyObject) { UIApplication.shared.open(URL(string: metaCritic.getPath(serie: serie.serie))!) }
+    @IBAction func webMetaCritic(_ sender: AnyObject) { UIApplication.shared.open(URL(string: "https://www.metacritic.com/tv/" + serie.slugMetaCritic)!) }
     @IBAction func webHomepage(_ sender: Any) { UIApplication.shared.open(URL(string: serie.homepage)!)}
     @IBAction func webRottenTomatoes(_ sender: AnyObject) { UIApplication.shared.open(URL(string: rottenTomatoes.getPath(serie: serie.serie))!) }
     @IBAction func webIMdb(_ sender: AnyObject) { UIApplication.shared.open(URL(string: "http://www.imdb.com/title/\(serie.idIMdb)")!) }
@@ -447,7 +443,11 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
                 if (trakt.removeFromWatchlist(theTVdbId: serie.idTVdb)) {
                     db.downloadGlobalInfo(serie: serie)
                     db.shows.remove(at: db.shows.firstIndex(of: serie)!)
+                    db.fillIndex()
                     boutonWatchlist.isHidden = true
+                    
+                    journal.addInfo(serie: serie.serie, source: srcUneSerie, methode: funcSerie, texte: "Suppression de la watchlist", type: newsListes)
+
                     db.saveDB()
                 }
             }
@@ -456,7 +456,11 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
                     db.downloadGlobalInfo(serie: serie)
                     serie.watchlist = true
                     db.shows.append(serie)
+                    db.fillIndex()
                     boutonWatchlist.isHidden = true
+
+                    journal.addInfo(serie: serie.serie, source: srcUneSerie, methode: funcSerie, texte: "Série ajoutée en watchlist", type: newsListes)
+
                     db.saveDB()
                 }
             }
@@ -471,6 +475,9 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
                     db.downloadGlobalInfo(serie: serie)
                     serie.unfollowed = false
                     boutonAbandon.isHidden = true
+
+                    journal.addInfo(serie: serie.serie, source: srcUneSerie, methode: funcSerie, texte: "Reprise de la série abandonnée", type: newsListes)
+
                     db.saveDB()
                 }
             }
@@ -479,36 +486,24 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
                     db.downloadGlobalInfo(serie: serie)
                     serie.unfollowed = true
                     boutonAbandon.isHidden = true
+
+                    journal.addInfo(serie: serie.serie, source: srcUneSerie, methode: funcSerie, texte: "Abandon de la série", type: newsListes)
+
                     db.saveDB()
                 }
             }
         }
     }
     
-    
-    @IBAction func setMyRating(_ sender: Any) {
-        viewRatings.isHidden = false
+    @IBAction func setFrancais(_ sender: Any) {
+        resume.text = serie.resumeFR
+        langueFR.isSelected = true
+        langueGB.isSelected = false
     }
     
-    @IBAction func setRate1(_ sender: Any) { setRate(rate : 1); viewRatings.isHidden = true }
-    @IBAction func setRate2(_ sender: Any) { setRate(rate : 2); viewRatings.isHidden = true }
-    @IBAction func setRate3(_ sender: Any) { setRate(rate : 3); viewRatings.isHidden = true }
-    @IBAction func setRate4(_ sender: Any) { setRate(rate : 4); viewRatings.isHidden = true }
-    @IBAction func setRate5(_ sender: Any) { setRate(rate : 5); viewRatings.isHidden = true }
-    @IBAction func setRate6(_ sender: Any) { setRate(rate : 6); viewRatings.isHidden = true }
-    @IBAction func setRate7(_ sender: Any) { setRate(rate : 7); viewRatings.isHidden = true }
-    @IBAction func setRate8(_ sender: Any) { setRate(rate : 8); viewRatings.isHidden = true }
-    @IBAction func setRate9(_ sender: Any) { setRate(rate : 9); viewRatings.isHidden = true }
-    
-    @IBAction func cancelRate(_ sender: Any) { viewRatings.isHidden = true }
-    
-    func setRate(rate : Int) {
-        print("Rate = \(rate)")
-        if (trakt.setMyRating(tvdbID : serie.idTVdb, rating: rate)) {
-            boutonMyRating.setTitle(String(rate), for: .normal)
-            boutonMyRating.backgroundColor = colorGradient(borneInf: 0.0, borneSup: 10.0, valeur: CGFloat(rate))
-            serie.myRating = rate
-        }
+    @IBAction func setAnglais(_ sender: Any) {
+        resume.text = serie.resume
+        langueFR.isSelected = false
+        langueGB.isSelected = true
     }
-    
 }

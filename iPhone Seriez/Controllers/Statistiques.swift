@@ -14,8 +14,11 @@ class Statistiques: UIViewController {
     
     @IBOutlet weak var graphe1: Stat1!
     @IBOutlet weak var graphe2: UIView!
-    @IBOutlet weak var graphe3: Stat3!
     @IBOutlet weak var graphe4: StatRates!
+    @IBOutlet weak var graphGantt: UIView!
+    @IBOutlet weak var viewSerieCounts: UIView!
+    @IBOutlet weak var viewGantt: UIView!
+    @IBOutlet weak var viewParNotes: UIView!
     
     @IBOutlet weak var nbEpisodes: UILabel!
     @IBOutlet weak var nbSaisons: UILabel!
@@ -32,7 +35,6 @@ class Statistiques: UIViewController {
     @IBOutlet weak var bRate9: UIButton!
     @IBOutlet weak var bRateNone: UIButton!
     
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,11 +43,11 @@ class Statistiques: UIViewController {
         var nbSeriesToSee : Int = 0
         var nbEpisodesToSee : Int = 0
         
-        makeGradiant(carre: graphe1, couleur: "Blanc")
+        makeGradiant(carre: viewSerieCounts, couleur: "Blanc")
         makeGradiant(carre: graphe2, couleur: "Blanc")
-        makeGradiant(carre: graphe3, couleur: "Blanc")
-        makeGradiant(carre: graphe4, couleur: "Blanc")
-
+        makeGradiant(carre: viewParNotes, couleur: "Blanc")
+        makeGradiant(carre: viewGantt, couleur: "Blanc")
+        
         // Boutons des ratings
         arrondirButton(texte: bRate1, radius: 6.0)
         bRate1.setTitleColor(UIColor.systemBackground, for: .normal)
@@ -86,10 +88,6 @@ class Statistiques: UIViewController {
         arrondirButton(texte: bRateNone, radius: 6.0)
         bRateNone.setTitleColor(UIColor.systemBackground, for: .normal)
         bRateNone.backgroundColor = .systemGray
-
-
-        graphe1.setNeedsDisplay()
-        graphe4.setNeedsDisplay()
         
         for uneSerie in db.shows {
             var serieDejaComptee : Bool = false
@@ -113,31 +111,12 @@ class Statistiques: UIViewController {
         nbSaisons.text = String(db.valSaisonsDiffusees)
         nbEpisodes.text = String(nbEpisodesToSee)
     }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let viewController = segue.destination as! ViewSerieListe
-        var rate: Int = Int(String((sender as! UIButton).titleLabel?.text ?? "")) ?? 0
-        var buildList = [Serie]()
-
-        viewController.title = "Séries notées \(rate)"
-        if (rate == 0) {
-            rate = -1
-            viewController.title = "Séries non notées"
-        }
         
-        for uneSerie in db.shows {
-            if (uneSerie.myRating == rate) { buildList.append(uneSerie) }
-        }
-        viewController.viewList = buildList
-        viewController.modeAffichage = modeParRate
-
-    }
-    
 }
 
 
 
-class Stat3: UIView  {
+class GrapheCalendrier: UIView  {
     // Gant view
     // --------------------------
     
@@ -221,7 +200,7 @@ class Stat3: UIView  {
         // Tracer les gants de chaque épisode
         var offset : Int = 0
         for uneSerie in db.shows {
-            if ( uneSerie.unfollowed ) { continue }
+//            if ( uneSerie.unfollowed ) { continue }
 //            if (uneSerie.watchlist || uneSerie.unfollowed ) { continue }
 
             for uneSaison in uneSerie.saisons {
@@ -230,6 +209,9 @@ class Stat3: UIView  {
 
                     if ( uneSerie.watchlist ) { // Watchlist
                         traceGantt(debut: uneSaison.starts, fin: uneSaison.ends, offset: offset, serie: uneSerie.serie, color: UIColor.systemGreen)
+                    }
+                    else if ( uneSerie.unfollowed ) { // Abandonnées
+                        traceGantt(debut: uneSaison.starts, fin: uneSaison.ends, offset: offset, serie: uneSerie.serie, color: UIColor.systemRed)
                     }
                     else if ( (uneSaison.starts.compare(now) == .orderedDescending) ) { // Annoncées
                         traceGantt(debut: uneSaison.starts, fin: uneSaison.ends, offset: offset, serie: uneSerie.serie, color: UIColor.systemIndigo)
@@ -336,7 +318,7 @@ class Stat1: UIView  {
         textAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: size), NSAttributedString.Key.foregroundColor: UIColor.systemRed]
         "\(db.valSeriesAbandonnees) abandonnées".draw(in: CGRect(x: x_label, y: y_label * 3 + 20.0, width: 300, height: 20), withAttributes: textAttributes)
         textAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: size), NSAttributedString.Key.foregroundColor: UIColor.systemGreen]
-        "\(db.valWatchList) à voir ?".draw(in: CGRect(x: x_label, y: y_label * 4 + 20.0, width: 300, height: 20), withAttributes: textAttributes)
+        "\(db.valWatchList) watchlist".draw(in: CGRect(x: x_label, y: y_label * 4 + 20.0, width: 300, height: 20), withAttributes: textAttributes)
     }
     
     func traceUnArc(color: UIColor, debut: CGFloat, fin: CGFloat) {

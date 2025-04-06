@@ -22,9 +22,15 @@ public class Episode : NSObject, NSCoding {
     public var idIMdb : String = ""
     public var idBetaSeries : Int = 0
     public var idTrakt : Int = 0
+    
     public var date : Date = Date.init(timeIntervalSince1970: 0)
     public var titre : String = String()
     public var resume : String = String()
+    public var titreFR : String = String()
+    public var resumeFR : String = String()
+    public var photo : String = String()
+    public var duration : Int = 0
+
     
     // Source Trakt
     public var ratingTrakt : Int = 0
@@ -77,6 +83,9 @@ public class Episode : NSObject, NSCoding {
         self.date = (decoder.decodeObject(forKey: "date") ?? Date.init(timeIntervalSince1970: 0)) as! Date
         self.titre = decoder.decodeObject(forKey: "titre") as? String ?? ""
         self.resume = decoder.decodeObject(forKey: "resume") as? String ?? ""
+        self.titreFR = decoder.decodeObject(forKey: "titreFR") as? String ?? ""
+        self.resumeFR = decoder.decodeObject(forKey: "resumeFR") as? String ?? ""
+        self.photo = decoder.decodeObject(forKey: "photo") as? String ?? ""
         self.ratersTVdb = decoder.decodeInteger(forKey: "ratersTVdb")
         self.ratingTrakt = decoder.decodeInteger(forKey: "ratingTrakt")
         self.ratersTrakt = decoder.decodeInteger(forKey: "ratersTrakt")
@@ -93,6 +102,7 @@ public class Episode : NSObject, NSCoding {
         self.ratingMetaCritic = decoder.decodeInteger(forKey: "ratingMetaCritic")
         self.ratersMetaCritic = decoder.decodeInteger(forKey: "ratersMetaCritic")
         self.ratingSensCritique = decoder.decodeInteger(forKey: "ratingSensCritique")
+        self.duration = decoder.decodeInteger(forKey: "duration")
     }
     
     public func encode(with coder: NSCoder) {
@@ -107,6 +117,9 @@ public class Episode : NSObject, NSCoding {
         coder.encode(self.date, forKey: "date")
         coder.encode(self.titre, forKey: "titre")
         coder.encode(self.resume, forKey: "resume")
+        coder.encode(self.titreFR, forKey: "titreFR")
+        coder.encode(self.resumeFR, forKey: "resumeFR")
+        coder.encode(self.photo, forKey: "photo")
         coder.encodeCInt(Int32(self.ratersTVdb), forKey: "ratersTVdb")
         coder.encode(self.ratingTrakt, forKey: "ratingTrakt")
         coder.encodeCInt(Int32(self.ratersTrakt), forKey: "ratersTrakt")
@@ -123,6 +136,7 @@ public class Episode : NSObject, NSCoding {
         coder.encode(self.ratingMetaCritic, forKey: "ratingMetaCritic")
         coder.encodeCInt(Int32(self.ratersMetaCritic), forKey: "ratersMetaCritic")
         coder.encodeCInt(Int32(self.ratingSensCritique), forKey: "ratingSensCritique")
+        coder.encodeCInt(Int32(self.duration), forKey: "duration")
     }
     
     init(fichier:String) {
@@ -145,7 +159,7 @@ public class Episode : NSObject, NSCoding {
     public func getFairRatingTrakt() -> Int {
         if (ratersTrakt == 0) { return 0 }
         if (date.compare(Date()) == .orderedDescending) { return 0 }
-        if (ecartTypeTrakt == 0) { return 0 }
+        if (ecartTypeTrakteps == 0) { return 0 }
 
         return Int( notesMid + (notesRange * Double(ratingTrakt - moyenneTrakteps) / ecartTypeTrakteps))
     }
@@ -153,7 +167,7 @@ public class Episode : NSObject, NSCoding {
     public func getFairRatingBetaSeries() -> Int {
         if (ratersBetaSeries == 0) { return 0 }
         if (date.compare(Date()) == .orderedDescending) { return 0 }
-        if (ecartTypeBetaSeries == 0) { return 0 }
+        if (ecartTypeBetaSerieseps == 0) { return 0 }
 
         return Int( notesMid + (notesRange * Double(ratingBetaSeries - moyenneBetaSerieseps) / ecartTypeBetaSerieseps))
     }
@@ -161,9 +175,34 @@ public class Episode : NSObject, NSCoding {
     public func getFairRatingIMdb() -> Int {
         if (ratersIMdb == 0) { return 0 }
         if (date.compare(Date()) == .orderedDescending) { return 0 }
-        if (ecartTypeIMDB == 0) { return 0 }
+        if (ecartTypeIMDBeps == 0) { return 0 }
 
         return Int( notesMid + (notesRange * Double(ratingIMdb - moyenneIMDBeps) / ecartTypeIMDBeps))
+    }
+    
+    
+    public func getFairRatingMovieDB() -> Int {
+        if (ratersMoviedb == 0) { return 0 }
+        if (date.compare(Date()) == .orderedDescending) { return 0 }
+        if (ecartTypeMoviedbeps == 0) { return 0 }
+
+        return Int( notesMid + (notesRange * Double(ratingMoviedb - moyenneMoviedbeps) / ecartTypeMoviedbeps))
+    }
+    
+    public func getFairRatingSensCritique() -> Int {
+        if (ratingSensCritique == 0) { return 0 }
+        if (date.compare(Date()) == .orderedDescending) { return 0 }
+        if (ecartTypeSensCritiqueeps == 0) { return 0 }
+
+        return Int( notesMid + (notesRange * Double(ratingSensCritique - moyenneSensCritiqueeps) / ecartTypeSensCritiqueeps))
+    }
+    
+    public func getFairRatingTVMaze() -> Int {
+        if (ratersTVMaze == 0) { return 0 }
+        if (date.compare(Date()) == .orderedDescending) { return 0 }
+        if (ecartTypeTVMazeeps == 0) { return 0 }
+
+        return Int( notesMid + (notesRange * Double(ratingTVMaze - moyenneTVMazeeps) / ecartTypeTVMazeeps))
     }
     
     
@@ -178,8 +217,11 @@ public class Episode : NSObject, NSCoding {
         if (unEpisode.idBetaSeries != 0)       { self.idBetaSeries = unEpisode.idBetaSeries }
         if (unEpisode.idTrakt != 0)            { self.idTrakt = unEpisode.idTrakt }
         if (unEpisode.date != Date.init(timeIntervalSince1970: 0))       { self.date = unEpisode.date }
-        if (unEpisode.titre != "")             { self.serie = unEpisode.titre }
-        if (unEpisode.resume != "")            { self.serie = unEpisode.resume }
+        if (unEpisode.titre != "")             { self.titre = unEpisode.titre }
+        if (unEpisode.resume != "")            { self.resume = unEpisode.resume }
+        if (unEpisode.titreFR != "")           { self.titreFR = unEpisode.titreFR }
+        if (unEpisode.resumeFR != "")          { self.resumeFR = unEpisode.resumeFR }
+        if (unEpisode.photo != "")             { self.photo = unEpisode.photo }
         if (unEpisode.ratingTrakt != 0)        { self.ratingTrakt = unEpisode.ratingTrakt }
         if (unEpisode.ratersTrakt != 0)        { self.ratersTrakt = unEpisode.ratersTrakt }
         if (unEpisode.ratingBetaSeries != 0)   { self.ratingBetaSeries = unEpisode.ratingBetaSeries }
@@ -195,5 +237,6 @@ public class Episode : NSObject, NSCoding {
         if (unEpisode.ratingMetaCritic != 0)   { self.ratingMetaCritic = unEpisode.ratingMetaCritic }
         if (unEpisode.ratersMetaCritic != 0)   { self.ratersMetaCritic = unEpisode.ratersMetaCritic }
         if (unEpisode.ratingSensCritique != 0) { self.ratingSensCritique = unEpisode.ratingSensCritique }
+        if (unEpisode.duration != 0)           { self.duration = unEpisode.duration }
     }
 }

@@ -15,25 +15,92 @@ import SwiftSoup
 class MetaCritic {
     var chrono : TimeInterval = 0
     let dateFormMetaCritic = DateFormatter()
-
+    
     init() {
         dateFormMetaCritic.dateFormat = "MMM dd, yyyy"
     }
     
     
-    func getSerieGlobalInfos(serie : String) -> Serie {
+    func loadAPI(reqAPI: String) -> NSObject {
         let startChrono : Date = Date()
-        let uneSerie : Serie = Serie(serie: serie)
-        let webPage : String = getPath(serie: serie).addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
+        var ended : Bool = false
+        var result : NSObject = NSObject()
         
-        if (webPage == "") {
+        var request : URLRequest = URLRequest(url: URL(string: reqAPI)!)
+        request.httpMethod = "GET"
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue("keep-alive", forHTTPHeaderField: "Connection")
+        
+        let task = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
+            if let data = data, let response = response as? HTTPURLResponse {
+                do {
+                    if (response.statusCode != 200) { print("MetaCritic::error \(response.statusCode) received for req=\(reqAPI)"); ended = true; return }
+                    result = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSObject
+                    ended = true
+                    
+                } catch let error as NSError { print("MetaCritic::failed \(error.localizedDescription) for req=\(reqAPI) - error \(response.statusCode)"); ended = true; }
+            } else { print(error as Any); ended = true; }
+        })
+        
+        task.resume()
+        while (!ended) { usleep(1000) }
+        
+        chrono = chrono + Date().timeIntervalSince(startChrono)
+        return result
+    }
+    
+    
+    func getSerieGlobalInfos(serie : String) -> Serie {
+        let uneSerie : Serie = Serie(serie: serie)
+        var reqURL : String = ""
+        let slug : String = getSlug(serie: serie)
+        if (slug == "") { return uneSerie }
+        else { reqURL = "https://backend.metacritic.com/v1/xapi/finder/metacritic/search/\(slug)/web?mcoTypeId=1&limit=5" }
+        
+        let reqResult : NSDictionary = loadAPI(reqAPI: reqURL) as? NSDictionary ?? NSDictionary()
+        if (reqResult.count == 0) {
+            print("MetaCritic.getSerieGlobalInfos : \(serie) non trouvée")
             return uneSerie
         }
         
+        let itemsFound = ((reqResult as AnyObject).object(forKey: "data")! as AnyObject).object(forKey: "items") as? NSArray ?? NSArray()
+        if (itemsFound.count == 0) {
+            print("MetaCritic.getSerieGlobalInfos : \(serie) non trouvée")
+            return uneSerie
+        }
+        
+        for oneShow in itemsFound {
+            let serieTrouvee = ((oneShow as! NSDictionary).object(forKey: "title")) as? String ?? ""
+            
+            if (serie.lowercased().trimmingCharacters(in: .whitespacesAndNewlines) == serieTrouvee.replacingOccurrences(of: #"\s?\([\w\s]*\)"#, with: "", options: .regularExpression).lowercased().trimmingCharacters(in: .whitespacesAndNewlines)) {
+                uneSerie.ratingMetaCritic = ((oneShow as! NSDictionary).object(forKey: "criticScoreSummary") as! NSDictionary).object(forKey: "score") as? Int ?? 0
+                uneSerie.certification = (oneShow as! NSDictionary).object(forKey: "rating") as? String ?? ""
+                uneSerie.year = (oneShow as! NSDictionary).object(forKey: "premiereYear") as? Int ?? 0
+                uneSerie.nbSaisons = (oneShow as! NSDictionary).object(forKey: "seasonCount") as? Int ?? 0
+                uneSerie.resume = (oneShow as! NSDictionary).object(forKey: "description") as? String ?? ""
+                uneSerie.runtime = (oneShow as! NSDictionary).object(forKey: "duration") as? Int ?? 0
+                uneSerie.slugMetaCritic = (oneShow as! NSDictionary).object(forKey: "slug") as? String ?? ""
+                
+                return uneSerie
+            }
+        }
+        
+        print("MetaCritic.getSerieGlobalInfos : \(serie) non trouvée")
+        
+        return uneSerie
+    }
+    
+    
+    func getSerieGlobalInfosWeb(serie : String) -> Serie {
+        let startChrono : Date = Date()
+        let uneSerie : Serie = Serie(serie: serie)
+        if (uneSerie.slugMetaCritic == "") { return uneSerie }
+        let webPage : String = "https://www.metacritic.com/tv/"+uneSerie.slugMetaCritic
+
         do {
-            let page : String = try String(contentsOf: URL(string : webPage)!)
+            let page : String = try String(contentsOf: URL(string : webPage)!, encoding: .utf8)
             let doc : Document = try SwiftSoup.parse(page)
-            let extract : String = try doc.select("[class='metascore_w header_size tvshow positive']").text()
+            let extract : String = try doc.select("[class='c-productScoreInfo u-clearfix g-inner-spacing-bottom-medium']").select("[class='c-productScoreInfo_scoreNumber u-float-right']").text()
             
             uneSerie.ratingMetaCritic = Int(extract) ?? 0
         }
@@ -43,14 +110,15 @@ class MetaCritic {
         return uneSerie
     }
     
+    
     func getEpisodesRatings(_ uneSerie: Serie) {
         let startChrono : Date = Date()
-        let webPage : String = getPath(serie: uneSerie.serie).addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
-        if (webPage == "") { return }
-        
+        if (uneSerie.slugMetaCritic == "") { return }
+        let webPage : String = "https://www.metacritic.com/tv/"+uneSerie.slugMetaCritic
+
         for uneSaison in uneSerie.saisons {
             do {
-                let page : String = try String(contentsOf: URL(string : webPage+"/season-"+String(uneSaison.saison))!)
+                let page : String = try String(contentsOf: URL(string : webPage+"/season-"+String(uneSaison.saison))!, encoding: .utf8)
                 let doc : Document = try SwiftSoup.parse(page)
                 let allNotes = try doc.select("li [class^='ep_guide_item']")
                 
@@ -76,7 +144,7 @@ class MetaCritic {
     
     
     func getTrendingShows() -> (names : [String], ids : [String]) {
-        return getShowList(url: "https://www.metacritic.com/browse/tv/score/metascore/90day/filtered?sort=desc&view=condensed")
+        return getShowList(url: "https://www.metacritic.com/browse/tv/all/all/current-year/metascore/?page=1")
     }
     
     
@@ -84,30 +152,30 @@ class MetaCritic {
         return getShowList(url: "https://www.metacritic.com/browse/tv/score/metascore/all/filtered?view=condensed&sort=desc")
     }
     
-
+    
     func getShowList(url : String) -> (names : [String], ids : [String]) {
         let startChrono : Date = Date()
         var showNames : [String] = []
         var showIds : [String] = []
         var compteur : Int = 0
-
+        
         do {
-            let page : String = try String(contentsOf: URL(string : url)!)
+            let page : String = try String(contentsOf: URL(string : url)!, encoding: .utf8)
             let doc : Document = try SwiftSoup.parse(page)
-
-            let showList = try doc.select("[class='collapsed']")
             
+            let showList = try doc.select("[class='c-finderProductCard_title']")
+
             for oneShow in showList {
-                let showName : String = try oneShow.select("img").attr("alt")
+                let spans = try oneShow.select("span")
                 
-                if (showName.contains(": Season")) {
-                    let serie : String = showName.components(separatedBy: ": Season")[0]
+                if (spans.count > 0) {
+                    let showName : String = try spans[1].text()
                     
-                    if ((!showNames.contains(serie)) && (compteur < popularShowsPerSource)){
-                        showNames.append(serie)
+                    if (compteur < popularShowsPerSource){
+                        showNames.append(showName)
                         showIds.append("")
                         compteur = compteur + 1
-                    }                   
+                    }
                 }
             }
         }
@@ -119,94 +187,89 @@ class MetaCritic {
     }
     
     
-    func getPath(serie : String) -> String {
+    func getSlug(serie: String) -> String {
         switch serie {
             
-        case "12 Monkeys":                              return "https://www.metacritic.com/tv/12-monkeys-2015"
-        case "Marco Polo":                              return "https://www.metacritic.com/tv/marco-polo-2014"
-        case "Outlander":                               return "https://www.metacritic.com/tv/outlander-2014"
-        case "Maniac":                                  return "https://www.metacritic.com/tv/maniac-2018"
-        case "Catch-22":                                return "https://www.metacritic.com/tv/catch-22-2019"
-        case "What We Do in the Shadows":               return "https://www.metacritic.com/tv/what-we-do-in-the-shadows-2019"
-        case "War of the Worlds":                       return "https://www.metacritic.com/tv/war-of-the-worlds-2020"
-        case "The Outsider":                            return "https://www.metacritic.com/tv/the-outsider-2020"
+        case "3%",
+            "A Very Secret Service",
+            "All the Way Up",
+            "Baron Noir",
+            "Borgen - Power & Glory",
+            "Borgia",
+            "Bottom",
+            "Braquo",
+            "Bref.",
+            "Cheeky Business",
+            "En thérapie",
+            "Family Business",
+            "Fawlty Towers",
+            "Glue",
+            "Guyane",
+            "HPI",
+            "Hard",
+            "Hero Corp",
+            "How to Sell Drugs Online (Fast)",
+            "Infiniti",
+            "Jordskott",
+            "Kaamelott",
+            "Kaboul Kitchen",
+            "La Meilleure Version de moi-même",
+            "Mafiosa",
+            "Maison close",
+            "Marianne",
+            "Monty Python's Flying Circus",
+            "Of Money and Blood",
+            "One-Punch Man",
+            "Polar Park",
+            "Real Humans",
+            "Savages",
+            "Shambles",
+            "Spiral",
+            "State of Happiness",
+            "The Bureau",
+            "The Collapse",
+            "UFOs",
+            "Vernon Subutex",
+            "Wentworth",
+            "Attack on Titan",
+            "Miskina, Poor Thing",
+            "Nothing",
+            "Standing Up",
+            "The Frog",
+            "Trapped",
+            "Trom",
+            "WorkinGirls":
+            return ""            // Not available on Metacritic
 
-        case "Absolutely Fabulous":                     return "https://www.metacritic.com/tv/absolutely-fabulous-uk"
-        case "The IT Crowd":                            return "https://www.metacritic.com/tv/the-it-crowd-uk"
-        case "Shameless":                               return "https://www.metacritic.com/tv/shameless-us"
-
-        case "Dirk Gently's Holistic Detective Agency": return "https://www.metacritic.com/tv/dirk-gentlys-holistic-detective-agency"
-        case "Mr. Robot":                               return "https://www.metacritic.com/tv/mr-robot"
-        case "The End of the F***ing World":            return "https://www.metacritic.com/tv/the-end-of-the-fing-world"
-        case "The Handmaid's Tale":                     return "https://www.metacritic.com/tv/the-handmaids-tale"
-        case "The Haunting":                            return "https://www.metacritic.com/tv/the-haunting-of-hill-house"
-        case "The Marvelous Mrs. Maisel":               return "https://www.metacritic.com/tv/the-marvelous-mrs-maisel"
-        case "Rick and Morty":                          return "https://www.metacritic.com/tv/rick-morty"
-        case "Locke & Key":                             return "https://www.metacritic.com/tv/locke-key"
-        case "The Queen's Gambit":                      return "https://www.metacritic.com/tv/the-queens-gambit"
-        case "Love, Death & Robots":                    return "https://www.metacritic.com/tv/love-death-robots"
-
-        case "Hero Corp",
-             "Call My Agent",
-             "Call My Agent!",
-             "3%",
-             "A Very Secret Service",
-             "Baron Noir",
-             "Republican Gangsters",
-             "Borgia",
-             "Braquo",
-             "Bref.",
-             "Fawlty Towers",
-             "Glue",
-             "Guyane",
-             "Hard",
-             "Kaamelott",
-             "Kaboul Kitchen",
-             "Mafiosa",
-             "Marianne",
-             "Maison close",
-             "Money Heist",
-             "Monty Python's Flying Circus",
-             "Real Humans",
-             "Spiral",
-             "The Bureau",
-             "Utopia",
-             "Wentworth",
-             "WorkinGirls",
-             "Savages",
-             "The Collapse",
-             "Vernon Subutex",
-             "Caliphate",
-             "The Crimson Rivers",
-             "One-Punch Man",
-             "How to Sell Drugs Online (Fast)",
-             
-             "En thérapie",
-             "OVNI(s)",
-             "Sky Rojo",
-             "Curon",
-             "Kuroko's Basketball",
-             "Hunter x Hunter",
-             "The Seven Deadly Sins":
-            return ""
             
-        default:
-            return "https://www.metacritic.com/tv/\(serie.lowercased().replacingOccurrences(of: "%", with: "-").replacingOccurrences(of: "'", with: "-").replacingOccurrences(of: " ", with: "-"))"
+        case "Shōgun",
+            "Rick and Morty",
+            "SAS: Rogue Heroes",
+            "Star Wars: Andor":
+            return ""            // Available on Metacritic mais mal gérées par UneSerie
+
+            
+//        case "Shōgun":            return "shogun-2024"
+//        case "Rick and Morty":    return "rick-morty"
+//        case "SAS: Rogue Heroes": return "rogue-heroes"
+//        case "Star Wars: Andor":  return "andor"
+
+        default : return serie.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) ?? ""
         }
     }
+
     
-    
-    func getCritics(serie: String, saison: Int) -> [Critique] {
+    func getCritics(slug: String, saison: Int) -> [Critique] {
         let startChrono : Date = Date()
         var result : [Critique] = []
-        var webPage : String = getPath(serie: serie)
-        
-        if (webPage == "") { return result }
-        webPage = webPage + "/critic-reviews?sort-by=date&num_items=200"
-        webPage = webPage.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
+        if (slug == "") { return result }
 
+        var webPage : String = "https://www.metacritic.com/tv/"+slug
+        webPage = webPage + "/critic-reviews/?sort-by=Recently%20Added&num_items=20&season=season-" + String(saison)
+        webPage = webPage.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
+        
         do {
-            let page : String = try String(contentsOf: URL(string : webPage)!)
+            let page : String = try String(contentsOf: URL(string : webPage)!, encoding: .utf8)
             let doc : Document = try SwiftSoup.parse(page)
             
             let critics = try doc.select("div [class='review pad_top1 pad_btm1']")
@@ -220,11 +283,11 @@ class MetaCritic {
                 uneCritique.logo = try oneCritic.select("div [class='title pad_btm_half']").select("img").attr("src")
                 uneCritique.auteur = try oneCritic.select("div [class='title pad_btm_half']").select("[class='author']").text()
                 uneCritique.saison = Int(try oneCritic.select("[class='season-des']").text().replacingOccurrences(of: "Season ", with: "").replacingOccurrences(of: " Review:", with: "")) ?? 0
-
+                
                 let dateString : String = try oneCritic.select("div [class='title pad_btm_half']").select("[class='date']").text()
                 let dateTmp : Date = dateFormMetaCritic.date(from: dateString) ?? ZeroDate
                 uneCritique.date = dateFormLong.string(from: dateTmp)
-
+                
                 if (try oneCritic.select("div [class='summary']").select("a").count > 0) {
                     uneCritique.texte = try oneCritic.select("div [class='summary']").select("a")[0].text().replacingOccurrences(of: "Season " + String(uneCritique.saison) + " Review: ", with: "")
                     uneCritique.lien = try oneCritic.select("div [class='summary']").select("a")[0].attr("href")
@@ -232,13 +295,13 @@ class MetaCritic {
                 else {
                     uneCritique.texte = try oneCritic.select("div [class='summary']").text().replacingOccurrences(of: "Season " + String(uneCritique.saison) + " Review: ", with: "")
                 }
-
+                
                 if (uneCritique.saison == saison) {
                     result.append(uneCritique)
                 }
             }
         }
-        catch let error as NSError { print("MetaCritic getCritics failed for \(serie): \(error.localizedDescription)") }
+        catch let error as NSError { print("MetaCritic.getCritics failed for \(slug): \(error.localizedDescription)") }
         
         chrono = chrono + Date().timeIntervalSince(startChrono)
         return result

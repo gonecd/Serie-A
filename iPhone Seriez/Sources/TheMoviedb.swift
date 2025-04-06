@@ -57,11 +57,14 @@ class TheMoviedb : NSObject {
                     for unEpisode in reqResult.object(forKey: "episodes")! as! NSArray {
                         let epIndex: Int = ((unEpisode as AnyObject).object(forKey: "episode_number")! as! Int)-1
                         
-                        if ( (epIndex < saison.episodes.count) && (epIndex > 0) ) {
+                        if ( (epIndex < saison.episodes.count) && (epIndex >= 0) ) {
                             if (saison.episodes[epIndex].date.compare(today) == .orderedAscending) {
                                 saison.episodes[epIndex].ratingMoviedb = Int(10 * (((unEpisode as AnyObject).object(forKey: "vote_average")! as AnyObject) as? Double ?? 0.0))
                                 saison.episodes[epIndex].ratersMoviedb = ((unEpisode as AnyObject).object(forKey: "vote_count")! as AnyObject) as? Int ?? 0
                             }
+                            
+                            saison.episodes[epIndex].photo = ((unEpisode as AnyObject).object(forKey: "still_path")! as AnyObject) as? String ?? ""
+                            saison.episodes[epIndex].photo = "https://image.tmdb.org/t/p/w500" + saison.episodes[epIndex].photo
                         }
                     }
                 }
@@ -154,7 +157,7 @@ class TheMoviedb : NSObject {
             return uneSerie
         }
         
-        let reqResult : NSDictionary = loadAPI(reqAPI: "https://api.themoviedb.org/3/tv/\(idMovieDB)?api_key=\(TheMoviedbUserkey)&language=en-US&append_to_response=external_ids,content_ratings") as? NSDictionary ?? NSDictionary()
+        let reqResult : NSDictionary = loadAPI(reqAPI: "https://api.themoviedb.org/3/tv/\(idMovieDB)?api_key=\(TheMoviedbUserkey)&language=en-US&append_to_response=external_ids") as? NSDictionary ?? NSDictionary()
         
         if (reqResult.object(forKey: "external_ids") != nil) {
             uneSerie.serie = reqResult.object(forKey: "name") as? String ?? ""
@@ -163,7 +166,13 @@ class TheMoviedb : NSObject {
             uneSerie.idMoviedb = String(reqResult.object(forKey: "id") as? Int ?? 0)
             if ((reqResult.object(forKey: "networks") != nil) && ((reqResult.object(forKey: "networks") as! NSArray).count > 0) ) {
                 uneSerie.network = ((reqResult.object(forKey: "networks") as! NSArray).object(at: 0) as! NSDictionary).object(forKey: "name") as? String ?? ""
+                let tmp : String = ((reqResult.object(forKey: "networks") as! NSArray).object(at: 0) as! NSDictionary).object(forKey: "logo_path") as? String ?? ""
+
+                if (tmp != "") {
+                    uneSerie.networkLogo = "https://image.tmdb.org/t/p/w92" + tmp
+                }
             }
+            
             uneSerie.poster = reqResult.object(forKey: "poster_path") as? String ?? ""
             if (uneSerie.poster != "") { uneSerie.poster = "https://image.tmdb.org/t/p/w92" + uneSerie.poster }
             uneSerie.status = reqResult.object(forKey: "status") as? String ?? ""

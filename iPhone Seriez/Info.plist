@@ -51,6 +51,8 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSContactsUsageDescription</key>
+	<string>Necessaire a la gestion des Advisors de Serie</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

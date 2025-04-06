@@ -27,9 +27,6 @@ class GraphMiniEpisode: UIView {
         hauteur  = self.frame.height + 1.0
         largeur  = self.frame.width
         
-        self.layer.cornerRadius = 5;
-        self.layer.masksToBounds = true
-        
         // Drawing code here.
         self.background()
         self.traceGraphePoints()

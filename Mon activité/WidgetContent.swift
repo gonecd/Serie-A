@@ -12,14 +12,20 @@ import UIKit
 
 struct MonActiviteData : TimelineEntry {
     var date        : Date      = Date()
+    
     var poster1     : UIImage   = UIImage()
     let data1       : Data4MonActivite
+
     var poster2     : UIImage   = UIImage()
     let data2       : Data4MonActivite
 
-    public init(dataWidget1 : Data4MonActivite, dataWidget2 : Data4MonActivite) {
+    var poster3     : UIImage   = UIImage()
+    let data3       : Data4MonActivite
+
+    public init(dataWidget1 : Data4MonActivite, dataWidget2 : Data4MonActivite, dataWidget3 : Data4MonActivite) {
         self.data1 = dataWidget1
         self.data2 = dataWidget2
+        self.data3 = dataWidget3
     }
 }
 
@@ -31,28 +37,14 @@ struct Data4MonActivite: Codable {
     let nbEps: Int
     let nbWatched: Int
     let poster: String
-    let rateGlobal: Int
-    let rateTrakt: Int
-    let rateIMDB: Int
-    let rateMovieDB: Int
-    let rateTVmaze: Int
-    let rateRottenTomatoes: Int
-    let rateBetaSeries: Int
     
-    public init(serie: String, channel: String, saison: Int, nbEps: Int, nbWatched: Int, poster: String, rateGlobal: Int, rateTrakt: Int, rateIMDB: Int, rateMovieDB: Int, rateTVmaze: Int, rateRottenTomatoes: Int, rateBetaSeries: Int) {
+    public init(serie: String, channel: String, saison: Int, nbEps: Int, nbWatched: Int, poster: String) {
         self.serie = serie
         self.channel = channel
         self.saison = saison
         self.nbEps = nbEps
         self.nbWatched = nbWatched
         self.poster = poster
-        self.rateGlobal = rateGlobal
-        self.rateTrakt = rateTrakt
-        self.rateIMDB = rateIMDB
-        self.rateMovieDB = rateMovieDB
-        self.rateTVmaze = rateTVmaze
-        self.rateRottenTomatoes = rateRottenTomatoes
-        self.rateBetaSeries = rateBetaSeries
     }
     
     public func encode(to encoder: Encoder) throws {
@@ -64,13 +56,25 @@ struct Data4MonActivite: Codable {
         try container.encode(nbEps, forKey: .nbEps)
         try container.encode(nbWatched, forKey: .nbWatched)
         try container.encode(poster, forKey: .poster)
-        try container.encode(rateGlobal, forKey: .rateGlobal)
-        try container.encode(rateTrakt, forKey: .rateTrakt)
-        try container.encode(rateIMDB, forKey: .rateIMDB)
-        try container.encode(rateMovieDB, forKey: .rateMovieDB)
-        try container.encode(rateTVmaze, forKey: .rateTVmaze)
-        try container.encode(rateRottenTomatoes, forKey: .rateRottenTomatoes)
-        try container.encode(rateBetaSeries, forKey: .rateBetaSeries)
     }
 
 }
+
+let americans = Data4MonActivite (
+    serie: "The Americans",
+    channel: "FX",
+    saison: 2,
+    nbEps: 13,
+    nbWatched: 8,
+    poster: "https://image.tmdb.org/t/p/w92/qB7WPVQnmODg2mZ1xUmPOrCa0wL.jpg"
+)
+
+let noSerie = Data4MonActivite (
+    serie: "N/A",
+    channel: "-",
+    saison: 0,
+    nbEps: 100,
+    nbWatched: 1,
+    poster: "https://image.tmdb.org/t/p/w92/qB7WPVQnmODg2mZ1xUmPOrCa0wL.jpg"
+)
+

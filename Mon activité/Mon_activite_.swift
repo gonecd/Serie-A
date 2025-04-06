@@ -12,46 +12,14 @@ import SwiftUI
 
 let nbSources : Int = 6
 
-let americans = Data4MonActivite (
-    serie: "The Americans",
-    channel: "FX",
-    saison: 2,
-    nbEps: 13,
-    nbWatched: 8,
-    poster: "https://image.tmdb.org/t/p/w92/qB7WPVQnmODg2mZ1xUmPOrCa0wL.jpg",
-    rateGlobal: 77,
-    rateTrakt: 83,
-    rateIMDB: 84,
-    rateMovieDB: 79,
-    rateTVmaze: 85,
-    rateRottenTomatoes: 96,
-    rateBetaSeries: 90
-)
-
-let noSerie = Data4MonActivite (
-    serie: "N/A",
-    channel: "-",
-    saison: 0,
-    nbEps: 100,
-    nbWatched: 1,
-    poster: "https://image.tmdb.org/t/p/w92/qB7WPVQnmODg2mZ1xUmPOrCa0wL.jpg",
-    rateGlobal: 50,
-    rateTrakt: 50,
-    rateIMDB: 50,
-    rateMovieDB: 50,
-    rateTVmaze: 50,
-    rateRottenTomatoes: 50,
-    rateBetaSeries: 50
-)
-
 
 struct MonActiviteProvider: TimelineProvider {
     func placeholder(in context: Context) -> MonActiviteData {
-        MonActiviteData(dataWidget1: americans, dataWidget2: noSerie)
+        MonActiviteData(dataWidget1: americans, dataWidget2: noSerie, dataWidget3: noSerie)
     }
     
     func getSnapshot(in context: Context, completion: @escaping (MonActiviteData) -> ()) {
-        var entry = MonActiviteData(dataWidget1: americans, dataWidget2: noSerie)
+        var entry = MonActiviteData(dataWidget1: americans, dataWidget2: noSerie, dataWidget3: noSerie)
         
         let url : URL = URL(string: entry.data1.poster)!
         let imageData = try? Data(contentsOf: url)
@@ -70,43 +38,39 @@ struct MonActiviteProvider: TimelineProvider {
         var widgetContent : [MonActiviteData] = []
         let currentDate = Date()
 
-        if (entries.count == 0) {
-            var uneActivite : MonActiviteData = MonActiviteData(dataWidget1: noSerie, dataWidget2: noSerie)
+        if (entries.count == 1) {
+            var uneActivite : MonActiviteData = MonActiviteData(dataWidget1: entries[0], dataWidget2: noSerie, dataWidget3: noSerie)
             uneActivite.date = currentDate
             
-            uneActivite.poster1 = #imageLiteral(resourceName: "Capture d’écran 2018-11-03 à 14.41.14.png")
+            uneActivite.poster1 = getImage(entries[0].poster)
             uneActivite.poster2 = #imageLiteral(resourceName: "Capture d’écran 2018-11-03 à 14.41.14.png")
+            uneActivite.poster3 = #imageLiteral(resourceName: "Capture d’écran 2018-11-03 à 14.41.14.png")
 
             widgetContent.append(uneActivite)
-        } else if (entries.count == 1) {
-            var uneActivite : MonActiviteData = MonActiviteData(dataWidget1: entries[0], dataWidget2: noSerie)
+        } else if (entries.count == 2) {
+            var uneActivite : MonActiviteData = MonActiviteData(dataWidget1: entries[0], dataWidget2: entries[1], dataWidget3: noSerie)
             uneActivite.date = currentDate
             
-            let url1 : URL = URL(string: entries[0].poster)!
-            let imageData1 = try? Data(contentsOf: url1)
-            uneActivite.poster1 = UIImage(data: imageData1!)!
-                
-            uneActivite.poster2 = #imageLiteral(resourceName: "Capture d’écran 2018-11-03 à 14.41.14.png")
-                
+            uneActivite.poster1 = getImage(entries[0].poster)
+            uneActivite.poster2 = getImage(entries[1].poster)
+            uneActivite.poster3 = #imageLiteral(resourceName: "Capture d’écran 2018-11-03 à 14.41.14.png")
+
             widgetContent.append(uneActivite)
         } else {
-            var uneActivite : MonActiviteData = MonActiviteData(dataWidget1: entries[0], dataWidget2: entries[1])
+            var uneActivite : MonActiviteData = MonActiviteData(dataWidget1: entries[0], dataWidget2: entries[1], dataWidget3: entries[2])
             uneActivite.date = currentDate
             
-            let url1 : URL = URL(string: entries[0].poster)!
-            let imageData1 = try? Data(contentsOf: url1)
-            uneActivite.poster1 = UIImage(data: imageData1!)!
-                
-            let url2 : URL = URL(string: entries[1].poster)!
-            let imageData2 = try? Data(contentsOf: url2)
-            uneActivite.poster2 = UIImage(data: imageData2!)!
-                
+            uneActivite.poster1 = getImage(entries[0].poster)
+            uneActivite.poster2 = getImage(entries[1].poster)
+            uneActivite.poster3 = getImage(entries[2].poster)
+
             widgetContent.append(uneActivite)
         }
-        
-        let timeline = Timeline(entries: widgetContent, policy: .atEnd)
-        completion(timeline)
-    }
+    
+    let timeline = Timeline(entries: widgetContent, policy: .never)
+    completion(timeline)
+}
+
 }
 
 @main
@@ -115,10 +79,39 @@ struct Mon_activite_: Widget {
     
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: MonActiviteProvider()) { entry in
-            MonActiviteView(model: entry)
+            if #available(iOS 17.0, *) {
+                MonActiviteView(entry: entry)
+                    .containerBackground(.fill.tertiary, for: .widget)
+            } else {
+                MonActiviteView(entry: entry)
+                    .padding()
+                    .background()
+            }
         }
         .configurationDisplayName("Une Série")
         .description("Saisons en cours de visionnage")
         .supportedFamilies([.systemLarge])
     }
+}
+
+
+
+//#Preview(as: .systemLarge) {
+//    Mon_activite_()
+//} timeline: {
+////    MonActiviteData(date: Date(),
+////                    poster1: UIImage(), data1: americans, diffuseur1: UIImage(),
+////                    poster2: UIImage(), data2: americans, diffuseur2: UIImage(),
+////                    poster3: UIImage(), data3: noSerie, diffuseur3: UIImage())
+//    
+//    MonActiviteData(dataWidget1 : americans, dataWidget2 : noSerie, dataWidget3 : noSerie)
+//}
+
+
+func getImage(_ url: String) -> UIImage {
+    if (url == "") { return UIImage() }
+    
+    let imageData = NSData(contentsOf: URL(string: url)!)
+    if (imageData != nil) { return UIImage(data: imageData! as Data)! }
+    else { return UIImage() }
 }

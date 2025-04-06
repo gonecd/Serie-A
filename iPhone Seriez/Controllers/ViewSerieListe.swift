@@ -18,8 +18,8 @@ class CellSerieListe: UITableViewCell {
     @IBOutlet weak var genres: UITextView!
     @IBOutlet weak var globalRating: UITextField!
     @IBOutlet weak var myRating: UITextField!
-    @IBOutlet weak var status: UITextField!
     @IBOutlet weak var drapeau: UIImageView!
+    @IBOutlet weak var network: UIImageView!
     
     var index: Int = 0
 }
@@ -29,7 +29,6 @@ class ViewSerieListe: UITableViewController {
     
     var viewList: [Serie] = [Serie]()
     var grapheType : Int = 0
-    var triType : Int = 0
     
     @IBOutlet var liste: UITableView!
     var modeAffichage : Int = 0
@@ -37,7 +36,7 @@ class ViewSerieListe: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     }
-    
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -53,10 +52,12 @@ class ViewSerieListe: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CellSerieListe", for: indexPath) as! CellSerieListe
         
+        cell.backgroundColor = indexPath.row % 2 == 0 ? SerieColor2 : SerieColor1
+
         cell.banniereSerie?.image = getImage(viewList[indexPath.row].poster)
         cell.index = indexPath.row
         cell.titre.text = viewList[indexPath.row].serie
-        cell.saison.text =  String(viewList[indexPath.row].nbSaisons) + " Saisons - " + String(viewList[indexPath.row].nbEpisodes) + " Epiosdes - " + String(viewList[indexPath.row].runtime) + " min"
+        cell.saison.text =  String(viewList[indexPath.row].nbSaisons) + " saisons - " + String(viewList[indexPath.row].nbEpisodes) + " épiosdes - " + String(viewList[indexPath.row].runtime) + " min"
         
         let note : Double = Double(viewList[indexPath.row].getGlobalRating())/10.0
         cell.globalRating.text = "👍🏼 " + String(note)
@@ -64,7 +65,7 @@ class ViewSerieListe: UITableViewController {
         cell.globalRating.layer.borderWidth = 2
         cell.globalRating.layer.cornerRadius = 12
         cell.globalRating.layer.masksToBounds = true
-
+        
         cell.myRating.textColor = UIColor.init(red: 1.0, green: 153.0/255.0, blue: 1.0, alpha: 1.0)
 
         if (viewList[indexPath.row].myRating < 1) {
@@ -85,20 +86,13 @@ class ViewSerieListe: UITableViewController {
         }
         cell.genres.text = allGenres
         
-        // Affichage du status
-        arrondir(texte: cell.status, radius: 8.0)
-        if (modeAffichage == modeParRate) {
-            cell.status.text = computeSerieListe(serie : viewList[indexPath.row]).label
-            cell.status.textColor = computeSerieListe(serie : viewList[indexPath.row]).couleur
-        }
-        else {
-            cell.status.text = computeSerieStatus(serie : viewList[indexPath.row]).label
-            cell.status.textColor = computeSerieStatus(serie : viewList[indexPath.row]).couleur
-        }
-        
         // Affichage du drapeau
         cell.drapeau.image = getDrapeau(country: viewList[indexPath.row].country)
         
+        // Affichage du network
+        cell.network.image = getLogoDiffuseur(diffuseur: viewList[indexPath.row].diffuseur)
+        arrondir(fenetre: cell.network, radius: 4)
+
         // Affichage du mini graphe
         cell.miniGraphe.sendNotes(rateTrakt: viewList[indexPath.row].getFairGlobalRatingTrakt(),
                                   rateBetaSeries: viewList[indexPath.row].getFairGlobalRatingBetaSeries(),
@@ -108,7 +102,9 @@ class ViewSerieListe: UITableViewController {
                                   rateRottenTomatoes: viewList[indexPath.row].getFairGlobalRatingRottenTomatoes(),
                                   rateMetaCritic: viewList[indexPath.row].getFairGlobalRatingMetaCritic(),
                                   rateAlloCine: viewList[indexPath.row].getFairGlobalRatingAlloCine(),
-                                  rateSensCritique: viewList[indexPath.row].getFairGlobalRatingSensCritique() )
+                                  rateSensCritique: viewList[indexPath.row].getFairGlobalRatingSensCritique(),
+                                  rateSIMKL: viewList[indexPath.row].getFairGlobalRatingSIMKL() )
+
         cell.miniGraphe.setType(type: grapheType)
         cell.miniGraphe.setNeedsDisplay()
         
@@ -116,20 +112,7 @@ class ViewSerieListe: UITableViewController {
     }
     
     
-    func computeSerieStatus(serie : Serie) -> (label: String, couleur: UIColor) {
-        if (serie.saisons.count > 0) {
-            if (serie.saisons.last!.starts.compare(ZeroDate) == .orderedSame) { return ("Saison prévue", .systemTeal) }
-            if (serie.saisons.last!.starts.compare(Date()) == .orderedDescending) { return ("Dates annoncées", .systemIndigo) }
-        }
-        if (serie.status == "Ended") { return ("Série terminée", .systemRed) }
-        if ((serie.saisons.count > 0) && (serie.saisons.last!.starts.compare(Date()) == .orderedAscending) && ((serie.saisons.last!.ends.compare(Date()) == .orderedDescending) || (serie.saisons.last!.ends.compare(ZeroDate) == .orderedSame)) ) { return ("Saison en cours", .systemBlue) }
-
-        return ("", .systemFill)
-    }
-    
-    
     func computeSerieListe(serie : Serie) -> (label: String, couleur: UIColor) {
-        
         if (serie.watchlist) { return ("Watchlist", .systemGreen) }
         if (serie.unfollowed) { return ("Série abandonnée", .systemRed) }
         if (serie.enCours()) { return ("Série en cours", .systemBlue) }
@@ -139,7 +122,6 @@ class ViewSerieListe: UITableViewController {
     
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -153,8 +135,15 @@ class ViewSerieListe: UITableViewController {
     
     override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let reload = UIContextualAction(style: .destructive, title: "Refresh") {  (contextualAction, view, boolValue) in
+
+            let oldSerie : Serie = self.viewList[indexPath.row].partialCopy()
+            
             db.downloadGlobalInfo(serie: self.viewList[indexPath.row])
             db.downloadDates(serie: self.viewList[indexPath.row])
+            db.downloadDetailInfo(serie: self.viewList[indexPath.row])
+
+            db.checkForUpdates(newSerie: self.viewList[indexPath.row], oldSerie: oldSerie, methode: funcSerie)
+
             db.saveDB()
             self.liste.reloadData()
             self.view.setNeedsDisplay()
@@ -170,33 +159,10 @@ class ViewSerieListe: UITableViewController {
     
     
     @IBAction func changeGraphe(_ sender: Any) {
-        if (grapheType == 0) { grapheType = 1 }
-        else if (grapheType == 1) { grapheType = 2 }
-        else if (grapheType == 2) { grapheType = 3 }
-        else { grapheType = 0 }
+        if (grapheType == 0) { grapheType = 3 }
+        else if (grapheType == 3) { grapheType = 0 }
         
         self.liste.reloadData()
         self.view.setNeedsDisplay()
     }
-    
-    
-    @IBAction func trier(_ sender: Any) {
-
-        if (triType == 0) {
-            viewList = viewList.sorted(by: { $0.myRating > $1.myRating })
-            triType = 1
-        }
-        else if (triType == 1) {
-            viewList = viewList.sorted(by: { $0.getGlobalRating() > $1.getGlobalRating() })
-            triType = 2
-        }
-        else {
-            viewList = viewList.sorted(by: { $0.serie < $1.serie })
-            triType = 0
-        }
-        
-        self.liste.reloadData()
-        self.view.setNeedsDisplay()
-    }
-    
 }

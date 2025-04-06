@@ -26,6 +26,33 @@ public class Saison : NSObject, NSCoding
         self.saison = saison
     }
     
+    func partialCopy() -> Saison {
+        let copie = Saison(serie: serie, saison: saison)
+        copie.starts = starts
+        copie.ends = ends
+
+        return copie
+    }
+    
+    
+    func findUpdates(versus: Saison) -> [String] {
+        var results : [String] = []
+        
+        if (watched()) { return results}
+        
+        if ((abs(starts.timeIntervalSince(versus.starts)/3600) > 36) && (starts != ZeroDate) ) {
+            results.append("La saison \(saison) débutera le \(dateFormShort.string(from: starts))")
+        }
+        
+        if ( (abs(ends.timeIntervalSince(versus.ends)/3600) > 36) && (ends != ZeroDate) ) {
+            results.append("La saison \(saison) finira le \(dateFormShort.string(from: ends))")
+        }
+        
+        return results
+    }
+    
+
+    
     public required init(coder decoder: NSCoder) {
         self.serie = decoder.decodeObject(forKey: "serie") as? String ?? ""
         self.saison = decoder.decodeInteger(forKey: "saison")
@@ -111,7 +138,50 @@ public class Saison : NSObject, NSCoding
         return 0
     }
 
+    public func getFairRatingTVMaze() -> Int {
+        var total : Int = 0
+        var nb : Int = 0
 
+        for episode in self.episodes {
+            if (episode.getFairRatingTVMaze() != 0) {
+                total = total + episode.getFairRatingTVMaze()
+                nb = nb + 1
+            }
+        }
+
+        if (nb != 0) { return Int(Double(total) / Double(nb)) }
+        return 0
+    }
+
+    public func getFairRatingSensCritique() -> Int {
+        var total : Int = 0
+        var nb : Int = 0
+
+        for episode in self.episodes {
+            if (episode.getFairRatingSensCritique() != 0) {
+                total = total + episode.getFairRatingSensCritique()
+                nb = nb + 1
+            }
+        }
+
+        if (nb != 0) { return Int(Double(total) / Double(nb)) }
+        return 0
+    }
+
+    public func getFairRatingMovieDB() -> Int {
+        var total : Int = 0
+        var nb : Int = 0
+
+        for episode in self.episodes {
+            if (episode.getFairRatingMovieDB() != 0) {
+                total = total + episode.getFairRatingMovieDB()
+                nb = nb + 1
+            }
+        }
+
+        if (nb != 0) { return Int(Double(total) / Double(nb)) }
+        return 0
+    }
     func merge(_ uneSaison : Saison) {
         if (uneSaison.serie != "")         { self.serie = uneSaison.serie }
         if (uneSaison.saison != 0)         { self.saison = uneSaison.saison }

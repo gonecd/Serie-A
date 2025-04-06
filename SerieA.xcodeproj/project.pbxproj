@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -75,7 +75,6 @@
 		628A1399236F38E8006B2AD4 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6255DBD92083780900CA9BA3 /* Helpers.swift */; };
 		628A139A236F38E8006B2AD4 /* ViewSaisonListe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D0EBBA204C30BE009774B6 /* ViewSaisonListe.swift */; };
 		628A139B236F38E8006B2AD4 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6279645E2099D32400ED5578 /* Database.swift */; };
-		628A139C236F38E8006B2AD4 /* SaisonFiche.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62AC509F200E58A200A8C841 /* SaisonFiche.swift */; };
 		628A139D236F38E8006B2AD4 /* ViewSearchNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6214F0FE227F12D10039F6E5 /* ViewSearchNew.swift */; };
 		628A139E236F38E8006B2AD4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD876F1FB766C600A9B9EE /* AppDelegate.swift */; };
 		628A139F236F38E8006B2AD4 /* TVmaze.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6217308521BC22EE00D37350 /* TVmaze.swift */; };
@@ -129,7 +128,6 @@
 		62921B5722BFE2F900A2BE94 /* allocine.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62921B5622BFE2F800A2BE94 /* allocine.ico */; };
 		62A581E71FBC5BCB002D8FD3 /* imdb.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62A581E51FBC5BCB002D8FD3 /* imdb.ico */; };
 		62A581E81FBC5BCB002D8FD3 /* rottentomatoes.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62A581E61FBC5BCB002D8FD3 /* rottentomatoes.ico */; };
-		62AC50A0200E58A200A8C841 /* SaisonFiche.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62AC509F200E58A200A8C841 /* SaisonFiche.swift */; };
 		62B087AE207A7938007703FF /* Magnifi-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087AC207A7937007703FF /* Magnifi-icon.png */; };
 		62B087AF207A7938007703FF /* Idea-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087AD207A7937007703FF /* Idea-icon.png */; };
 		62B087C0207BEBC6007703FF /* Flag_of_the_United_Kingdom.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087BB207BEBC5007703FF /* Flag_of_the_United_Kingdom.png */; };
@@ -197,25 +195,220 @@
 		F13C1CA6279334DA004EF536 /* Capture d’écran 2018-11-03 à 14.41.14.png in Resources */ = {isa = PBXBuildFile; fileRef = F14B477D276510E9000655C4 /* Capture d’écran 2018-11-03 à 14.41.14.png */; };
 		F14B477E276510E9000655C4 /* Capture d’écran 2018-11-03 à 14.41.14.png in Resources */ = {isa = PBXBuildFile; fileRef = F14B477D276510E9000655C4 /* Capture d’écran 2018-11-03 à 14.41.14.png */; };
 		F14B477F276510E9000655C4 /* Capture d’écran 2018-11-03 à 14.41.14.png in Resources */ = {isa = PBXBuildFile; fileRef = F14B477D276510E9000655C4 /* Capture d’écran 2018-11-03 à 14.41.14.png */; };
+		F153D03A29118B1A00BA283E /* ViewCalendrier.swift in Sources */ = {isa = PBXBuildFile; fileRef = F153D03929118B1A00BA283E /* ViewCalendrier.swift */; };
+		F16263312CFCB58A00A7727D /* justwatch.ico in Resources */ = {isa = PBXBuildFile; fileRef = F16263302CFCB58A00A7727D /* justwatch.ico */; };
+		F16263322CFCB58A00A7727D /* justwatch.ico in Resources */ = {isa = PBXBuildFile; fileRef = F16263302CFCB58A00A7727D /* justwatch.ico */; };
+		F16263332CFCB58A00A7727D /* justwatch.ico in Resources */ = {isa = PBXBuildFile; fileRef = F16263302CFCB58A00A7727D /* justwatch.ico */; };
+		F16263352D20593C00A7727D /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = F16263342D20593C00A7727D /* AppConfig.swift */; };
+		F16263362D20593C00A7727D /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = F16263342D20593C00A7727D /* AppConfig.swift */; };
+		F16263372D20593C00A7727D /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = F16263342D20593C00A7727D /* AppConfig.swift */; };
 		F16F63132763C92C008E459E /* Saison.swift in Sources */ = {isa = PBXBuildFile; fileRef = F16F63102763C92C008E459E /* Saison.swift */; };
 		F16F63142763C92C008E459E /* Saison.swift in Sources */ = {isa = PBXBuildFile; fileRef = F16F63102763C92C008E459E /* Saison.swift */; };
 		F16F63152763C92C008E459E /* Episode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F16F63112763C92C008E459E /* Episode.swift */; };
 		F16F63162763C92C008E459E /* Episode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F16F63112763C92C008E459E /* Episode.swift */; };
 		F16F63172763C92C008E459E /* Serie.swift in Sources */ = {isa = PBXBuildFile; fileRef = F16F63122763C92C008E459E /* Serie.swift */; };
 		F16F63182763C92C008E459E /* Serie.swift in Sources */ = {isa = PBXBuildFile; fileRef = F16F63122763C92C008E459E /* Serie.swift */; };
-		F16F631A2763C93E008E459E /* InfosRefresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = F16F63192763C93E008E459E /* InfosRefresh.swift */; };
-		F16F631B2763C93E008E459E /* InfosRefresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = F16F63192763C93E008E459E /* InfosRefresh.swift */; };
+		F17644BA2CCEB7550033E318 /* netflix.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F17644B42CCEB7540033E318 /* netflix.jpg */; };
+		F17644BB2CCEB7550033E318 /* apple tv.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F17644B52CCEB7540033E318 /* apple tv.jpg */; };
+		F17644BC2CCEB7550033E318 /* tf1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F17644B62CCEB7540033E318 /* tf1.jpg */; };
+		F17644BD2CCEB7550033E318 /* canal plus.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F17644B72CCEB7540033E318 /* canal plus.jpg */; };
+		F17644BE2CCEB7550033E318 /* disney.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F17644B82CCEB7540033E318 /* disney.jpg */; };
+		F17644BF2CCEB7550033E318 /* prime video.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F17644B92CCEB7550033E318 /* prime video.jpg */; };
+		F17644C02CCEB7640033E318 /* apple tv.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F17644B52CCEB7540033E318 /* apple tv.jpg */; };
+		F17644C12CCEB7650033E318 /* apple tv.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F17644B52CCEB7540033E318 /* apple tv.jpg */; };
+		F17644C22CCEB76A0033E318 /* tf1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F17644B62CCEB7540033E318 /* tf1.jpg */; };
+		F17644C32CCEB76A0033E318 /* disney.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F17644B82CCEB7540033E318 /* disney.jpg */; };
+		F17644C42CCEB76A0033E318 /* canal plus.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F17644B72CCEB7540033E318 /* canal plus.jpg */; };
+		F17644C52CCEB76A0033E318 /* prime video.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F17644B92CCEB7550033E318 /* prime video.jpg */; };
+		F17644C62CCEB76A0033E318 /* netflix.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F17644B42CCEB7540033E318 /* netflix.jpg */; };
+		F17644C72CCEB76B0033E318 /* tf1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F17644B62CCEB7540033E318 /* tf1.jpg */; };
+		F17644C82CCEB76B0033E318 /* disney.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F17644B82CCEB7540033E318 /* disney.jpg */; };
+		F17644C92CCEB76B0033E318 /* canal plus.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F17644B72CCEB7540033E318 /* canal plus.jpg */; };
+		F17644CA2CCEB76B0033E318 /* prime video.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F17644B92CCEB7550033E318 /* prime video.jpg */; };
+		F17644CB2CCEB76B0033E318 /* netflix.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F17644B42CCEB7540033E318 /* netflix.jpg */; };
 		F17B14A426DA9A450071B8DB /* GraphMiniEpisode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17B14A326DA9A450071B8DB /* GraphMiniEpisode.swift */; };
 		F17B14A526DA9A450071B8DB /* GraphMiniEpisode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17B14A326DA9A450071B8DB /* GraphMiniEpisode.swift */; };
+		F191E0052D25B347004E9991 /* ViewAdvisors.swift in Sources */ = {isa = PBXBuildFile; fileRef = F191E0042D25B32E004E9991 /* ViewAdvisors.swift */; };
+		F191E0062D25B347004E9991 /* ViewAdvisors.swift in Sources */ = {isa = PBXBuildFile; fileRef = F191E0042D25B32E004E9991 /* ViewAdvisors.swift */; };
+		F191E0072D25B347004E9991 /* ViewAdvisors.swift in Sources */ = {isa = PBXBuildFile; fileRef = F191E0042D25B32E004E9991 /* ViewAdvisors.swift */; };
+		F19A39782BD4046600A03651 /* SIMKL.swift in Sources */ = {isa = PBXBuildFile; fileRef = F19A39772BD4046600A03651 /* SIMKL.swift */; };
+		F19A39792BD4046600A03651 /* SIMKL.swift in Sources */ = {isa = PBXBuildFile; fileRef = F19A39772BD4046600A03651 /* SIMKL.swift */; };
+		F19A397B2BD4192A00A03651 /* simkl.png in Resources */ = {isa = PBXBuildFile; fileRef = F19A397A2BD4192A00A03651 /* simkl.png */; };
+		F19A397C2BD4192A00A03651 /* simkl.png in Resources */ = {isa = PBXBuildFile; fileRef = F19A397A2BD4192A00A03651 /* simkl.png */; };
+		F19A397F2BD4246300A03651 /* Flag_of_Argentina.png in Resources */ = {isa = PBXBuildFile; fileRef = F19A397D2BD4246300A03651 /* Flag_of_Argentina.png */; };
+		F19A39802BD4246300A03651 /* Flag_of_Argentina.png in Resources */ = {isa = PBXBuildFile; fileRef = F19A397D2BD4246300A03651 /* Flag_of_Argentina.png */; };
+		F19A39812BD4246300A03651 /* Flag_of_Ireland.png in Resources */ = {isa = PBXBuildFile; fileRef = F19A397E2BD4246300A03651 /* Flag_of_Ireland.png */; };
+		F19A39822BD4246300A03651 /* Flag_of_Ireland.png in Resources */ = {isa = PBXBuildFile; fileRef = F19A397E2BD4246300A03651 /* Flag_of_Ireland.png */; };
 		F19C5825253C7D2700E881DA /* SerieA copy3-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F19C5822253C7D2700E881DA /* SerieA copy3-Info.plist */; };
+		F1A14E642C7A4EEE00082E06 /* Statistiques.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62612BBA23DDE2B100ACCF81 /* Statistiques.swift */; };
+		F1A14E662C7A4EEE00082E06 /* SerieFiche.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD87A91FB7838400A9B9EE /* SerieFiche.swift */; };
+		F1A14E672C7A4EEE00082E06 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 621B1D9C20D665B800F4F3BD /* Configuration.swift */; };
+		F1A14E682C7A4EEE00082E06 /* GraphMiniEpisode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17B14A326DA9A450071B8DB /* GraphMiniEpisode.swift */; };
+		F1A14E692C7A4EEE00082E06 /* TheMoviedb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D0EBBC204C374B009774B6 /* TheMoviedb.swift */; };
+		F1A14E6A2C7A4EEE00082E06 /* Constantes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6224A5E42042207800450812 /* Constantes.swift */; };
+		F1A14E6B2C7A4EEE00082E06 /* IMdb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626D4728204C6DE900B1A64D /* IMdb.swift */; };
+		F1A14E6C2C7A4EEE00082E06 /* EpisodeFiche.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F8ECF32013775800A41EF7 /* EpisodeFiche.swift */; };
+		F1A14E6D2C7A4EEE00082E06 /* SerieFicheDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11F4CBF28689862002EB3E3 /* SerieFicheDetails.swift */; };
+		F1A14E6E2C7A4EEE00082E06 /* Saison.swift in Sources */ = {isa = PBXBuildFile; fileRef = F16F63102763C92C008E459E /* Saison.swift */; };
+		F1A14E6F2C7A4EEE00082E06 /* Episode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F16F63112763C92C008E459E /* Episode.swift */; };
+		F1A14E702C7A4EEE00082E06 /* GraphMiniSerie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6224A5E62043141800450812 /* GraphMiniSerie.swift */; };
+		F1A14E712C7A4EEE00082E06 /* GraphMiniSaison.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62CD57C22038B87D00DE28A1 /* GraphMiniSaison.swift */; };
+		F1A14E722C7A4EEE00082E06 /* MetaCritic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620B22FD22A304FD0027DCF6 /* MetaCritic.swift */; };
+		F1A14E732C7A4EEE00082E06 /* Notes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626D4726204C624500B1A64D /* Notes.swift */; };
+		F1A14E742C7A4EEE00082E06 /* WidgetContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1D777392711FA2400394176 /* WidgetContent.swift */; };
+		F1A14E752C7A4EEE00082E06 /* BetaSeries.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD87B91FB8C15500A9B9EE /* BetaSeries.swift */; };
+		F1A14E762C7A4EEE00082E06 /* Graph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD87B11FB8A2E000A9B9EE /* Graph.swift */; };
+		F1A14E772C7A4EEE00082E06 /* JustWatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625F145D242FB530007C1B18 /* JustWatch.swift */; };
+		F1A14E782C7A4EEE00082E06 /* GraphSaison.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627A0E2720139E8300FE1777 /* GraphSaison.swift */; };
+		F1A14E792C7A4EEE00082E06 /* Allocine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6217308121BC22C300D37350 /* Allocine.swift */; };
+		F1A14E7A2C7A4EEE00082E06 /* GraphEpisode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627A0E2920139E9900FE1777 /* GraphEpisode.swift */; };
+		F1A14E7B2C7A4EEE00082E06 /* TheTVdb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD879F1FB76F5D00A9B9EE /* TheTVdb.swift */; };
+		F1A14E7C2C7A4EEE00082E06 /* ViewSerieListe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6224A5E22041F30200450812 /* ViewSerieListe.swift */; };
+		F1A14E7D2C7A4EEE00082E06 /* SensCritique.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11F4CBA2851EBE1002EB3E3 /* SensCritique.swift */; };
+		F1A14E7E2C7A4EEE00082E06 /* ViewPropals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625799B6219734480010144D /* ViewPropals.swift */; };
+		F1A14E7F2C7A4EEE00082E06 /* Trakt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD87A31FB76F5D00A9B9EE /* Trakt.swift */; };
+		F1A14E802C7A4EEE00082E06 /* RottenTomatoes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6217308321BC22DE00D37350 /* RottenTomatoes.swift */; };
+		F1A14E812C7A4EEE00082E06 /* ViewSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B4716B20A88D3E0067BD34 /* ViewSearch.swift */; };
+		F1A14E822C7A4EEE00082E06 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6208D96722352ACC00FE179F /* Notification.swift */; };
+		F1A14E832C7A4EEE00082E06 /* ViewAccueil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624D27481FFBD4E100B49702 /* ViewAccueil.swift */; };
+		F1A14E842C7A4EEE00082E06 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6255DBD92083780900CA9BA3 /* Helpers.swift */; };
+		F1A14E852C7A4EEE00082E06 /* ViewSaisonListe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D0EBBA204C30BE009774B6 /* ViewSaisonListe.swift */; };
+		F1A14E862C7A4EEE00082E06 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6279645E2099D32400ED5578 /* Database.swift */; };
+		F1A14E872C7A4EEE00082E06 /* Serie.swift in Sources */ = {isa = PBXBuildFile; fileRef = F16F63122763C92C008E459E /* Serie.swift */; };
+		F1A14E882C7A4EEE00082E06 /* SaisonFiche.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62AC509F200E58A200A8C841 /* SaisonFiche.swift */; };
+		F1A14E892C7A4EEE00082E06 /* Critique.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620B25E323BBA52E00EC7610 /* Critique.swift */; };
+		F1A14E8A2C7A4EEE00082E06 /* ViewSearchNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6214F0FE227F12D10039F6E5 /* ViewSearchNew.swift */; };
+		F1A14E8B2C7A4EEE00082E06 /* SIMKL.swift in Sources */ = {isa = PBXBuildFile; fileRef = F19A39772BD4046600A03651 /* SIMKL.swift */; };
+		F1A14E8C2C7A4EEE00082E06 /* YaQuoiCommeSerie.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11F4CB1284FB26C002EB3E3 /* YaQuoiCommeSerie.swift */; };
+		F1A14E8D2C7A4EEE00082E06 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD876F1FB766C600A9B9EE /* AppDelegate.swift */; };
+		F1A14E8E2C7A4EEE00082E06 /* TVmaze.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6217308521BC22EE00D37350 /* TVmaze.swift */; };
+		F1A14E902C7A4EEE00082E06 /* Pods_SerieA_iPad.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E10A1A7E4C8EE57E8899C1C8 /* Pods_SerieA_iPad.framework */; };
+		F1A14E922C7A4EEE00082E06 /* tvmaze.ico in Resources */ = {isa = PBXBuildFile; fileRef = 6210217421EBA91C00849E6E /* tvmaze.ico */; };
+		F1A14E932C7A4EEE00082E06 /* Flag_of_the_Czech_Republic.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087C8207BEE39007703FF /* Flag_of_the_Czech_Republic.png */; };
+		F1A14E942C7A4EEE00082E06 /* simkl.png in Resources */ = {isa = PBXBuildFile; fileRef = F19A397A2BD4192A00A03651 /* simkl.png */; };
+		F1A14E952C7A4EEE00082E06 /* Flag_of_South_Korea.png in Resources */ = {isa = PBXBuildFile; fileRef = F13B52A82753D67D00EA976B /* Flag_of_South_Korea.png */; };
+		F1A14E962C7A4EEE00082E06 /* Flag_of_Denmark.png in Resources */ = {isa = PBXBuildFile; fileRef = F13B52AE2753D71100EA976B /* Flag_of_Denmark.png */; };
+		F1A14E972C7A4EEE00082E06 /* betaseries.png in Resources */ = {isa = PBXBuildFile; fileRef = 62DD87B51FB8BE4F00A9B9EE /* betaseries.png */; };
+		F1A14E982C7A4EEE00082E06 /* 2021_05_13_0ux_Kleki.png in Resources */ = {isa = PBXBuildFile; fileRef = F1FBCD89265026B2003075D3 /* 2021_05_13_0ux_Kleki.png */; };
+		F1A14E992C7A4EEE00082E06 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 62DD87781FB766C600A9B9EE /* LaunchScreen.storyboard */; };
+		F1A14E9A2C7A4EEE00082E06 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 62DD87761FB766C600A9B9EE /* Assets.xcassets */; };
+		F1A14E9B2C7A4EEE00082E06 /* Flag_of_Israel.png in Resources */ = {isa = PBXBuildFile; fileRef = 6231F8EB22833C34009D0351 /* Flag_of_Israel.png */; };
+		F1A14E9C2C7A4EEE00082E06 /* Flag_of_Taiwan.png in Resources */ = {isa = PBXBuildFile; fileRef = 6231F8E922833C33009D0351 /* Flag_of_Taiwan.png */; };
+		F1A14E9D2C7A4EEE00082E06 /* Flag_of_Sweden.png in Resources */ = {isa = PBXBuildFile; fileRef = F130B7EC266D229C002BC7BC /* Flag_of_Sweden.png */; };
+		F1A14E9E2C7A4EEE00082E06 /* Flag_of_Germany.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087BD207BEBC5007703FF /* Flag_of_Germany.png */; };
+		F1A14E9F2C7A4EEE00082E06 /* Flag_of_Belgium.png in Resources */ = {isa = PBXBuildFile; fileRef = 6214FF9524E06B290022A1B6 /* Flag_of_Belgium.png */; };
+		F1A14EA02C7A4EEE00082E06 /* Stop-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97CA2039016A007B658E /* Stop-icon.png */; };
+		F1A14EA12C7A4EEE00082E06 /* Flag_of_Norway.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087C7207BEE39007703FF /* Flag_of_Norway.png */; };
+		F1A14EA22C7A4EEE00082E06 /* 2021_05_15_0te_Kleki.png in Resources */ = {isa = PBXBuildFile; fileRef = F1FBCD88265026B2003075D3 /* 2021_05_15_0te_Kleki.png */; };
+		F1A14EA32C7A4EEE00082E06 /* Flag_of_Canada.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087C5207BED6F007703FF /* Flag_of_Canada.png */; };
+		F1A14EA42C7A4EEE00082E06 /* Flag_of_Ireland.png in Resources */ = {isa = PBXBuildFile; fileRef = F19A397E2BD4246300A03651 /* Flag_of_Ireland.png */; };
+		F1A14EA52C7A4EEE00082E06 /* rottentomatoes.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62A581E61FBC5BCB002D8FD3 /* rottentomatoes.ico */; };
+		F1A14EA62C7A4EEE00082E06 /* senscritique.png in Resources */ = {isa = PBXBuildFile; fileRef = F11F4CB72851EB75002EB3E3 /* senscritique.png */; };
+		F1A14EA72C7A4EEE00082E06 /* ToDo.txt in Resources */ = {isa = PBXBuildFile; fileRef = 62896015236C89D600699D17 /* ToDo.txt */; };
+		F1A14EA82C7A4EEE00082E06 /* Flag_of_Argentina.png in Resources */ = {isa = PBXBuildFile; fileRef = F19A397D2BD4246300A03651 /* Flag_of_Argentina.png */; };
+		F1A14EA92C7A4EEE00082E06 /* Logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 62796464209A15A800ED5578 /* Logo.png */; };
+		F1A14EAA2C7A4EEE00082E06 /* Flag_of_China.png in Resources */ = {isa = PBXBuildFile; fileRef = 6231F8E822833C33009D0351 /* Flag_of_China.png */; };
+		F1A14EAB2C7A4EEE00082E06 /* 2021_05_15_0uo_Kleki.png in Resources */ = {isa = PBXBuildFile; fileRef = F1FBCDA326502DEE003075D3 /* 2021_05_15_0uo_Kleki.png */; };
+		F1A14EAC2C7A4EEE00082E06 /* Chart-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 624EC9A420B1A87E005ED207 /* Chart-icon.png */; };
+		F1A14EAD2C7A4EEE00082E06 /* Bio-Hazard-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97CD2039016B007B658E /* Bio-Hazard-icon.png */; };
+		F1A14EAE2C7A4EEE00082E06 /* 2021_05_15_0u9_Kleki.png in Resources */ = {isa = PBXBuildFile; fileRef = F1FBCD9B265029DA003075D3 /* 2021_05_15_0u9_Kleki.png */; };
+		F1A14EAF2C7A4EEE00082E06 /* Flag_of_India.png in Resources */ = {isa = PBXBuildFile; fileRef = 6231F8EA22833C33009D0351 /* Flag_of_India.png */; };
+		F1A14EB02C7A4EEE00082E06 /* Flag_of_Australia.png in Resources */ = {isa = PBXBuildFile; fileRef = 627964592095D5BB00ED5578 /* Flag_of_Australia.png */; };
+		F1A14EB12C7A4EEE00082E06 /* Magnifi-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087AC207A7937007703FF /* Magnifi-icon.png */; };
+		F1A14EB22C7A4EEE00082E06 /* Flag_of_the_United_States.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087BC207BEBC5007703FF /* Flag_of_the_United_States.png */; };
+		F1A14EB32C7A4EEE00082E06 /* List-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97D220390305007B658E /* List-icon.png */; };
+		F1A14EB42C7A4EEE00082E06 /* trakt.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62DD87B41FB8BE4F00A9B9EE /* trakt.ico */; };
+		F1A14EB52C7A4EEE00082E06 /* Trash-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97DA2039AAFC007B658E /* Trash-icon.png */; };
+		F1A14EB62C7A4EEE00082E06 /* Flag_of_Brazil.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B4D8B7208CB7BF002110E8 /* Flag_of_Brazil.png */; };
+		F1A14EB72C7A4EEE00082E06 /* thetvdb.png in Resources */ = {isa = PBXBuildFile; fileRef = 62DD87B31FB8BE4F00A9B9EE /* thetvdb.png */; };
+		F1A14EB82C7A4EEE00082E06 /* metacritic.png in Resources */ = {isa = PBXBuildFile; fileRef = 6218303D22AD73BE003243B9 /* metacritic.png */; };
+		F1A14EB92C7A4EEE00082E06 /* 2021_05_13_0uk_Kleki.png in Resources */ = {isa = PBXBuildFile; fileRef = F1FBCD87265026B2003075D3 /* 2021_05_13_0uk_Kleki.png */; };
+		F1A14EBA2C7A4EEE00082E06 /* Eye-2-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62F2233D21E0F40F0032A6E3 /* Eye-2-icon.png */; };
+		F1A14EBB2C7A4EEE00082E06 /* Flag_of_France.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087BF207BEBC5007703FF /* Flag_of_France.png */; };
+		F1A14EBC2C7A4EEE00082E06 /* TV-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97D52039076C007B658E /* TV-icon.png */; };
+		F1A14EBD2C7A4EEE00082E06 /* 2021_05_15_0tl_Kleki.png in Resources */ = {isa = PBXBuildFile; fileRef = F1FBCD8A265026B3003075D3 /* 2021_05_15_0tl_Kleki.png */; };
+		F1A14EBE2C7A4EEE00082E06 /* Flag_of_Spain.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087BE207BEBC5007703FF /* Flag_of_Spain.png */; };
+		F1A14EBF2C7A4EEE00082E06 /* iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 62BB4F34236F32640095DE4B /* iPhone.storyboard */; };
+		F1A14EC02C7A4EEE00082E06 /* Flag_of_New_Zealand.png in Resources */ = {isa = PBXBuildFile; fileRef = F13B52AB2753D6AF00EA976B /* Flag_of_New_Zealand.png */; };
+		F1A14EC12C7A4EEE00082E06 /* Capture d’écran 2018-11-03 à 14.41.14.png in Resources */ = {isa = PBXBuildFile; fileRef = F14B477D276510E9000655C4 /* Capture d’écran 2018-11-03 à 14.41.14.png */; };
+		F1A14EC22C7A4EEE00082E06 /* Eye-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97CC2039016B007B658E /* Eye-icon.png */; };
+		F1A14EC32C7A4EEE00082E06 /* Flag_of_Mexico.png in Resources */ = {isa = PBXBuildFile; fileRef = F125F2C426235F0B00D012DA /* Flag_of_Mexico.png */; };
+		F1A14EC42C7A4EEE00082E06 /* Idea-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087AD207A7937007703FF /* Idea-icon.png */; };
+		F1A14EC52C7A4EEE00082E06 /* Sandbox.xml in Resources */ = {isa = PBXBuildFile; fileRef = 62921B5422BEBEFE00A2BE94 /* Sandbox.xml */; };
+		F1A14EC62C7A4EEE00082E06 /* Flag_of_Japan.png in Resources */ = {isa = PBXBuildFile; fileRef = 627964582095D5BB00ED5578 /* Flag_of_Japan.png */; };
+		F1A14EC72C7A4EEE00082E06 /* themoviedb.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97BF2038C9A3007B658E /* themoviedb.ico */; };
+		F1A14EC82C7A4EEE00082E06 /* Play-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97CB2039016B007B658E /* Play-icon.png */; };
+		F1A14EC92C7A4EEE00082E06 /* Calendar-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97D42039076C007B658E /* Calendar-icon.png */; };
+		F1A14ECA2C7A4EEE00082E06 /* imdb.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62A581E51FBC5BCB002D8FD3 /* imdb.ico */; };
+		F1A14ECB2C7A4EEE00082E06 /* Flag_of_Italy.png in Resources */ = {isa = PBXBuildFile; fileRef = F124A5C1261A290900E5BD8F /* Flag_of_Italy.png */; };
+		F1A14ECC2C7A4EEE00082E06 /* Air-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62FF97D62039076D007B658E /* Air-icon.png */; };
+		F1A14ECD2C7A4EEE00082E06 /* Flag_of_the_United_Kingdom.png in Resources */ = {isa = PBXBuildFile; fileRef = 62B087BB207BEBC5007703FF /* Flag_of_the_United_Kingdom.png */; };
+		F1A14ECE2C7A4EEE00082E06 /* Refresh-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 62F2233F21E120DF0032A6E3 /* Refresh-icon.png */; };
+		F1A14ECF2C7A4EEE00082E06 /* iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 628A1311236F353B006B2AD4 /* iPad.storyboard */; };
+		F1A14ED02C7A4EEE00082E06 /* Flag_of_Finland.png in Resources */ = {isa = PBXBuildFile; fileRef = 6231F8E422833ACD009D0351 /* Flag_of_Finland.png */; };
+		F1A14ED12C7A4EEE00082E06 /* allocine.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62921B5622BFE2F800A2BE94 /* allocine.ico */; };
+		F1A14ED32C7A4EEE00082E06 /* Mon activitéExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = F1D77727270A0D7800394176 /* Mon activitéExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		F1A14EDA2C7A501B00082E06 /* iPad13p.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F1A14E5B2C7A4E7B00082E06 /* iPad13p.storyboard */; };
+		F1B0E8CE2CEA4CF80016B5B5 /* M6.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F1B0E8CB2CEA4CF80016B5B5 /* M6.jpg */; };
+		F1B0E8CF2CEA4CF80016B5B5 /* M6.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F1B0E8CB2CEA4CF80016B5B5 /* M6.jpg */; };
+		F1B0E8D02CEA4CF80016B5B5 /* M6.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F1B0E8CB2CEA4CF80016B5B5 /* M6.jpg */; };
+		F1B0E8D12CEA4CF80016B5B5 /* arte.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F1B0E8CC2CEA4CF80016B5B5 /* arte.jpg */; };
+		F1B0E8D22CEA4CF80016B5B5 /* arte.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F1B0E8CC2CEA4CF80016B5B5 /* arte.jpg */; };
+		F1B0E8D32CEA4CF80016B5B5 /* arte.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F1B0E8CC2CEA4CF80016B5B5 /* arte.jpg */; };
+		F1B0E8D42CEA4CF80016B5B5 /* francetv.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F1B0E8CD2CEA4CF80016B5B5 /* francetv.jpg */; };
+		F1B0E8D52CEA4CF80016B5B5 /* francetv.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F1B0E8CD2CEA4CF80016B5B5 /* francetv.jpg */; };
+		F1B0E8D62CEA4CF80016B5B5 /* francetv.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F1B0E8CD2CEA4CF80016B5B5 /* francetv.jpg */; };
+		F1D470AF2CD7CD0000EEF11B /* ViewExplorer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1D470AE2CD7CD0000EEF11B /* ViewExplorer.swift */; };
+		F1D470B02CD7CD0000EEF11B /* ViewExplorer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1D470AE2CD7CD0000EEF11B /* ViewExplorer.swift */; };
+		F1D470B12CD7CD0000EEF11B /* ViewExplorer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1D470AE2CD7CD0000EEF11B /* ViewExplorer.swift */; };
+		F1D470B52CE8FE0600EEF11B /* ocs.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F1D470B22CE8FE0500EEF11B /* ocs.jpg */; };
+		F1D470B62CE8FE0600EEF11B /* ocs.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F1D470B22CE8FE0500EEF11B /* ocs.jpg */; };
+		F1D470B72CE8FE0600EEF11B /* ocs.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F1D470B22CE8FE0500EEF11B /* ocs.jpg */; };
+		F1D470B82CE8FE0600EEF11B /* paramount.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F1D470B32CE8FE0600EEF11B /* paramount.jpg */; };
+		F1D470B92CE8FE0600EEF11B /* paramount.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F1D470B32CE8FE0600EEF11B /* paramount.jpg */; };
+		F1D470BA2CE8FE0600EEF11B /* paramount.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F1D470B32CE8FE0600EEF11B /* paramount.jpg */; };
+		F1D470BB2CE8FE0600EEF11B /* max.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F1D470B42CE8FE0600EEF11B /* max.jpg */; };
+		F1D470BC2CE8FE0600EEF11B /* max.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F1D470B42CE8FE0600EEF11B /* max.jpg */; };
+		F1D470BD2CE8FE0600EEF11B /* max.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F1D470B42CE8FE0600EEF11B /* max.jpg */; };
+		F1D5FDEF2D60CFAB005BCB47 /* Logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 62796464209A15A800ED5578 /* Logo.png */; };
+		F1D5FDF12D60D379005BCB47 /* 120.png in Resources */ = {isa = PBXBuildFile; fileRef = F1D5FDF02D60D379005BCB47 /* 120.png */; };
+		F1D5FDF22D60D379005BCB47 /* 120.png in Resources */ = {isa = PBXBuildFile; fileRef = F1D5FDF02D60D379005BCB47 /* 120.png */; };
+		F1D5FDF32D60D379005BCB47 /* 120.png in Resources */ = {isa = PBXBuildFile; fileRef = F1D5FDF02D60D379005BCB47 /* 120.png */; };
+		F1D5FDF42D60D379005BCB47 /* 120.png in Resources */ = {isa = PBXBuildFile; fileRef = F1D5FDF02D60D379005BCB47 /* 120.png */; };
+		F1D5FDF52D60F62C005BCB47 /* 120.png in Resources */ = {isa = PBXBuildFile; fileRef = F1D5FDF02D60D379005BCB47 /* 120.png */; };
+		F1D5FDF92D624ACB005BCB47 /* francetv.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F1B0E8CD2CEA4CF80016B5B5 /* francetv.jpg */; };
+		F1D5FDFA2D624ACB005BCB47 /* M6.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F1B0E8CB2CEA4CF80016B5B5 /* M6.jpg */; };
+		F1D5FDFB2D624ACB005BCB47 /* ocs.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F1D470B22CE8FE0500EEF11B /* ocs.jpg */; };
+		F1D5FDFC2D624ACB005BCB47 /* max.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F1D470B42CE8FE0600EEF11B /* max.jpg */; };
+		F1D5FDFD2D624ACB005BCB47 /* tf1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F17644B62CCEB7540033E318 /* tf1.jpg */; };
+		F1D5FDFE2D624ACB005BCB47 /* netflix.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F17644B42CCEB7540033E318 /* netflix.jpg */; };
+		F1D5FDFF2D624ACB005BCB47 /* paramount.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F1D470B32CE8FE0600EEF11B /* paramount.jpg */; };
+		F1D5FE002D624ACB005BCB47 /* prime video.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F17644B92CCEB7550033E318 /* prime video.jpg */; };
+		F1D5FE012D624ACB005BCB47 /* canal plus.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F17644B72CCEB7540033E318 /* canal plus.jpg */; };
+		F1D5FE022D624ACB005BCB47 /* arte.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F1B0E8CC2CEA4CF80016B5B5 /* arte.jpg */; };
+		F1D5FE032D624ACB005BCB47 /* disney.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F17644B82CCEB7540033E318 /* disney.jpg */; };
+		F1D5FE042D624ACB005BCB47 /* apple tv.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F17644B52CCEB7540033E318 /* apple tv.jpg */; };
+		F1D5FE0E2D68F0CB005BCB47 /* SaisonFiche.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62AC509F200E58A200A8C841 /* SaisonFiche.swift */; };
+		F1D5FE0F2D68F0CB005BCB47 /* SaisonFiche.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62AC509F200E58A200A8C841 /* SaisonFiche.swift */; };
+		F1D5FE112D736EC6005BCB47 /* News.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1D5FE102D736EC6005BCB47 /* News.swift */; };
+		F1D5FE122D736EC6005BCB47 /* News.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1D5FE102D736EC6005BCB47 /* News.swift */; };
+		F1D5FE132D736EC6005BCB47 /* News.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1D5FE102D736EC6005BCB47 /* News.swift */; };
+		F1D5FE152D74B6DC005BCB47 /* Journal.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1D5FE142D74B6DC005BCB47 /* Journal.swift */; };
+		F1D5FE162D74B6DC005BCB47 /* Journal.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1D5FE142D74B6DC005BCB47 /* Journal.swift */; };
+		F1D5FE172D74B6DC005BCB47 /* Journal.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1D5FE142D74B6DC005BCB47 /* Journal.swift */; };
 		F1D77729270A0D7800394176 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1D77728270A0D7800394176 /* WidgetKit.framework */; };
 		F1D7772B270A0D7800394176 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1D7772A270A0D7800394176 /* SwiftUI.framework */; };
 		F1D7772E270A0D7800394176 /* Mon_activite_.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1D7772D270A0D7800394176 /* Mon_activite_.swift */; };
 		F1D77730270A0D8000394176 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F1D7772F270A0D8000394176 /* Assets.xcassets */; };
-		F1D77734270A0D8000394176 /* Mon activitéExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = F1D77727270A0D7800394176 /* Mon activitéExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		F1D7773B2711FA2400394176 /* WidgetContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1D777392711FA2400394176 /* WidgetContent.swift */; };
 		F1D7773F2711FB0900394176 /* WidegtView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1D7773E2711FB0900394176 /* WidegtView.swift */; };
-		F1D777412713342A00394176 /* Mon activitéExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = F1D77727270A0D7800394176 /* Mon activitéExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		F1F234832D5FADAF00087FF1 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1D77728270A0D7800394176 /* WidgetKit.framework */; };
+		F1F234842D5FADAF00087FF1 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1D7772A270A0D7800394176 /* SwiftUI.framework */; };
+		F1F234942D5FB78600087FF1 /* tvmaze.ico in Resources */ = {isa = PBXBuildFile; fileRef = 6210217421EBA91C00849E6E /* tvmaze.ico */; };
+		F1F234952D5FB78D00087FF1 /* trakt.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62DD87B41FB8BE4F00A9B9EE /* trakt.ico */; };
+		F1F234962D5FB79700087FF1 /* imdb.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62A581E51FBC5BCB002D8FD3 /* imdb.ico */; };
+		F1F234972D5FB9CE00087FF1 /* 2021_05_15_0u9_Kleki.png in Resources */ = {isa = PBXBuildFile; fileRef = F1FBCD9B265029DA003075D3 /* 2021_05_15_0u9_Kleki.png */; };
+		F1F2349B2D60A6FC00087FF1 /* DataUpdatesExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = F1F234822D5FADAF00087FF1 /* DataUpdatesExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		F1FBCD8C265026B3003075D3 /* 2021_05_13_0uk_Kleki.png in Resources */ = {isa = PBXBuildFile; fileRef = F1FBCD87265026B2003075D3 /* 2021_05_13_0uk_Kleki.png */; };
 		F1FBCD8D265026B3003075D3 /* 2021_05_13_0uk_Kleki.png in Resources */ = {isa = PBXBuildFile; fileRef = F1FBCD87265026B2003075D3 /* 2021_05_13_0uk_Kleki.png */; };
 		F1FBCD8F265026B3003075D3 /* 2021_05_15_0te_Kleki.png in Resources */ = {isa = PBXBuildFile; fileRef = F1FBCD88265026B2003075D3 /* 2021_05_15_0te_Kleki.png */; };
@@ -228,46 +421,79 @@
 		F1FBCD9D265029DA003075D3 /* 2021_05_15_0u9_Kleki.png in Resources */ = {isa = PBXBuildFile; fileRef = F1FBCD9B265029DA003075D3 /* 2021_05_15_0u9_Kleki.png */; };
 		F1FBCDA426502DEE003075D3 /* 2021_05_15_0uo_Kleki.png in Resources */ = {isa = PBXBuildFile; fileRef = F1FBCDA326502DEE003075D3 /* 2021_05_15_0uo_Kleki.png */; };
 		F1FBCDA526502DEE003075D3 /* 2021_05_15_0uo_Kleki.png in Resources */ = {isa = PBXBuildFile; fileRef = F1FBCDA326502DEE003075D3 /* 2021_05_15_0uo_Kleki.png */; };
+		F1FFB3822D8F233D00ED1E4F /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1D77728270A0D7800394176 /* WidgetKit.framework */; };
+		F1FFB3832D8F233D00ED1E4F /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1D7772A270A0D7800394176 /* SwiftUI.framework */; };
+		F1FFB3942D8F259100ED1E4F /* 120.png in Resources */ = {isa = PBXBuildFile; fileRef = F1D5FDF02D60D379005BCB47 /* 120.png */; };
+		F1FFB39E2D8F57E200ED1E4F /* News.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1D5FE102D736EC6005BCB47 /* News.swift */; };
+		F1FFB39F2D8F64EE00ED1E4F /* SerieNewsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = F1FFB3812D8F233D00ED1E4F /* SerieNewsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		F1FFB3A42D906E9000ED1E4F /* trakt.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62DD87B41FB8BE4F00A9B9EE /* trakt.ico */; };
+		F1FFB3A52D90732900ED1E4F /* tvmaze.ico in Resources */ = {isa = PBXBuildFile; fileRef = 6210217421EBA91C00849E6E /* tvmaze.ico */; };
+		F1FFB3A62D9980B600ED1E4F /* DataUpdatesExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = F1F234822D5FADAF00087FF1 /* DataUpdatesExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		F1FFB3AA2D9980BD00ED1E4F /* SerieNewsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = F1FFB3812D8F233D00ED1E4F /* SerieNewsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		F1D77732270A0D8000394176 /* PBXContainerItemProxy */ = {
+		F1A14E602C7A4EEE00082E06 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 62DD87641FB766C600A9B9EE /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = F1D77726270A0D7700394176;
 			remoteInfo = "Mon activitéExtension";
 		};
-		F1D777422713342A00394176 /* PBXContainerItemProxy */ = {
+		F1F2349C2D60A6FC00087FF1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 62DD87641FB766C600A9B9EE /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = F1D77726270A0D7700394176;
-			remoteInfo = "Mon activitéExtension";
+			remoteGlobalIDString = F1F234812D5FADAF00087FF1;
+			remoteInfo = DataUpdatesExtension;
+		};
+		F1FFB3A02D8F64EE00ED1E4F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 62DD87641FB766C600A9B9EE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F1FFB3802D8F233D00ED1E4F;
+			remoteInfo = SerieNewsExtension;
+		};
+		F1FFB3A72D9980B600ED1E4F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 62DD87641FB766C600A9B9EE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F1F234812D5FADAF00087FF1;
+			remoteInfo = DataUpdatesExtension;
+		};
+		F1FFB3AB2D9980BD00ED1E4F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 62DD87641FB766C600A9B9EE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F1FFB3802D8F233D00ED1E4F;
+			remoteInfo = SerieNewsExtension;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		626F88D52210939300E5A132 /* Embed App Extensions */ = {
+		F1A14ED22C7A4EEE00082E06 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				F1D77734270A0D8000394176 /* Mon activitéExtension.appex in Embed App Extensions */,
+				F1A14ED32C7A4EEE00082E06 /* Mon activitéExtension.appex in Embed Foundation Extensions */,
+				F1FFB39F2D8F64EE00ED1E4F /* SerieNewsExtension.appex in Embed Foundation Extensions */,
+				F1F2349B2D60A6FC00087FF1 /* DataUpdatesExtension.appex in Embed Foundation Extensions */,
 			);
-			name = "Embed App Extensions";
+			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		628A13D6236F38E8006B2AD4 /* Embed App Extensions */ = {
+		F1FFB3A92D9980B600ED1E4F /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				F1D777412713342A00394176 /* Mon activitéExtension.appex in Embed App Extensions */,
+				F1FFB3AA2D9980BD00ED1E4F /* SerieNewsExtension.appex in Embed Foundation Extensions */,
+				F1FFB3A62D9980B600ED1E4F /* DataUpdatesExtension.appex in Embed Foundation Extensions */,
 			);
-			name = "Embed App Extensions";
+			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -377,12 +603,40 @@
 		F13B52AB2753D6AF00EA976B /* Flag_of_New_Zealand.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_New_Zealand.png; sourceTree = "<group>"; };
 		F13B52AE2753D71100EA976B /* Flag_of_Denmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_Denmark.png; sourceTree = "<group>"; };
 		F14B477D276510E9000655C4 /* Capture d’écran 2018-11-03 à 14.41.14.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Capture d’écran 2018-11-03 à 14.41.14.png"; sourceTree = "<group>"; };
+		F153D03929118B1A00BA283E /* ViewCalendrier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewCalendrier.swift; sourceTree = "<group>"; };
+		F16263302CFCB58A00A7727D /* justwatch.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = justwatch.ico; sourceTree = "<group>"; };
+		F16263342D20593C00A7727D /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
+		F16263382D2466D300A7727D /* ContactsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ContactsUI.framework; path = System/Library/Frameworks/ContactsUI.framework; sourceTree = SDKROOT; };
 		F16F63102763C92C008E459E /* Saison.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Saison.swift; sourceTree = "<group>"; };
 		F16F63112763C92C008E459E /* Episode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Episode.swift; sourceTree = "<group>"; };
 		F16F63122763C92C008E459E /* Serie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Serie.swift; sourceTree = "<group>"; };
-		F16F63192763C93E008E459E /* InfosRefresh.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfosRefresh.swift; sourceTree = "<group>"; };
+		F17644B42CCEB7540033E318 /* netflix.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = netflix.jpg; sourceTree = "<group>"; };
+		F17644B52CCEB7540033E318 /* apple tv.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "apple tv.jpg"; sourceTree = "<group>"; };
+		F17644B62CCEB7540033E318 /* tf1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = tf1.jpg; sourceTree = "<group>"; };
+		F17644B72CCEB7540033E318 /* canal plus.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "canal plus.jpg"; sourceTree = "<group>"; };
+		F17644B82CCEB7540033E318 /* disney.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = disney.jpg; sourceTree = "<group>"; };
+		F17644B92CCEB7550033E318 /* prime video.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "prime video.jpg"; sourceTree = "<group>"; };
 		F17B14A326DA9A450071B8DB /* GraphMiniEpisode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphMiniEpisode.swift; sourceTree = "<group>"; };
+		F191E0042D25B32E004E9991 /* ViewAdvisors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewAdvisors.swift; sourceTree = "<group>"; };
+		F19A39772BD4046600A03651 /* SIMKL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SIMKL.swift; sourceTree = "<group>"; };
+		F19A397A2BD4192A00A03651 /* simkl.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = simkl.png; sourceTree = "<group>"; };
+		F19A397D2BD4246300A03651 /* Flag_of_Argentina.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_Argentina.png; sourceTree = "<group>"; };
+		F19A397E2BD4246300A03651 /* Flag_of_Ireland.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_Ireland.png; sourceTree = "<group>"; };
 		F19C5822253C7D2700E881DA /* SerieA copy3-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "SerieA copy3-Info.plist"; sourceTree = SOURCE_ROOT; };
+		F1A14E5C2C7A4E7B00082E06 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/iPad13p.storyboard; sourceTree = "<group>"; };
+		F1A14ED82C7A4EEE00082E06 /* SerieA-iPad copy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SerieA-iPad copy.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F1A14ED92C7A4EEF00082E06 /* SerieA-iPad copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "SerieA-iPad copy-Info.plist"; path = "/Users/cyril/Coding/Projets/SerieA/SerieA-iPad copy-Info.plist"; sourceTree = "<absolute>"; };
+		F1B0E8CB2CEA4CF80016B5B5 /* M6.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = M6.jpg; sourceTree = "<group>"; };
+		F1B0E8CC2CEA4CF80016B5B5 /* arte.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = arte.jpg; sourceTree = "<group>"; };
+		F1B0E8CD2CEA4CF80016B5B5 /* francetv.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = francetv.jpg; sourceTree = "<group>"; };
+		F1D470AE2CD7CD0000EEF11B /* ViewExplorer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExplorer.swift; sourceTree = "<group>"; };
+		F1D470B22CE8FE0500EEF11B /* ocs.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ocs.jpg; sourceTree = "<group>"; };
+		F1D470B32CE8FE0600EEF11B /* paramount.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = paramount.jpg; sourceTree = "<group>"; };
+		F1D470B42CE8FE0600EEF11B /* max.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = max.jpg; sourceTree = "<group>"; };
+		F1D5FDF02D60D379005BCB47 /* 120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 120.png; sourceTree = "<group>"; };
+		F1D5FE0D2D63DC24005BCB47 /* DataUpdatesExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DataUpdatesExtension.entitlements; sourceTree = "<group>"; };
+		F1D5FE102D736EC6005BCB47 /* News.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = News.swift; sourceTree = "<group>"; };
+		F1D5FE142D74B6DC005BCB47 /* Journal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Journal.swift; sourceTree = "<group>"; };
 		F1D77727270A0D7800394176 /* Mon activitéExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Mon activitéExtension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1D77728270A0D7800394176 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		F1D7772A270A0D7800394176 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
@@ -392,13 +646,66 @@
 		F1D777392711FA2400394176 /* WidgetContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = WidgetContent.swift; path = "Mon activité/WidgetContent.swift"; sourceTree = SOURCE_ROOT; };
 		F1D7773E2711FB0900394176 /* WidegtView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = WidegtView.swift; path = "Mon activité/WidegtView.swift"; sourceTree = SOURCE_ROOT; };
 		F1D7774527134E6F00394176 /* Mon activitéExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Mon activitéExtension.entitlements"; sourceTree = "<group>"; };
+		F1F234822D5FADAF00087FF1 /* DataUpdatesExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = DataUpdatesExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1FBCD87265026B2003075D3 /* 2021_05_13_0uk_Kleki.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2021_05_13_0uk_Kleki.png; sourceTree = "<group>"; };
 		F1FBCD88265026B2003075D3 /* 2021_05_15_0te_Kleki.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2021_05_15_0te_Kleki.png; sourceTree = "<group>"; };
 		F1FBCD89265026B2003075D3 /* 2021_05_13_0ux_Kleki.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2021_05_13_0ux_Kleki.png; sourceTree = "<group>"; };
 		F1FBCD8A265026B3003075D3 /* 2021_05_15_0tl_Kleki.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2021_05_15_0tl_Kleki.png; sourceTree = "<group>"; };
 		F1FBCD9B265029DA003075D3 /* 2021_05_15_0u9_Kleki.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2021_05_15_0u9_Kleki.png; sourceTree = "<group>"; };
 		F1FBCDA326502DEE003075D3 /* 2021_05_15_0uo_Kleki.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2021_05_15_0uo_Kleki.png; sourceTree = "<group>"; };
+		F1FFB3812D8F233D00ED1E4F /* SerieNewsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SerieNewsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		F1FFB3952D8F2C9000ED1E4F /* SerieNewsExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SerieNewsExtension.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		F1D5FE062D63B498005BCB47 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				DataUpdates.swift,
+			);
+			target = F1A14E5E2C7A4EEE00082E06 /* SerieA-iPad copy */;
+		};
+		F1D5FE092D63D956005BCB47 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				DataUpdates.swift,
+			);
+			target = 62DD876B1FB766C600A9B9EE /* SerieA */;
+		};
+		F1D5FE0A2D63D956005BCB47 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				DataUpdates.swift,
+			);
+			target = 628A1379236F38E8006B2AD4 /* SerieA-iPad */;
+		};
+		F1F234902D5FADB000087FF1 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = F1F234812D5FADAF00087FF1 /* DataUpdatesExtension */;
+		};
+		F1FFB3932D8F233F00ED1E4F /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = F1FFB3802D8F233D00ED1E4F /* SerieNewsExtension */;
+		};
+		F1FFB39B2D8F2F9300ED1E4F /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				SerieNews.swift,
+			);
+			target = F1A14E5E2C7A4EEE00082E06 /* SerieA-iPad copy */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		F1F234852D5FADAF00087FF1 /* DataUpdates */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (F1D5FE092D63D956005BCB47 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, F1D5FE0A2D63D956005BCB47 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, F1D5FE062D63B498005BCB47 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, F1F234902D5FADB000087FF1 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = DataUpdates; sourceTree = "<group>"; };
+		F1FFB3842D8F233D00ED1E4F /* SerieNews */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (F1FFB39B2D8F2F9300ED1E4F /* PBXFileSystemSynchronizedBuildFileExceptionSet */, F1FFB3932D8F233F00ED1E4F /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = SerieNews; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		628A13A0236F38E8006B2AD4 /* Frameworks */ = {
@@ -418,6 +725,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F1A14E8F2C7A4EEE00082E06 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F1A14E902C7A4EEE00082E06 /* Pods_SerieA_iPad.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F1D77724270A0D7700394176 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -427,12 +742,31 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F1F2347F2D5FADAF00087FF1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F1F234842D5FADAF00087FF1 /* SwiftUI.framework in Frameworks */,
+				F1F234832D5FADAF00087FF1 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F1FFB37E2D8F233D00ED1E4F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F1FFB3832D8F233D00ED1E4F /* SwiftUI.framework in Frameworks */,
+				F1FFB3822D8F233D00ED1E4F /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		0A631D6EDA1ECD3F1B0500DA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F16263382D2466D300A7727D /* ContactsUI.framework */,
 				A21F0479BBD9521083FD9EAA /* Pods_SerieA.framework */,
 				626F88C62210939300E5A132 /* NotificationCenter.framework */,
 				E10A1A7E4C8EE57E8899C1C8 /* Pods_SerieA_iPad.framework */,
@@ -452,6 +786,7 @@
 				620B22FD22A304FD0027DCF6 /* MetaCritic.swift */,
 				6217308321BC22DE00D37350 /* RottenTomatoes.swift */,
 				F11F4CBA2851EBE1002EB3E3 /* SensCritique.swift */,
+				F19A39772BD4046600A03651 /* SIMKL.swift */,
 				62D0EBBC204C374B009774B6 /* TheMoviedb.swift */,
 				62DD879F1FB76F5D00A9B9EE /* TheTVdb.swift */,
 				62DD87A31FB76F5D00A9B9EE /* Trakt.swift */,
@@ -477,12 +812,13 @@
 		624D874B2043327B00AFDA06 /* Structures */ = {
 			isa = PBXGroup;
 			children = (
+				F16263342D20593C00A7727D /* AppConfig.swift */,
 				6224A5E42042207800450812 /* Constantes.swift */,
 				F16F63122763C92C008E459E /* Serie.swift */,
 				F16F63102763C92C008E459E /* Saison.swift */,
 				F16F63112763C92C008E459E /* Episode.swift */,
 				620B25E323BBA52E00EC7610 /* Critique.swift */,
-				F16F63192763C93E008E459E /* InfosRefresh.swift */,
+				F1D5FE102D736EC6005BCB47 /* News.swift */,
 			);
 			path = Structures;
 			sourceTree = "<group>";
@@ -498,11 +834,15 @@
 				62DD87A91FB7838400A9B9EE /* SerieFiche.swift */,
 				F11F4CBF28689862002EB3E3 /* SerieFicheDetails.swift */,
 				624D27481FFBD4E100B49702 /* ViewAccueil.swift */,
+				F153D03929118B1A00BA283E /* ViewCalendrier.swift */,
 				625799B6219734480010144D /* ViewPropals.swift */,
 				62D0EBBA204C30BE009774B6 /* ViewSaisonListe.swift */,
 				62B4716B20A88D3E0067BD34 /* ViewSearch.swift */,
 				6214F0FE227F12D10039F6E5 /* ViewSearchNew.swift */,
 				6224A5E22041F30200450812 /* ViewSerieListe.swift */,
+				F1D470AE2CD7CD0000EEF11B /* ViewExplorer.swift */,
+				F191E0042D25B32E004E9991 /* ViewAdvisors.swift */,
+				F1D5FE142D74B6DC005BCB47 /* Journal.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -518,8 +858,10 @@
 				F1FBCD9B265029DA003075D3 /* 2021_05_15_0u9_Kleki.png */,
 				F1FBCDA326502DEE003075D3 /* 2021_05_15_0uo_Kleki.png */,
 				62796464209A15A800ED5578 /* Logo.png */,
+				F1D5FDF02D60D379005BCB47 /* 120.png */,
 				62B087B0207BEA8B007703FF /* Drapeaux */,
 				62FF97C12038FA0A007B658E /* Icones accueil */,
+				F17644B02CCEB4470033E318 /* Icones diffuseurs */,
 				625480531FE6D7140099A3D2 /* Icones sources */,
 			);
 			path = Images;
@@ -531,9 +873,11 @@
 				62921B5622BFE2F800A2BE94 /* allocine.ico */,
 				62DD87B51FB8BE4F00A9B9EE /* betaseries.png */,
 				62A581E51FBC5BCB002D8FD3 /* imdb.ico */,
+				F16263302CFCB58A00A7727D /* justwatch.ico */,
 				6218303D22AD73BE003243B9 /* metacritic.png */,
 				62A581E61FBC5BCB002D8FD3 /* rottentomatoes.ico */,
 				F11F4CB72851EB75002EB3E3 /* senscritique.png */,
+				F19A397A2BD4192A00A03651 /* simkl.png */,
 				62FF97BF2038C9A3007B658E /* themoviedb.ico */,
 				62DD87B31FB8BE4F00A9B9EE /* thetvdb.png */,
 				62DD87B41FB8BE4F00A9B9EE /* trakt.ico */,
@@ -564,6 +908,8 @@
 				F130B7EC266D229C002BC7BC /* Flag_of_Sweden.png */,
 				F124A5C1261A290900E5BD8F /* Flag_of_Italy.png */,
 				6214FF9524E06B290022A1B6 /* Flag_of_Belgium.png */,
+				F19A397D2BD4246300A03651 /* Flag_of_Argentina.png */,
+				F19A397E2BD4246300A03651 /* Flag_of_Ireland.png */,
 				627964592095D5BB00ED5578 /* Flag_of_Australia.png */,
 				62B4D8B7208CB7BF002110E8 /* Flag_of_Brazil.png */,
 				62B087C5207BED6F007703FF /* Flag_of_Canada.png */,
@@ -587,13 +933,18 @@
 		62DD87631FB766C600A9B9EE = {
 			isa = PBXGroup;
 			children = (
+				F1FFB3952D8F2C9000ED1E4F /* SerieNewsExtension.entitlements */,
+				F1D5FE0D2D63DC24005BCB47 /* DataUpdatesExtension.entitlements */,
 				625F4B022214B05100FE5A5C /* SerieA.entitlements */,
 				F1D7774527134E6F00394176 /* Mon activitéExtension.entitlements */,
 				62DD876E1FB766C600A9B9EE /* iPhone Seriez */,
 				F1D7772C270A0D7800394176 /* Mon activité */,
+				F1F234852D5FADAF00087FF1 /* DataUpdates */,
+				F1FFB3842D8F233D00ED1E4F /* SerieNews */,
 				62DD876D1FB766C600A9B9EE /* Products */,
 				A8D0FF75432B397DCE10E570 /* Pods */,
 				0A631D6EDA1ECD3F1B0500DA /* Frameworks */,
+				F1A14ED92C7A4EEF00082E06 /* SerieA-iPad copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -603,6 +954,9 @@
 				62DD876C1FB766C600A9B9EE /* SerieA.app */,
 				628A13DC236F38E8006B2AD4 /* SerieA-iPad.app */,
 				F1D77727270A0D7800394176 /* Mon activitéExtension.appex */,
+				F1A14ED82C7A4EEE00082E06 /* SerieA-iPad copy.app */,
+				F1F234822D5FADAF00087FF1 /* DataUpdatesExtension.appex */,
+				F1FFB3812D8F233D00ED1E4F /* SerieNewsExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -620,6 +974,7 @@
 				62DD87781FB766C600A9B9EE /* LaunchScreen.storyboard */,
 				62BB4F34236F32640095DE4B /* iPhone.storyboard */,
 				628A1311236F353B006B2AD4 /* iPad.storyboard */,
+				F1A14E5B2C7A4E7B00082E06 /* iPad13p.storyboard */,
 				62DD87761FB766C600A9B9EE /* Assets.xcassets */,
 				62DD877B1FB766C600A9B9EE /* Info.plist */,
 				F19C5822253C7D2700E881DA /* SerieA copy3-Info.plist */,
@@ -669,6 +1024,25 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
+		F17644B02CCEB4470033E318 /* Icones diffuseurs */ = {
+			isa = PBXGroup;
+			children = (
+				F17644B52CCEB7540033E318 /* apple tv.jpg */,
+				F1B0E8CC2CEA4CF80016B5B5 /* arte.jpg */,
+				F17644B72CCEB7540033E318 /* canal plus.jpg */,
+				F17644B82CCEB7540033E318 /* disney.jpg */,
+				F1B0E8CD2CEA4CF80016B5B5 /* francetv.jpg */,
+				F1B0E8CB2CEA4CF80016B5B5 /* M6.jpg */,
+				F1D470B42CE8FE0600EEF11B /* max.jpg */,
+				F17644B42CCEB7540033E318 /* netflix.jpg */,
+				F1D470B22CE8FE0500EEF11B /* ocs.jpg */,
+				F1D470B32CE8FE0600EEF11B /* paramount.jpg */,
+				F17644B92CCEB7550033E318 /* prime video.jpg */,
+				F17644B62CCEB7540033E318 /* tf1.jpg */,
+			);
+			path = "Icones diffuseurs";
+			sourceTree = "<group>";
+		};
 		F1D7772C270A0D7800394176 /* Mon activité */ = {
 			isa = PBXGroup;
 			children = (
@@ -693,13 +1067,11 @@
 				628A1381236F38E8006B2AD4 /* Sources */,
 				628A13A0236F38E8006B2AD4 /* Frameworks */,
 				628A13A3236F38E8006B2AD4 /* Resources */,
-				628A13D6236F38E8006B2AD4 /* Embed App Extensions */,
 				E9149FC792538959B965BD27 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				F1D777432713342A00394176 /* PBXTargetDependency */,
 			);
 			name = "SerieA-iPad";
 			productName = "iPhone Seriez";
@@ -715,16 +1087,41 @@
 				62DD87691FB766C600A9B9EE /* Frameworks */,
 				62DD876A1FB766C600A9B9EE /* Resources */,
 				336C3BDA93DDD2C034789A22 /* [CP] Embed Pods Frameworks */,
-				626F88D52210939300E5A132 /* Embed App Extensions */,
+				F1FFB3A92D9980B600ED1E4F /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				F1D77733270A0D8000394176 /* PBXTargetDependency */,
+				F1FFB3A82D9980B600ED1E4F /* PBXTargetDependency */,
+				F1FFB3AC2D9980BD00ED1E4F /* PBXTargetDependency */,
 			);
 			name = SerieA;
 			productName = "iPhone Seriez";
 			productReference = 62DD876C1FB766C600A9B9EE /* SerieA.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F1A14E5E2C7A4EEE00082E06 /* SerieA-iPad copy */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F1A14ED52C7A4EEE00082E06 /* Build configuration list for PBXNativeTarget "SerieA-iPad copy" */;
+			buildPhases = (
+				F1A14E612C7A4EEE00082E06 /* [CP] Check Pods Manifest.lock */,
+				F1A14E622C7A4EEE00082E06 /* ShellScript */,
+				F1A14E632C7A4EEE00082E06 /* Sources */,
+				F1A14E8F2C7A4EEE00082E06 /* Frameworks */,
+				F1A14E912C7A4EEE00082E06 /* Resources */,
+				F1A14ED22C7A4EEE00082E06 /* Embed Foundation Extensions */,
+				F1A14ED42C7A4EEE00082E06 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F1A14E5F2C7A4EEE00082E06 /* PBXTargetDependency */,
+				F1F2349D2D60A6FC00087FF1 /* PBXTargetDependency */,
+				F1FFB3A12D8F64EE00ED1E4F /* PBXTargetDependency */,
+			);
+			name = "SerieA-iPad copy";
+			productName = "iPhone Seriez";
+			productReference = F1A14ED82C7A4EEE00082E06 /* SerieA-iPad copy.app */;
 			productType = "com.apple.product-type.application";
 		};
 		F1D77726270A0D7700394176 /* Mon activitéExtension */ = {
@@ -744,14 +1141,59 @@
 			productReference = F1D77727270A0D7800394176 /* Mon activitéExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		F1F234812D5FADAF00087FF1 /* DataUpdatesExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F1F234912D5FADB000087FF1 /* Build configuration list for PBXNativeTarget "DataUpdatesExtension" */;
+			buildPhases = (
+				F1F2347E2D5FADAF00087FF1 /* Sources */,
+				F1F2347F2D5FADAF00087FF1 /* Frameworks */,
+				F1F234802D5FADAF00087FF1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				F1F234852D5FADAF00087FF1 /* DataUpdates */,
+			);
+			name = DataUpdatesExtension;
+			packageProductDependencies = (
+			);
+			productName = DataUpdatesExtension;
+			productReference = F1F234822D5FADAF00087FF1 /* DataUpdatesExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		F1FFB3802D8F233D00ED1E4F /* SerieNewsExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F1FFB3922D8F233F00ED1E4F /* Build configuration list for PBXNativeTarget "SerieNewsExtension" */;
+			buildPhases = (
+				F1FFB37D2D8F233D00ED1E4F /* Sources */,
+				F1FFB37E2D8F233D00ED1E4F /* Frameworks */,
+				F1FFB37F2D8F233D00ED1E4F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				F1FFB3842D8F233D00ED1E4F /* SerieNews */,
+			);
+			name = SerieNewsExtension;
+			packageProductDependencies = (
+			);
+			productName = SerieNewsExtension;
+			productReference = F1FFB3812D8F233D00ED1E4F /* SerieNewsExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		62DD87641FB766C600A9B9EE /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1240;
-				LastUpgradeCheck = 1200;
+				BuildIndependentTargetsInParallel = YES;
+				LastSwiftUpdateCheck = 1620;
+				LastUpgradeCheck = 1610;
 				ORGANIZATIONNAME = Home;
 				TargetAttributes = {
 					62DD876B1FB766C600A9B9EE = {
@@ -769,6 +1211,12 @@
 					};
 					F1D77726270A0D7700394176 = {
 						CreatedOnToolsVersion = 12.4;
+					};
+					F1F234812D5FADAF00087FF1 = {
+						CreatedOnToolsVersion = 16.1;
+					};
+					F1FFB3802D8F233D00ED1E4F = {
+						CreatedOnToolsVersion = 16.2;
 					};
 				};
 			};
@@ -788,6 +1236,9 @@
 				62DD876B1FB766C600A9B9EE /* SerieA */,
 				628A1379236F38E8006B2AD4 /* SerieA-iPad */,
 				F1D77726270A0D7700394176 /* Mon activitéExtension */,
+				F1A14E5E2C7A4EEE00082E06 /* SerieA-iPad copy */,
+				F1F234812D5FADAF00087FF1 /* DataUpdatesExtension */,
+				F1FFB3802D8F233D00ED1E4F /* SerieNewsExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -799,6 +1250,7 @@
 			files = (
 				628A13A4236F38E8006B2AD4 /* tvmaze.ico in Resources */,
 				628A13A5236F38E8006B2AD4 /* Flag_of_the_Czech_Republic.png in Resources */,
+				F19A397C2BD4192A00A03651 /* simkl.png in Resources */,
 				F13B52AA2753D67D00EA976B /* Flag_of_South_Korea.png in Resources */,
 				F13B52B02753D71100EA976B /* Flag_of_Denmark.png in Resources */,
 				628A13A6236F38E8006B2AD4 /* betaseries.png in Resources */,
@@ -814,9 +1266,11 @@
 				628A13AD236F38E8006B2AD4 /* Flag_of_Norway.png in Resources */,
 				F1FBCD90265026B3003075D3 /* 2021_05_15_0te_Kleki.png in Resources */,
 				628A13AE236F38E8006B2AD4 /* Flag_of_Canada.png in Resources */,
+				F19A39822BD4246300A03651 /* Flag_of_Ireland.png in Resources */,
 				628A13AF236F38E8006B2AD4 /* rottentomatoes.ico in Resources */,
 				F11F4CB92851EB75002EB3E3 /* senscritique.png in Resources */,
 				628A13B0236F38E8006B2AD4 /* ToDo.txt in Resources */,
+				F19A39802BD4246300A03651 /* Flag_of_Argentina.png in Resources */,
 				628A13B1236F38E8006B2AD4 /* Logo.png in Resources */,
 				628A13B2236F38E8006B2AD4 /* Flag_of_China.png in Resources */,
 				F1FBCDA526502DEE003075D3 /* 2021_05_15_0uo_Kleki.png in Resources */,
@@ -824,21 +1278,35 @@
 				628A13B4236F38E8006B2AD4 /* Bio-Hazard-icon.png in Resources */,
 				F1FBCD9D265029DA003075D3 /* 2021_05_15_0u9_Kleki.png in Resources */,
 				628A13B5236F38E8006B2AD4 /* Flag_of_India.png in Resources */,
+				F16263322CFCB58A00A7727D /* justwatch.ico in Resources */,
 				628A13B6236F38E8006B2AD4 /* Flag_of_Australia.png in Resources */,
+				F1B0E8D22CEA4CF80016B5B5 /* arte.jpg in Resources */,
 				628A13B7236F38E8006B2AD4 /* Magnifi-icon.png in Resources */,
 				628A13B8236F38E8006B2AD4 /* Flag_of_the_United_States.png in Resources */,
 				628A13B9236F38E8006B2AD4 /* List-icon.png in Resources */,
+				F1D470BC2CE8FE0600EEF11B /* max.jpg in Resources */,
 				628A13BA236F38E8006B2AD4 /* trakt.ico in Resources */,
 				628A13BB236F38E8006B2AD4 /* Trash-icon.png in Resources */,
+				F1D5FDF32D60D379005BCB47 /* 120.png in Resources */,
+				F17644C22CCEB76A0033E318 /* tf1.jpg in Resources */,
+				F17644C32CCEB76A0033E318 /* disney.jpg in Resources */,
+				F1B0E8D52CEA4CF80016B5B5 /* francetv.jpg in Resources */,
+				F17644C42CCEB76A0033E318 /* canal plus.jpg in Resources */,
+				F17644C52CCEB76A0033E318 /* prime video.jpg in Resources */,
+				F17644C62CCEB76A0033E318 /* netflix.jpg in Resources */,
+				F1D470B62CE8FE0600EEF11B /* ocs.jpg in Resources */,
 				628A13BC236F38E8006B2AD4 /* Flag_of_Brazil.png in Resources */,
 				628A13BD236F38E8006B2AD4 /* thetvdb.png in Resources */,
 				628A13BE236F38E8006B2AD4 /* metacritic.png in Resources */,
 				F1FBCD8D265026B3003075D3 /* 2021_05_13_0uk_Kleki.png in Resources */,
 				628A13BF236F38E8006B2AD4 /* Eye-2-icon.png in Resources */,
+				F17644C12CCEB7650033E318 /* apple tv.jpg in Resources */,
 				628A13C0236F38E8006B2AD4 /* Flag_of_France.png in Resources */,
 				628A13C1236F38E8006B2AD4 /* TV-icon.png in Resources */,
 				F1FBCD96265026B3003075D3 /* 2021_05_15_0tl_Kleki.png in Resources */,
+				F1D470B92CE8FE0600EEF11B /* paramount.jpg in Resources */,
 				628A13C2236F38E8006B2AD4 /* Flag_of_Spain.png in Resources */,
+				F1B0E8CF2CEA4CF80016B5B5 /* M6.jpg in Resources */,
 				628A13C3236F38E8006B2AD4 /* iPhone.storyboard in Resources */,
 				F13B52AD2753D6AF00EA976B /* Flag_of_New_Zealand.png in Resources */,
 				F14B477F276510E9000655C4 /* Capture d’écran 2018-11-03 à 14.41.14.png in Resources */,
@@ -865,10 +1333,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F19A397F2BD4246300A03651 /* Flag_of_Argentina.png in Resources */,
 				6210217521EBA91D00849E6E /* tvmaze.ico in Resources */,
 				F1FBCDA426502DEE003075D3 /* 2021_05_15_0uo_Kleki.png in Resources */,
+				F1D5FDF22D60D379005BCB47 /* 120.png in Resources */,
 				62B087CB207BEE3A007703FF /* Flag_of_the_Czech_Republic.png in Resources */,
 				F13B52AC2753D6AF00EA976B /* Flag_of_New_Zealand.png in Resources */,
+				F1D470B52CE8FE0600EEF11B /* ocs.jpg in Resources */,
 				62DD87B81FB8BE4F00A9B9EE /* betaseries.png in Resources */,
 				62DD877A1FB766C600A9B9EE /* LaunchScreen.storyboard in Resources */,
 				62DD87771FB766C600A9B9EE /* Assets.xcassets in Resources */,
@@ -878,21 +1349,26 @@
 				62FF97CE2039016B007B658E /* Stop-icon.png in Resources */,
 				F1FBCD95265026B3003075D3 /* 2021_05_15_0tl_Kleki.png in Resources */,
 				62B087CA207BEE3A007703FF /* Flag_of_Norway.png in Resources */,
+				F1D470B82CE8FE0600EEF11B /* paramount.jpg in Resources */,
 				62B087C6207BED6F007703FF /* Flag_of_Canada.png in Resources */,
 				62A581E81FBC5BCB002D8FD3 /* rottentomatoes.ico in Resources */,
 				6214FF9624E06B290022A1B6 /* Flag_of_Belgium.png in Resources */,
 				62896016236C89D600699D17 /* ToDo.txt in Resources */,
 				62796465209A15A800ED5578 /* Logo.png in Resources */,
 				6231F8EC22833C34009D0351 /* Flag_of_China.png in Resources */,
+				F17644BF2CCEB7550033E318 /* prime video.jpg in Resources */,
 				624EC9A520B1A87E005ED207 /* Chart-icon.png in Resources */,
 				62FF97D12039016B007B658E /* Bio-Hazard-icon.png in Resources */,
 				6231F8EE22833C34009D0351 /* Flag_of_India.png in Resources */,
 				6279645B2095D5BB00ED5578 /* Flag_of_Australia.png in Resources */,
 				62B087AE207A7938007703FF /* Magnifi-icon.png in Resources */,
+				F1D470BB2CE8FE0600EEF11B /* max.jpg in Resources */,
 				62B087C1207BEBC6007703FF /* Flag_of_the_United_States.png in Resources */,
 				62FF97D320390305007B658E /* List-icon.png in Resources */,
 				62DD87B71FB8BE4F00A9B9EE /* trakt.ico in Resources */,
 				625F1461243A4129007C1B18 /* toto.json in Resources */,
+				F1B0E8D42CEA4CF80016B5B5 /* francetv.jpg in Resources */,
+				F19A397B2BD4192A00A03651 /* simkl.png in Resources */,
 				62FF97DB2039AAFC007B658E /* Trash-icon.png in Resources */,
 				62B4D8B8208CB7C0002110E8 /* Flag_of_Brazil.png in Resources */,
 				F125F2C526235F0B00D012DA /* Flag_of_Mexico.png in Resources */,
@@ -908,9 +1384,13 @@
 				62FF97D02039016B007B658E /* Eye-icon.png in Resources */,
 				F14B477E276510E9000655C4 /* Capture d’écran 2018-11-03 à 14.41.14.png in Resources */,
 				62B087AF207A7938007703FF /* Idea-icon.png in Resources */,
+				F17644BE2CCEB7550033E318 /* disney.jpg in Resources */,
+				F16263332CFCB58A00A7727D /* justwatch.ico in Resources */,
 				62921B5522BEBEFE00A2BE94 /* Sandbox.xml in Resources */,
+				F19A39812BD4246300A03651 /* Flag_of_Ireland.png in Resources */,
 				F1FBCD8F265026B3003075D3 /* 2021_05_15_0te_Kleki.png in Resources */,
 				6279645A2095D5BB00ED5578 /* Flag_of_Japan.png in Resources */,
+				F17644BC2CCEB7550033E318 /* tf1.jpg in Resources */,
 				625F1463243B80BD007C1B18 /* allocine.php in Resources */,
 				62FF97C02038C9A3007B658E /* themoviedb.ico in Resources */,
 				F124A5C2261A290900E5BD8F /* Flag_of_Italy.png in Resources */,
@@ -922,13 +1402,104 @@
 				F1FBCD9C265029DA003075D3 /* 2021_05_15_0u9_Kleki.png in Resources */,
 				62FF97D92039076D007B658E /* Air-icon.png in Resources */,
 				62B087C0207BEBC6007703FF /* Flag_of_the_United_Kingdom.png in Resources */,
+				F17644BD2CCEB7550033E318 /* canal plus.jpg in Resources */,
+				F1B0E8CE2CEA4CF80016B5B5 /* M6.jpg in Resources */,
 				F13B52AF2753D71100EA976B /* Flag_of_Denmark.png in Resources */,
 				F130B7ED266D229C002BC7BC /* Flag_of_Sweden.png in Resources */,
 				62F2234021E120E00032A6E3 /* Refresh-icon.png in Resources */,
 				F1FBCD92265026B3003075D3 /* 2021_05_13_0ux_Kleki.png in Resources */,
+				F17644BA2CCEB7550033E318 /* netflix.jpg in Resources */,
+				F1B0E8D12CEA4CF80016B5B5 /* arte.jpg in Resources */,
 				628A1313236F353B006B2AD4 /* iPad.storyboard in Resources */,
 				6231F8E622833ACE009D0351 /* Flag_of_Finland.png in Resources */,
 				62921B5722BFE2F900A2BE94 /* allocine.ico in Resources */,
+				F17644BB2CCEB7550033E318 /* apple tv.jpg in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F1A14E912C7A4EEE00082E06 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F1A14E922C7A4EEE00082E06 /* tvmaze.ico in Resources */,
+				F1A14E932C7A4EEE00082E06 /* Flag_of_the_Czech_Republic.png in Resources */,
+				F1A14E942C7A4EEE00082E06 /* simkl.png in Resources */,
+				F1D470B72CE8FE0600EEF11B /* ocs.jpg in Resources */,
+				F1A14E952C7A4EEE00082E06 /* Flag_of_South_Korea.png in Resources */,
+				F16263312CFCB58A00A7727D /* justwatch.ico in Resources */,
+				F1B0E8D02CEA4CF80016B5B5 /* M6.jpg in Resources */,
+				F1A14E962C7A4EEE00082E06 /* Flag_of_Denmark.png in Resources */,
+				F1B0E8D32CEA4CF80016B5B5 /* arte.jpg in Resources */,
+				F1A14E972C7A4EEE00082E06 /* betaseries.png in Resources */,
+				F1A14EDA2C7A501B00082E06 /* iPad13p.storyboard in Resources */,
+				F1A14E982C7A4EEE00082E06 /* 2021_05_13_0ux_Kleki.png in Resources */,
+				F1A14E992C7A4EEE00082E06 /* LaunchScreen.storyboard in Resources */,
+				F1B0E8D62CEA4CF80016B5B5 /* francetv.jpg in Resources */,
+				F1A14E9A2C7A4EEE00082E06 /* Assets.xcassets in Resources */,
+				F1A14E9B2C7A4EEE00082E06 /* Flag_of_Israel.png in Resources */,
+				F1A14E9C2C7A4EEE00082E06 /* Flag_of_Taiwan.png in Resources */,
+				F1A14E9D2C7A4EEE00082E06 /* Flag_of_Sweden.png in Resources */,
+				F1A14E9E2C7A4EEE00082E06 /* Flag_of_Germany.png in Resources */,
+				F1A14E9F2C7A4EEE00082E06 /* Flag_of_Belgium.png in Resources */,
+				F1A14EA02C7A4EEE00082E06 /* Stop-icon.png in Resources */,
+				F1A14EA12C7A4EEE00082E06 /* Flag_of_Norway.png in Resources */,
+				F1A14EA22C7A4EEE00082E06 /* 2021_05_15_0te_Kleki.png in Resources */,
+				F1A14EA32C7A4EEE00082E06 /* Flag_of_Canada.png in Resources */,
+				F1A14EA42C7A4EEE00082E06 /* Flag_of_Ireland.png in Resources */,
+				F1A14EA52C7A4EEE00082E06 /* rottentomatoes.ico in Resources */,
+				F1D5FDF12D60D379005BCB47 /* 120.png in Resources */,
+				F1A14EA62C7A4EEE00082E06 /* senscritique.png in Resources */,
+				F1A14EA72C7A4EEE00082E06 /* ToDo.txt in Resources */,
+				F1A14EA82C7A4EEE00082E06 /* Flag_of_Argentina.png in Resources */,
+				F1A14EA92C7A4EEE00082E06 /* Logo.png in Resources */,
+				F1A14EAA2C7A4EEE00082E06 /* Flag_of_China.png in Resources */,
+				F1A14EAB2C7A4EEE00082E06 /* 2021_05_15_0uo_Kleki.png in Resources */,
+				F1A14EAC2C7A4EEE00082E06 /* Chart-icon.png in Resources */,
+				F1A14EAD2C7A4EEE00082E06 /* Bio-Hazard-icon.png in Resources */,
+				F1A14EAE2C7A4EEE00082E06 /* 2021_05_15_0u9_Kleki.png in Resources */,
+				F1A14EAF2C7A4EEE00082E06 /* Flag_of_India.png in Resources */,
+				F1A14EB02C7A4EEE00082E06 /* Flag_of_Australia.png in Resources */,
+				F1A14EB12C7A4EEE00082E06 /* Magnifi-icon.png in Resources */,
+				F1D470BD2CE8FE0600EEF11B /* max.jpg in Resources */,
+				F1A14EB22C7A4EEE00082E06 /* Flag_of_the_United_States.png in Resources */,
+				F1A14EB32C7A4EEE00082E06 /* List-icon.png in Resources */,
+				F1A14EB42C7A4EEE00082E06 /* trakt.ico in Resources */,
+				F1A14EB52C7A4EEE00082E06 /* Trash-icon.png in Resources */,
+				F1A14EB62C7A4EEE00082E06 /* Flag_of_Brazil.png in Resources */,
+				F1A14EB72C7A4EEE00082E06 /* thetvdb.png in Resources */,
+				F1A14EB82C7A4EEE00082E06 /* metacritic.png in Resources */,
+				F1A14EB92C7A4EEE00082E06 /* 2021_05_13_0uk_Kleki.png in Resources */,
+				F1A14EBA2C7A4EEE00082E06 /* Eye-2-icon.png in Resources */,
+				F1A14EBB2C7A4EEE00082E06 /* Flag_of_France.png in Resources */,
+				F1A14EBC2C7A4EEE00082E06 /* TV-icon.png in Resources */,
+				F1A14EBD2C7A4EEE00082E06 /* 2021_05_15_0tl_Kleki.png in Resources */,
+				F1A14EBE2C7A4EEE00082E06 /* Flag_of_Spain.png in Resources */,
+				F1A14EBF2C7A4EEE00082E06 /* iPhone.storyboard in Resources */,
+				F1A14EC02C7A4EEE00082E06 /* Flag_of_New_Zealand.png in Resources */,
+				F1A14EC12C7A4EEE00082E06 /* Capture d’écran 2018-11-03 à 14.41.14.png in Resources */,
+				F1A14EC22C7A4EEE00082E06 /* Eye-icon.png in Resources */,
+				F1A14EC32C7A4EEE00082E06 /* Flag_of_Mexico.png in Resources */,
+				F1A14EC42C7A4EEE00082E06 /* Idea-icon.png in Resources */,
+				F1A14EC52C7A4EEE00082E06 /* Sandbox.xml in Resources */,
+				F17644C02CCEB7640033E318 /* apple tv.jpg in Resources */,
+				F1A14EC62C7A4EEE00082E06 /* Flag_of_Japan.png in Resources */,
+				F1A14EC72C7A4EEE00082E06 /* themoviedb.ico in Resources */,
+				F17644C72CCEB76B0033E318 /* tf1.jpg in Resources */,
+				F17644C82CCEB76B0033E318 /* disney.jpg in Resources */,
+				F17644C92CCEB76B0033E318 /* canal plus.jpg in Resources */,
+				F17644CA2CCEB76B0033E318 /* prime video.jpg in Resources */,
+				F17644CB2CCEB76B0033E318 /* netflix.jpg in Resources */,
+				F1A14EC82C7A4EEE00082E06 /* Play-icon.png in Resources */,
+				F1A14EC92C7A4EEE00082E06 /* Calendar-icon.png in Resources */,
+				F1A14ECA2C7A4EEE00082E06 /* imdb.ico in Resources */,
+				F1A14ECB2C7A4EEE00082E06 /* Flag_of_Italy.png in Resources */,
+				F1A14ECC2C7A4EEE00082E06 /* Air-icon.png in Resources */,
+				F1A14ECD2C7A4EEE00082E06 /* Flag_of_the_United_Kingdom.png in Resources */,
+				F1A14ECE2C7A4EEE00082E06 /* Refresh-icon.png in Resources */,
+				F1A14ECF2C7A4EEE00082E06 /* iPad.storyboard in Resources */,
+				F1D470BA2CE8FE0600EEF11B /* paramount.jpg in Resources */,
+				F1A14ED02C7A4EEE00082E06 /* Flag_of_Finland.png in Resources */,
+				F1A14ED12C7A4EEE00082E06 /* allocine.ico in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -936,8 +1507,44 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F1D5FDF92D624ACB005BCB47 /* francetv.jpg in Resources */,
+				F1D5FDFA2D624ACB005BCB47 /* M6.jpg in Resources */,
+				F1D5FDFB2D624ACB005BCB47 /* ocs.jpg in Resources */,
+				F1D5FDFC2D624ACB005BCB47 /* max.jpg in Resources */,
+				F1D5FDFD2D624ACB005BCB47 /* tf1.jpg in Resources */,
+				F1D5FDFE2D624ACB005BCB47 /* netflix.jpg in Resources */,
+				F1D5FDFF2D624ACB005BCB47 /* paramount.jpg in Resources */,
+				F1D5FE002D624ACB005BCB47 /* prime video.jpg in Resources */,
+				F1D5FE012D624ACB005BCB47 /* canal plus.jpg in Resources */,
+				F1D5FE022D624ACB005BCB47 /* arte.jpg in Resources */,
+				F1D5FE032D624ACB005BCB47 /* disney.jpg in Resources */,
+				F1D5FE042D624ACB005BCB47 /* apple tv.jpg in Resources */,
+				F1D5FDF52D60F62C005BCB47 /* 120.png in Resources */,
 				F1D77730270A0D8000394176 /* Assets.xcassets in Resources */,
 				F13C1CA6279334DA004EF536 /* Capture d’écran 2018-11-03 à 14.41.14.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F1F234802D5FADAF00087FF1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F1D5FDEF2D60CFAB005BCB47 /* Logo.png in Resources */,
+				F1F234972D5FB9CE00087FF1 /* 2021_05_15_0u9_Kleki.png in Resources */,
+				F1F234942D5FB78600087FF1 /* tvmaze.ico in Resources */,
+				F1F234962D5FB79700087FF1 /* imdb.ico in Resources */,
+				F1D5FDF42D60D379005BCB47 /* 120.png in Resources */,
+				F1F234952D5FB78D00087FF1 /* trakt.ico in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F1FFB37F2D8F233D00ED1E4F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F1FFB3942D8F259100ED1E4F /* 120.png in Resources */,
+				F1FFB3A52D90732900ED1E4F /* tvmaze.ico in Resources */,
+				F1FFB3A42D906E9000ED1E4F /* trakt.ico in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1039,6 +1646,62 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SerieA-iPad/Pods-SerieA-iPad-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		F1A14E612C7A4EEE00082E06 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SerieA-iPad-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F1A14E622C7A4EEE00082E06 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n";
+		};
+		F1A14ED42C7A4EEE00082E06 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SerieA-iPad/Pods-SerieA-iPad-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SerieA-iPad/Pods-SerieA-iPad-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SerieA-iPad/Pods-SerieA-iPad-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -1047,11 +1710,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				62612BBC23DDE7F600ACCF81 /* Statistiques.swift in Sources */,
-				F16F631B2763C93E008E459E /* InfosRefresh.swift in Sources */,
 				628A1382236F38E8006B2AD4 /* SerieFiche.swift in Sources */,
 				628A1383236F38E8006B2AD4 /* Configuration.swift in Sources */,
 				F17B14A526DA9A450071B8DB /* GraphMiniEpisode.swift in Sources */,
+				F1D470B02CD7CD0000EEF11B /* ViewExplorer.swift in Sources */,
 				628A1384236F38E8006B2AD4 /* TheMoviedb.swift in Sources */,
+				F1D5FE122D736EC6005BCB47 /* News.swift in Sources */,
 				628A1385236F38E8006B2AD4 /* Constantes.swift in Sources */,
 				628A1386236F38E8006B2AD4 /* IMdb.swift in Sources */,
 				628A1387236F38E8006B2AD4 /* EpisodeFiche.swift in Sources */,
@@ -1064,6 +1728,7 @@
 				628A138B236F38E8006B2AD4 /* Notes.swift in Sources */,
 				F118B0052753F0B700D12598 /* WidgetContent.swift in Sources */,
 				628A138C236F38E8006B2AD4 /* BetaSeries.swift in Sources */,
+				F191E0062D25B347004E9991 /* ViewAdvisors.swift in Sources */,
 				628A138D236F38E8006B2AD4 /* Graph.swift in Sources */,
 				625F145F242FBB49007C1B18 /* JustWatch.swift in Sources */,
 				628A138E236F38E8006B2AD4 /* GraphSaison.swift in Sources */,
@@ -1077,14 +1742,17 @@
 				628A1395236F38E8006B2AD4 /* RottenTomatoes.swift in Sources */,
 				628A1396236F38E8006B2AD4 /* ViewSearch.swift in Sources */,
 				628A1397236F38E8006B2AD4 /* Notification.swift in Sources */,
+				F1D5FE0F2D68F0CB005BCB47 /* SaisonFiche.swift in Sources */,
 				628A1398236F38E8006B2AD4 /* ViewAccueil.swift in Sources */,
+				F1D5FE162D74B6DC005BCB47 /* Journal.swift in Sources */,
 				628A1399236F38E8006B2AD4 /* Helpers.swift in Sources */,
 				628A139A236F38E8006B2AD4 /* ViewSaisonListe.swift in Sources */,
 				628A139B236F38E8006B2AD4 /* Database.swift in Sources */,
+				F16263362D20593C00A7727D /* AppConfig.swift in Sources */,
 				F16F63182763C92C008E459E /* Serie.swift in Sources */,
-				628A139C236F38E8006B2AD4 /* SaisonFiche.swift in Sources */,
 				620B25E523BBA82B00EC7610 /* Critique.swift in Sources */,
 				628A139D236F38E8006B2AD4 /* ViewSearchNew.swift in Sources */,
+				F19A39792BD4046600A03651 /* SIMKL.swift in Sources */,
 				F11F4CB3284FB26C002EB3E3 /* YaQuoiCommeSerie.swift in Sources */,
 				628A139E236F38E8006B2AD4 /* AppDelegate.swift in Sources */,
 				628A139F236F38E8006B2AD4 /* TVmaze.swift in Sources */,
@@ -1096,13 +1764,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				62612BBB23DDE2B100ACCF81 /* Statistiques.swift in Sources */,
-				F16F631A2763C93E008E459E /* InfosRefresh.swift in Sources */,
 				62DD87AA1FB7838400A9B9EE /* SerieFiche.swift in Sources */,
 				621B1D9D20D665B800F4F3BD /* Configuration.swift in Sources */,
 				F17B14A426DA9A450071B8DB /* GraphMiniEpisode.swift in Sources */,
 				62D0EBBD204C374B009774B6 /* TheMoviedb.swift in Sources */,
 				6224A5E52042207800450812 /* Constantes.swift in Sources */,
 				626D4729204C6DE900B1A64D /* IMdb.swift in Sources */,
+				F1D470AF2CD7CD0000EEF11B /* ViewExplorer.swift in Sources */,
+				F191E0072D25B347004E9991 /* ViewAdvisors.swift in Sources */,
+				F16263372D20593C00A7727D /* AppConfig.swift in Sources */,
 				62F8ECF42013775800A41EF7 /* EpisodeFiche.swift in Sources */,
 				F11F4CC028689862002EB3E3 /* SerieFicheDetails.swift in Sources */,
 				F16F63132763C92C008E459E /* Saison.swift in Sources */,
@@ -1111,12 +1781,14 @@
 				62CD57C32038B87D00DE28A1 /* GraphMiniSaison.swift in Sources */,
 				620B22FE22A304FD0027DCF6 /* MetaCritic.swift in Sources */,
 				626D4727204C624500B1A64D /* Notes.swift in Sources */,
+				F1D5FE112D736EC6005BCB47 /* News.swift in Sources */,
 				F118B0062753F0B800D12598 /* WidgetContent.swift in Sources */,
 				62DD87BA1FB8C15600A9B9EE /* BetaSeries.swift in Sources */,
 				62DD87B21FB8A2E000A9B9EE /* Graph.swift in Sources */,
 				625F145E242FB530007C1B18 /* JustWatch.swift in Sources */,
 				627A0E2820139E8300FE1777 /* GraphSaison.swift in Sources */,
 				6217308221BC22C300D37350 /* Allocine.swift in Sources */,
+				F19A39782BD4046600A03651 /* SIMKL.swift in Sources */,
 				627A0E2A20139E9900FE1777 /* GraphEpisode.swift in Sources */,
 				62DD87A41FB76F5D00A9B9EE /* TheTVdb.swift in Sources */,
 				6224A5E32041F30200450812 /* ViewSerieListe.swift in Sources */,
@@ -1125,18 +1797,74 @@
 				62DD87A81FB76F5D00A9B9EE /* Trakt.swift in Sources */,
 				6217308421BC22DE00D37350 /* RottenTomatoes.swift in Sources */,
 				62B4716C20A88D3E0067BD34 /* ViewSearch.swift in Sources */,
+				F153D03A29118B1A00BA283E /* ViewCalendrier.swift in Sources */,
 				6208D96822352ACC00FE179F /* Notification.swift in Sources */,
 				624D27491FFBD4E100B49702 /* ViewAccueil.swift in Sources */,
 				6255DBDA2083780900CA9BA3 /* Helpers.swift in Sources */,
 				62D0EBBB204C30BE009774B6 /* ViewSaisonListe.swift in Sources */,
 				6279645F2099D32400ED5578 /* Database.swift in Sources */,
+				F1D5FE152D74B6DC005BCB47 /* Journal.swift in Sources */,
 				F16F63172763C92C008E459E /* Serie.swift in Sources */,
-				62AC50A0200E58A200A8C841 /* SaisonFiche.swift in Sources */,
 				620B25E423BBA52E00EC7610 /* Critique.swift in Sources */,
 				6214F0FF227F12D10039F6E5 /* ViewSearchNew.swift in Sources */,
+				F1D5FE0E2D68F0CB005BCB47 /* SaisonFiche.swift in Sources */,
 				F11F4CB2284FB26C002EB3E3 /* YaQuoiCommeSerie.swift in Sources */,
 				62DD87701FB766C600A9B9EE /* AppDelegate.swift in Sources */,
 				6217308621BC22EE00D37350 /* TVmaze.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F1A14E632C7A4EEE00082E06 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F1A14E642C7A4EEE00082E06 /* Statistiques.swift in Sources */,
+				F1A14E662C7A4EEE00082E06 /* SerieFiche.swift in Sources */,
+				F1A14E672C7A4EEE00082E06 /* Configuration.swift in Sources */,
+				F1A14E682C7A4EEE00082E06 /* GraphMiniEpisode.swift in Sources */,
+				F1D470B12CD7CD0000EEF11B /* ViewExplorer.swift in Sources */,
+				F1A14E692C7A4EEE00082E06 /* TheMoviedb.swift in Sources */,
+				F1D5FE132D736EC6005BCB47 /* News.swift in Sources */,
+				F1A14E6A2C7A4EEE00082E06 /* Constantes.swift in Sources */,
+				F1A14E6B2C7A4EEE00082E06 /* IMdb.swift in Sources */,
+				F1A14E6C2C7A4EEE00082E06 /* EpisodeFiche.swift in Sources */,
+				F1A14E6D2C7A4EEE00082E06 /* SerieFicheDetails.swift in Sources */,
+				F1A14E6E2C7A4EEE00082E06 /* Saison.swift in Sources */,
+				F1A14E6F2C7A4EEE00082E06 /* Episode.swift in Sources */,
+				F1A14E702C7A4EEE00082E06 /* GraphMiniSerie.swift in Sources */,
+				F1A14E712C7A4EEE00082E06 /* GraphMiniSaison.swift in Sources */,
+				F1A14E722C7A4EEE00082E06 /* MetaCritic.swift in Sources */,
+				F1A14E732C7A4EEE00082E06 /* Notes.swift in Sources */,
+				F1A14E742C7A4EEE00082E06 /* WidgetContent.swift in Sources */,
+				F1A14E752C7A4EEE00082E06 /* BetaSeries.swift in Sources */,
+				F191E0052D25B347004E9991 /* ViewAdvisors.swift in Sources */,
+				F1A14E762C7A4EEE00082E06 /* Graph.swift in Sources */,
+				F1A14E772C7A4EEE00082E06 /* JustWatch.swift in Sources */,
+				F1A14E782C7A4EEE00082E06 /* GraphSaison.swift in Sources */,
+				F1A14E792C7A4EEE00082E06 /* Allocine.swift in Sources */,
+				F1A14E7A2C7A4EEE00082E06 /* GraphEpisode.swift in Sources */,
+				F1A14E7B2C7A4EEE00082E06 /* TheTVdb.swift in Sources */,
+				F1A14E7C2C7A4EEE00082E06 /* ViewSerieListe.swift in Sources */,
+				F1A14E7D2C7A4EEE00082E06 /* SensCritique.swift in Sources */,
+				F1A14E7E2C7A4EEE00082E06 /* ViewPropals.swift in Sources */,
+				F1A14E7F2C7A4EEE00082E06 /* Trakt.swift in Sources */,
+				F1A14E802C7A4EEE00082E06 /* RottenTomatoes.swift in Sources */,
+				F1A14E812C7A4EEE00082E06 /* ViewSearch.swift in Sources */,
+				F1A14E822C7A4EEE00082E06 /* Notification.swift in Sources */,
+				F1A14E832C7A4EEE00082E06 /* ViewAccueil.swift in Sources */,
+				F1A14E842C7A4EEE00082E06 /* Helpers.swift in Sources */,
+				F1D5FE172D74B6DC005BCB47 /* Journal.swift in Sources */,
+				F1A14E852C7A4EEE00082E06 /* ViewSaisonListe.swift in Sources */,
+				F1A14E862C7A4EEE00082E06 /* Database.swift in Sources */,
+				F16263352D20593C00A7727D /* AppConfig.swift in Sources */,
+				F1A14E872C7A4EEE00082E06 /* Serie.swift in Sources */,
+				F1A14E882C7A4EEE00082E06 /* SaisonFiche.swift in Sources */,
+				F1A14E892C7A4EEE00082E06 /* Critique.swift in Sources */,
+				F1A14E8A2C7A4EEE00082E06 /* ViewSearchNew.swift in Sources */,
+				F1A14E8B2C7A4EEE00082E06 /* SIMKL.swift in Sources */,
+				F1A14E8C2C7A4EEE00082E06 /* YaQuoiCommeSerie.swift in Sources */,
+				F1A14E8D2C7A4EEE00082E06 /* AppDelegate.swift in Sources */,
+				F1A14E8E2C7A4EEE00082E06 /* TVmaze.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1150,18 +1878,48 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F1F2347E2D5FADAF00087FF1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F1FFB37D2D8F233D00ED1E4F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F1FFB39E2D8F57E200ED1E4F /* News.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		F1D77733270A0D8000394176 /* PBXTargetDependency */ = {
+		F1A14E5F2C7A4EEE00082E06 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = F1D77726270A0D7700394176 /* Mon activitéExtension */;
-			targetProxy = F1D77732270A0D8000394176 /* PBXContainerItemProxy */;
+			targetProxy = F1A14E602C7A4EEE00082E06 /* PBXContainerItemProxy */;
 		};
-		F1D777432713342A00394176 /* PBXTargetDependency */ = {
+		F1F2349D2D60A6FC00087FF1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = F1D77726270A0D7700394176 /* Mon activitéExtension */;
-			targetProxy = F1D777422713342A00394176 /* PBXContainerItemProxy */;
+			target = F1F234812D5FADAF00087FF1 /* DataUpdatesExtension */;
+			targetProxy = F1F2349C2D60A6FC00087FF1 /* PBXContainerItemProxy */;
+		};
+		F1FFB3A12D8F64EE00ED1E4F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F1FFB3802D8F233D00ED1E4F /* SerieNewsExtension */;
+			targetProxy = F1FFB3A02D8F64EE00ED1E4F /* PBXContainerItemProxy */;
+		};
+		F1FFB3A82D9980B600ED1E4F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F1F234812D5FADAF00087FF1 /* DataUpdatesExtension */;
+			targetProxy = F1FFB3A72D9980B600ED1E4F /* PBXContainerItemProxy */;
+		};
+		F1FFB3AC2D9980BD00ED1E4F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F1FFB3802D8F233D00ED1E4F /* SerieNewsExtension */;
+			targetProxy = F1FFB3AB2D9980BD00ED1E4F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1190,6 +1948,14 @@
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
+		F1A14E5B2C7A4E7B00082E06 /* iPad13p.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F1A14E5C2C7A4E7B00082E06 /* Base */,
+			);
+			name = iPad13p.storyboard;
+			sourceTree = "<group>";
+		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -1197,7 +1963,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 6FA7A8CB4C6B2280C6F4BE42 /* Pods-SerieA-iPad.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-6";
 				CODE_SIGN_ENTITLEMENTS = SerieA.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1212,7 +1977,7 @@
 					"$(PROJECT_DIR)/iPhone\\ Seriez/Controllers",
 				);
 				INFOPLIST_FILE = "SerieA copy3-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1220,7 +1985,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = Home.SerieA;
 				PRODUCT_NAME = "SerieA-iPad";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 2;
 			};
@@ -1230,7 +1997,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1DCFE27F4A55D88A0C5FEFFE /* Pods-SerieA-iPad.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-6";
 				CODE_SIGN_ENTITLEMENTS = SerieA.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1245,7 +2011,7 @@
 					"$(PROJECT_DIR)/iPhone\\ Seriez/Controllers",
 				);
 				INFOPLIST_FILE = "SerieA copy3-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1253,7 +2019,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = Home.SerieA;
 				PRODUCT_NAME = "SerieA-iPad";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 2;
 			};
@@ -1379,7 +2147,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B1C026E4AFBD0FFD02361181 /* Pods-SerieA.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-7";
 				CODE_SIGN_ENTITLEMENTS = SerieA.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1394,7 +2161,7 @@
 					"$(PROJECT_DIR)/iPhone\\ Seriez/Controllers",
 				);
 				INFOPLIST_FILE = "iPhone Seriez/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1402,7 +2169,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = Home.SerieA;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -1412,7 +2181,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0C2BDB4BCD394FE5A2E3877B /* Pods-SerieA.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-7";
 				CODE_SIGN_ENTITLEMENTS = SerieA.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1427,7 +2195,7 @@
 					"$(PROJECT_DIR)/iPhone\\ Seriez/Controllers",
 				);
 				INFOPLIST_FILE = "iPhone Seriez/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1435,9 +2203,79 @@
 				PRODUCT_BUNDLE_IDENTIFIER = Home.SerieA;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		F1A14ED62C7A4EEE00082E06 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6FA7A8CB4C6B2280C6F4BE42 /* Pods-SerieA-iPad.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-6";
+				CODE_SIGN_ENTITLEMENTS = SerieA.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = MXLKZ7P9DM;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/iPhone\\ Seriez",
+					"$(PROJECT_DIR)/iPhone\\ Seriez",
+					"$(PROJECT_DIR)/iPhone\\ Seriez",
+					"$(PROJECT_DIR)/iPhone\\ Seriez/Controllers",
+					"$(PROJECT_DIR)/iPhone\\ Seriez/Controllers",
+				);
+				INFOPLIST_FILE = "SerieA-iPad copy-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = Home.SerieA;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Debug;
+		};
+		F1A14ED72C7A4EEE00082E06 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1DCFE27F4A55D88A0C5FEFFE /* Pods-SerieA-iPad.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-6";
+				CODE_SIGN_ENTITLEMENTS = SerieA.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = MXLKZ7P9DM;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/iPhone\\ Seriez",
+					"$(PROJECT_DIR)/iPhone\\ Seriez",
+					"$(PROJECT_DIR)/iPhone\\ Seriez",
+					"$(PROJECT_DIR)/iPhone\\ Seriez/Controllers",
+					"$(PROJECT_DIR)/iPhone\\ Seriez/Controllers",
+				);
+				INFOPLIST_FILE = "SerieA-iPad copy-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = Home.SerieA;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Release;
 		};
@@ -1451,7 +2289,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = MXLKZ7P9DM;
 				INFOPLIST_FILE = "Mon activité/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1462,6 +2300,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "Home.SerieA.Mon-activite-";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1477,7 +2318,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = MXLKZ7P9DM;
 				INFOPLIST_FILE = "Mon activité/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1487,8 +2328,173 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "Home.SerieA.Mon-activite-";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		F1F234922D5FADB000087FF1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_ENTITLEMENTS = DataUpdatesExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = MXLKZ7P9DM;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DataUpdates/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = DataUpdates;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 Home. All rights reserved.";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = Home.SerieA.DataUpdates;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		F1F234932D5FADB000087FF1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_ENTITLEMENTS = DataUpdatesExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = MXLKZ7P9DM;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DataUpdates/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = DataUpdates;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 Home. All rights reserved.";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = Home.SerieA.DataUpdates;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		F1FFB3902D8F233F00ED1E4F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_ENTITLEMENTS = SerieNewsExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = MXLKZ7P9DM;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SerieNews/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SerieNews;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 Home. All rights reserved.";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = Home.SerieA.SerieNews;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Debug;
+		};
+		F1FFB3912D8F233F00ED1E4F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_ENTITLEMENTS = SerieNewsExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = MXLKZ7P9DM;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SerieNews/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SerieNews;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 Home. All rights reserved.";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = Home.SerieA.SerieNews;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Release;
 		};
@@ -1522,11 +2528,38 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		F1A14ED52C7A4EEE00082E06 /* Build configuration list for PBXNativeTarget "SerieA-iPad copy" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F1A14ED62C7A4EEE00082E06 /* Debug */,
+				F1A14ED72C7A4EEE00082E06 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		F1D77737270A0D8000394176 /* Build configuration list for PBXNativeTarget "Mon activitéExtension" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F1D77735270A0D8000394176 /* Debug */,
 				F1D77736270A0D8000394176 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F1F234912D5FADB000087FF1 /* Build configuration list for PBXNativeTarget "DataUpdatesExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F1F234922D5FADB000087FF1 /* Debug */,
+				F1F234932D5FADB000087FF1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F1FFB3922D8F233F00ED1E4F /* Build configuration list for PBXNativeTarget "SerieNewsExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F1FFB3902D8F233F00ED1E4F /* Debug */,
+				F1FFB3912D8F233F00ED1E4F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

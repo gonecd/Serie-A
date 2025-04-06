@@ -11,125 +11,63 @@ import SwiftUI
 
 
 struct MonActiviteView : View {
-    let model: MonActiviteData
+    let entry: MonActiviteData
+    var lien1 : String = "UneSerie://NonRien"
+    var lien2 : String = "UneSerie://NonRien"
+    var lien3 : String = "UneSerie://NonRien"
+    
+    init(entry: MonActiviteData) {
+        self.entry = entry
+        
+        if (entry.data1.serie != noSerie.serie) { lien1 = "UneSerie://ASuivre1" }
+        if (entry.data2.serie != noSerie.serie) { lien2 = "UneSerie://ASuivre2" }
+        if (entry.data3.serie != noSerie.serie) { lien3 = "UneSerie://ASuivre3" }
+    }
+    
+    
+    func MyBloc(lien : String, poster: UIImage, data : Data4MonActivite) -> AnyView {
+        if (data.serie == "N/A") { return AnyView(EmptyView()) }
+        
+        return AnyView( Link(destination: URL(string: lien)!) {
+            HStack(alignment: .center) {
+                Image(uiImage: poster).resizable().frame(width: 60, height: 80, alignment: .center)
+                Text("  ")
+                VStack(alignment: .leading) {
+                    Text(data.serie).font(.system(size: 20, weight: .heavy)).lineLimit(1).foregroundColor(.black)
+                    Text("Saison " + String(data.saison)).font(.footnote).foregroundColor(.black)
+                    
+                    HStack(alignment: .top) {
+                        ZStack() {
+                            Circle().fill(Color.blue).frame(width: 15, height: 15)
+                            PieSegment(start: .degrees(360.0*Double(data.nbWatched)/Double(data.nbEps)-90.0), end: .degrees(-90)).fill(Color.white).frame(width: 13, height: 13)
+                        }
+                        Text(String(data.nbWatched) + " éps vus sur " + String(data.nbEps)).font(.footnote).foregroundColor(.blue)
+                    }
+                }
+                Spacer()
+                Image(uiImage: getLogoDiffuseur(diffuseur: data.channel)).resizable().frame(width: 40, height: 40, alignment: .center)
+            }
+        })
+    }
+    
     
     var body: some View {
-        
-        Spacer()
-
-        HStack(alignment: .center) {
-            Text(" ").font(.system(size: 12))
-            Image(uiImage: model.poster1).resizable().frame(width: 70, height: 108, alignment: .center)
-
-            VStack(alignment: .leading, spacing: 8) {
-                Text(model.data1.serie).font(.system(size: 20, weight: .heavy)).lineLimit(1).foregroundColor(.black)
-                
-                HStack() {
-                    Text("Saison " + String(model.data1.saison)).font(.footnote).foregroundColor(.black)
-                    Spacer()
-                    Text("  👍🏼  " + String(Double(model.data1.rateGlobal)/10) + "  ") .font(.system(size: 14, weight: .bold)).foregroundColor(.blue).background(Color.gray.opacity(0.2)).overlay( RoundedRectangle(cornerRadius: 8).stroke(Color.blue, lineWidth: 2) )
-                }
-                
-                HStack() {
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text("   "+model.data1.channel+"   ").font(.footnote).foregroundColor(.gray).overlay( RoundedRectangle(cornerRadius: 8).stroke(Color.gray, lineWidth: 1) )
-                        HStack() {
-                            ZStack() {
-                                Circle().fill(Color.blue).frame(width: 15, height: 15)
-                                PieSegment(start: .degrees(360.0*Double(model.data1.nbWatched)/Double(model.data1.nbEps)-90.0), end: .degrees(-90)).fill(Color.white).frame(width: 13, height: 13)
-                            }
-                            Text(String(model.data1.nbWatched) + " éps vus sur " + String(model.data1.nbEps)).font(.footnote).foregroundColor(.blue)
-                        }
-                    }
-                    
-                    Spacer()
-                    
-                    ZStack() {
-                        Circle().fill(Color.gray).frame(width: 50, height: 50)
-
-                        Group {
-                            PieSegment(start: .zero, end: .degrees(59)).fill(Color.white).frame(width: 49, height: 49)
-                            PieSegment(start: .degrees(60), end: .degrees(119)).fill(Color.white).frame(width: 49, height: 49)
-                            PieSegment(start: .degrees(120), end: .degrees(179)).fill(Color.white).frame(width: 49, height: 49)
-                            PieSegment(start: .degrees(180), end: .degrees(239)).fill(Color.white).frame(width: 49, height: 49)
-                            PieSegment(start: .degrees(240), end: .degrees(299)).fill(Color.white).frame(width: 49, height: 49)
-                            PieSegment(start: .degrees(300), end: .degrees(359)).fill(Color.white).frame(width: 49, height: 49)
-                        }
-
-                        Group {
-                            PieSegment(start: .zero, end: .degrees(59)).fill(Color.red.opacity(0.4)).frame(width: CGFloat(50*model.data1.rateTrakt/100), height: CGFloat(50*model.data1.rateTrakt/100))
-                            PieSegment(start: .degrees(60), end: .degrees(119)).fill(Color.green.opacity(0.4)).frame(width: CGFloat(50*model.data1.rateMovieDB/100), height: CGFloat(50*model.data1.rateMovieDB/100))
-                            PieSegment(start: .degrees(120), end: .degrees(179)).fill(Color.orange.opacity(0.4)).frame(width: CGFloat(50*model.data1.rateIMDB/100), height: CGFloat(50*model.data1.rateIMDB/100))
-                            PieSegment(start: .degrees(180), end: .degrees(239)).fill(Color.teal.opacity(0.4)).frame(width: CGFloat(50*model.data1.rateTVmaze/100), height: CGFloat(50*model.data1.rateTVmaze/100))
-                            PieSegment(start: .degrees(240), end: .degrees(299)).fill(Color.purple.opacity(0.4)).frame(width: CGFloat(50*model.data1.rateRottenTomatoes/100), height: CGFloat(50*model.data1.rateRottenTomatoes/100))
-                            PieSegment(start: .degrees(300), end: .degrees(359)).fill(Color.blue.opacity(0.4)).frame(width: CGFloat(50*model.data1.rateBetaSeries/100), height: CGFloat(50*model.data1.rateBetaSeries/100))
-                        }
-                    }.frame(width: 60, height: 60, alignment: .center)
-                }
-            }
-            Text(" ").font(.system(size: 12))
+        HStack {
+            Text("Une Série ?").font(.system(size: 20, weight: .heavy))
+            Spacer(minLength: 1)
+            Text("Saisons en cours").font(.system(size: 14))
+            Image(uiImage: #imageLiteral(resourceName: "120.png")).resizable().frame(width: 30, height: 30, alignment: .trailing)
         }
         
         Spacer()
-
-        HStack(alignment: .center) {
-            Text(" ").font(.system(size: 12))
-            Image(uiImage: model.poster2).resizable().frame(width: 70, height: 108, alignment: .center)
-
-            VStack(alignment: .leading, spacing: 8) {
-                Text(model.data2.serie).font(.system(size: 20, weight: .heavy)).lineLimit(1).foregroundColor(.black)
-                
-                HStack() {
-                    Text("Saison " + String(model.data2.saison)).font(.footnote).foregroundColor(.black)
-                    Spacer()
-                    Text("  👍🏼  " + String(Double(model.data2.rateGlobal)/10) + "  ") .font(.system(size: 14, weight: .bold)).foregroundColor(.blue).background(Color.gray.opacity(0.2)).overlay( RoundedRectangle(cornerRadius: 8).stroke(Color.blue, lineWidth: 2) )
-                }
-                
-                HStack() {
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text("   "+model.data2.channel+"   ").font(.footnote).foregroundColor(.gray).overlay( RoundedRectangle(cornerRadius: 8).stroke(Color.gray, lineWidth: 1) )
-                        HStack() {
-                            ZStack() {
-                                Circle().fill(Color.blue).frame(width: 15, height: 15)
-                                PieSegment(start: .degrees(360.0*Double(model.data2.nbWatched)/Double(model.data2.nbEps)-90.0), end: .degrees(-90)).fill(Color.white).frame(width: 13, height: 13)
-                            }
-                            Text(String(model.data2.nbWatched) + " éps vus sur " + String(model.data2.nbEps)).font(.footnote).foregroundColor(.blue)
-                        }
-                    }
-                    
-                    Spacer()
-                    
-                    ZStack() {
-                        Circle().fill(Color.gray).frame(width: 50, height: 50)
-
-                        Group {
-                            PieSegment(start: .zero, end: .degrees(59)).fill(Color.white).frame(width: 49, height: 49)
-                            PieSegment(start: .degrees(60), end: .degrees(119)).fill(Color.white).frame(width: 49, height: 49)
-                            PieSegment(start: .degrees(120), end: .degrees(179)).fill(Color.white).frame(width: 49, height: 49)
-                            PieSegment(start: .degrees(180), end: .degrees(239)).fill(Color.white).frame(width: 49, height: 49)
-                            PieSegment(start: .degrees(240), end: .degrees(299)).fill(Color.white).frame(width: 49, height: 49)
-                            PieSegment(start: .degrees(300), end: .degrees(359)).fill(Color.white).frame(width: 49, height: 49)
-                        }
-
-                        Group {
-                            PieSegment(start: .zero, end: .degrees(59)).fill(Color.red.opacity(0.4)).frame(width: CGFloat(50*model.data2.rateTrakt/100), height: CGFloat(50*model.data2.rateTrakt/100))
-                            PieSegment(start: .degrees(60), end: .degrees(119)).fill(Color.green.opacity(0.4)).frame(width: CGFloat(50*model.data2.rateMovieDB/100), height: CGFloat(50*model.data2.rateMovieDB/100))
-                            PieSegment(start: .degrees(120), end: .degrees(179)).fill(Color.orange.opacity(0.4)).frame(width: CGFloat(50*model.data2.rateIMDB/100), height: CGFloat(50*model.data2.rateIMDB/100))
-                            PieSegment(start: .degrees(180), end: .degrees(239)).fill(Color.teal.opacity(0.4)).frame(width: CGFloat(50*model.data2.rateTVmaze/100), height: CGFloat(50*model.data2.rateTVmaze/100))
-                            PieSegment(start: .degrees(240), end: .degrees(299)).fill(Color.purple.opacity(0.4)).frame(width: CGFloat(50*model.data2.rateRottenTomatoes/100), height: CGFloat(50*model.data2.rateRottenTomatoes/100))
-                            PieSegment(start: .degrees(300), end: .degrees(359)).fill(Color.blue.opacity(0.4)).frame(width: CGFloat(50*model.data2.rateBetaSeries/100), height: CGFloat(50*model.data2.rateBetaSeries/100))
-                        }
-                    }.frame(width: 60, height: 60, alignment: .center)
-                }
-            }
-            Text(" ").font(.system(size: 12))
-        }
-        
+        MyBloc(lien: lien1, poster: entry.poster1, data: entry.data1)
         Spacer()
-        
+        MyBloc(lien: lien2, poster: entry.poster2, data: entry.data2)
+        Spacer()
+        MyBloc(lien: lien3, poster: entry.poster3, data: entry.data3)
     }
+    
 }
-
 
 
 struct PieSegment: Shape {
@@ -143,5 +81,29 @@ struct PieSegment: Shape {
         path.addArc(center: center, radius: rect.midX, startAngle: start, endAngle: end, clockwise: false)
         return path
     }
+}
+
+func getLogoDiffuseur(diffuseur: String) -> UIImage {
+    switch (diffuseur) {
+    case "Netflix": return #imageLiteral(resourceName: "netflix.jpg")
+    case "Canal+": return #imageLiteral(resourceName: "canal plus.jpg")
+    case "Apple TV+": return #imageLiteral(resourceName: "apple tv.jpg")
+    case "Disney+": return #imageLiteral(resourceName: "disney.jpg")
+    case "Amazon": return #imageLiteral(resourceName: "prime video.jpg")
+    case "Prime Video": return #imageLiteral(resourceName: "prime video.jpg")
+    case "Max": return #imageLiteral(resourceName: "max.jpg")
+    case "Paramount+": return #imageLiteral(resourceName: "paramount.jpg")
+    case "OCS": return #imageLiteral(resourceName: "ocs.jpg")
+    case "M6+": return #imageLiteral(resourceName: "M6.jpg")
+    case "TF1+": return #imageLiteral(resourceName: "tf1.jpg")
+    case "Arte": return #imageLiteral(resourceName: "arte.jpg")
+    case "france.tv": return #imageLiteral(resourceName: "francetv.jpg")
+    case "": return UIImage()
+
+    default:
+        print("Logo diffuseur inconnu = \(diffuseur)")
+        return UIImage()
+    }
+    
 }
 

@@ -18,6 +18,7 @@ class GraphMiniSerie: UIView {
     var noteMetaCritic : Int = 0
     var noteAlloCine : Int = 0
     var noteSensCritique : Int = 0
+    var noteSIMKL : Int = 0
 
     var nbNotes : Int = 0
     
@@ -45,9 +46,6 @@ class GraphMiniSerie: UIView {
         centreY = self.frame.width / 2
         rayon = min(centreX, centreY) - bordure
         
-        self.layer.cornerRadius = 5
-        self.layer.masksToBounds = true
-        
         // Drawing code here.
         if (grapheType == 0) {
             self.traceGrapheCercle()
@@ -72,7 +70,7 @@ class GraphMiniSerie: UIView {
         grapheType = type
     }
     
-    func sendNotes(rateTrakt : Int, rateBetaSeries : Int, rateMoviedb : Int, rateIMdb : Int, rateTVmaze : Int, rateRottenTomatoes : Int, rateMetaCritic : Int, rateAlloCine : Int, rateSensCritique : Int) {
+    func sendNotes(rateTrakt : Int, rateBetaSeries : Int, rateMoviedb : Int, rateIMdb : Int, rateTVmaze : Int, rateRottenTomatoes : Int, rateMetaCritic : Int, rateAlloCine : Int, rateSensCritique : Int, rateSIMKL : Int) {
         nbNotes = 0
         
         if (rateTrakt > 0) { nbNotes = nbNotes + 1 }
@@ -84,6 +82,7 @@ class GraphMiniSerie: UIView {
         if (rateMetaCritic > 0) { nbNotes = nbNotes + 1 }
         if (rateAlloCine > 0) { nbNotes = nbNotes + 1 }
         if (rateSensCritique > 0) { nbNotes = nbNotes + 1 }
+        if (rateSIMKL > 0) { nbNotes = nbNotes + 1 }
         if (nbNotes == 0) { nbNotes = 1 }
 
         noteTrakt = rateTrakt
@@ -95,6 +94,7 @@ class GraphMiniSerie: UIView {
         noteMetaCritic = rateMetaCritic
         noteAlloCine = rateAlloCine
         noteSensCritique = rateSensCritique
+        noteSIMKL = rateSIMKL
     }
     
     func backgroundCercles() {
@@ -200,6 +200,10 @@ class GraphMiniSerie: UIView {
             offset = offset + 1
             traceUneBarre(noteSensCritique, color: colorSensCritique, offset: offset)
         }
+        if (noteSIMKL > 0) {
+            offset = offset + 1
+            traceUneBarre(noteSIMKL, color: colorSIMKL, offset: offset)
+        }
     }
     
     
@@ -267,6 +271,10 @@ class GraphMiniSerie: UIView {
             offset = offset + 1
             traceUnCercle(noteSensCritique, color: colorSensCritique, offset: offset)
         }
+        if (noteSIMKL > 0) {
+            offset = offset + 1
+            traceUnCercle(noteSIMKL, color: colorSIMKL, offset: offset)
+        }
     }
     
     
@@ -300,7 +308,7 @@ class GraphMiniSerie: UIView {
         let A1 : CGFloat = 08.0
         let A2 : CGFloat = 43.0
         let A3 : CGFloat = 78.0
-        
+    
         #imageLiteral(resourceName: "trakt.ico").draw(in: CGRect(x: A1, y: A1, width: logoSize, height: logoSize))
         #imageLiteral(resourceName: "betaseries.png").draw(in: CGRect(x: A2, y: A1, width: logoSize, height: logoSize))
         #imageLiteral(resourceName: "imdb.ico").draw(in: CGRect(x: A3, y: A1, width: logoSize, height: logoSize))
@@ -410,7 +418,13 @@ class GraphMiniSerie: UIView {
             notes.append(CGFloat(noteSensCritique))
             logos.append(#imageLiteral(resourceName: "senscritique.png"))
         }
+        if (noteSIMKL > 0) {
+            notes.append(CGFloat(noteSIMKL))
+            logos.append(#imageLiteral(resourceName: "simkl.png"))
+        }
 
+        if (notes.count == 0) { return }
+        
         UIColor.systemBlue.setStroke()
         UIColor.systemBlue.withAlphaComponent(0.4).setFill()
         let path2 : UIBezierPath = UIBezierPath()
