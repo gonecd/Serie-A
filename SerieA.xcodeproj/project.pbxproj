@@ -239,7 +239,6 @@
 		F19A39802BD4246300A03651 /* Flag_of_Argentina.png in Resources */ = {isa = PBXBuildFile; fileRef = F19A397D2BD4246300A03651 /* Flag_of_Argentina.png */; };
 		F19A39812BD4246300A03651 /* Flag_of_Ireland.png in Resources */ = {isa = PBXBuildFile; fileRef = F19A397E2BD4246300A03651 /* Flag_of_Ireland.png */; };
 		F19A39822BD4246300A03651 /* Flag_of_Ireland.png in Resources */ = {isa = PBXBuildFile; fileRef = F19A397E2BD4246300A03651 /* Flag_of_Ireland.png */; };
-		F19C5825253C7D2700E881DA /* SerieA copy3-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F19C5822253C7D2700E881DA /* SerieA copy3-Info.plist */; };
 		F1A14E642C7A4EEE00082E06 /* Statistiques.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62612BBA23DDE2B100ACCF81 /* Statistiques.swift */; };
 		F1A14E662C7A4EEE00082E06 /* SerieFiche.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62DD87A91FB7838400A9B9EE /* SerieFiche.swift */; };
 		F1A14E672C7A4EEE00082E06 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 621B1D9C20D665B800F4F3BD /* Configuration.swift */; };
@@ -349,6 +348,8 @@
 		F1A14ED12C7A4EEE00082E06 /* allocine.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62921B5622BFE2F800A2BE94 /* allocine.ico */; };
 		F1A14ED32C7A4EEE00082E06 /* Mon activitéExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = F1D77727270A0D7800394176 /* Mon activitéExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		F1A14EDA2C7A501B00082E06 /* iPad13p.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F1A14E5B2C7A4E7B00082E06 /* iPad13p.storyboard */; };
+		F1AD4EC42DA2EED200D11A87 /* Info-iPad13p.plist in Resources */ = {isa = PBXBuildFile; fileRef = F1AD4EC32DA2EED200D11A87 /* Info-iPad13p.plist */; };
+		F1AD4EC62DA2EF9200D11A87 /* Info-iPad.plist in Resources */ = {isa = PBXBuildFile; fileRef = F1AD4EC52DA2EF9200D11A87 /* Info-iPad.plist */; };
 		F1B0E8CE2CEA4CF80016B5B5 /* M6.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F1B0E8CB2CEA4CF80016B5B5 /* M6.jpg */; };
 		F1B0E8CF2CEA4CF80016B5B5 /* M6.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F1B0E8CB2CEA4CF80016B5B5 /* M6.jpg */; };
 		F1B0E8D02CEA4CF80016B5B5 /* M6.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F1B0E8CB2CEA4CF80016B5B5 /* M6.jpg */; };
@@ -409,6 +410,7 @@
 		F1F234962D5FB79700087FF1 /* imdb.ico in Resources */ = {isa = PBXBuildFile; fileRef = 62A581E51FBC5BCB002D8FD3 /* imdb.ico */; };
 		F1F234972D5FB9CE00087FF1 /* 2021_05_15_0u9_Kleki.png in Resources */ = {isa = PBXBuildFile; fileRef = F1FBCD9B265029DA003075D3 /* 2021_05_15_0u9_Kleki.png */; };
 		F1F2349B2D60A6FC00087FF1 /* DataUpdatesExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = F1F234822D5FADAF00087FF1 /* DataUpdatesExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		F1F636642DA2EFD500BB4754 /* Info-iPhone.plist in Resources */ = {isa = PBXBuildFile; fileRef = F1F636632DA2EFD500BB4754 /* Info-iPhone.plist */; };
 		F1FBCD8C265026B3003075D3 /* 2021_05_13_0uk_Kleki.png in Resources */ = {isa = PBXBuildFile; fileRef = F1FBCD87265026B2003075D3 /* 2021_05_13_0uk_Kleki.png */; };
 		F1FBCD8D265026B3003075D3 /* 2021_05_13_0uk_Kleki.png in Resources */ = {isa = PBXBuildFile; fileRef = F1FBCD87265026B2003075D3 /* 2021_05_13_0uk_Kleki.png */; };
 		F1FBCD8F265026B3003075D3 /* 2021_05_15_0te_Kleki.png in Resources */ = {isa = PBXBuildFile; fileRef = F1FBCD88265026B2003075D3 /* 2021_05_15_0te_Kleki.png */; };
@@ -566,7 +568,6 @@
 		62DD876F1FB766C600A9B9EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		62DD87761FB766C600A9B9EE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		62DD87791FB766C600A9B9EE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		62DD877B1FB766C600A9B9EE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		62DD879F1FB76F5D00A9B9EE /* TheTVdb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TheTVdb.swift; sourceTree = "<group>"; };
 		62DD87A31FB76F5D00A9B9EE /* Trakt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Trakt.swift; sourceTree = "<group>"; };
 		62DD87A91FB7838400A9B9EE /* SerieFiche.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerieFiche.swift; sourceTree = "<group>"; };
@@ -622,10 +623,10 @@
 		F19A397A2BD4192A00A03651 /* simkl.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = simkl.png; sourceTree = "<group>"; };
 		F19A397D2BD4246300A03651 /* Flag_of_Argentina.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_Argentina.png; sourceTree = "<group>"; };
 		F19A397E2BD4246300A03651 /* Flag_of_Ireland.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_Ireland.png; sourceTree = "<group>"; };
-		F19C5822253C7D2700E881DA /* SerieA copy3-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "SerieA copy3-Info.plist"; sourceTree = SOURCE_ROOT; };
 		F1A14E5C2C7A4E7B00082E06 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/iPad13p.storyboard; sourceTree = "<group>"; };
-		F1A14ED82C7A4EEE00082E06 /* SerieA-iPad copy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SerieA-iPad copy.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		F1A14ED92C7A4EEF00082E06 /* SerieA-iPad copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "SerieA-iPad copy-Info.plist"; path = "/Users/cyril/Coding/Projets/SerieA/SerieA-iPad copy-Info.plist"; sourceTree = "<absolute>"; };
+		F1A14ED82C7A4EEE00082E06 /* SerieA-iPad13p.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SerieA-iPad13p.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F1AD4EC32DA2EED200D11A87 /* Info-iPad13p.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-iPad13p.plist"; sourceTree = "<group>"; };
+		F1AD4EC52DA2EF9200D11A87 /* Info-iPad.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-iPad.plist"; sourceTree = "<group>"; };
 		F1B0E8CB2CEA4CF80016B5B5 /* M6.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = M6.jpg; sourceTree = "<group>"; };
 		F1B0E8CC2CEA4CF80016B5B5 /* arte.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = arte.jpg; sourceTree = "<group>"; };
 		F1B0E8CD2CEA4CF80016B5B5 /* francetv.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = francetv.jpg; sourceTree = "<group>"; };
@@ -647,6 +648,7 @@
 		F1D7773E2711FB0900394176 /* WidegtView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = WidegtView.swift; path = "Mon activité/WidegtView.swift"; sourceTree = SOURCE_ROOT; };
 		F1D7774527134E6F00394176 /* Mon activitéExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Mon activitéExtension.entitlements"; sourceTree = "<group>"; };
 		F1F234822D5FADAF00087FF1 /* DataUpdatesExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = DataUpdatesExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		F1F636632DA2EFD500BB4754 /* Info-iPhone.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-iPhone.plist"; sourceTree = "<group>"; };
 		F1FBCD87265026B2003075D3 /* 2021_05_13_0uk_Kleki.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2021_05_13_0uk_Kleki.png; sourceTree = "<group>"; };
 		F1FBCD88265026B2003075D3 /* 2021_05_15_0te_Kleki.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2021_05_15_0te_Kleki.png; sourceTree = "<group>"; };
 		F1FBCD89265026B2003075D3 /* 2021_05_13_0ux_Kleki.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2021_05_13_0ux_Kleki.png; sourceTree = "<group>"; };
@@ -663,7 +665,7 @@
 			membershipExceptions = (
 				DataUpdates.swift,
 			);
-			target = F1A14E5E2C7A4EEE00082E06 /* SerieA-iPad copy */;
+			target = F1A14E5E2C7A4EEE00082E06 /* SerieA-iPad13p */;
 		};
 		F1D5FE092D63D956005BCB47 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
@@ -698,7 +700,7 @@
 			membershipExceptions = (
 				SerieNews.swift,
 			);
-			target = F1A14E5E2C7A4EEE00082E06 /* SerieA-iPad copy */;
+			target = F1A14E5E2C7A4EEE00082E06 /* SerieA-iPad13p */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -933,9 +935,9 @@
 		62DD87631FB766C600A9B9EE = {
 			isa = PBXGroup;
 			children = (
+				625F4B022214B05100FE5A5C /* SerieA.entitlements */,
 				F1FFB3952D8F2C9000ED1E4F /* SerieNewsExtension.entitlements */,
 				F1D5FE0D2D63DC24005BCB47 /* DataUpdatesExtension.entitlements */,
-				625F4B022214B05100FE5A5C /* SerieA.entitlements */,
 				F1D7774527134E6F00394176 /* Mon activitéExtension.entitlements */,
 				62DD876E1FB766C600A9B9EE /* iPhone Seriez */,
 				F1D7772C270A0D7800394176 /* Mon activité */,
@@ -944,7 +946,6 @@
 				62DD876D1FB766C600A9B9EE /* Products */,
 				A8D0FF75432B397DCE10E570 /* Pods */,
 				0A631D6EDA1ECD3F1B0500DA /* Frameworks */,
-				F1A14ED92C7A4EEF00082E06 /* SerieA-iPad copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -953,8 +954,8 @@
 			children = (
 				62DD876C1FB766C600A9B9EE /* SerieA.app */,
 				628A13DC236F38E8006B2AD4 /* SerieA-iPad.app */,
+				F1A14ED82C7A4EEE00082E06 /* SerieA-iPad13p.app */,
 				F1D77727270A0D7800394176 /* Mon activitéExtension.appex */,
-				F1A14ED82C7A4EEE00082E06 /* SerieA-iPad copy.app */,
 				F1F234822D5FADAF00087FF1 /* DataUpdatesExtension.appex */,
 				F1FFB3812D8F233D00ED1E4F /* SerieNewsExtension.appex */,
 			);
@@ -976,8 +977,9 @@
 				628A1311236F353B006B2AD4 /* iPad.storyboard */,
 				F1A14E5B2C7A4E7B00082E06 /* iPad13p.storyboard */,
 				62DD87761FB766C600A9B9EE /* Assets.xcassets */,
-				62DD877B1FB766C600A9B9EE /* Info.plist */,
-				F19C5822253C7D2700E881DA /* SerieA copy3-Info.plist */,
+				F1AD4EC52DA2EF9200D11A87 /* Info-iPad.plist */,
+				F1F636632DA2EFD500BB4754 /* Info-iPhone.plist */,
+				F1AD4EC32DA2EED200D11A87 /* Info-iPad13p.plist */,
 			);
 			path = "iPhone Seriez";
 			sourceTree = "<group>";
@@ -1100,9 +1102,9 @@
 			productReference = 62DD876C1FB766C600A9B9EE /* SerieA.app */;
 			productType = "com.apple.product-type.application";
 		};
-		F1A14E5E2C7A4EEE00082E06 /* SerieA-iPad copy */ = {
+		F1A14E5E2C7A4EEE00082E06 /* SerieA-iPad13p */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F1A14ED52C7A4EEE00082E06 /* Build configuration list for PBXNativeTarget "SerieA-iPad copy" */;
+			buildConfigurationList = F1A14ED52C7A4EEE00082E06 /* Build configuration list for PBXNativeTarget "SerieA-iPad13p" */;
 			buildPhases = (
 				F1A14E612C7A4EEE00082E06 /* [CP] Check Pods Manifest.lock */,
 				F1A14E622C7A4EEE00082E06 /* ShellScript */,
@@ -1119,9 +1121,9 @@
 				F1F2349D2D60A6FC00087FF1 /* PBXTargetDependency */,
 				F1FFB3A12D8F64EE00ED1E4F /* PBXTargetDependency */,
 			);
-			name = "SerieA-iPad copy";
+			name = "SerieA-iPad13p";
 			productName = "iPhone Seriez";
-			productReference = F1A14ED82C7A4EEE00082E06 /* SerieA-iPad copy.app */;
+			productReference = F1A14ED82C7A4EEE00082E06 /* SerieA-iPad13p.app */;
 			productType = "com.apple.product-type.application";
 		};
 		F1D77726270A0D7700394176 /* Mon activitéExtension */ = {
@@ -1236,7 +1238,7 @@
 				62DD876B1FB766C600A9B9EE /* SerieA */,
 				628A1379236F38E8006B2AD4 /* SerieA-iPad */,
 				F1D77726270A0D7700394176 /* Mon activitéExtension */,
-				F1A14E5E2C7A4EEE00082E06 /* SerieA-iPad copy */,
+				F1A14E5E2C7A4EEE00082E06 /* SerieA-iPad13p */,
 				F1F234812D5FADAF00087FF1 /* DataUpdatesExtension */,
 				F1FFB3802D8F233D00ED1E4F /* SerieNewsExtension */,
 			);
@@ -1321,6 +1323,7 @@
 				628A13CB236F38E8006B2AD4 /* imdb.ico in Resources */,
 				F124A5C3261A290900E5BD8F /* Flag_of_Italy.png in Resources */,
 				628A13CD236F38E8006B2AD4 /* Air-icon.png in Resources */,
+				F1AD4EC62DA2EF9200D11A87 /* Info-iPad.plist in Resources */,
 				628A13CE236F38E8006B2AD4 /* Flag_of_the_United_Kingdom.png in Resources */,
 				628A13CF236F38E8006B2AD4 /* Refresh-icon.png in Resources */,
 				628A13D0236F38E8006B2AD4 /* iPad.storyboard in Resources */,
@@ -1347,6 +1350,7 @@
 				6231F8ED22833C34009D0351 /* Flag_of_Taiwan.png in Resources */,
 				62B087C2207BEBC6007703FF /* Flag_of_Germany.png in Resources */,
 				62FF97CE2039016B007B658E /* Stop-icon.png in Resources */,
+				F1F636642DA2EFD500BB4754 /* Info-iPhone.plist in Resources */,
 				F1FBCD95265026B3003075D3 /* 2021_05_15_0tl_Kleki.png in Resources */,
 				62B087CA207BEE3A007703FF /* Flag_of_Norway.png in Resources */,
 				F1D470B82CE8FE0600EEF11B /* paramount.jpg in Resources */,
@@ -1395,7 +1399,6 @@
 				62FF97C02038C9A3007B658E /* themoviedb.ico in Resources */,
 				F124A5C2261A290900E5BD8F /* Flag_of_Italy.png in Resources */,
 				F1FBCD8C265026B3003075D3 /* 2021_05_13_0uk_Kleki.png in Resources */,
-				F19C5825253C7D2700E881DA /* SerieA copy3-Info.plist in Resources */,
 				62FF97CF2039016B007B658E /* Play-icon.png in Resources */,
 				62FF97D72039076D007B658E /* Calendar-icon.png in Resources */,
 				62A581E71FBC5BCB002D8FD3 /* imdb.ico in Resources */,
@@ -1444,6 +1447,7 @@
 				F1A14EA02C7A4EEE00082E06 /* Stop-icon.png in Resources */,
 				F1A14EA12C7A4EEE00082E06 /* Flag_of_Norway.png in Resources */,
 				F1A14EA22C7A4EEE00082E06 /* 2021_05_15_0te_Kleki.png in Resources */,
+				F1AD4EC42DA2EED200D11A87 /* Info-iPad13p.plist in Resources */,
 				F1A14EA32C7A4EEE00082E06 /* Flag_of_Canada.png in Resources */,
 				F1A14EA42C7A4EEE00082E06 /* Flag_of_Ireland.png in Resources */,
 				F1A14EA52C7A4EEE00082E06 /* rottentomatoes.ico in Resources */,
@@ -1963,7 +1967,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 6FA7A8CB4C6B2280C6F4BE42 /* Pods-SerieA-iPad.debug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-6";
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-3";
 				CODE_SIGN_ENTITLEMENTS = SerieA.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
@@ -1976,7 +1980,8 @@
 					"$(PROJECT_DIR)/iPhone\\ Seriez/Controllers",
 					"$(PROJECT_DIR)/iPhone\\ Seriez/Controllers",
 				);
-				INFOPLIST_FILE = "SerieA copy3-Info.plist";
+				INFOPLIST_FILE = "iPhone Seriez/Info-iPad.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1997,7 +2002,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1DCFE27F4A55D88A0C5FEFFE /* Pods-SerieA-iPad.release.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-6";
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-3";
 				CODE_SIGN_ENTITLEMENTS = SerieA.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
@@ -2010,7 +2015,8 @@
 					"$(PROJECT_DIR)/iPhone\\ Seriez/Controllers",
 					"$(PROJECT_DIR)/iPhone\\ Seriez/Controllers",
 				);
-				INFOPLIST_FILE = "SerieA copy3-Info.plist";
+				INFOPLIST_FILE = "iPhone Seriez/Info-iPad.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2160,7 +2166,8 @@
 					"$(PROJECT_DIR)/iPhone\\ Seriez/Controllers",
 					"$(PROJECT_DIR)/iPhone\\ Seriez/Controllers",
 				);
-				INFOPLIST_FILE = "iPhone Seriez/Info.plist";
+				INFOPLIST_FILE = "iPhone Seriez/Info-iPhone.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2194,7 +2201,8 @@
 					"$(PROJECT_DIR)/iPhone\\ Seriez/Controllers",
 					"$(PROJECT_DIR)/iPhone\\ Seriez/Controllers",
 				);
-				INFOPLIST_FILE = "iPhone Seriez/Info.plist";
+				INFOPLIST_FILE = "iPhone Seriez/Info-iPhone.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2228,7 +2236,8 @@
 					"$(PROJECT_DIR)/iPhone\\ Seriez/Controllers",
 					"$(PROJECT_DIR)/iPhone\\ Seriez/Controllers",
 				);
-				INFOPLIST_FILE = "SerieA-iPad copy-Info.plist";
+				INFOPLIST_FILE = "iPhone Seriez/Info-iPad13p.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2262,7 +2271,8 @@
 					"$(PROJECT_DIR)/iPhone\\ Seriez/Controllers",
 					"$(PROJECT_DIR)/iPhone\\ Seriez/Controllers",
 				);
-				INFOPLIST_FILE = "SerieA-iPad copy-Info.plist";
+				INFOPLIST_FILE = "iPhone Seriez/Info-iPad13p.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2528,7 +2538,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F1A14ED52C7A4EEE00082E06 /* Build configuration list for PBXNativeTarget "SerieA-iPad copy" */ = {
+		F1A14ED52C7A4EEE00082E06 /* Build configuration list for PBXNativeTarget "SerieA-iPad13p" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F1A14ED62C7A4EEE00082E06 /* Debug */,

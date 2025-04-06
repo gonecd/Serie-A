@@ -31,8 +31,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "F1A14E5E2C7A4EEE00082E06"
-               BuildableName = "SerieA-iPad copy.app"
-               BlueprintName = "SerieA-iPad copy"
+               BuildableName = "SerieA-iPad13p.app"
+               BlueprintName = "SerieA-iPad13p"
                ReferencedContainer = "container:SerieA.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -72,8 +72,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "F1A14E5E2C7A4EEE00082E06"
-            BuildableName = "SerieA-iPad copy.app"
-            BlueprintName = "SerieA-iPad copy"
+            BuildableName = "SerieA-iPad13p.app"
+            BlueprintName = "SerieA-iPad13p"
             ReferencedContainer = "container:SerieA.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -108,8 +108,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "F1A14E5E2C7A4EEE00082E06"
-            BuildableName = "SerieA-iPad copy.app"
-            BlueprintName = "SerieA-iPad copy"
+            BuildableName = "SerieA-iPad13p.app"
+            BlueprintName = "SerieA-iPad13p"
             ReferencedContainer = "container:SerieA.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
