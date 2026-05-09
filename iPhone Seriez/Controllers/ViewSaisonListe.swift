@@ -65,6 +65,7 @@ class ViewSaisonListe: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CellSaisonListe", for: indexPath) as! CellSaisonListe
         
         cell.banniereSerie?.image = getImage(viewList[indexPath.row].poster)
+        arrondir(fenetre: cell.banniereSerie, radius: 6)
         cell.index = indexPath.row
         cell.titre.text = viewList[indexPath.row].serie
         

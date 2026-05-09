@@ -56,7 +56,7 @@ struct MonActiviteView : View {
             Text("Une Série ?").font(.system(size: 20, weight: .heavy))
             Spacer(minLength: 1)
             Text("Saisons en cours").font(.system(size: 14))
-            Image(uiImage: #imageLiteral(resourceName: "120.png")).resizable().frame(width: 30, height: 30, alignment: .trailing)
+            Image(uiImage: #imageLiteral(resourceName: "PlaygroundImage.jpeg")).resizable().frame(width: 30, height: 30, alignment: .trailing)
         }
         
         Spacer()

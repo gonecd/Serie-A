@@ -59,10 +59,24 @@ func getImage(_ url: String) -> UIImage {
 }
 
 
+func loadImage(_ url: String) -> UIImage {
+    if (url == "") { return UIImage() }
+    
+    let imageData = NSData(contentsOf: URL(string: url)!)
+    if (imageData != nil) {
+        return UIImage(data: imageData! as Data)!
+    }
+    else {
+        return UIImage()
+    }
+}
+
+
 func getDrapeau(country : String) -> UIImage {
     switch country {
     case "US": return #imageLiteral(resourceName: "Flag_of_the_United_States.png")
     case "GB": return #imageLiteral(resourceName: "Flag_of_the_United_Kingdom.png")
+    case "EN": return #imageLiteral(resourceName: "Flag_of_the_United_Kingdom.png")
     case "UK": return #imageLiteral(resourceName: "Flag_of_the_United_Kingdom.png")
     case "FR": return #imageLiteral(resourceName: "Flag_of_France.png")
     case "ES": return #imageLiteral(resourceName: "Flag_of_Spain.png")
@@ -187,8 +201,8 @@ func makeMiniGradiant(carre : UIView, couleur : String) {
 
 func arrondir(fenetre: UIView, radius : CGFloat) {
     fenetre.layer.cornerRadius = radius
-    fenetre.layer.borderWidth = 4.0
-    fenetre.layer.borderColor = UIColor.systemFill.cgColor
+//    fenetre.layer.borderWidth = 4.0
+//    fenetre.layer.borderColor = UIColor.systemFill.cgColor
     fenetre.layer.masksToBounds = true
 }
 
@@ -235,7 +249,7 @@ func getStreamers(serie: String, idTVDB: String, idIMDB: String, saison: Int) ->
     var allStreamers : [String] = []
     
     for oneDiffuseur in justWatch.getDiffuseurs(serie: serie, saison: saison) {
-            if (oneDiffuseur.mode == "Streaming") {
+            if ((oneDiffuseur.mode == "Streaming") || (oneDiffuseur.mode == "ADS ???")) {
                 allStreamers.append(oneDiffuseur.logo)
             }
         }
@@ -253,16 +267,19 @@ func getStreamers(serie: String, idTVDB: String, idIMDB: String, saison: Int) ->
 func parentguideColor(severity: String) -> UIColor {
     
     switch severity {
-    case "None": return UIColor.systemGray5
-    case "Mild": return UIColor.systemGreen.withAlphaComponent(0.5)
-    case "Moderate": return UIColor.systemOrange.withAlphaComponent(0.5)
-    case "Severe": return UIColor.systemRed.withAlphaComponent(0.5)
-    case "Faible": return UIColor.systemGreen.withAlphaComponent(0.5)
-    case "Modéré": return UIColor.systemOrange.withAlphaComponent(0.5)
-    case "Élevé": return UIColor.systemRed.withAlphaComponent(0.5)
+    case "None" : return UIColor.systemGreen.withAlphaComponent(0.5)
+    case "Mild", "Faible" : return UIColor.systemYellow.withAlphaComponent(0.5)
+    case "Moderate", "Modéré" : return UIColor.systemOrange.withAlphaComponent(0.5)
+    case "Severe", "Élevé" : return UIColor.systemRed.withAlphaComponent(0.5)
+    case "0": return UIColor.systemGray2
+    case "1": return UIColor.systemGreen.withAlphaComponent(0.5)
+    case "2" : return UIColor.systemYellow.withAlphaComponent(0.5)
+    case "3" : return UIColor.systemOrange.withAlphaComponent(0.5)
+    case "4" : return UIColor.systemRed.withAlphaComponent(0.5)
+    case "5" : return UIColor.systemRed
     default:
         print ("Unknown severity : \(severity)")
-        return UIColor.systemGray6
+        return UIColor.systemGray2
     }
 }
 
@@ -272,7 +289,7 @@ func getLogoDiffuseur(diffuseur: String) -> UIImage {
     switch (diffuseur) {
     case "Netflix": return #imageLiteral(resourceName: "netflix.jpg")
     case "Canal+": return #imageLiteral(resourceName: "canal plus.jpg")
-    case "Apple TV+": return #imageLiteral(resourceName: "apple tv.jpg")
+    case "Apple TV+", "Apple TV": return #imageLiteral(resourceName: "apple tv.jpg")
     case "Disney+": return #imageLiteral(resourceName: "disney.jpg")
     case "Amazon": return #imageLiteral(resourceName: "prime video.jpg")
     case "Prime Video": return #imageLiteral(resourceName: "prime video.jpg")

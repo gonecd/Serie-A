@@ -57,6 +57,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        
+        trakt.start()
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -66,28 +68,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     // Support for background fetch
     func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        var dataUpdates : DataUpdatesEntry = db.loadDataUpdates()
+        var fileUpdates : DataUpdates = db.loadDataUpdates()
         
-        // Dates TV Maze (une fois par jour)
-        if (Calendar.current.isDateInToday(dataUpdates.TVMaze_Dates) == false) {
+        // Dates from TV Maze (une fois par jour)
+        if (Calendar.current.isDateInToday(fileUpdates.TVMaze_Dates) == false) {
             loadDates()
-            dataUpdates.TVMaze_Dates = Date()
+            fileUpdates.TVMaze_Dates = Date()
             checkComingUp()
-            db.saveDataUpdates(dataUpdates: dataUpdates)
+            db.saveDataUpdates(dataUpdates: fileUpdates)
         }
 
-        // Ratings IMDB (une fois par jpur)
-        if ( Calendar.current.isDateInToday(dataUpdates.IMDB_Episodes) == false ) {
+        // Ratings from IMDB (une fois par jpur)
+        if ( Calendar.current.isDateInToday(fileUpdates.IMDB_Rates) == false ) {
             loadIMDB()
-            dataUpdates.IMDB_Rates = Date()
-            db.saveDataUpdates(dataUpdates: dataUpdates)
+            fileUpdates.IMDB_Rates = Date()
+            db.saveDataUpdates(dataUpdates: fileUpdates)
         }
 
-        // Statuses Trakt
+        // Visualisation from Trakt
         db.quickRefresh()
         db.finaliseDB()
-        dataUpdates.Trakt_Viewed = Date()
-        db.saveDataUpdates(dataUpdates: dataUpdates)
+        fileUpdates.Trakt_Viewed = Date()
+        db.saveDataUpdates(dataUpdates: fileUpdates)
 
         db.saveDB()
         completionHandler(.newData)
@@ -101,6 +103,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let components = NSURLComponents(url: url, resolvingAgainstBaseURL: true)
         let source = components!.host
         let params = components!.queryItems
+
+        print("Redirect URI from :\(String(describing: source))")
 
         switch source {
         case "Trakt":

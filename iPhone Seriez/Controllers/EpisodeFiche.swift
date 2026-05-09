@@ -8,13 +8,15 @@
 
 
 import UIKit
-
+import WebKit
 
 class CellCasting : UICollectionViewCell {
     
     @IBOutlet weak var poster: UIImageView!
     @IBOutlet weak var nom: UILabel!
     @IBOutlet weak var perso: UILabel!
+    @IBOutlet weak var type: UILabel!
+    @IBOutlet weak var bouton: UIButton!
 }
 
 class CellComment: UITableViewCell {
@@ -25,7 +27,7 @@ class CellComment: UITableViewCell {
 }
 
 
-class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDataSource, UICollectionViewDelegate {
+class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDataSource, UICollectionViewDelegate, WKNavigationDelegate {
     
     var serie : Serie = Serie(serie: "")
     var image : UIImage = UIImage()
@@ -34,8 +36,9 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
     var allComments : [Critique] = []
     var displayComments : [Critique] = []
     var allCasting : [Casting] = []
-    var parentalGuide : NSMutableDictionary = [:]
-    
+    var IMDBparentalGuide : NSMutableDictionary = [:]
+    var IMDBcodeSource : String = ""
+
     @IBOutlet weak var boutonVuUnEp: UIView!
     
     @IBOutlet weak var resume: UITextView!
@@ -84,6 +87,7 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
     
     @IBOutlet weak var epsNum: UILabel!
     
+    @IBOutlet weak var webView: WKWebView!
     
     
     override func viewDidLoad() {
@@ -91,6 +95,11 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
         
         title = "\(serie.serie) - " + String(format: "S%02dE%02d", saison, episode)
         
+        let url = URL(string: "https://www.imdb.com/fr/title/\(serie.saisons[saison - 1].episodes[episode - 1].idIMdb)/parentalguide/")
+        let request = URLRequest(url: url!)
+        webView.navigationDelegate = self
+        webView.load(request)
+
         if (appConfig.modeCouleurSerie) {
             let mainSerieColor : UIColor = extractDominantColor(from: image) ?? .systemRed
             SerieColor1 = mainSerieColor.withAlphaComponent(0.3)
@@ -198,18 +207,27 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
         queue.addOperation(opeCommentsBetaSeries)
         
         let opParental = BlockOperation(block: {
-            self.parentalGuide = imdb.getParentalGuide(IMDBid: self.serie.saisons[self.saison - 1].episodes[self.episode - 1].idIMdb)
+
+            while (self.IMDBcodeSource == "") { usleep(100) }
+            self.IMDBparentalGuide = imdb.getParentalGuide(page: self.IMDBcodeSource)
+
             OperationQueue.main.addOperation({
-                self.parentSex.backgroundColor = parentguideColor(severity: self.parentalGuide["#nudity"] as? String ?? "None")
-                self.parentViolence.backgroundColor = parentguideColor(severity: self.parentalGuide["#violence"] as? String ?? "None")
-                self.parentProfanity.backgroundColor = parentguideColor(severity: self.parentalGuide["#profanity"] as? String ?? "None")
-                self.parentDrugs.backgroundColor = parentguideColor(severity: self.parentalGuide["#alcohol"] as? String ?? "None")
-                self.parentFrightened.backgroundColor = parentguideColor(severity: self.parentalGuide["#frightening"] as? String ?? "None")
+                self.parentSex.backgroundColor = parentguideColor(severity: self.IMDBparentalGuide["#nudity"] as? String ?? "None")
+                self.parentViolence.backgroundColor = parentguideColor(severity: self.IMDBparentalGuide["#violence"] as? String ?? "None")
+                self.parentProfanity.backgroundColor = parentguideColor(severity: self.IMDBparentalGuide["#profanity"] as? String ?? "None")
+                self.parentDrugs.backgroundColor = parentguideColor(severity: self.IMDBparentalGuide["#alcohol"] as? String ?? "None")
+                self.parentFrightened.backgroundColor = parentguideColor(severity: self.IMDBparentalGuide["#frightening"] as? String ?? "None")
             } )
         } )
         queue.addOperation(opParental)
     }
     
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        webView.evaluateJavaScript("document.getElementsByTagName('html')[0].innerHTML") { innerHTML, error in
+            self.IMDBcodeSource = innerHTML as? String ?? ""
+        }
+    }
+
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -253,28 +271,22 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
                 serie.saisons[saison - 1].nbWatchedEps = serie.saisons[saison - 1].nbWatchedEps + 1
                 if (serie.unfollowed) {
                     serie.unfollowed = false
-                    journal.addInfo(serie: serie.serie, source: srcUneSerie, methode: funcEpisodeVu, texte: "Reprise de la série abandonnée", type: newsListes)
+                    journal.addInfo(serie: serie.serie, source: srcUneSerie, methode: funcEpisodeVu, texte: "Reprise de la série abandonnée", type: codeNewsReprise)
                 }
                 if (serie.watchlist) {
                     serie.watchlist = false
-                    journal.addInfo(serie: serie.serie, source: srcUneSerie, methode: funcEpisodeVu, texte: "Visionnage d'un nouvelle série", type: newsListes)
+                    journal.addInfo(serie: serie.serie, source: srcUneSerie, methode: funcEpisodeVu, texte: "Visionnage d'un nouvelle série", type: codeNewsNouvelleSerie)
                 }
                 
                 boutonVuUnEp.isHidden = true
                 
                 db.updateCompteurs()
                 
-                var dataUpdates : DataUpdatesEntry = db.loadDataUpdates()
-                dataUpdates.UneSerieWatchedEps = Date()
-                db.saveDataUpdates(dataUpdates: dataUpdates)
-
-                if (episode == 1) {
-                    journal.addInfo(serie: serie.serie, source: srcUneSerie, methode: funcEpisodeVu, texte: "Saison \(saison) commencée", type: newsVision)
-                } else if (episode == serie.saisons[saison - 1].nbEpisodes) {
-                    journal.addInfo(serie: serie.serie, source: srcUneSerie, methode: funcEpisodeVu, texte: "Saison \(saison) visionnée", type: newsVision)
+                if (episode == serie.saisons[saison - 1].nbEpisodes) {
+                    journal.addInfo(serie: serie.serie, source: srcUneSerie, methode: funcEpisodeVu, texte: "Saison \(saison) visionnée", type: codeNewsVisionnage)
                     
                     if ( (saison == serie.nbSaisons) && ((serie.status == "ended") || (serie.status == "Ended") || (serie.status == "canceled"))) {
-                        journal.addInfo(serie: serie.serie, source: srcUneSerie, methode: funcEpisodeVu, texte: "La série est vue entièrement", type: newsListes)
+                        journal.addInfo(serie: serie.serie, source: srcUneSerie, methode: funcEpisodeVu, texte: "Série visionnée", type: codeNewsSerieVisionnee)
                     }
                 }
 
@@ -296,9 +308,13 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
         
         cell.backgroundColor = indexPath.row % 2 == 0 ? SerieColor2 : SerieColor1
 
+        arrondir(fenetre: cell, radius: 8)
+        
         cell.poster.image = getImage(allCasting[indexPath.row].photo)
         cell.perso.text = allCasting[indexPath.row].personnage
         cell.nom.text = allCasting[indexPath.row].name
+        cell.type.text = allCasting[indexPath.row].type
+        cell.bouton.tag = allCasting[indexPath.row].idMovieDB
         
         return cell
     }
@@ -345,5 +361,18 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
         }
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let viewController = segue.destination as! SaisonFiche
+        
+        viewController.serie = serie
+        viewController.saison = saison
+        viewController.image = image
+    }
+
+    
+    @IBAction func openActor(_ sender: Any) {
+        let id : String = String((sender.self as! UIButton).tag)
+        UIApplication.shared.open(URL(string: "https://www.themoviedb.org/person/\(id)")!)
+    }
 }
 

@@ -32,6 +32,9 @@ var alloCine       : AlloCine       = AlloCine.init()
 var justWatch      : JustWatch      = JustWatch.init()
 var sensCritique   : SensCritique   = SensCritique.init()
 var yaqcs          : YaQuoiCommeSerie = YaQuoiCommeSerie()
+var youtube        : YouTube          = YouTube()
+var freebox        : FreeBox          = FreeBox.init()
+var commonSens     : CommonSensMedia  = CommonSensMedia.init()
 
 
 
@@ -63,11 +66,15 @@ let funcEpisodeVu       : Int = 3
 let funcSerie           : Int = 4
 
 // Types de news
-let newsDates     : Int = 0
-let newsVision    : Int = 1
-let newsArrets    : Int = 2
-let newsDiffusion : Int = 3
-let newsListes    : Int = 4
+let codeNewsDates           : Int = 0
+let codeNewsVisionnage      : Int = 1
+let codeNewsStatusChg       : Int = 2
+let codeNewsDiffusion       : Int = 3
+let codeNewsWatchlist       : Int = 5
+let codeNewsAbandon         : Int = 6
+let codeNewsReprise         : Int = 7
+let codeNewsNouvelleSerie   : Int = 8
+let codeNewsSerieVisionnee  : Int = 9
 
 
 // Limitations de chargement
@@ -157,3 +164,6 @@ var UIcolor2 : UIColor = mainUIcolor.withAlphaComponent(0.1)
 
 var SerieColor1 : UIColor = .systemGray.withAlphaComponent(0.3)
 var SerieColor2 : UIColor = .systemGray.withAlphaComponent(0.1)
+
+var myDarkLightMode : UIUserInterfaceStyle = .light
+

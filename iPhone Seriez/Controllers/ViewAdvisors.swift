@@ -220,6 +220,8 @@ class ViewAdvisors: UIViewController, UITableViewDelegate, UITableViewDataSource
         cell.backgroundColor = indexPath.row % 2 == 0 ? UIcolor2 : UIcolor1
         
         cell.banniereSerie?.image = getImage(viewList[indexPath.row].poster)
+        arrondir(fenetre: cell.banniereSerie, radius: 8)
+        
         cell.index = indexPath.row
         cell.titre.text = viewList[indexPath.row].serie
         

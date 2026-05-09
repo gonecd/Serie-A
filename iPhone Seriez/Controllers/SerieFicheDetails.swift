@@ -35,6 +35,14 @@ class CellSerieCasting: UITableViewCell {
     @IBOutlet weak var castingRole: UILabel!
 }
 
+class CellSaisonIPhone: UITableViewCell {
+    @IBOutlet weak var saison: UILabel!
+    @IBOutlet weak var debut: UILabel!
+    @IBOutlet weak var fin: UILabel!
+    @IBOutlet weak var episodes: UILabel!
+    @IBOutlet weak var graphe: GraphSaison!
+}
+
 
 
 class SerieFicheDetails: UIViewController, UITableViewDelegate, UITableViewDataSource, CNContactPickerDelegate {
@@ -69,6 +77,10 @@ class SerieFicheDetails: UIViewController, UITableViewDelegate, UITableViewDataS
     @IBOutlet weak var spiderGraph: GraphMiniSerie!
     @IBOutlet weak var note: UILabel!
     @IBOutlet weak var boutonMyRating: UIButton!
+    @IBOutlet weak var cadreNotes: UIView!
+    @IBOutlet weak var cadreNotesParSource: UIView!
+    @IBOutlet weak var cadreNotesParSaison: UIView!
+    
     
     @IBOutlet weak var bRate1: UIButton!
     @IBOutlet weak var bRate2: UIButton!
@@ -114,6 +126,10 @@ class SerieFicheDetails: UIViewController, UITableViewDelegate, UITableViewDataS
                                   rateAlloCine: serie.getFairGlobalRatingAlloCine(),
                                   rateSensCritique: serie.getFairGlobalRatingSensCritique(),
                                   rateSIMKL: serie.getFairGlobalRatingSIMKL() )
+            
+            seriesBackgrounds(carre: cadreNotes)
+            seriesBackgrounds(carre: cadreNotesParSaison)
+            seriesBackgrounds(carre: cadreNotesParSource)
         }
         else {
             noteSelect.isHidden = true
@@ -338,7 +354,7 @@ class SerieFicheDetails: UIViewController, UITableViewDelegate, UITableViewDataS
             return cell
         }
         else if (tableView == tableDetailSaisons) {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "CellDetailSaison", for: indexPath) as! CellSaison
+            let cell = tableView.dequeueReusableCell(withIdentifier: "CellDetailSaisonIPhone", for: indexPath) as! CellSaisonIPhone
             cell.saison.text = "Saison " + String(indexPath.row + 1)
             cell.episodes.text = String(serie.saisons[indexPath.row].nbEpisodes) + " épisodes"
             
@@ -350,8 +366,7 @@ class SerieFicheDetails: UIViewController, UITableViewDelegate, UITableViewDataS
             if (serie.saisons[indexPath.row].ends == ZeroDate) { cell.fin.text = "TBD" }
             else { cell.fin.text = dateFormShort.string(from: serie.saisons[indexPath.row].ends) }
             
-            cell.graphe.setSerie(serie: serie, saison: indexPath.row + 1)
-            cell.graphe.setType(type: 3)
+            cell.graphe.sendSaison(serie.saisons[indexPath.row])
             cell.graphe.setNeedsDisplay()
             
             return cell
@@ -375,8 +390,16 @@ class SerieFicheDetails: UIViewController, UITableViewDelegate, UITableViewDataS
         else if (pressedButton == bRate9) { newRate = 9 }
         
         let viewController = segue.destination as! SerieFiche
-        viewController.serie.myRating = newRate
-        viewController.serie.nomConseil = newConseil
+        
+        if (viewController.serie.myRating != newRate) {
+            viewController.serie.myRating = newRate
+            viewController.updateType = 1
+        }
+        
+        if (viewController.serie.nomConseil != newConseil) {
+            viewController.serie.nomConseil = newConseil
+            viewController.updateType = 2
+        }
     }
     
     
@@ -437,40 +460,6 @@ class SerieFicheDetails: UIViewController, UITableViewDelegate, UITableViewDataS
         advisorImage.image = UIImage(systemName: "person.circle")
         newConseil = ""
     }
-    
-    
-//    func retrieveContactsWithStore(store: CNContactStore)
-//    {
-//        let keysToFetch = [CNContactFormatter.descriptorForRequiredKeys(for: .fullName), CNContactPhoneNumbersKey,CNContactImageDataKey, CNContactEmailAddressesKey] as [Any]
-//        let request = CNContactFetchRequest(keysToFetch: keysToFetch as! [CNKeyDescriptor])
-//        var cnContacts = [CNContact]()
-//        do {
-//            try store.enumerateContacts(with: request){
-//                (contact, cursor) -> Void in
-//                if (!contact.phoneNumbers.isEmpty) {
-//                }
-//                
-//                if contact.isKeyAvailable(CNContactImageDataKey) {
-//                    if let contactImageData = contact.imageData {
-//                        print(UIImage(data: contactImageData)) // Print the image set on the contact
-//                    }
-//                } else { // No Image available }
-//                
-//                if (!contact.emailAddresses.isEmpty) {  }
-//                
-//                cnContacts.append(contact)
-//            }
-//        } catch let error {
-//            NSLog("Fetch contact error: \(error)")
-//        }
-//        
-//        NSLog(">>>> Contact list:")
-//        for contact in cnContacts {
-//            let fullName = CNContactFormatter.string(from: contact, style: .fullName) ?? "No Name"
-//            NSLog("\(fullName): \(contact.phoneNumbers.description)")
-//        }
-//    }
-    
     
 }
 

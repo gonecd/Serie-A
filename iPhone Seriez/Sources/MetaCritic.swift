@@ -55,19 +55,33 @@ class MetaCritic {
         var reqURL : String = ""
         let slug : String = getSlug(serie: serie)
         if (slug == "") { return uneSerie }
-        else { reqURL = "https://backend.metacritic.com/v1/xapi/finder/metacritic/search/\(slug)/web?mcoTypeId=1&limit=5" }
+        else { reqURL = "https://backend.metacritic.com/composer/metacritic/pages/search/\(slug)/web?contentOnly=true&mcoTypeId=1&limit=5" }
+        
         
         let reqResult : NSDictionary = loadAPI(reqAPI: reqURL) as? NSDictionary ?? NSDictionary()
         if (reqResult.count == 0) {
-            print("MetaCritic.getSerieGlobalInfos : \(serie) non trouvée")
+            print("MetaCritic.getSerieGlobalInfos : \(serie) non trouvée (rien)")
             return uneSerie
         }
         
-        let itemsFound = ((reqResult as AnyObject).object(forKey: "data")! as AnyObject).object(forKey: "items") as? NSArray ?? NSArray()
-        if (itemsFound.count == 0) {
-            print("MetaCritic.getSerieGlobalInfos : \(serie) non trouvée")
+        let componentsFound = (reqResult as AnyObject).object(forKey: "components") as? NSArray ?? NSArray()
+        if (componentsFound.count == 0) {
+            print("MetaCritic.getSerieGlobalInfos : \(serie) non trouvée (pas de components)")
             return uneSerie
         }
+        
+        let dataFound = (componentsFound[0] as AnyObject).object(forKey: "data") as? NSDictionary ?? NSDictionary()
+        if (dataFound.count == 0) {
+            print("MetaCritic.getSerieGlobalInfos : \(serie) non trouvée (pas de data)")
+            return uneSerie
+        }
+        
+        let itemsFound = (dataFound as AnyObject).object(forKey: "items") as? NSArray ?? NSArray()
+        if (itemsFound.count == 0) {
+            print("MetaCritic.getSerieGlobalInfos : \(serie) non trouvée (pas d'item)")
+            return uneSerie
+        }
+        
         
         for oneShow in itemsFound {
             let serieTrouvee = ((oneShow as! NSDictionary).object(forKey: "title")) as? String ?? ""
@@ -85,8 +99,7 @@ class MetaCritic {
             }
         }
         
-        print("MetaCritic.getSerieGlobalInfos : \(serie) non trouvée")
-        
+        print("MetaCritic.getSerieGlobalInfos : \(serie) non trouvée (titre non matché)")
         return uneSerie
     }
     
@@ -193,6 +206,7 @@ class MetaCritic {
         case "3%",
             "A Very Secret Service",
             "All the Way Up",
+            "Attack on Titan",
             "Baron Noir",
             "Borgen - Power & Glory",
             "Borgia",
@@ -217,43 +231,37 @@ class MetaCritic {
             "Mafiosa",
             "Maison close",
             "Marianne",
+            "Miskina, Poor Thing",
             "Monty Python's Flying Circus",
+            "Nothing",
             "Of Money and Blood",
-            "One-Punch Man",
+            "Parliament",
             "Polar Park",
             "Real Humans",
             "Savages",
             "Shambles",
             "Spiral",
+            "Standing Up",
             "State of Happiness",
             "The Bureau",
             "The Collapse",
+            "The Frog",
+            "The Messiah",
+            "The Sentinels",
+            "Trapped",
+            "Trom",
             "UFOs",
             "Vernon Subutex",
             "Wentworth",
-            "Attack on Titan",
-            "Miskina, Poor Thing",
-            "Nothing",
-            "Standing Up",
-            "The Frog",
-            "Trapped",
-            "Trom",
             "WorkinGirls":
             return ""            // Not available on Metacritic
-
             
-        case "Shōgun",
-            "Rick and Morty",
-            "SAS: Rogue Heroes",
-            "Star Wars: Andor":
-            return ""            // Available on Metacritic mais mal gérées par UneSerie
-
             
-//        case "Shōgun":            return "shogun-2024"
-//        case "Rick and Morty":    return "rick-morty"
-//        case "SAS: Rogue Heroes": return "rogue-heroes"
-//        case "Star Wars: Andor":  return "andor"
-
+        case "Shōgun":            return "shogun-2024"
+        case "Rick and Morty":    return "rick-morty"
+        case "SAS: Rogue Heroes": return "rogue-heroes"
+        case "Star Wars: Andor":  return "andor"
+            
         default : return serie.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) ?? ""
         }
     }

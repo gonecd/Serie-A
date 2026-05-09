@@ -7,7 +7,10 @@
 //
 
 import UIKit
+import WebKit
 import ContactsUI
+import TagListView
+
 
 class CellSaison: UITableViewCell {
     @IBOutlet weak var saison: UILabel!
@@ -18,13 +21,15 @@ class CellSaison: UITableViewCell {
 }
 
 
-class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource {
+class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, WKNavigationDelegate {
     
     var serie : Serie = Serie(serie: "")
     var image : UIImage = UIImage()
-//    var allCritics : [Critique] = []
     var modeAffichage : Int = 0
-    var parentalGuide : NSMutableDictionary = [:]
+    var IMDBparentalGuide : NSMutableDictionary = [:]
+    var CSMparentalGuide : NSMutableDictionary = [:]
+    var IMDBcodeSource : String = ""
+    var updateType = 0
 
     @IBOutlet weak var resume: UITextView!
     @IBOutlet weak var banniere: UIImageView!
@@ -54,7 +59,6 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
     
     @IBOutlet weak var network: UILabel!
     @IBOutlet weak var status: UILabel!
-    @IBOutlet weak var genre: UILabel!
     @IBOutlet weak var duree: UILabel!
     @IBOutlet weak var certif: UILabel!
     @IBOutlet weak var langue: UILabel!
@@ -86,20 +90,35 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
     @IBOutlet weak var parentProfanity: UILabel!
     @IBOutlet weak var parentFrightened: UILabel!
     
+    @IBOutlet weak var csmparentSex: UILabel!
+    @IBOutlet weak var csmparentViolence: UILabel!
+    @IBOutlet weak var csmparentDrugs: UILabel!
+    @IBOutlet weak var csmparentProfanity: UILabel!
+
     @IBOutlet weak var langueFR: UIButton!
     @IBOutlet weak var langueGB: UIButton!
 
+    @IBOutlet weak var genresTags: TagListView!
+    
+    @IBOutlet weak var webView: WKWebView!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         title = serie.serie
         
+        let url = URL(string: "https://www.imdb.com/fr/title/\(serie.idIMdb)/parentalguide/")
+        let request = URLRequest(url: url!)
+        webView.navigationDelegate = self
+        webView.load(request)
+                
         if (appConfig.modeCouleurSerie) {
             let mainSerieColor : UIColor = extractDominantColor(from: image) ?? .systemRed
             SerieColor1 = mainSerieColor.withAlphaComponent(0.3)
             SerieColor2 = mainSerieColor.withAlphaComponent(0.1)
         }
-
+        
         makeGradiant(carre: boutonDiffuseurs, couleur: "Gris")
         makeGradiant(carre: boutonCritiques, couleur: "Gris")
         makeGradiant(carre: boutonCasting, couleur: "Gris")
@@ -115,6 +134,11 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
             arrondirLabel(texte: parentDrugs, radius: 7)
             arrondirLabel(texte: parentProfanity, radius: 7)
             arrondirLabel(texte: parentFrightened, radius: 7)
+
+            arrondirLabel(texte: csmparentSex, radius: 7)
+            arrondirLabel(texte: csmparentViolence, radius: 7)
+            arrondirLabel(texte: csmparentDrugs, radius: 7)
+            arrondirLabel(texte: csmparentProfanity, radius: 7)
 
             arrondir(fenetre: imageConseil, radius: 30.0)
             refreshAdvisor(name: serie.nomConseil)
@@ -138,6 +162,8 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
             else {
                 boutonWatchlist.isHidden = true
             }
+            
+            arrondir(fenetre: banniere, radius: 6)
         }
         
         
@@ -167,11 +193,9 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
         if (serie.idTrakt == "") { bTrakt.isHidden = true }
         
         // Affichage des genres
-        var allGenres : String = ""
-        for unGenre in serie.genres {
-            allGenres = allGenres + unGenre + " "
-        }
-        genre.text = allGenres
+        genresTags.textFont = UIFont.systemFont(ofSize: 12)
+        genresTags.alignment = .leading
+        genresTags.addTags(serie.genres)
         
         // Arrondir les labels
         arrondirLabel(texte: status, radius: 10)
@@ -180,7 +204,6 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
         arrondirLabel(texte: certif, radius: 8)
         arrondirLabel(texte: langue, radius: 8)
         arrondirLabel(texte: drapeauBgd, radius: 8)
-        arrondirLabel(texte: genre, radius: 8)
         arrondirLabel(texte: annee, radius: 8)
         
         // MyRating de la série
@@ -253,16 +276,32 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
 
         if (UIDevice.current.userInterfaceIdiom == .pad) {
             let opParental = BlockOperation(block: {
-                self.parentalGuide = imdb.getParentalGuide(IMDBid: self.serie.idIMdb)
+
+                while (self.IMDBcodeSource == "") { usleep(100) }
+                self.IMDBparentalGuide = imdb.getParentalGuide(page: self.IMDBcodeSource)
+
                 OperationQueue.main.addOperation({
-                    self.parentSex.backgroundColor = parentguideColor(severity: self.parentalGuide["#nudity"] as? String ?? "None")
-                    self.parentViolence.backgroundColor = parentguideColor(severity: self.parentalGuide["#violence"] as? String ?? "None")
-                    self.parentProfanity.backgroundColor = parentguideColor(severity: self.parentalGuide["#profanity"] as? String ?? "None")
-                    self.parentDrugs.backgroundColor = parentguideColor(severity: self.parentalGuide["#alcohol"] as? String ?? "None")
-                    self.parentFrightened.backgroundColor = parentguideColor(severity: self.parentalGuide["#frightening"] as? String ?? "None")
+                    self.parentSex.backgroundColor = parentguideColor(severity: self.IMDBparentalGuide["#nudity"] as? String ?? "None")
+                    self.parentViolence.backgroundColor = parentguideColor(severity: self.IMDBparentalGuide["#violence"] as? String ?? "None")
+                    self.parentProfanity.backgroundColor = parentguideColor(severity: self.IMDBparentalGuide["#profanity"] as? String ?? "None")
+                    self.parentDrugs.backgroundColor = parentguideColor(severity: self.IMDBparentalGuide["#alcohol"] as? String ?? "None")
+                    self.parentFrightened.backgroundColor = parentguideColor(severity: self.IMDBparentalGuide["#frightening"] as? String ?? "None")
                 } )
             } )
             queue.addOperation(opParental)
+            
+            
+            let opCSMParental = BlockOperation(block: {
+                self.CSMparentalGuide = commonSens.getParentalGuide(serie: self.serie.serie)
+
+                OperationQueue.main.addOperation({
+                    self.csmparentSex.backgroundColor = parentguideColor(severity: self.CSMparentalGuide["#nudity"] as? String ?? "None")
+                    self.csmparentViolence.backgroundColor = parentguideColor(severity: self.CSMparentalGuide["#violence"] as? String ?? "None")
+                    self.csmparentProfanity.backgroundColor = parentguideColor(severity: self.CSMparentalGuide["#profanity"] as? String ?? "None")
+                    self.csmparentDrugs.backgroundColor = parentguideColor(severity: self.CSMparentalGuide["#alcohol"] as? String ?? "None")
+                } )
+            } )
+            queue.addOperation(opCSMParental)
         }
         
         let opeFinalise = BlockOperation(block: {
@@ -277,7 +316,12 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
         queue.addOperation(opeFinalise)
     }
     
-    
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        webView.evaluateJavaScript("document.getElementsByTagName('html')[0].innerHTML") { innerHTML, error in
+            self.IMDBcodeSource = innerHTML as? String ?? ""
+        }
+    }
+
     func refreshAdvisor(name: String) {
         labelConseil.text = name
         
@@ -301,7 +345,8 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
     
     
     func modeSpecifique(mode : Int){
-        let attributes = [NSAttributedString.Key.strikethroughStyle : 1, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14), NSAttributedString.Key.foregroundColor: UIColor.systemBackground] as [NSAttributedString.Key : Any]
+        let attributes = [NSAttributedString.Key.strikethroughStyle : 1, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14)] as [NSAttributedString.Key : Any]
+//        let attributes = [NSAttributedString.Key.strikethroughStyle : 1, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14), NSAttributedString.Key.foregroundColor: UIColor.systemBackground] as [NSAttributedString.Key : Any]
         let titleNoAbandon = NSAttributedString(string: "       Abandon", attributes: attributes)
         let titleNoWatchlist = NSAttributedString(string: "       Watchlist", attributes: attributes)
         
@@ -370,6 +415,8 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        updateType = 0
+        
         if (segue.identifier == "ShowSaison") {
             let viewController = segue.destination as! SaisonFiche
             viewController.serie = serie
@@ -414,13 +461,25 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
     }
     
     @IBAction func unwindToSerieFiche(sender: UIStoryboardSegue) {
-        boutonMyRating.setTitle(String(serie.myRating), for: .normal)
-        boutonMyRating.backgroundColor = colorGradient(borneInf: 0.0, borneSup: 10.0, valeur: CGFloat(serie.myRating))
+        if (updateType == 1) {
+            boutonMyRating.setTitle(String(serie.myRating), for: .normal)
+            boutonMyRating.backgroundColor = colorGradient(borneInf: 0.0, borneSup: 10.0, valeur: CGFloat(serie.myRating))
+
+            if (serie.idTVdb != "") {
+                if (trakt.setMyRating(tvdbID: serie.idTVdb, rating: serie.myRating)) {
+                    db.saveDB()
+                    db.saveAdvisors()
+                }
+            }
+        }
         
-        refreshAdvisor(name: serie.nomConseil)
-        
-        db.saveDB()
-        db.saveAdvisors()
+        if (updateType == 2) {
+            refreshAdvisor(name: serie.nomConseil)
+            db.saveDB()
+            db.saveAdvisors()
+
+            //        https://im5fyobr.fbxos.fr:57058/
+        }
     }
 
     
@@ -446,7 +505,7 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
                     db.fillIndex()
                     boutonWatchlist.isHidden = true
                     
-                    journal.addInfo(serie: serie.serie, source: srcUneSerie, methode: funcSerie, texte: "Suppression de la watchlist", type: newsListes)
+                    journal.addInfo(serie: serie.serie, source: srcUneSerie, methode: funcSerie, texte: "Suppression de la watchlist", type: codeNewsAbandon)
 
                     db.saveDB()
                 }
@@ -459,7 +518,7 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
                     db.fillIndex()
                     boutonWatchlist.isHidden = true
 
-                    journal.addInfo(serie: serie.serie, source: srcUneSerie, methode: funcSerie, texte: "Série ajoutée en watchlist", type: newsListes)
+                    journal.addInfo(serie: serie.serie, source: srcUneSerie, methode: funcSerie, texte: "Série ajoutée en watchlist", type: codeNewsWatchlist)
 
                     db.saveDB()
                 }
@@ -476,7 +535,7 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
                     serie.unfollowed = false
                     boutonAbandon.isHidden = true
 
-                    journal.addInfo(serie: serie.serie, source: srcUneSerie, methode: funcSerie, texte: "Reprise de la série abandonnée", type: newsListes)
+                    journal.addInfo(serie: serie.serie, source: srcUneSerie, methode: funcSerie, texte: "Reprise de la série abandonnée", type: codeNewsReprise)
 
                     db.saveDB()
                 }
@@ -487,7 +546,7 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
                     serie.unfollowed = true
                     boutonAbandon.isHidden = true
 
-                    journal.addInfo(serie: serie.serie, source: srcUneSerie, methode: funcSerie, texte: "Abandon de la série", type: newsListes)
+                    journal.addInfo(serie: serie.serie, source: srcUneSerie, methode: funcSerie, texte: "Abandon de la série", type: codeNewsAbandon)
 
                     db.saveDB()
                 }

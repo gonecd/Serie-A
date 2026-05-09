@@ -69,15 +69,14 @@ class ViewAccueil: UIViewController  {
         super.viewDidLoad()
         appConfig.load()
         reqAccessToContacts()
-        
+                
         // Initialisation sources de données
         trakt.start()
         theTVdb.initializeToken()
+//        freebox.initializeToken()
         
         let queue : OperationQueue = OperationQueue()
-        let opeIMDB = BlockOperation(block: {
-            imdb.loadDataFile()
-        } )
+        let opeIMDB = BlockOperation(block: { imdb.loadDataFile() } )
         queue.addOperation(opeIMDB)
 
         // Chargement de la dernière sauvegarde
@@ -93,6 +92,7 @@ class ViewAccueil: UIViewController  {
         dateFormSource.dateFormat = "yyyy-MM-dd"
 
         journal.load()
+//        journal.clean()
 //        journal.removeDuplicates()
 //        journal.save()
         
@@ -160,6 +160,10 @@ class ViewAccueil: UIViewController  {
             border(texte: cptSaisonsDiffusees)
             border(texte: cptSaisonsAnnoncees)
             
+            arrondir(fenetre: bannerASuivre1, radius: 5)
+            arrondir(fenetre: bannerASuivre2, radius: 5)
+            arrondir(fenetre: bannerASuivre3, radius: 5)
+            
             arrondir(fenetre: diffuseurASuivre1, radius: 4)
             arrondir(fenetre: diffuseurASuivre2, radius: 4)
             arrondir(fenetre: diffuseurASuivre3, radius: 4)
@@ -180,7 +184,16 @@ class ViewAccueil: UIViewController  {
             cptSaisonsDiffusees.text = String(db.valSaisonsDiffusees)
             cptSaisonsAnnoncees.text = String(db.valSaisonsAnnoncees)
             
+            makeGradiant(carre: cadreSeries, couleur: "Blanc")
+            makeGradiant(carre: cadreSaisons, couleur: "Blanc")
+            makeGradiant(carre: cadreDecouverte, couleur: "Blanc")
+            makeGradiant(carre: cadreDivers, couleur: "Blanc")
+            makeGradiant(carre: cadreASuivre, couleur: "Blanc")
+
             refreshASuivre()
+        }
+        else {
+            makeGradiant(carre: cadreSeries, couleur: "Blanc")
         }
     }
     
@@ -473,18 +486,19 @@ class ViewAccueil: UIViewController  {
         
         
 
-        var dataUpdates : DataUpdatesEntry = db.loadDataUpdates()
+        var fileUpdates : DataUpdates = db.loadDataUpdates()
         db.quickRefresh()
-        dataUpdates.Trakt_Viewed = Date()
+        fileUpdates.Trakt_Viewed = Date()
 
         for uneSerie in db.shows {
             if ( (uneSerie.watchlist == false) && (uneSerie.unfollowed == false) && (uneSerie.status != "ended") && (uneSerie.status != "canceled") ) {
                 db.downloadDates(serie : uneSerie)
             }
         }
-        dataUpdates.TVMaze_Dates = Date()
         
-        db.saveDataUpdates(dataUpdates: dataUpdates)
+        fileUpdates.TVMaze_Dates = Date()
+        
+        db.saveDataUpdates(dataUpdates: fileUpdates)
         db.finaliseDB()
         self.viewDidAppear(false)
     }

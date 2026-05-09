@@ -15,6 +15,7 @@ class AlloCine : NSObject {
     let indexWebPage: Dictionary = [
         "A Very Secret Service" : 10224,
         "All the Way Up" : 24293,
+        "Asterix & Obelix: The Big Fight" : 28613,
         "Bref." : 10520,
         "Borgen - Power & Glory" : 31831,
         "Call My Agent!" : 5019,
@@ -23,6 +24,7 @@ class AlloCine : NSObject {
         "Dirk Gently's Holistic Detective Agency" : 20395,
         "Elite" : 22373,
         "Fargo" : 11042,
+        "Hard" : 3703,
         "House of the Dragon" : 25633,
         "Jordskott" : 19051,
         "Lioness" : 27407,
@@ -33,6 +35,7 @@ class AlloCine : NSObject {
         "Of Money and Blood" : 25647,
         "One-Punch Man" : 20669,
         "Parasyte: The Grey" : 32655,
+        "Parliament" : 24791,
         "Real Humans" : 10946,
         "Revolution" : 10591,
         "Savages" : 24290,
@@ -48,10 +51,13 @@ class AlloCine : NSObject {
         "Boss" : 9488,
         "Miskina, Poor Thing" : 28813,
         "Nothing" : 31587,
+        "Secrets We Keep" : 1000000466,
         "Standing Up" : 26113,
         "The Bridge" : 11138,
-        "The Frog" : 35982,
-        "The Seven Deadly Sins" : 19946
+        "The Eternaut" : 30830,
+        "The Messiah" : 31847,
+        "The Sentinels" : 34373,
+        "The Frog" : 35982
     ]
     
     override init() {

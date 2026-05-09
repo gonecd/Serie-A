@@ -8,7 +8,8 @@
 
 import Foundation
 import SwiftSoup
-import Gzip
+import SwiftGzip
+
 
 class IMdb : NSObject {
     var IMDBrates : NSMutableDictionary = NSMutableDictionary()
@@ -20,6 +21,7 @@ class IMdb : NSObject {
         dateFormIMDB.dateFormat = "dd MMM yyyy"
         dateFormIMDB.locale = Locale(identifier: "fr_FR")
     }
+
 
     func downloadData() {
         downloadRatings()
@@ -42,68 +44,44 @@ class IMdb : NSObject {
     
     func downloadRatings() {
         let startChrono  :  Date = Date()
+
+        // Removing previous file
         if FileManager.default.fileExists(atPath: IMdbDir.appendingPathComponent("ratings.tsv").path) {
             try! FileManager.default.removeItem(at: IMdbDir.appendingPathComponent("ratings.tsv"))
         }
         
+        // Loading IMDB gzipped file
         let rawData = NSData(contentsOf :  URL(string :  "https://datasets.imdbws.com/title.ratings.tsv.gz")!)
-        let unzippedData  :  Data = rawData! as Data
-        try! unzippedData.gunzipped().write(to :  IMdbDir.appendingPathComponent("ratings.tsv"))
+        
+        // Extracting data
+        let decompressor = GzipDecompressor()
+        let unzippedData = try! decompressor.unzip(data: rawData! as Data)
+        
+        // Saving IMDB Ratings
+        try! unzippedData.write(to: IMdbDir.appendingPathComponent("ratings.tsv"))
+        
         chrono = chrono + Date().timeIntervalSince(startChrono)
     }
     
         
     func downloadEpisodes() {
         let startChrono: Date = Date()
-//        var listeShows : String = ""
         
         // Loading from IMDB
         if FileManager.default.fileExists(atPath: IMdbDir.appendingPathComponent("episode.tsv").path) {
             try! FileManager.default.removeItem(at: IMdbDir.appendingPathComponent("episode.tsv"))
         }
-        print ("REMOVE FILE = \(Date().timeIntervalSince(startChrono))")
 
-        // Unzipping
+        // Loading IMDB gzipped file
         //  grep tt1641349 data.tsv | awk -F'\t' '{printf "\""$2"-s"$3"-e"$4"\" : \""$1"\",\n"}' | sort
         let rawData = NSData(contentsOf :  URL(string: "https://datasets.imdbws.com/title.episode.tsv.gz")!)
-        print ("DOWNLOAD FILE = \(Date().timeIntervalSince(startChrono))")
-//        let unzippedData  :  Data = rawData! as Data
-//        try! unzippedData.gunzipped().write(to :  IMdbDir.appendingPathComponent("episode.tsv"))
-
         
-        let unzippedData: Data = try! (rawData! as Data).gunzipped()
-        print ("UNZIP FILE = \(Date().timeIntervalSince(startChrono))")
-
-//        // Building my shows list
-//        for oneShow in db.shows {
-//            listeShows.append(oneShow.idIMdb)
-//        }
-//        print ("CREATE IDs LIST = \(Date().timeIntervalSince(startChrono)) - \(listeShows.count) lines")
-//
-//        // Parsing
-//        let str = unzippedData.withUnsafeBytes { String(decoding: $0, as: UTF8.self) }
-//        //let rows = str.utf8.split(separator: UInt8(ascii: "\n"))
-//        let rows = str.components(separatedBy: "\n")
-//        print ("SPLITTING FILE = \(Date().timeIntervalSince(startChrono)) - \(rows.count) lines")
-//
-//        // Selecting my shows
-//        var myEpisodes : String = ""
-//        for row in rows {
-//            //let columns = row.split(separator: UInt8(ascii: "\t"))
-//            let columns = row.components(separatedBy: "\t")
-//            if (columns.count > 2) {
-//                //if(listeShows.contains(String(columns[1])!)) {
-//                if( listeShows.contains(columns[1]) ) {
-//                    myEpisodes = myEpisodes + row + "\n"
-//                }
-//            }
-//        }
-//        print ("PARSING FILE = \(Date().timeIntervalSince(startChrono))")
+        // Extracting data
+        let decompressor = GzipDecompressor()
+        let unzippedData = try! decompressor.unzip(data: rawData! as Data)
 
         // Saving
-        //try! myEpisodes.data(using: .utf8)!.write(to: IMdbDir.appendingPathComponent("episode.tsv"))
         try! unzippedData.write(to: IMdbDir.appendingPathComponent("episode.tsv"))
-        print ("SAVING FILE = \(Date().timeIntervalSince(startChrono))")
 
         chrono = chrono + Date().timeIntervalSince(startChrono)
     }
@@ -190,15 +168,12 @@ class IMdb : NSObject {
         do {
             let page : String = try String(contentsOf: URL(string: url)!, encoding: .utf8)
             let doc : Document = try SwiftSoup.parse(page)
-//            let showList = try doc.select("tr")
-            let showList = try doc.select("div [class='ipc-title ipc-title--base ipc-title--title ipc-title-link-no-icon ipc-title--on-textPrimary sc-a69a4297-2 bqNXEn cli-title with-margin']")
+            let showList = try doc.select("div [class^='ipc-title ipc-title--base ipc-title--title ipc-title-link-no-icon ipc-title--on-textPrimary']")
             
             for oneShow in showList {
                 if (compteur < popularShowsPerSource) {
-//                    let showName : String = try oneShow.select("td")[1].select("a").text()
-//                    let IMDBid : String = try oneShow.select("td")[1].select("a").attr("href").components(separatedBy: "/")[2]
                     let showName : String = try oneShow.text()
-                    let IMDBid : String = try oneShow.select("a").attr("href").components(separatedBy: "/")[2]
+                    let IMDBid : String = try oneShow.select("a").attr("href").components(separatedBy: "/")[3]
 
                     compteur = compteur + 1
                     showNames.append(showName)
@@ -288,7 +263,7 @@ class IMdb : NSObject {
     func getParentalGuide(IMDBid : String) -> NSMutableDictionary {
         let startChrono : Date = Date()
         let result : NSMutableDictionary = NSMutableDictionary()
-        let url : String = "https://www.imdb.com/title/\(IMDBid)/parentalguide"
+        let url : String = "https://www.imdb.com/fr/title/\(IMDBid)/parentalguide/"
         
         result["#nudity"] = "Unknown"
         result["#violence"] = "Unknown"
@@ -299,7 +274,7 @@ class IMdb : NSObject {
         do {
             let page : String = try String(contentsOf: URL(string: url)!, encoding: .utf8)
             let doc : Document = try SwiftSoup.parse(page)
-            let GuideItems = try doc.select("[class*='sc-44677bd0-0 PLgPc']")
+            let GuideItems = try doc.select("[class*='sc-81dc9a3b-0 cKVKFL']")
 
             for guideItem in GuideItems {
                 let section : String = try guideItem.select("a").attr("href")
@@ -310,11 +285,43 @@ class IMdb : NSObject {
                 }
             }
         }
-        catch let error as NSError { print("IMdb failed for getShowList : \(error.localizedDescription)") }
+        catch let error as NSError { print("IMdb failed for getParentalGuide on id \(IMDBid): \(error.localizedDescription)") }
 
         chrono = chrono + Date().timeIntervalSince(startChrono)
         
         return result
     }
+ 
+    
+    func getParentalGuide(page : String) -> NSMutableDictionary {
+        let startChrono : Date = Date()
+        let result : NSMutableDictionary = NSMutableDictionary()
+        
+        result["#nudity"] = "Unknown"
+        result["#violence"] = "Unknown"
+        result["#profanity"] = "Unknown"
+        result["#alcohol"] = "Unknown"
+        result["#frightening"] = "Unknown"
+
+        do {
+            let doc : Document = try SwiftSoup.parse(page)
+            let GuideItems = try doc.select("[class*='sc-81dc9a3b-0 cKVKFL']")
+
+            for guideItem in GuideItems {
+                let section : String = try guideItem.select("a").attr("href")
+                let severity :String = try guideItem.select("div [class='ipc-html-content-inner-div']").text()
+                
+                if (severity != "") {
+                    result[section] = severity
+                }
+            }
+        }
+        catch let error as NSError { print("IMdb failed for getParentalGuide : \(error.localizedDescription)") }
+
+        chrono = chrono + Date().timeIntervalSince(startChrono)
+        
+        return result
+    }
+
     
 }

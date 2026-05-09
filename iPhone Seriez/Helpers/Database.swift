@@ -39,6 +39,11 @@ class Database : NSObject {
             else {
                 for uneSaison in uneSerie.saisons {
                     if (uneSaison.saison-1 < shows[indexDB].saisons.count) {
+                        if ((shows[indexDB].watchlist == true) && (uneSaison.nbWatchedEps != 0)) {
+                            shows[indexDB].watchlist = false
+                            journal.addInfo(serie: shows[indexDB].serie, source: srcTrakt, methode: funcQuickRefresh, texte: "Visionnage d'un nouvelle série", type: codeNewsNouvelleSerie)
+                        }
+                        
                         shows[indexDB].saisons[uneSaison.saison-1].nbWatchedEps = uneSaison.nbWatchedEps
                     }
                 }
@@ -59,7 +64,7 @@ class Database : NSObject {
             else {
                 if (shows[indexDB].unfollowed == false)  {
                     shows[indexDB].unfollowed = true
-                    journal.addInfo(serie: uneSerie.serie, source: srcTrakt, methode: funcQuickRefresh, texte: "Abandon de la série", type: newsListes)
+                    journal.addInfo(serie: uneSerie.serie, source: srcTrakt, methode: funcQuickRefresh, texte: "Abandon de la série", type: codeNewsAbandon)
                 }
             }
         }
@@ -74,12 +79,12 @@ class Database : NSObject {
                 downloadGlobalInfo(serie: uneSerie)
                 uneSerie.watchlist = true
                 shows.append(uneSerie)
-                journal.addInfo(serie: uneSerie.serie, source: srcTrakt, methode: funcQuickRefresh, texte: "Série ajoutée en watchlist", type: newsListes)
+                journal.addInfo(serie: uneSerie.serie, source: srcTrakt, methode: funcQuickRefresh, texte: "Série ajoutée en watchlist", type: codeNewsWatchlist)
             }
             else {
                 if (shows[indexDB].watchlist == false) {
                     shows[indexDB].watchlist = true
-                    journal.addInfo(serie: uneSerie.serie, source: srcTrakt, methode: funcQuickRefresh, texte: "Série ajoutée en watchlist", type: newsListes)
+                    journal.addInfo(serie: uneSerie.serie, source: srcTrakt, methode: funcQuickRefresh, texte: "Série ajoutée en watchlist", type: codeNewsWatchlist)
                 }
             }
         }
@@ -128,24 +133,11 @@ class Database : NSObject {
     func downloadDetailInfo(serie : Serie) {
         trakt.getEpisodes(uneSerie: serie)
         
-//        var needIMDBids : Bool = false
-        
         for uneSaison in serie.saisons {
-//            for unEpisode in uneSaison.episodes {
-//                if ((unEpisode.idIMdb) == "" && (unEpisode.date.compare(Date()) == .orderedAscending) && (unEpisode.date != ZeroDate) ) {
-//                    needIMDBids = true
-//                }
-//            }
-            
-            if (uneSaison.ends == ZeroDate) {
-                if (uneSaison.episodes.count > 0) {
-                    uneSaison.ends = uneSaison.episodes[uneSaison.episodes.count - 1].date
-                }
-            }
+            if (uneSaison.ends == ZeroDate) && (uneSaison.episodes.count > 0) { uneSaison.ends = uneSaison.episodes[uneSaison.episodes.count - 1].date }
+            if (uneSaison.starts == ZeroDate) && (uneSaison.ends != ZeroDate) { uneSaison.starts = uneSaison.ends }
         }
 
-//        if (needIMDBids) { imdb.getSerieIDs(uneSerie: serie) }
-        
         let queue : OperationQueue = OperationQueue()
         
         queue.addOperation(BlockOperation(block: { if (serie.idTVdb != "") { betaSeries.getEpisodesRatings(serie) } } ) )
@@ -164,7 +156,7 @@ class Database : NSObject {
 //        if (serie.serie == "Lupin") { return }
 //        if (serie.serie == "Money Heist") { return }
 
-        let tvMazeResults : (saisons : [Int], debuts : [Date], fins : [Date]) = tvMaze.getSeasonsDates(idTVmaze: serie.idTVmaze)
+        var tvMazeResults : (saisons : [Int], debuts : [Date], fins : [Date]) = tvMaze.getSeasonsDates(idTVmaze: serie.idTVmaze)
         
         for i:Int in 0..<tvMazeResults.saisons.count {
             let seasonIdx : Int = tvMazeResults.saisons[i]-1
@@ -172,6 +164,9 @@ class Database : NSObject {
             if (seasonIdx < serie.saisons.count) {
                 let prevSaisonStart : Date = serie.saisons[seasonIdx].starts
                 let prevSaisonEnd : Date = serie.saisons[seasonIdx].ends
+
+                if (tvMazeResults.debuts[i] != ZeroDate) && (tvMazeResults.fins[i] == ZeroDate)  { tvMazeResults.fins[i] = tvMazeResults.debuts[i] }
+                if (tvMazeResults.debuts[i] == ZeroDate) && (tvMazeResults.fins[i] != ZeroDate)  { tvMazeResults.debuts[i] = tvMazeResults.fins[i] }
 
                 if (tvMazeResults.debuts[i] != ZeroDate) { serie.saisons[seasonIdx].starts = tvMazeResults.debuts[i] }
                 if (tvMazeResults.fins[i] != ZeroDate) { serie.saisons[seasonIdx].ends = tvMazeResults.fins[i] }
@@ -234,6 +229,7 @@ class Database : NSObject {
                 let data = Data(referencing:nsData)
                 
                 shows = try (NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as? [Serie])!
+// WAS :                 shows = try (NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as? [Serie])!
 //                shows = try NSKeyedUnarchiver.unarchivedArrayOfObjects(ofClass: Serie, from: data)!
                 //unarchivedObject(ofClass: [Serie], from: data) as! [Serie]
                 shows = shows.sorted(by: { $0.serie < $1.serie })
@@ -285,12 +281,12 @@ class Database : NSObject {
     
     func checkForUpdates(newSerie: Serie, oldSerie : Serie, methode: Int) {
         if (newSerie.status != oldSerie.status) {
-            journal.addInfo(serie: newSerie.serie, source: srcTrakt, methode: methode, texte: "Changement de status de la série : \(newSerie.status) -> \(oldSerie.status)", type: newsArrets)
+            journal.addInfo(serie: newSerie.serie, source: srcTrakt, methode: methode, texte: "\(oldSerie.status) -> \(newSerie.status)", type: codeNewsStatusChg)
         }
         
         let news : [String] = newSerie.findUpdates(versus: oldSerie)
         for uneNews in news {
-            journal.addInfo(serie: newSerie.serie, source: srcTrakt, methode: methode, texte: uneNews, type: newsDates)
+            journal.addInfo(serie: newSerie.serie, source: srcTrakt, methode: methode, texte: uneNews, type: codeNewsDates)
         }
     }
     
@@ -331,20 +327,20 @@ class Database : NSObject {
     }
     
     
-    func loadDataUpdates() -> DataUpdatesEntry {
-        var dataUpdates : DataUpdatesEntry = DataUpdatesEntry(date: .now, TVMaze_Dates: ZeroDate, Trakt_Viewed: ZeroDate, IMDB_Rates: ZeroDate, IMDB_Episodes: ZeroDate, UneSerieReload: ZeroDate, UneSerieWatchedEps: ZeroDate)
+    func loadDataUpdates() -> DataUpdates {
+        var dataUpdates : DataUpdates = DataUpdates(TVMaze_Dates: ZeroDate, Trakt_Viewed: ZeroDate, Trakt_MyRates: ZeroDate, Trakt_SeriesStatus: ZeroDate, IMDB_Rates: ZeroDate, IMDB_IDs: ZeroDate)
         if let data = UserDefaults(suiteName: "group.Series")!.value(forKey:"DataUpdates") as? Data {
-            dataUpdates = try! PropertyListDecoder().decode(DataUpdatesEntry.self, from: data)
+            do { dataUpdates = try PropertyListDecoder().decode(DataUpdates.self, from: data) }
+            catch { print("Error loading DataUpdates") }
         }
 
         return dataUpdates
     }
     
     
-    func saveDataUpdates(dataUpdates : DataUpdatesEntry) {
+    func saveDataUpdates(dataUpdates : DataUpdates) {
         let sharedContainer = UserDefaults(suiteName: "group.Series")
         sharedContainer?.set(try? PropertyListEncoder().encode(dataUpdates), forKey: "DataUpdates")
-        WidgetCenter.shared.reloadTimelines(ofKind: "DataUpdates")
     }
     
 

@@ -46,70 +46,107 @@ class Configuration: UIViewController
     @IBOutlet weak var ViewFairRates: UIView!
     @IBOutlet weak var viewAdvisors: UIView!
     @IBOutlet weak var viewVideCache: UIView!
-
+    
     @IBOutlet weak var viewData: UIView!
     @IBOutlet weak var viewSources: UIView!
     @IBOutlet weak var viewUpdates: UIView!
     @IBOutlet weak var viewThemes: UIView!
     @IBOutlet weak var viewDivers: UIView!
     
-    @IBOutlet weak var updateTrakt: UILabel!
-    @IBOutlet weak var updateIMDB: UILabel!
+    @IBOutlet weak var updateTraktVisu: UILabel!
+    @IBOutlet weak var updateTraktSeriesStatus: UILabel!
+    @IBOutlet weak var updateTraktMyRates: UILabel!
+    @IBOutlet weak var updateIMDBnotes: UILabel!
+    @IBOutlet weak var updateIMDBids: UILabel!
     @IBOutlet weak var updateTVMaze: UILabel!
     
+    
+    
+    
     @IBOutlet weak var SerieColorSwitch: UISwitch!
+    @IBOutlet weak var DarkLightSwitch: UISwitch!
+    
+    @IBOutlet weak var icon1: UIImageView!
+    @IBOutlet weak var icon2: UIImageView!
+    @IBOutlet weak var icon3: UIImageView!
+    @IBOutlet weak var icon4: UIImageView!
+    @IBOutlet weak var icon5: UIImageView!
+    @IBOutlet weak var icon6: UIImageView!
+    @IBOutlet weak var icon7: UIImageView!
+    @IBOutlet weak var icon8: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         progresData.isHidden = true
         loadingIMDB.isHidden = true
-        updateChronos()
         
         title = "Configuration"
         
-
         makeGradiant(carre: viewReload, couleur : "Gris")
         makeGradiant(carre: viewConnect, couleur : "Gris")
         makeGradiant(carre: viewMyRates, couleur : "Gris")
         makeGradiant(carre: viewIMDBids, couleur : "Gris")
         makeGradiant(carre: viewIMDBratings, couleur : "Gris")
-        makeGradiant(carre: ViewFairRates, couleur : "Gris")
+        
+        makeGradiant(carre: viewUpdates, couleur: "Blanc")
+        makeGradiant(carre: viewThemes, couleur: "Blanc")
+        makeGradiant(carre: viewData, couleur: "Blanc")
 
+        let dataUpdates : DataUpdates = db.loadDataUpdates()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "d MMM à HH:mm"
+        
+        updateTraktVisu.text = dateFormatter.string(from: dataUpdates.Trakt_Viewed)
+        updateTraktSeriesStatus.text = dateFormatter.string(from: dataUpdates.Trakt_SeriesStatus)
+        updateTraktMyRates.text = dateFormatter.string(from: dataUpdates.Trakt_MyRates)
+        updateIMDBnotes.text = dateFormatter.string(from: dataUpdates.IMDB_Rates)
+        updateIMDBids.text = dateFormatter.string(from: dataUpdates.IMDB_IDs)
+        updateTVMaze.text = dateFormatter.string(from: dataUpdates.TVMaze_Dates)
+        
+        switch myDarkLightMode {
+        case .dark: DarkLightSwitch.isOn = true
+        case .light: DarkLightSwitch.isOn = false
+        default: DarkLightSwitch.isOn = false
+        }
+        
+        SerieColorSwitch.setOn(appConfig.modeCouleurSerie, animated: false)
+        DarkLightSwitch.setOn(appConfig.modeDark, animated: false)
+        SerieColorSwitch.onTintColor = mainUIcolor
+        DarkLightSwitch.onTintColor = mainUIcolor
+        
         // iPad spécific
         if (UIDevice.current.userInterfaceIdiom == .pad) {
-            SerieColorSwitch.setOn(appConfig.modeCouleurSerie, animated: false)
-            SerieColorSwitch.onTintColor = mainUIcolor
+            updateChronos()
 
-            makeGradiant(carre: viewData, couleur: "Blanc")
             makeGradiant(carre: viewSources, couleur: "Blanc")
-            makeGradiant(carre: viewUpdates, couleur: "Blanc")
-            makeGradiant(carre: viewThemes, couleur: "Blanc")
             makeGradiant(carre: viewDivers, couleur: "Blanc")
             makeGradiant(carre: viewAdvisors, couleur : "Gris")
             makeGradiant(carre: viewVideCache, couleur : "Gris")
+            makeGradiant(carre: ViewFairRates, couleur : "Gris")
 
-            let dataUpdates : DataUpdatesEntry = db.loadDataUpdates()
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "d MMM à HH:mm"
-
-            updateTrakt.text = dateFormatter.string(from: dataUpdates.Trakt_Viewed)
-            updateIMDB.text = dateFormatter.string(from: dataUpdates.IMDB_Rates)
-            updateTVMaze.text = dateFormatter.string(from: dataUpdates.TVMaze_Dates)
+            iconLook(icone: icon1)
+            iconLook(icone: icon2)
+            iconLook(icone: icon3)
+            iconLook(icone: icon4)
+            iconLook(icone: icon5)
+            iconLook(icone: icon6)
+            iconLook(icone: icon7)
+            iconLook(icone: icon8)
+            
+            makePrettyColorViews(view: colTrakt, couleur: colorTrakt)
+            makePrettyColorViews(view: colTVdb, couleur: colorTVdb)
+            makePrettyColorViews(view: colBetaSeries, couleur: colorBetaSeries)
+            makePrettyColorViews(view: colMovieDB, couleur: colorMoviedb)
+            makePrettyColorViews(view: colIMDB, couleur: colorIMDB)
+            makePrettyColorViews(view: colRottenTom, couleur: colorRottenTomatoes)
+            makePrettyColorViews(view: colTVmaze, couleur: colorTVmaze)
+            makePrettyColorViews(view: colMetaCritic, couleur: colorMetaCritic)
+            makePrettyColorViews(view: colAlloCine, couleur: colorAlloCine)
+            makePrettyColorViews(view: colSensCritique, couleur: colorSensCritique)
+            makePrettyColorViews(view: colSIMKL, couleur: colorSIMKL)
         }
-        
-        makePrettyColorViews(view: colTrakt, couleur: colorTrakt)
-        makePrettyColorViews(view: colTVdb, couleur: colorTVdb)
-        makePrettyColorViews(view: colBetaSeries, couleur: colorBetaSeries)
-        makePrettyColorViews(view: colMovieDB, couleur: colorMoviedb)
-        makePrettyColorViews(view: colIMDB, couleur: colorIMDB)
-        makePrettyColorViews(view: colRottenTom, couleur: colorRottenTomatoes)
-        makePrettyColorViews(view: colTVmaze, couleur: colorTVmaze)
-        makePrettyColorViews(view: colMetaCritic, couleur: colorMetaCritic)
-        makePrettyColorViews(view: colAlloCine, couleur: colorAlloCine)
-        makePrettyColorViews(view: colSensCritique, couleur: colorSensCritique)
-        makePrettyColorViews(view: colSIMKL, couleur: colorSIMKL)
     }
-
+    
     func makePrettyColorViews(view : UIView, couleur : UIColor) {
         view.layer.borderColor = couleur.cgColor
         view.layer.borderWidth = 2.0
@@ -117,7 +154,14 @@ class Configuration: UIViewController
         view.layer.cornerRadius = 8;
     }
     
-     
+
+    func iconLook(icone : UIView) {
+        icone.layer.cornerRadius = 15.0
+        icone.layer.borderWidth = 1.0
+        icone.layer.borderColor = UIColor.label.cgColor
+    }
+
+    
     @IBAction func loadAll(_ sender: Any) {
         progresData.setProgress(0.0, animated: false)
         progresData.isHidden = false
@@ -126,13 +170,13 @@ class Configuration: UIViewController
         var oldDB : [Serie] = []
         var oldIndex : Dictionary = [String:Int]()
         var i : Int  = 0
-
+        
         for oneShow in db.shows {
             oldDB.append(oneShow.partialCopy())
             oldIndex[oneShow.serie] = i
             i = i + 1
         }
-
+        
         
         DispatchQueue.global(qos: .utility).async {
             
@@ -144,10 +188,10 @@ class Configuration: UIViewController
             
             DispatchQueue.main.async { self.encours.text = "Loading Stopped list ..." }
             db.shows = db.merge(db.shows, adds: trakt.getStopped())
-
+            
             DispatchQueue.main.async { self.encours.text = "Loading Watchlist ..." }
             db.shows = db.merge(db.shows, adds: trakt.getWatchlist())
-
+            
             DispatchQueue.main.async { self.encours.text = "Loading IMDB rates ..." }
             imdb.downloadData()
             imdb.loadDataFile()
@@ -175,22 +219,22 @@ class Configuration: UIViewController
                 
                 let indexOldDB : Int = oldIndex[uneSerie.serie] ?? -1
                 if (indexOldDB == -1) {
-                    if (uneSerie.watchlist) { journal.addInfo(serie: uneSerie.serie, source: srcTrakt, methode: funcFullRefresh, texte: "Série ajoutée en watchlist", type: newsListes) }
-                    else if (uneSerie.unfollowed) { journal.addInfo(serie: uneSerie.serie, source: srcTrakt, methode: funcFullRefresh, texte: "Abandon de la série", type: newsListes) }
-                    else { journal.addInfo(serie: uneSerie.serie, source: srcTrakt, methode: funcFullRefresh, texte: "Visionnage d'un nouvelle série", type: newsListes) }
+                    if (uneSerie.watchlist) { journal.addInfo(serie: uneSerie.serie, source: srcTrakt, methode: funcFullRefresh, texte: "Série ajoutée en watchlist", type: codeNewsWatchlist) }
+                    else if (uneSerie.unfollowed) { journal.addInfo(serie: uneSerie.serie, source: srcTrakt, methode: funcFullRefresh, texte: "Abandon de la série", type: codeNewsAbandon) }
+                    else { journal.addInfo(serie: uneSerie.serie, source: srcTrakt, methode: funcFullRefresh, texte: "Visionnage d'un nouvelle série", type: codeNewsNouvelleSerie) }
                 } else {
                     db.checkForUpdates(newSerie: uneSerie, oldSerie: oldDB[indexOldDB], methode: funcFullRefresh)
                 }
-
             }
             
             DispatchQueue.main.async {
                 self.updateChronos()
-
-                var dataUpdates : DataUpdatesEntry = db.loadDataUpdates()
-                dataUpdates.UneSerieReload = Date()
-                db.saveDataUpdates(dataUpdates: dataUpdates)
-
+                
+                var fileUpdates : DataUpdates = db.loadDataUpdates()
+                fileUpdates.IMDB_Rates = Date()
+                fileUpdates.Trakt_Viewed = Date()
+                db.saveDataUpdates(dataUpdates: fileUpdates)
+                
                 db.finaliseDB()
                 db.saveDB()
                 
@@ -207,17 +251,20 @@ class Configuration: UIViewController
     
     
     func updateChronos() {
-        chronoTrakt.text = String(format: "%0.3f sec", trakt.chrono)
-        chronoTVdb.text = String(format: "%0.3f sec", theTVdb.chrono)
-        chronoBetaSeries.text = String(format: "%0.3f sec", betaSeries.chrono)
-        chronoMovieDB.text = String(format: "%0.3f sec", theMoviedb.chrono)
-        chronoIMdb.text = String(format: "%0.3f sec", imdb.chrono)
-        chronoRottenTom.text = String(format: "%0.3f sec", rottenTomatoes.chrono)
-        chronoTVmaze.text = String(format: "%0.3f sec", tvMaze.chrono)
-        chronoMetaCritic.text = String(format: "%0.3f sec", metaCritic.chrono)
-        chronoAlloCine.text = String(format: "%0.3f sec", alloCine.chrono)
-        chronoSensCritique.text = String(format: "%0.3f sec", sensCritique.chrono)
-        chronoSIMKL.text = String(format: "%0.3f sec", simkl.chrono)
+        // iPad spécific
+        if (UIDevice.current.userInterfaceIdiom == .pad) {
+            chronoTrakt.text = String(format: "%0.3f sec", trakt.chrono)
+            chronoTVdb.text = String(format: "%0.3f sec", theTVdb.chrono)
+            chronoBetaSeries.text = String(format: "%0.3f sec", betaSeries.chrono)
+            chronoMovieDB.text = String(format: "%0.3f sec", theMoviedb.chrono)
+            chronoIMdb.text = String(format: "%0.3f sec", imdb.chrono)
+            chronoRottenTom.text = String(format: "%0.3f sec", rottenTomatoes.chrono)
+            chronoTVmaze.text = String(format: "%0.3f sec", tvMaze.chrono)
+            chronoMetaCritic.text = String(format: "%0.3f sec", metaCritic.chrono)
+            chronoAlloCine.text = String(format: "%0.3f sec", alloCine.chrono)
+            chronoSensCritique.text = String(format: "%0.3f sec", sensCritique.chrono)
+            chronoSIMKL.text = String(format: "%0.3f sec", simkl.chrono)
+        }
     }
     
     
@@ -241,11 +288,11 @@ class Configuration: UIViewController
             DispatchQueue.main.async {
                 self.loadingIMDB.stopAnimating()
                 self.loadingIMDB.isHidden = true
-
-                var dataUpdates : DataUpdatesEntry = db.loadDataUpdates()
-                dataUpdates.IMDB_Rates = Date()
-                db.saveDataUpdates(dataUpdates: dataUpdates)
-
+                
+                var fileUpdates : DataUpdates = db.loadDataUpdates()
+                fileUpdates.IMDB_Rates = Date()
+                db.saveDataUpdates(dataUpdates: fileUpdates)
+                
                 db.saveDB()
             }
         }
@@ -258,9 +305,13 @@ class Configuration: UIViewController
             uneSerie.myRating = myRates[uneSerie.serie] ?? -1
         }
         
+        var fileUpdates : DataUpdates = db.loadDataUpdates()
+        fileUpdates.Trakt_MyRates = Date()
+        db.saveDataUpdates(dataUpdates: fileUpdates)
+
         db.saveDB()
     }
-
+    
     
     @IBAction func LoadIMDBids(_ sender: Any) {
         loadingIMDB.isHidden = false
@@ -269,15 +320,15 @@ class Configuration: UIViewController
         DispatchQueue.global(qos: .utility).async {
             
             imdb.downloadEpisodes()
-                       
+            
             DispatchQueue.main.async {
                 self.loadingIMDB.stopAnimating()
                 self.loadingIMDB.isHidden = true
                 
-                var dataUpdates : DataUpdatesEntry = db.loadDataUpdates()
-                dataUpdates.IMDB_Episodes = Date()
-                db.saveDataUpdates(dataUpdates: dataUpdates)
-
+                var fileUpdates : DataUpdates = db.loadDataUpdates()
+                fileUpdates.IMDB_IDs = Date()
+                db.saveDataUpdates(dataUpdates: fileUpdates)
+                
                 db.saveDB()
             }
         }
@@ -286,7 +337,7 @@ class Configuration: UIViewController
     @IBAction func ComputeFairRates(_ sender: Any) {
         db.computeFairRates()
     }
-
+    
     @IBAction func themeGris(_ sender: Any)     { setColors(couleur: .systemGray) }
     @IBAction func themeBlanc(_ sender: Any)    { setColors(couleur: .systemBackground) }
     @IBAction func themeBleu(_ sender: Any)     { setColors(couleur: .systemBlue) }
@@ -295,14 +346,14 @@ class Configuration: UIViewController
     @IBAction func themeVert(_ sender: Any)     { setColors(couleur: .systemGreen) }
     @IBAction func themeJaune(_ sender: Any)    { setColors(couleur: .systemYellow) }
     @IBAction func themeMenthe(_ sender: Any)   { setColors(couleur: .systemMint) }
-
+    
     func setColors(couleur: UIColor){
         mainUIcolor = couleur
         UIcolor1 = mainUIcolor.withAlphaComponent(0.3)
         UIcolor2 = mainUIcolor.withAlphaComponent(0.1)
         SerieColor1 = mainUIcolor.withAlphaComponent(0.3)
         SerieColor2 = mainUIcolor.withAlphaComponent(0.1)
-
+        
         switch couleur {
         case .systemGray        : appConfig.couleur = "Gris"
         case .systemBackground  : appConfig.couleur = "Blanc"
@@ -314,26 +365,32 @@ class Configuration: UIViewController
         case .systemMint        : appConfig.couleur = "Menthe"
         default                 : appConfig.couleur = "Gris"
         }
-
+        
         appConfig.save()
-
-        //        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: couleur, NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 28)]
-      
+        
         makeGradiant(carre: viewData, couleur: "Blanc")
-        makeGradiant(carre: viewSources, couleur: "Blanc")
         makeGradiant(carre: viewUpdates, couleur: "Blanc")
         makeGradiant(carre: viewThemes, couleur: "Blanc")
-        makeGradiant(carre: viewDivers, couleur: "Blanc")
+
+        // iPad spécific
+        if (UIDevice.current.userInterfaceIdiom == .pad) {
+            makeGradiant(carre: viewSources, couleur: "Blanc")
+            makeGradiant(carre: viewDivers, couleur: "Blanc")
+        }
     }
     
     @IBAction func switchUseSerieColor(_ sender: Any) {
-        appConfig.modeCouleurSerie = SerieColorSwitch.isOn
         SerieColor1 = UIcolor1
         SerieColor2 = UIcolor2
         
+        appConfig.modeCouleurSerie = SerieColorSwitch.isOn
         appConfig.save()
-        
-//        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: mainUIcolor, NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 28)]
+    }
+    
+    @IBAction func switchDarkLightMode(_ sender: Any) {
+        appConfig.modeDark = DarkLightSwitch.isOn
+        appConfig.save()
+        appConfig.setDarkLightMode()
     }
     
     @IBAction func AdvisorsReload(_ sender: Any) {

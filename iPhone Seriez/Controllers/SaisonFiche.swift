@@ -42,6 +42,7 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
     @IBOutlet weak var viewEpisodes: UIView!
     @IBOutlet weak var viewDiffuseurs: UIView!
     
+    @IBOutlet weak var boutonRecap: UIView!
     
     
     override func viewDidLoad() {
@@ -49,6 +50,13 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         let queue : OperationQueue = OperationQueue()
 
         title = "\(serie.serie) - Saison " + String(saison)
+
+        if (saison > 1) {
+            //youtube.searchRecap(serie: serie.serie, Season: saison-1)
+            makeGradiant(carre: boutonRecap, couleur: "Gris")
+        } else {
+            boutonRecap.isHidden = true
+        }
         
         if (appConfig.modeCouleurSerie) {
             let mainSerieColor : UIColor = extractDominantColor(from: image) ?? .systemRed
@@ -111,9 +119,9 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         arrondirLabel(texte: labelSaison, radius: 10)
         arrondirLabel(texte: labelSaisons, radius: 10)
 
-        arrondir(fenetre: diffuseur1, radius: 4)
-        arrondir(fenetre: diffuseur2, radius: 4)
-        arrondir(fenetre: diffuseur3, radius: 4)
+        arrondir(fenetre: diffuseur1, radius: 6)
+        arrondir(fenetre: diffuseur2, radius: 6)
+        arrondir(fenetre: diffuseur3, radius: 6)
         
         // Récupération des diffuseurs en mode streaming
         
@@ -191,13 +199,28 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
 
         
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let viewController = segue.destination as! EpisodeFiche
-        let ficheEpisode : CellEpisode = sender as! CellEpisode
-        
-        viewController.serie = serie
-        viewController.saison = saison
-        viewController.image = image
-        viewController.episode = Int(ficheEpisode.numero.text!)!
+        if (segue.identifier == "showEpisode") {
+            let viewController = segue.destination as! EpisodeFiche
+            let ficheEpisode : CellEpisode = sender as! CellEpisode
+            
+            viewController.serie = serie
+            viewController.saison = saison
+            viewController.image = image
+            viewController.episode = Int(ficheEpisode.numero.text!)!
+        }
+        else if (segue.identifier == "showSerie") {
+            let viewController = segue.destination as! SerieFiche
+            
+            viewController.serie = serie
+            viewController.image = image
+            viewController.modeAffichage = modeEnCours
+        }
+        else if (segue.identifier == "showRecap") {
+            let viewController = segue.destination as! SaisonFicheDetails
+            
+            viewController.serie = serie
+            viewController.saison = saison
+        }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -220,7 +243,7 @@ class SaisonFiche: UIViewController, UITableViewDelegate, UITableViewDataSource 
         if (serie.saisons[saison - 1].episodes[indexPath.row].date == ZeroDate) { cell.date.text = "TBD" }
         else { cell.date.text = dateFormShort.string(from: serie.saisons[saison - 1].episodes[indexPath.row].date) }
         
-        if ( (indexPath.row + 1) > serie.saisons[saison - 1].nbWatchedEps) { cell.titre.textColor = .darkText }
+        if ( (indexPath.row + 1) > serie.saisons[saison - 1].nbWatchedEps) { cell.titre.textColor = .label }
         else { cell.titre.textColor = .systemGray }
         
         cell.duree.text = String(serie.saisons[saison - 1].episodes[indexPath.row].duration) + " min"

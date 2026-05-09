@@ -58,7 +58,7 @@ class SIMKL : NSObject {
         
         if (idSIMKLOrIMDB == "") { return uneSerie }
         
-        let reqResult : NSDictionary = loadAPI(reqAPI: "https://api.simkl.com/tv/\(idSIMKLOrIMDB)?extended=full&clientid=\(SIMKLClientID)") as? NSDictionary ?? NSDictionary()
+        let reqResult : NSDictionary = loadAPI(reqAPI: "https://api.simkl.com/tv/\(idSIMKLOrIMDB)?extended=full&client_id=\(SIMKLClientID)") as? NSDictionary ?? NSDictionary()
         if (reqResult.count == 0) { return uneSerie }
         
         uneSerie.serie = reqResult.object(forKey: "title") as? String ?? ""
@@ -114,4 +114,44 @@ class SIMKL : NSObject {
         
         return (showNames, showIds)
     }
+    
+    
+    func recherche(Arechercher : String) -> [Serie] {
+        var serieListe : [Serie] = []
+        
+        let reqResult : NSArray = loadAPI(reqAPI: "https://api.simkl.com/search/tv?q=\(Arechercher.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)!)&extended=full&client_id=\(SIMKLClientID)") as! NSArray
+        
+        for oneItem in reqResult {
+            let oneShow : NSDictionary = oneItem as! NSDictionary
+            let newSerie : Serie = Serie(serie: oneShow.object(forKey: "title") as! String)
+            
+            newSerie.idMoviedb = (oneShow.object(forKey: "ids")! as AnyObject).object(forKey: "tmdb") as? String ?? ""
+            newSerie.idSIMKL = String((oneShow.object(forKey: "ids")! as AnyObject).object(forKey: "simkl_id") as? Int ?? 0)
+            newSerie.year = oneShow.object(forKey: "year") as? Int ?? 0
+            newSerie.status = oneShow.object(forKey: "status") as? String ?? ""
+            newSerie.nbEpisodes = oneShow.object(forKey: "ep_count") as? Int ?? 0
+            
+            newSerie.poster = oneShow.object(forKey: "poster") as? String ?? ""
+            if (newSerie.poster != "") { newSerie.poster = "https://simkl.in/posters/" + newSerie.poster + "_ca.jpg" }
+            
+            if (oneShow.object(forKey: "ratings") != nil ) {
+                if ((oneShow.object(forKey: "ratings")! as AnyObject).object(forKey: "simkl") != nil ) {
+                    newSerie.ratingSIMKL = Int(10 * (((oneShow.object(forKey: "ratings")! as AnyObject).object(forKey: "simkl")! as AnyObject).object(forKey: "rating") as? Double ?? 0.0))
+                    newSerie.ratersSIMKL = ((oneShow.object(forKey: "ratings")! as AnyObject).object(forKey: "simkl")! as AnyObject).object(forKey: "votes") as? Int ?? 0
+                }
+                
+                if ((oneShow.object(forKey: "ratings")! as AnyObject).object(forKey: "imdb") != nil ) {
+                    newSerie.ratingIMDB = Int(10 * (((oneShow.object(forKey: "ratings")! as AnyObject).object(forKey: "imdb")! as AnyObject).object(forKey: "rating") as? Double ?? 0.0))
+                    newSerie.ratersIMDB = ((oneShow.object(forKey: "ratings")! as AnyObject).object(forKey: "imdb")! as AnyObject).object(forKey: "votes") as? Int ?? 0
+                }
+            }
+            
+            newSerie.watchlist = true
+            
+            serieListe.append(newSerie)
+        }
+        
+        return serieListe
+    }
+
 }

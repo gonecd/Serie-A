@@ -68,15 +68,6 @@ class ViewPropals: UIViewController, UICollectionViewDataSource, UICollectionVie
     @IBOutlet weak var viewCollection: UICollectionView!
     @IBOutlet weak var selectBarre: UISegmentedControl!
     
-//    @IBOutlet weak var boutonTrakt: UIButton!
-//    @IBOutlet weak var boutonBetaSeries: UIButton!
-//    @IBOutlet weak var boutonTVMaze: UIButton!
-//    @IBOutlet weak var boutonAlloCine: UIButton!
-//    @IBOutlet weak var boutonMovieDB: UIButton!
-//    @IBOutlet weak var boutonRottenTom: UIButton!
-//    @IBOutlet weak var boutonIMDB: UIButton!
-//    @IBOutlet weak var boutonMetaCritic: UIButton!
-    
     // New structures
     var allPropositions : [SrcProposition] = []
     var allSuggestions : [Suggestion] = []
@@ -253,11 +244,13 @@ class ViewPropals: UIViewController, UICollectionViewDataSource, UICollectionVie
                 toBeAdded = true
             }
             
-            if (unePropale.typeid == srcIMdb)     { uneSuggestion!.IMDBid = unePropale.id }
-            if (unePropale.typeid == srcTVMaze)   { uneSuggestion!.TVMazeID = unePropale.id }
-            if (unePropale.typeid == srcAlloCine) { uneSuggestion!.AlloCineID = unePropale.id }
-            if (unePropale.typeid == srcMovieDB)  { uneSuggestion!.MovieDBid = unePropale.id }
-            if (unePropale.typeid == srcSIMKL)    { uneSuggestion!.MovieDBid = unePropale.id }
+            if (unePropale.typeid == srcIMdb)       { uneSuggestion!.IMDBid = unePropale.id }
+            if (unePropale.typeid == srcTVMaze)     { uneSuggestion!.TVMazeID = unePropale.id }
+            if (unePropale.typeid == srcAlloCine)   { uneSuggestion!.AlloCineID = unePropale.id }
+            if (unePropale.typeid == srcMovieDB)    { uneSuggestion!.MovieDBid = unePropale.id }
+            if (unePropale.typeid == srcSIMKL)      { uneSuggestion!.MovieDBid = unePropale.id }
+            if (unePropale.typeid == srcTrakt)      { uneSuggestion!.IMDBid = unePropale.id }
+            if (unePropale.typeid == srcBetaSeries) { uneSuggestion!.IMDBid = unePropale.id }
 
             uneSuggestion!.sources.append(unePropale.source)
             
@@ -299,6 +292,8 @@ class ViewPropals: UIViewController, UICollectionViewDataSource, UICollectionVie
         
         cell.titre.text = displayedSeries[indexPath.row].serie
         cell.poster.image = getImage(displayedSeries[indexPath.row].poster)
+        arrondir(fenetre: cell.poster, radius: 8)
+        
         cell.drapeau.image = getDrapeau(country: displayedSeries[indexPath.row].country)
         cell.note.text = String(displayedSeries[indexPath.row].getGlobalRating()) + " %"
         arrondir(texte: cell.note, radius: 8.0)

@@ -38,13 +38,13 @@ public class Saison : NSObject, NSCoding
     func findUpdates(versus: Saison) -> [String] {
         var results : [String] = []
         
-        if (watched()) { return results}
-        
-        if ((abs(starts.timeIntervalSince(versus.starts)/3600) > 36) && (starts != ZeroDate) ) {
+        if (watched()) { return results }
+
+        if ((abs(starts.timeIntervalSince(versus.starts)/3600) > 36) && (starts != ZeroDate) && (starts > Date()) ) {
             results.append("La saison \(saison) débutera le \(dateFormShort.string(from: starts))")
         }
         
-        if ( (abs(ends.timeIntervalSince(versus.ends)/3600) > 36) && (ends != ZeroDate) ) {
+        if ( (abs(ends.timeIntervalSince(versus.ends)/3600) > 36) && (ends != ZeroDate) && (ends > Date()) ) {
             results.append("La saison \(saison) finira le \(dateFormShort.string(from: ends))")
         }
         

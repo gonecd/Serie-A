@@ -60,7 +60,7 @@ struct SerieNewsEntryView : View {
                 Text("Une Série ?").font(.system(size: 20, weight: .heavy))
                 Spacer(minLength: 1)
                 Text("News des séries").font(.system(size: 14))
-                Image(uiImage: #imageLiteral(resourceName: "120.png")).resizable().frame(width: 30, height: 30, alignment: .trailing)
+                Image(uiImage: #imageLiteral(resourceName: "PlaygroundImage.jpeg")).resizable().frame(width: 30, height: 30, alignment: .trailing)
             }
 
             Spacer(minLength: 30)
@@ -88,9 +88,14 @@ struct SerieNewsEntryView : View {
                         switch article.type {
                         case 0: Image(systemName: "calendar").frame(width: iconSize, height: iconSize, alignment: .center).foregroundStyle(.blue)
                         case 1: Image(systemName: "eye").frame(width: iconSize, height: iconSize, alignment: .center).foregroundStyle(.blue)
-                        case 2: Image(systemName: "xmark.square").frame(width: iconSize, height: iconSize, alignment: .center).foregroundStyle(.blue)
+                        case 2: Image(systemName: "switch.2").frame(width: iconSize, height: iconSize, alignment: .center).foregroundStyle(.blue)
                         case 3: Image(systemName: "antenna.radiowaves.left.and.right").frame(width: iconSize, height: iconSize, alignment: .center).foregroundStyle(.blue)
-                        case 4: Image(systemName: "arrowshape.left.arrowshape.right").frame(width: iconSize, height: iconSize, alignment: .center).foregroundStyle(.blue)
+                        case 5: Image(systemName: "list.bullet.clipboard").frame(width: iconSize, height: iconSize, alignment: .center).foregroundStyle(.blue)
+                        case 6: Image(systemName: "trash").frame(width: iconSize, height: iconSize, alignment: .center).foregroundStyle(.blue)
+                        case 7: Image(systemName: "playpause.circle").frame(width: iconSize, height: iconSize, alignment: .center).foregroundStyle(.blue)
+                        case 8: Image(systemName: "playpause.circle").frame(width: iconSize, height: iconSize, alignment: .center).foregroundStyle(.blue)
+                        case 9: Image(systemName: "tray.full").frame(width: iconSize, height: iconSize, alignment: .center).foregroundStyle(.blue)
+
                         default: Image(systemName: "questionmark.app").frame(width: iconSize, height: iconSize, alignment: .center).foregroundStyle(.blue)
                         }
                         Text("  ")

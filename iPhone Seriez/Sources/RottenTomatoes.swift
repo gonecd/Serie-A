@@ -59,7 +59,7 @@ class RottenTomatoes {
             let page : String = try String(contentsOf: URL(string : webPage)!, encoding: .utf8)
             let doc : Document = try SwiftSoup.parse(page)
             
-            let audience : String = try doc.select("media-scorecard").select("[slot='audienceScore']").text()
+            let audience : String = try doc.select("media-scorecard").select("[slot='audience-score']").text()
             uneSerie.ratingRottenTomatoes = Int(audience.components(separatedBy: CharacterSet.decimalDigits.inverted).first!) ?? 0
         }
         catch let error as NSError { print("RottenTomatoes failed for \(serie) : \(error.localizedDescription)") }
@@ -152,7 +152,11 @@ class RottenTomatoes {
         case "Star Wars: Andor":                    return "https://www.rottentomatoes.com/tv/andor"
         case "Borgen - Power & Glory":              return "https://www.rottentomatoes.com/tv/borgen_power_and_glory"
         case "Love, Death & Robots":                return "https://www.rottentomatoes.com/tv/love_death_robots"
-            
+        case "Asterix & Obelix: The Big Fight":     return "https://www.rottentomatoes.com/tv/asterix_and_obelix_the_big_fight"
+        case "It's a Sin":                          return "https://www.rottentomatoes.com/tv/its_a_sin"
+        case "Parliament":                          return "https://www.rottentomatoes.com/tv/parlement"
+        case "The Messiah":                         return "https://www.rottentomatoes.com/tv/la_mesias"
+
         case "The Boys":                            return "https://www.rottentomatoes.com/tv/the_boys_2019"
         case "Vikings":                             return "https://www.rottentomatoes.com/tv/vikings_2013"
         case "The IT Crowd":                        return "https://www.rottentomatoes.com/tv/the_it_crowd_2006"

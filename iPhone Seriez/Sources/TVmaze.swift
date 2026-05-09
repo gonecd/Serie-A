@@ -227,7 +227,7 @@ class TVmaze {
             
             for oneShow in showList {
                 let showName : String = try oneShow.select("div [class='content auto cell']").select("a")[0].text()
-                let TVMazeID : String = try oneShow.select("div [class='content auto cell']").select("a")[0].attr("href").components(separatedBy: "/")[1]
+                let TVMazeID : String = try oneShow.select("div [class='content auto cell']").select("a")[0].attr("href").components(separatedBy: "/")[2]
 
                 showNames.append(showName)
                 showIds.append(TVMazeID)

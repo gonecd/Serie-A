@@ -347,8 +347,10 @@ class TheMoviedb : NSObject {
         if (casting.count != 0) {
             for oneCast in casting {
                 let unActeur : Casting = Casting.init()
+                unActeur.type = "Main casting"
                 unActeur.personnage = ((oneCast as! NSDictionary).object(forKey: "character")) as? String ?? ""
                 unActeur.name = ((oneCast as! NSDictionary).object(forKey: "name")) as? String ?? ""
+                unActeur.idMovieDB = ((oneCast as! NSDictionary).object(forKey: "id")) as? Int ?? 0
                 unActeur.photo = ((oneCast as! NSDictionary).object(forKey: "profile_path")) as? String ?? ""
                 unActeur.photo = "https://image.tmdb.org/t/p/w500" + unActeur.photo
                 
@@ -361,8 +363,10 @@ class TheMoviedb : NSObject {
         if (casting.count != 0) {
             for oneCast in casting {
                 let unActeur : Casting = Casting.init()
+                unActeur.type = "Guest star"
                 unActeur.personnage = ((oneCast as! NSDictionary).object(forKey: "character")) as? String ?? ""
                 unActeur.name = ((oneCast as! NSDictionary).object(forKey: "name")) as? String ?? ""
+                unActeur.idMovieDB = ((oneCast as! NSDictionary).object(forKey: "id")) as? Int ?? 0
                 unActeur.photo = ((oneCast as! NSDictionary).object(forKey: "profile_path")) as? String ?? ""
                 unActeur.photo = "https://image.tmdb.org/t/p/w500" + unActeur.photo
                 

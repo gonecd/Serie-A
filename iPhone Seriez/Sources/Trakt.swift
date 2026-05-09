@@ -100,8 +100,8 @@ class Trakt : NSObject {
             let expiration: Double = defaults.double(forKey: "TraktTokenExpiration")
             self.TokenExpiration = Date.init(timeIntervalSince1970: (expiration))
             
-            // On refresh le token s'il expire dans moins de 2 mois
-            if (self.TokenExpiration.timeIntervalSinceNow < 5000000) {
+            // On refresh le token s'il expire dans moins de 3 jours (was 2 mois = 5000000)
+            if (self.TokenExpiration.timeIntervalSinceNow < 250000) {
                 self.refreshToken(self.RefreshToken)
             }
         }

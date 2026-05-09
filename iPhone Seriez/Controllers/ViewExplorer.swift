@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import TagListView
 
 class CellExplorerListe: UITableViewCell {
     
@@ -14,13 +15,13 @@ class CellExplorerListe: UITableViewCell {
     @IBOutlet weak var titre: UILabel!
     @IBOutlet weak var saison: UILabel!
     @IBOutlet weak var miniGraphe: GraphMiniSerie!
-    @IBOutlet weak var genres: UITextView!
     @IBOutlet weak var globalRating: UITextField!
     @IBOutlet weak var myRating: UITextField!
     @IBOutlet weak var status: UITextField!
     @IBOutlet weak var drapeau: UIImageView!
     @IBOutlet weak var network: UIImageView!
     @IBOutlet weak var diffuseur: UIImageView!
+    @IBOutlet weak var genresTags: TagListView!
     
     var index: Int = 0
 }
@@ -181,6 +182,8 @@ class ViewExplorer: UIViewController, UITableViewDelegate, UITableViewDataSource
         cell.backgroundColor = indexPath.row % 2 == 0 ? UIcolor2 : UIcolor1
 
         cell.banniereSerie?.image = getImage(viewList[indexPath.row].poster)
+        arrondir(fenetre: cell.banniereSerie, radius: 6)
+
         cell.index = indexPath.row
         cell.titre.text = viewList[indexPath.row].serie
         cell.saison.text =  String(viewList[indexPath.row].nbSaisons) + " saisons - " + String(viewList[indexPath.row].nbEpisodes) + " épisodes - " + String(viewList[indexPath.row].runtime) + " min"
@@ -206,11 +209,10 @@ class ViewExplorer: UIViewController, UITableViewDelegate, UITableViewDataSource
         cell.myRating.textColor = UIColor.systemBackground
         
         // Affichage des genres
-        var allGenres : String = ""
-        for unGenre in viewList[indexPath.row].genres {
-            allGenres = allGenres + unGenre + " "
-        }
-        cell.genres.text = allGenres
+        cell.genresTags.removeAllTags()
+        cell.genresTags.textFont = UIFont.systemFont(ofSize: 10)
+        cell.genresTags.alignment = .leading
+        cell.genresTags.addTags(viewList[indexPath.row].genres)
         
         // Affichage du status
         arrondir(texte: cell.status, radius: 8.0)

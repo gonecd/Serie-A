@@ -87,7 +87,7 @@ class JustWatch {
         let reqResult : NSDictionary = postAPI(reqAPI: reqURL, body: reqBody) as? NSDictionary ?? NSDictionary()
         
         
-        if (reqResult.object(forKey: "data") != nil) {
+        if (reqResult.object(forKey: "data") != nil && reqResult.object(forKey: "data") is NSDictionary) {
             if ((reqResult.object(forKey: "data") as! NSDictionary).object(forKey: "urlV2") != nil) {
                 if (((reqResult.object(forKey: "data") as! NSDictionary).object(forKey: "urlV2") as! NSDictionary).object(forKey: "node") != nil) {
                     let foundOffers = (((reqResult.object(forKey: "data") as! NSDictionary).object(forKey: "urlV2") as! NSDictionary).object(forKey: "node") as! NSDictionary).object(forKey: "offers") as! NSArray

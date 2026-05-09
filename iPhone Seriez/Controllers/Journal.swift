@@ -80,11 +80,17 @@ class ViewJournal: UIViewController, UITableViewDelegate, UITableViewDataSource 
         }
         
         switch viewNews[indexPath.row].type {
-        case newsListes : cell.typeImage.image = UIImage(systemName: "arrowshape.left.arrowshape.right") ?? UIImage()
-        case newsDiffusion : cell.typeImage.image = UIImage(systemName: "antenna.radiowaves.left.and.right") ?? UIImage()
-        case newsDates : cell.typeImage.image = UIImage(systemName: "calendar") ?? UIImage()
-        case newsVision : cell.typeImage.image = UIImage(systemName: "eye") ?? UIImage()
-        case newsArrets : cell.typeImage.image = UIImage(systemName: "xmark.square") ?? UIImage()
+        case codeNewsDates : cell.typeImage.image = UIImage(systemName: "calendar") ?? UIImage()
+        case codeNewsVisionnage : cell.typeImage.image = UIImage(systemName: "eye") ?? UIImage()
+        case codeNewsStatusChg : cell.typeImage.image = UIImage(systemName: "switch.2") ?? UIImage()
+        case codeNewsDiffusion : cell.typeImage.image = UIImage(systemName: "antenna.radiowaves.left.and.right") ?? UIImage()
+
+        case codeNewsWatchlist : cell.typeImage.image = UIImage(systemName: "list.bullet.clipboard") ?? UIImage()
+        case codeNewsAbandon : cell.typeImage.image = UIImage(systemName: "trash") ?? UIImage()
+        case codeNewsReprise : cell.typeImage.image = UIImage(systemName: "playpause.circle") ?? UIImage()
+        case codeNewsNouvelleSerie : cell.typeImage.image = UIImage(systemName: "playpause.circle") ?? UIImage()
+        case codeNewsSerieVisionnee : cell.typeImage.image = UIImage(systemName: "tray.full") ?? UIImage()
+
         default : cell.typeImage.image = UIImage(systemName: "questionmark.app") ?? UIImage()
         }
         
@@ -104,6 +110,7 @@ class ViewJournal: UIViewController, UITableViewDelegate, UITableViewDataSource 
             else {
                 cell.banner.image = getImage(db.shows[indexDB].poster)
             }
+            arrondir(fenetre: cell.banner, radius: 6)
         } else {
             cell.banner.image = UIImage()
         }
@@ -111,17 +118,31 @@ class ViewJournal: UIViewController, UITableViewDelegate, UITableViewDataSource 
         return cell
     }
     
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let delete = UIContextualAction(style: .destructive, title: "Delete") {  (contextualAction, view, boolValue) in
+            
+            journal.removeInfo(uneNews : self.viewNews[indexPath.row])
+            self.appliquerSelection(self)
+        }
+        delete.backgroundColor = .systemRed
+        
+        return UISwipeActionsConfiguration(actions: [delete])
+    }
+    
+    
     @IBAction func appliquerSelection(_ sender: Any) {
         viewNews = journal.articles.sorted(by: { $0.date > $1.date })
-
-        if (filterDates.isOn == false) { viewNews = viewNews.filter({$0.type != newsDates})}
-        if (filterVision.isOn == false) { viewNews = viewNews.filter({$0.type != newsVision})}
-        if (filterArrets.isOn == false) { viewNews = viewNews.filter({$0.type != newsArrets})}
-        if (filterDiffusion.isOn == false) { viewNews = viewNews.filter({$0.type != newsDiffusion})}
-        if (filterListes.isOn == false) { viewNews = viewNews.filter({$0.type != newsListes})}
-
+        
+        if (UIDevice.current.userInterfaceIdiom == .pad) {
+            if (filterDates.isOn == false) { viewNews = viewNews.filter({$0.type != codeNewsDates})}
+            if (filterVision.isOn == false) { viewNews = viewNews.filter({$0.type != codeNewsVisionnage})}
+            if (filterArrets.isOn == false) { viewNews = viewNews.filter({$0.type != codeNewsStatusChg})}
+            if (filterDiffusion.isOn == false) { viewNews = viewNews.filter({$0.type != codeNewsDiffusion})}
+            if (filterListes.isOn == false) { viewNews = viewNews.filter({($0.type != codeNewsWatchlist) && ($0.type != codeNewsReprise) && ($0.type != codeNewsNouvelleSerie) && ($0.type != codeNewsSerieVisionnee) && ($0.type != codeNewsAbandon)})}
+        }
+        
         self.table.reloadData()
         self.view.setNeedsDisplay()
     }
-    
 }

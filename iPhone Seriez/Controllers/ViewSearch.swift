@@ -18,7 +18,8 @@ class CellResult: UITableViewCell {
     @IBOutlet weak var sourceBetaSeries: UIImageView!
     @IBOutlet weak var sourceTrakt: UIImageView!
     @IBOutlet weak var sourceMovieDB: UIImageView!
-    
+    @IBOutlet weak var sourceSIMKL: UIImageView!
+
     var index: Int = 0
 }
 
@@ -28,12 +29,14 @@ struct SourceRecherche {
     var BetaSeries  : Bool = false
     var Trakt       : Bool = false
     var MovieDB     : Bool = false
-    
-    public init(foundTVMaze : Bool, foundBetaSeries : Bool, foundTrakt : Bool, foundMovieDB : Bool) {
+    var SIMKL       : Bool = false
+
+    public init(foundTVMaze : Bool, foundBetaSeries : Bool, foundTrakt : Bool, foundMovieDB : Bool, foundSIMKL : Bool) {
         self.TVMaze = foundTVMaze
         self.BetaSeries = foundBetaSeries
         self.Trakt = foundTrakt
         self.MovieDB = foundMovieDB
+        self.SIMKL = foundSIMKL
     }
 }
 
@@ -261,7 +264,8 @@ class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
         if (sourcesTrouvees[indexPath.row].BetaSeries)  { cell.sourceBetaSeries.alpha = alphaFull }  else { cell.sourceBetaSeries.alpha = alphaLight }
         if (sourcesTrouvees[indexPath.row].Trakt)       { cell.sourceTrakt.alpha = alphaFull }       else { cell.sourceTrakt.alpha = alphaLight }
         if (sourcesTrouvees[indexPath.row].MovieDB)     { cell.sourceMovieDB.alpha = alphaFull }     else { cell.sourceMovieDB.alpha = alphaLight }
-        
+        if (sourcesTrouvees[indexPath.row].SIMKL)       { cell.sourceSIMKL.alpha = alphaFull }       else { cell.sourceSIMKL.alpha = alphaLight }
+
         return cell
     }
     
@@ -300,19 +304,21 @@ class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
             var dataBetaSeries  : [Serie] = []
             var dataTheMovieDB  : [Serie] = []
             var dataTVMaze      : [Serie] = []
-            
+            var dataSIMKL       : [Serie] = []
+
             let queue : OperationQueue = OperationQueue()
             
             queue.addOperation(BlockOperation(block: { dataBetaSeries = betaSeries.rechercheParTitre(serieArechercher: searchString) } ))
             queue.addOperation(BlockOperation(block: { dataTheMovieDB = theMoviedb.rechercheParTitre(serieArechercher: searchString) } ))
             queue.addOperation(BlockOperation(block: { dataTVMaze = tvMaze.rechercheParTitre(serieArechercher: searchString) } ))
             queue.addOperation(BlockOperation(block: { dataTrakt = trakt.rechercheParTitre(serieArechercher: searchString) } ))
-            
+            queue.addOperation(BlockOperation(block: { dataSIMKL = simkl.recherche(Arechercher: searchString) } ))
+
             queue.waitUntilAllOperationsAreFinished()
-            (seriesTrouvees, sourcesTrouvees) = mergeResults(dataTrakt: dataTrakt, dataBetaSeries: dataBetaSeries, dataTheMovieDB: dataTheMovieDB, dataTVMaze: dataTVMaze)
+            (seriesTrouvees, sourcesTrouvees) = mergeResults(dataTrakt: dataTrakt, dataBetaSeries: dataBetaSeries, dataTheMovieDB: dataTheMovieDB, dataTVMaze: dataTVMaze, dataSIMKL: dataSIMKL)
             
             cptResults.text = String(seriesTrouvees.count)
-            cptResultsTotal.text = String(dataTrakt.count + dataBetaSeries.count + dataTheMovieDB.count + dataTVMaze.count)
+            cptResultsTotal.text = String(dataTrakt.count + dataBetaSeries.count + dataTheMovieDB.count + dataTVMaze.count + dataSIMKL.count)
         }
         else {
             seriesTrouvees = []
@@ -323,7 +329,7 @@ class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
         searchResults.reloadData()
     }
     
-    func mergeResults(dataTrakt :[Serie], dataBetaSeries :[Serie], dataTheMovieDB :[Serie], dataTVMaze :[Serie]) -> ([Serie], [SourceRecherche]) {
+    func mergeResults(dataTrakt :[Serie], dataBetaSeries :[Serie], dataTheMovieDB :[Serie], dataTVMaze :[Serie], dataSIMKL :[Serie]) -> ([Serie], [SourceRecherche]) {
         var result : [Serie] = []
         var sources : [SourceRecherche] = []
         
@@ -338,16 +344,18 @@ class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
             var uneSerieMovieDB : Serie = emptySerie
             var uneSerieTVMaze : Serie = emptySerie
             var uneSerieIMDB : Serie = emptySerie
+            var uneSerieSIMKL : Serie = emptySerie
             uneSerieIMDB = imdb.getSerieGlobalInfos(idIMDB: uneSerieTrakt.idIMdb)
-            var source : SourceRecherche = SourceRecherche.init(foundTVMaze: false, foundBetaSeries: false, foundTrakt: true, foundMovieDB: false)
+            var source : SourceRecherche = SourceRecherche.init(foundTVMaze: false, foundBetaSeries: false, foundTrakt: true, foundMovieDB: false, foundSIMKL: false)
             
             for i in 0..<dataBetaSeries.count { if (uneSerieTrakt.idIMdb == dataBetaSeries[i].idIMdb) { uneSerieBetaSeries = dataBetaSeries[i]; source.BetaSeries = true; break; } }
             for i in 0..<dataTheMovieDB.count { if (uneSerieTrakt.idMoviedb == dataTheMovieDB[i].idMoviedb) { uneSerieMovieDB = dataTheMovieDB[i]; source.MovieDB = true; break; } }
             for i in 0..<dataTVMaze.count { if (uneSerieTrakt.idIMdb == dataTVMaze[i].idIMdb) { uneSerieTVMaze = dataTVMaze[i]; source.TVMaze = true; break; } }
-            
+            for i in 0..<dataSIMKL.count { if (uneSerieTrakt.idMoviedb == dataSIMKL[i].idMoviedb) { uneSerieSIMKL = dataSIMKL[i]; source.SIMKL = true; break; } }
+
             uneSerie.cleverMerge(TVdb: emptySerie, Moviedb: uneSerieMovieDB, Trakt: uneSerieTrakt, BetaSeries: uneSerieBetaSeries,
                                  IMDB: uneSerieIMDB, RottenTomatoes: emptySerie, TVmaze: uneSerieTVMaze, MetaCritic: emptySerie,
-                                 AlloCine: emptySerie, SensCritique: emptySerie, SIMKL: emptySerie)
+                                 AlloCine: emptySerie, SensCritique: emptySerie, SIMKL: uneSerieSIMKL)
             
             traitees.append(uneSerie.serie)
             result.append(uneSerie)
@@ -364,15 +372,17 @@ class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
             var uneSerieMovieDB : Serie = emptySerie
             var uneSerieTVMaze : Serie = emptySerie
             var uneSerieIMDB : Serie = emptySerie
+            var uneSerieSIMKL : Serie = emptySerie
             uneSerieIMDB = imdb.getSerieGlobalInfos(idIMDB: uneSerieBetaSeries.idIMdb)
-            var source : SourceRecherche = SourceRecherche.init(foundTVMaze: false, foundBetaSeries: true, foundTrakt: false, foundMovieDB: false)
+            var source : SourceRecherche = SourceRecherche.init(foundTVMaze: false, foundBetaSeries: true, foundTrakt: false, foundMovieDB: false, foundSIMKL: false)
             
             for i in 0..<dataTheMovieDB.count { if (uneSerieBetaSeries.serie == dataTheMovieDB[i].serie) { uneSerieMovieDB = dataTheMovieDB[i]; source.MovieDB = true; break; } }
             for i in 0..<dataTVMaze.count { if (uneSerieBetaSeries.idIMdb == dataTVMaze[i].idIMdb) { uneSerieTVMaze = dataTVMaze[i]; source.TVMaze = true; break; } }
-            
+            for i in 0..<dataSIMKL.count { if (uneSerieBetaSeries.idMoviedb == dataSIMKL[i].idMoviedb) { uneSerieSIMKL = dataSIMKL[i]; source.SIMKL = true; break; } }
+
             uneSerie.cleverMerge(TVdb: emptySerie, Moviedb: uneSerieMovieDB, Trakt: emptySerie, BetaSeries: uneSerieBetaSeries,
                                  IMDB: uneSerieIMDB, RottenTomatoes: emptySerie, TVmaze: uneSerieTVMaze, MetaCritic: emptySerie,
-                                 AlloCine: emptySerie, SensCritique: emptySerie, SIMKL: emptySerie)
+                                 AlloCine: emptySerie, SensCritique: emptySerie, SIMKL: uneSerieSIMKL)
             
             traitees.append(uneSerie.serie)
             result.append(uneSerie)
@@ -388,14 +398,16 @@ class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
             let emptySerie :Serie = Serie(serie:uneSerieTVMaze.serie)
             var uneSerieMovieDB : Serie = emptySerie
             var uneSerieIMDB : Serie = emptySerie
+            var uneSerieSIMKL : Serie = emptySerie
             uneSerieIMDB = imdb.getSerieGlobalInfos(idIMDB: uneSerieTVMaze.idIMdb)
-            var source : SourceRecherche = SourceRecherche.init(foundTVMaze: true, foundBetaSeries: false, foundTrakt: false, foundMovieDB: false)
+            var source : SourceRecherche = SourceRecherche.init(foundTVMaze: true, foundBetaSeries: false, foundTrakt: false, foundMovieDB: false, foundSIMKL: false)
             
             for i in 0..<dataTheMovieDB.count { if (uneSerieTVMaze.serie == dataTheMovieDB[i].serie) { uneSerieMovieDB = dataTheMovieDB[i]; source.MovieDB = true; break; } }
-            
+            for i in 0..<dataSIMKL.count { if (uneSerieTVMaze.idMoviedb == dataSIMKL[i].idMoviedb) { uneSerieSIMKL = dataSIMKL[i]; source.SIMKL = true; break; } }
+
             uneSerie.cleverMerge(TVdb: emptySerie, Moviedb: uneSerieMovieDB, Trakt: emptySerie, BetaSeries: emptySerie,
                                  IMDB: uneSerieIMDB, RottenTomatoes: emptySerie, TVmaze: uneSerieTVMaze, MetaCritic: emptySerie,
-                                 AlloCine: emptySerie, SensCritique: emptySerie, SIMKL: emptySerie)
+                                 AlloCine: emptySerie, SensCritique: emptySerie, SIMKL: uneSerieSIMKL)
             
             traitees.append(uneSerie.serie)
             result.append(uneSerie)
@@ -405,8 +417,31 @@ class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
         // Adding series from MovieDB
         for uneSerieMovieDB in dataTheMovieDB {
             if traitees.contains(uneSerieMovieDB.serie) { continue }
-            let source : SourceRecherche = SourceRecherche.init(foundTVMaze: false, foundBetaSeries: false, foundTrakt: false, foundMovieDB: true)
-            result.append(uneSerieMovieDB)
+            
+            let uneSerie : Serie = Serie(serie: "")
+            
+            let emptySerie :Serie = Serie(serie:uneSerieMovieDB.serie)
+            var uneSerieIMDB : Serie = emptySerie
+            var uneSerieSIMKL : Serie = emptySerie
+            uneSerieIMDB = imdb.getSerieGlobalInfos(idIMDB: uneSerieMovieDB.idIMdb)
+            var source : SourceRecherche = SourceRecherche.init(foundTVMaze: true, foundBetaSeries: false, foundTrakt: false, foundMovieDB: false, foundSIMKL: false)
+            
+            for i in 0..<dataSIMKL.count { if (uneSerieMovieDB.idMoviedb == dataSIMKL[i].idMoviedb) { uneSerieSIMKL = dataSIMKL[i]; source.SIMKL = true; break; } }
+
+            uneSerie.cleverMerge(TVdb: emptySerie, Moviedb: uneSerieMovieDB, Trakt: emptySerie, BetaSeries: emptySerie,
+                                 IMDB: uneSerieIMDB, RottenTomatoes: emptySerie, TVmaze: emptySerie, MetaCritic: emptySerie,
+                                 AlloCine: emptySerie, SensCritique: emptySerie, SIMKL: uneSerieSIMKL)
+            
+            traitees.append(uneSerie.serie)
+            result.append(uneSerie)
+            sources.append(source)
+        }
+
+        // Adding series from SIMKL
+        for uneSerieSIMKL in dataSIMKL {
+            if traitees.contains(uneSerieSIMKL.serie) { continue }
+            let source : SourceRecherche = SourceRecherche.init(foundTVMaze: false, foundBetaSeries: false, foundTrakt: false, foundMovieDB: true, foundSIMKL: false)
+            result.append(uneSerieSIMKL)
             sources.append(source)
         }
         
@@ -454,7 +489,7 @@ class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
             seriesTrouvees = trakt.recherche(serieArechercher: titre.text!, aChercherDans : chercherDans)
         }
         
-        let uneSourceTrakt : SourceRecherche = SourceRecherche.init(foundTVMaze: false, foundBetaSeries: false, foundTrakt: true, foundMovieDB: false)
+        let uneSourceTrakt : SourceRecherche = SourceRecherche.init(foundTVMaze: false, foundBetaSeries: false, foundTrakt: true, foundMovieDB: false, foundSIMKL: false)
         for _ in seriesTrouvees {
             sourcesTrouvees.append(uneSourceTrakt)
         }
@@ -576,7 +611,7 @@ class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
                                                                  langue: tmpLangue,
                                                                  network: tmpNetworks.replacingOccurrences(of: ", ", with: ","))
         
-        let uneSourceMovieDB : SourceRecherche = SourceRecherche.init(foundTVMaze: false, foundBetaSeries: false, foundTrakt: false, foundMovieDB: true)
+        let uneSourceMovieDB : SourceRecherche = SourceRecherche.init(foundTVMaze: false, foundBetaSeries: false, foundTrakt: false, foundMovieDB: true, foundSIMKL: false)
         for _ in seriesTrouvees {
             sourcesTrouvees.append(uneSourceMovieDB)
         }
@@ -694,7 +729,7 @@ class ViewSearch: UIViewController, UITableViewDelegate, UITableViewDataSource {
                                                                  duree: tmpDuree,
                                                                  streamers: tmpStreamers.replacingOccurrences(of: ", ", with: ","))
         
-        let uneSourceBetaSeries : SourceRecherche = SourceRecherche.init(foundTVMaze: false, foundBetaSeries: true, foundTrakt: false, foundMovieDB: false)
+        let uneSourceBetaSeries : SourceRecherche = SourceRecherche.init(foundTVMaze: false, foundBetaSeries: true, foundTrakt: false, foundMovieDB: false, foundSIMKL: false)
         for _ in seriesTrouvees {
             sourcesTrouvees.append(uneSourceBetaSeries)
         }

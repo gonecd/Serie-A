@@ -54,7 +54,7 @@ func loadDates() {
             let news : [String] = uneSerie.findUpdates(versus: svgSerie)
            
             for uneNews in news {
-                journal.addInfo(serie: uneSerie.serie, source: srcTVMaze, methode: funcBackgroundFetch, texte: uneNews, type: newsDates)
+                journal.addInfo(serie: uneSerie.serie, source: srcTVMaze, methode: funcBackgroundFetch, texte: uneNews, type: codeNewsDates)
                 pushNotification(titre: uneSerie.serie, soustitre: "", message: uneNews)
             }
         }
@@ -69,7 +69,7 @@ func checkComingUp() {
             for uneSaison in uneSerie.saisons {
                 if (Calendar.current.isDateInToday(uneSaison.starts)) { pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) commence aujourd'hui") }
                 if (Calendar.current.isDateInToday(uneSaison.ends)) {
-                    journal.addInfo(serie: uneSerie.serie, source: srcTVMaze, methode: funcBackgroundFetch, texte: "La saison \(uneSaison.saison) est entièrement diffusée", type: newsDiffusion)
+                    journal.addInfo(serie: uneSerie.serie, source: srcTVMaze, methode: funcBackgroundFetch, texte: "Saison \(uneSaison.saison) diffusée", type: codeNewsDiffusion)
                     pushNotification(titre: uneSerie.serie, soustitre: "", message: "La saison \(uneSaison.saison) finit aujourd'hui")
                 }
                 

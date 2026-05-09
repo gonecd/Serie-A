@@ -13,6 +13,8 @@ class Casting {
     var name        : String = ""
     var personnage  : String = ""
     var photo       : String = ""
+    var type        : String = ""
+    var idMovieDB   : Int = 0
 }
 
 
