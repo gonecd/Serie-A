@@ -15,6 +15,7 @@ class AlloCine : NSObject {
     let indexWebPage: Dictionary = [
         "A Very Secret Service" : 10224,
         "All the Way Up" : 24293,
+        "Agent Kim Reactivated" : 1000003113,
         "Asterix & Obelix: The Big Fight" : 28613,
         "Bref." : 10520,
         "Borgen - Power & Glory" : 31831,
@@ -54,6 +55,7 @@ class AlloCine : NSObject {
         "Secrets We Keep" : 1000000466,
         "Standing Up" : 26113,
         "The Bridge" : 11138,
+        "The Danish Woman" : 1000000625,
         "The Eternaut" : 30830,
         "The Messiah" : 31847,
         "The Sentinels" : 34373,

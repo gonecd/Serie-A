@@ -153,7 +153,6 @@ class RottenTomatoes {
         case "Borgen - Power & Glory":              return "https://www.rottentomatoes.com/tv/borgen_power_and_glory"
         case "Love, Death & Robots":                return "https://www.rottentomatoes.com/tv/love_death_robots"
         case "Asterix & Obelix: The Big Fight":     return "https://www.rottentomatoes.com/tv/asterix_and_obelix_the_big_fight"
-        case "It's a Sin":                          return "https://www.rottentomatoes.com/tv/its_a_sin"
         case "Parliament":                          return "https://www.rottentomatoes.com/tv/parlement"
         case "The Messiah":                         return "https://www.rottentomatoes.com/tv/la_mesias"
 
@@ -186,6 +185,7 @@ class RottenTomatoes {
             "Shambles",
             "State of Happiness",
             "The Collapse",
+            "The Danish Woman",
             "UFOs",
             "Vernon Subutex",
             "WorkinGirls",
@@ -193,7 +193,7 @@ class RottenTomatoes {
             return ""
             
         default:
-            return "https://www.rottentomatoes.com/tv/\(serie.lowercased().replacingOccurrences(of: "%", with: "_").replacingOccurrences(of: "'", with: "_").replacingOccurrences(of: ",", with: "").replacingOccurrences(of: ".", with: "").replacingOccurrences(of: ":", with: "").replacingOccurrences(of: "-", with: "_").replacingOccurrences(of: " ", with: "_"))"
+            return "https://www.rottentomatoes.com/tv/\(serie.lowercased().replacingOccurrences(of: "%", with: "_").replacingOccurrences(of: "'", with: "").replacingOccurrences(of: ",", with: "").replacingOccurrences(of: ".", with: "").replacingOccurrences(of: ":", with: "").replacingOccurrences(of: "-", with: "_").replacingOccurrences(of: " ", with: "_"))"
         }
     }
     

@@ -107,12 +107,7 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
         super.viewDidLoad()
 
         title = serie.serie
-        
-        let url = URL(string: "https://www.imdb.com/fr/title/\(serie.idIMdb)/parentalguide/")
-        let request = URLRequest(url: url!)
-        webView.navigationDelegate = self
-        webView.load(request)
-                
+                        
         if (appConfig.modeCouleurSerie) {
             let mainSerieColor : UIColor = extractDominantColor(from: image) ?? .systemRed
             SerieColor1 = mainSerieColor.withAlphaComponent(0.3)
@@ -125,6 +120,11 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
         makeGradiant(carre: boutonWatchlist, couleur: "Vert")
         
         if (UIDevice.current.userInterfaceIdiom == .pad) {
+            let url = URL(string: "https://www.imdb.com/fr/title/\(serie.idIMdb)/parentalguide/")
+            let request = URLRequest(url: url!)
+            webView.navigationDelegate = self
+            webView.load(request)
+
             makeGradiant(carre: boutonNoter, couleur: "Bleu")
             makeGradiant(carre: boutonAdvisor, couleur: "Bleu")
             makeGradiant(carre: boutonAbandon, couleur: "Rouge")
@@ -277,7 +277,7 @@ class SerieFiche: UIViewController, UIScrollViewDelegate, UITableViewDelegate, U
         if (UIDevice.current.userInterfaceIdiom == .pad) {
             let opParental = BlockOperation(block: {
 
-                while (self.IMDBcodeSource == "") { usleep(100) }
+                while (self.IMDBcodeSource.count < 10000) { usleep(100) }
                 self.IMDBparentalGuide = imdb.getParentalGuide(page: self.IMDBcodeSource)
 
                 OperationQueue.main.addOperation({

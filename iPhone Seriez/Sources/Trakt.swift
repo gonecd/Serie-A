@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 
 
+
 class Trakt : NSObject {
     var chrono : TimeInterval = 0
 
@@ -26,35 +27,114 @@ class Trakt : NSObject {
         dateFormTrakt.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSX"
     }
     
+    struct TraktPage {
+        var items      : NSArray = NSArray()
+        var page       : Int = 1   // X-Pagination-Page
+        var pageCount  : Int = 1   // X-Pagination-Page-Count
+        var itemCount  : Int = 0   // X-Pagination-Item-Count
+        var limit      : Int = 0   // X-Pagination-Limit (limite RÉELLEMENT appliquée)
+    }
     
-    func loadAPI(reqAPI: String) -> NSObject {
+    func loadAPIWithHeaders(reqAPI: String) -> (body: NSObject, response: HTTPURLResponse?) {
         let startChrono : Date = Date()
         var ended : Bool = false
         var result : NSObject = NSObject()
+        var httpResponse : HTTPURLResponse? = nil
 
         var request = URLRequest(url: URL(string: reqAPI)!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("Bearer \(self.Token)", forHTTPHeaderField: "Authorization")
         request.addValue("2", forHTTPHeaderField: "trakt-api-version")
         request.addValue("\(self.TraktClientID)", forHTTPHeaderField: "trakt-api-key")
-        
+
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if let data = data, let response = response as? HTTPURLResponse {
+                httpResponse = response
                 do {
-                    if (response.statusCode != 200) { print("Trakt::error \(response.statusCode) received for req=\(reqAPI) "); ended = true; return; }
-                    result = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSObject
+                    if (response.statusCode != 200) {
+                        print("Trakt::error \(response.statusCode) received for req=\(reqAPI) "); ended = true; return
+                    }
+                    result = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as! NSObject
                     ended = true
-                    
-                } catch let error as NSError { print("Trakt::failed \(error.localizedDescription) for req=\(reqAPI)"); ended = true; }
-            } else { print(error as Any); ended = true; }
+                } catch let error as NSError {
+                    print("Trakt::failed \(error.localizedDescription) for req=\(reqAPI)"); ended = true
+                }
+            } else { print(error as Any); ended = true }
         }
-        
         task.resume()
         while (!ended) { usleep(1000) }
-        
+
         chrono = chrono + Date().timeIntervalSince(startChrono)
+        return (result, httpResponse)
+    }
+
+    func loadAPI(reqAPI: String) -> NSObject {
+        return loadAPIWithHeaders(reqAPI: reqAPI).body
+    }
+    
+    func loadAPIPage(base: String, page: Int, limit: Int) -> TraktPage {
+        let sep = base.contains("?") ? "&" : "?"
+        let url = "\(base)\(sep)page=\(page)&limit=\(limit)"
+
+        let (body, response) = loadAPIWithHeaders(reqAPI: url)
+
+        var result = TraktPage()
+        result.items = body as? NSArray ?? NSArray()
+        if let r = response {
+            result.page      = Int(r.value(forHTTPHeaderField: "X-Pagination-Page")       ?? "") ?? page
+            result.pageCount = Int(r.value(forHTTPHeaderField: "X-Pagination-Page-Count")  ?? "") ?? 1
+            result.itemCount = Int(r.value(forHTTPHeaderField: "X-Pagination-Item-Count")  ?? "") ?? result.items.count
+            result.limit     = Int(r.value(forHTTPHeaderField: "X-Pagination-Limit")       ?? "") ?? limit
+        }
         return result
     }
+        
+    func loadAPIAllPages(base: String, limit: Int = 250) -> NSArray {
+        let result = NSMutableArray()
+
+        // 1re page : on en tire aussi le nombre total de pages.
+        let first = loadAPIPage(base: base, page: 1, limit: limit)
+        result.addObjects(from: first.items as! [Any])
+
+        // Pages suivantes, s'il y en a.
+        if first.pageCount > 1 {
+            for page in 2...first.pageCount {
+                let next = loadAPIPage(base: base, page: page, limit: limit)
+                if next.items.count == 0 { break }             // repli de sécurité
+                result.addObjects(from: next.items as! [Any])
+            }
+        }
+        return result
+    }
+    
+//    func loadAPI(reqAPI: String) -> NSObject {
+//        let startChrono : Date = Date()
+//        var ended : Bool = false
+//        var result : NSObject = NSObject()
+//
+//        var request = URLRequest(url: URL(string: reqAPI)!)
+//        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+//        request.addValue("Bearer \(self.Token)", forHTTPHeaderField: "Authorization")
+//        request.addValue("2", forHTTPHeaderField: "trakt-api-version")
+//        request.addValue("\(self.TraktClientID)", forHTTPHeaderField: "trakt-api-key")
+//        
+//        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+//            if let data = data, let response = response as? HTTPURLResponse {
+//                do {
+//                    if (response.statusCode != 200) { print("Trakt::error \(response.statusCode) received for req=\(reqAPI) "); ended = true; return; }
+//                    result = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSObject
+//                    ended = true
+//                    
+//                } catch let error as NSError { print("Trakt::failed \(error.localizedDescription) for req=\(reqAPI)"); ended = true; }
+//            } else { print(error as Any); ended = true; }
+//        }
+//        
+//        task.resume()
+//        while (!ended) { usleep(1000) }
+//        
+//        chrono = chrono + Date().timeIntervalSince(startChrono)
+//        return result
+//    }
     
     
     func postAPI(reqAPI: String, body: String) -> Bool {
@@ -113,9 +193,7 @@ class Trakt : NSObject {
     
     
     func webAutenth() {
-        
         revokeToken()
-        
         let path : String = "https://trakt.tv/oauth/authorize?response_type=code&client_id=\(TraktClientID)&redirect_uri=UneSerie://Trakt"
         let url : URL = URL(string: path.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)!
         UIApplication.shared.open(url)
@@ -126,7 +204,7 @@ class Trakt : NSObject {
         var request = URLRequest(url: URL(string: "https://api.trakt.tv/oauth/token")!)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = "{  \"code\": \"\(key)\",  \"client_id\": \"\(TraktClientID)\",  \"client_secret\": \"\(TraktClientSecret)\",  \"redirect_uri\": \"UneSerie://Trakt\",  \"grant_type\": \"authorization_code\"}".data(using: String.Encoding.utf8);
+        request.httpBody = "{ \"code\": \"\(key)\", \"client_id\": \"\(TraktClientID)\", \"client_secret\": \"\(TraktClientSecret)\", \"redirect_uri\": \"UneSerie://Trakt\", \"grant_type\": \"authorization_code\" }".data(using: String.Encoding.utf8);
         
         let task = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
             if let data = data, let response = response as? HTTPURLResponse  {
@@ -162,8 +240,8 @@ class Trakt : NSObject {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = "{\n  \"refresh_token\": \"\(refresher)\",\n  \"client_id\": \"\(self.TraktClientID)\",\n  \"client_secret\": \"\(self.TraktClientSecret)\",\n  \"redirect_uri\": \"urn:ietf:wg:oauth:2.0:oob\",\n  \"grant_type\": \"refresh_token\"\n}".data(using: String.Encoding.utf8);
-        
+        request.httpBody = "{ \"refresh_token\": \"\(refresher)\", \"client_id\": \"\(self.TraktClientID)\", \"client_secret\": \"\(self.TraktClientSecret)\", \"redirect_uri\": \"UneSerie://Trakt\", \"grant_type\": \"refresh_token\" }".data(using: String.Encoding.utf8);
+
         let session = URLSession.shared
         let task = session.dataTask(with: request, completionHandler: { data, response, error in
             if let data = data, let response = response as? HTTPURLResponse {
@@ -200,7 +278,7 @@ class Trakt : NSObject {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = "{\n  \"token\": \"\(Token)\",\n  \"client_id\": \"\(self.TraktClientID)\",\n  \"client_secret\": \"\(self.TraktClientSecret)\"\n}".data(using: String.Encoding.utf8);
+        request.httpBody = "{ \"token\": \"\(Token)\", \"client_id\": \"\(self.TraktClientID)\", \"client_secret\": \"\(self.TraktClientSecret)\" }".data(using: String.Encoding.utf8);
         
         let session = URLSession.shared
         let task = session.dataTask(with: request, completionHandler: { data, response, error in
@@ -269,7 +347,7 @@ class Trakt : NSObject {
     func rechercheParTitre(serieArechercher : String) -> [Serie] {
         var serieListe : [Serie] = []
 
-        let reqResult : NSArray = loadAPI(reqAPI: "https://api.trakt.tv/search/show?extended=full,fields=title,translations&query=\(serieArechercher.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)!)") as! NSArray
+        let reqResult : NSArray = loadAPI(reqAPI: "https://api.trakt.tv/search/show?extended=full&field=title,translations&query=\(serieArechercher.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)!)") as! NSArray
         
         for fiche in reqResult {
             let oneShow : AnyObject = ((fiche as AnyObject).object(forKey: "show")! as AnyObject)
@@ -344,8 +422,9 @@ class Trakt : NSObject {
         var returnSeries: [Serie] = [Serie]()
         var serie: Serie = Serie(serie: "")
         
-        let reqResult : NSArray = loadAPI(reqAPI: "https://api.trakt.tv/users/me/watchlist/shows") as? NSArray ?? NSArray()
-        
+        //let reqResult : NSArray = loadAPI(reqAPI: "https://api.trakt.tv/users/me/watchlist/shows") as? NSArray ?? NSArray()
+        let reqResult : NSArray = loadAPIAllPages(base: "https://api.trakt.tv/users/me/watchlist/shows")
+
         for fiche in reqResult {
             serie = Serie.init(serie: ((fiche as AnyObject).object(forKey: "show")! as AnyObject).object(forKey: "title") as! String)
             serie.idIMdb = (((fiche as AnyObject).object(forKey: "show")! as AnyObject).object(forKey: "ids")! as AnyObject).object(forKey: "imdb") as? String ?? ""
@@ -391,8 +470,9 @@ class Trakt : NSObject {
         var returnSeries: [Serie] = [Serie]()
         var serie: Serie = Serie(serie: "")
 
-        let reqResult : NSArray = loadAPI(reqAPI: "https://api.trakt.tv/users/me/lists/Abandon/items/shows") as? NSArray ?? NSArray()
-        
+        //let reqResult : NSArray = loadAPI(reqAPI: "https://api.trakt.tv/users/me/lists/Abandon/items/shows") as? NSArray ?? NSArray()
+        let reqResult : NSArray = loadAPIAllPages(base: "https://api.trakt.tv/users/me/lists/Abandon/items/shows")
+
         for fiche in reqResult {
             serie = Serie.init(serie: ((fiche as AnyObject).object(forKey: "show")! as AnyObject).object(forKey: "title") as! String)
             serie.idIMdb = (((fiche as AnyObject).object(forKey: "show")! as AnyObject).object(forKey: "ids")! as AnyObject).object(forKey: "imdb") as? String ?? ""
@@ -412,8 +492,9 @@ class Trakt : NSObject {
         var returnSeries: [Serie] = [Serie]()
         var serie: Serie = Serie(serie: "")
 
-        let reqResult : NSArray = loadAPI(reqAPI: "https://api.trakt.tv/sync/watched/shows") as? NSArray ?? NSArray()
-        
+        //let reqResult : NSArray = loadAPI(reqAPI: "https://api.trakt.tv/sync/watched/shows") as? NSArray ?? NSArray()
+        let reqResult : NSArray = loadAPIAllPages(base: "https://api.trakt.tv/sync/watched/shows?extended=progress")
+
         for fiche in reqResult {
             serie = Serie.init(serie: ((fiche as AnyObject).object(forKey: "show")! as AnyObject).object(forKey: "title") as! String)
             serie.idIMdb = (((fiche as AnyObject).object(forKey: "show")! as AnyObject).object(forKey: "ids")! as AnyObject).object(forKey: "imdb") as? String ?? ""
@@ -421,11 +502,11 @@ class Trakt : NSObject {
             serie.idTrakt = String((((fiche as AnyObject).object(forKey: "show")! as AnyObject).object(forKey: "ids")! as AnyObject).object(forKey: "trakt") as? Int ?? 0)
             serie.idMoviedb = String((((fiche as AnyObject).object(forKey: "show")! as AnyObject).object(forKey: "ids")! as AnyObject).object(forKey: "tmdb") as? Int ?? 0)
             
-            for fichesaisons in (fiche as AnyObject).object(forKey: "seasons") as! NSArray {
+            for fichesaisons in (fiche as AnyObject).object(forKey: "seasons") as? NSArray ?? NSArray() {
                 if ( ((fichesaisons as AnyObject).object(forKey: "number") as! Int) != 0 ) {
                     let uneSaison : Saison = Saison(serie: ((fiche as AnyObject).object(forKey: "show")! as AnyObject).object(forKey: "title") as! String,
                                                     saison: (fichesaisons as AnyObject).object(forKey: "number") as! Int)
-                    uneSaison.nbWatchedEps = ((fichesaisons as AnyObject).object(forKey: "episodes") as! NSArray).count
+                    uneSaison.nbWatchedEps = ((fichesaisons as AnyObject).object(forKey: "episodes") as? NSArray ?? NSArray()).count
                     
                     serie.saisons.append(uneSaison)
                 }
@@ -649,7 +730,8 @@ class Trakt : NSObject {
         var show : String = ""
         var rate : Int = 0
         
-        let reqResult : NSArray = loadAPI(reqAPI: "https://api.trakt.tv/sync/ratings/shows") as! NSArray
+        //let reqResult : NSArray = loadAPI(reqAPI: "https://api.trakt.tv/sync/ratings/shows") as! NSArray
+        let reqResult : NSArray = loadAPIAllPages(base: "https://api.trakt.tv/sync/ratings/shows")
 
         for oneShow in reqResult {
             rate = ((oneShow as! NSDictionary).object(forKey: "rating")) as? Int ?? 0

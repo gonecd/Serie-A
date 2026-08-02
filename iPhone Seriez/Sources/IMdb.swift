@@ -39,7 +39,7 @@ class IMdb : NSObject {
         }
         chrono = chrono + Date().timeIntervalSince(startChrono)
         
-        print ("Loading duration : \(Date().timeIntervalSince(startChrono))")
+        print ("Loading IMDB ratings : \(Date().timeIntervalSince(startChrono)) sec")
     }
     
     func downloadRatings() {
