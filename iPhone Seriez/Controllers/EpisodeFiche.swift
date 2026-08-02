@@ -208,7 +208,7 @@ class EpisodeFiche : UIViewController, UIScrollViewDelegate, UITableViewDelegate
         
         let opParental = BlockOperation(block: {
 
-            while (self.IMDBcodeSource == "") { usleep(100) }
+            while (self.IMDBcodeSource.count < 10000) { usleep(100) }
             self.IMDBparentalGuide = imdb.getParentalGuide(page: self.IMDBcodeSource)
 
             OperationQueue.main.addOperation({

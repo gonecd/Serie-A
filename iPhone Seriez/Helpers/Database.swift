@@ -126,6 +126,9 @@ class Database : NSObject {
 
         queue.waitUntilAllOperationsAreFinished()
         
+        
+        print ("\(serie.serie);\(dataTVdb.status);\(dataMoviedb.status);\(dataTrakt.status);\(dataBetaSeries.status);\(dataIMDB.status);\(dataRotten.status);\(dataTVmaze.status);\(dataMetaCritic.status);\(dataAlloCine.status);\(dataSensCritique.status);\(dataSIMKL.status);")
+        
         serie.cleverMerge(TVdb : dataTVdb, Moviedb: dataMoviedb, Trakt: dataTrakt, BetaSeries: dataBetaSeries, IMDB: dataIMDB, RottenTomatoes: dataRotten, TVmaze: dataTVmaze, MetaCritic: dataMetaCritic, AlloCine: dataAlloCine, SensCritique: dataSensCritique, SIMKL: dataSIMKL)
     }
     
@@ -229,9 +232,7 @@ class Database : NSObject {
                 let data = Data(referencing:nsData)
                 
                 shows = try (NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as? [Serie])!
-// WAS :                 shows = try (NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as? [Serie])!
 //                shows = try NSKeyedUnarchiver.unarchivedArrayOfObjects(ofClass: Serie, from: data)!
-                //unarchivedObject(ofClass: [Serie], from: data) as! [Serie]
                 shows = shows.sorted(by: { $0.serie < $1.serie })
                 fillIndex()
             } catch {

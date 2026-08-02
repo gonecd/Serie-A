@@ -69,11 +69,13 @@ class ViewAccueil: UIViewController  {
         super.viewDidLoad()
         appConfig.load()
         reqAccessToContacts()
-                
+        checkDirectories()
+
         // Initialisation sources de données
         trakt.start()
         theTVdb.initializeToken()
 //        freebox.initializeToken()
+//        freebox.openSession(appToken: "Hxs2ZJY/COFBr2SNj/TtpHj32EI0Y9HBgncROMNlkmlieZYT4eNg+uJEV+gnVpL4")
         
         let queue : OperationQueue = OperationQueue()
         let opeIMDB = BlockOperation(block: { imdb.loadDataFile() } )
@@ -96,7 +98,6 @@ class ViewAccueil: UIViewController  {
 //        journal.removeDuplicates()
 //        journal.save()
         
-        checkDirectories()
         
         // Faire des jolis carrés dégradés à coins ronds
         makeGradiant(carre: cadreSerieWatchlist, couleur : "Vert")

@@ -86,7 +86,8 @@ class MetaCritic {
         for oneShow in itemsFound {
             let serieTrouvee = ((oneShow as! NSDictionary).object(forKey: "title")) as? String ?? ""
             
-            if (serie.lowercased().trimmingCharacters(in: .whitespacesAndNewlines) == serieTrouvee.replacingOccurrences(of: #"\s?\([\w\s]*\)"#, with: "", options: .regularExpression).lowercased().trimmingCharacters(in: .whitespacesAndNewlines)) {
+            if ((serie.lowercased().trimmingCharacters(in: .whitespacesAndNewlines) == serieTrouvee.replacingOccurrences(of: #"\s?\([\w\s]*\)"#, with: "", options: .regularExpression).lowercased().trimmingCharacters(in: .whitespacesAndNewlines))
+                || (serie == "Shōgun") || (serie == "Rick and Morty") || (serie == "SAS: Rogue Heroes") || (serie == "Star Wars: Andor")) {
                 uneSerie.ratingMetaCritic = ((oneShow as! NSDictionary).object(forKey: "criticScoreSummary") as! NSDictionary).object(forKey: "score") as? Int ?? 0
                 uneSerie.certification = (oneShow as! NSDictionary).object(forKey: "rating") as? String ?? ""
                 uneSerie.year = (oneShow as! NSDictionary).object(forKey: "premiereYear") as? Int ?? 0
@@ -109,7 +110,7 @@ class MetaCritic {
         let uneSerie : Serie = Serie(serie: serie)
         if (uneSerie.slugMetaCritic == "") { return uneSerie }
         let webPage : String = "https://www.metacritic.com/tv/"+uneSerie.slugMetaCritic
-
+        
         do {
             let page : String = try String(contentsOf: URL(string : webPage)!, encoding: .utf8)
             let doc : Document = try SwiftSoup.parse(page)
@@ -128,7 +129,7 @@ class MetaCritic {
         let startChrono : Date = Date()
         if (uneSerie.slugMetaCritic == "") { return }
         let webPage : String = "https://www.metacritic.com/tv/"+uneSerie.slugMetaCritic
-
+        
         for uneSaison in uneSerie.saisons {
             do {
                 let page : String = try String(contentsOf: URL(string : webPage+"/season-"+String(uneSaison.saison))!, encoding: .utf8)
@@ -177,7 +178,7 @@ class MetaCritic {
             let doc : Document = try SwiftSoup.parse(page)
             
             let showList = try doc.select("[class='c-finderProductCard_title']")
-
+            
             for oneShow in showList {
                 let spans = try oneShow.select("span")
                 
@@ -217,6 +218,7 @@ class MetaCritic {
             "En thérapie",
             "Family Business",
             "Fawlty Towers",
+            "Furies",
             "Glue",
             "Guyane",
             "HPI",
@@ -245,6 +247,7 @@ class MetaCritic {
             "State of Happiness",
             "The Bureau",
             "The Collapse",
+            "The Danish Woman",
             "The Frog",
             "The Messiah",
             "The Sentinels",
@@ -265,13 +268,13 @@ class MetaCritic {
         default : return serie.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) ?? ""
         }
     }
-
+    
     
     func getCritics(slug: String, saison: Int) -> [Critique] {
         let startChrono : Date = Date()
         var result : [Critique] = []
         if (slug == "") { return result }
-
+        
         var webPage : String = "https://www.metacritic.com/tv/"+slug
         webPage = webPage + "/critic-reviews/?sort-by=Recently%20Added&num_items=20&season=season-" + String(saison)
         webPage = webPage.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!

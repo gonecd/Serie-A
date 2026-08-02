@@ -149,6 +149,8 @@
 		F19A397B2BD4192A00A03651 /* simkl.png in Resources */ = {isa = PBXBuildFile; fileRef = F19A397A2BD4192A00A03651 /* simkl.png */; };
 		F19A397F2BD4246300A03651 /* Flag_of_Argentina.png in Resources */ = {isa = PBXBuildFile; fileRef = F19A397D2BD4246300A03651 /* Flag_of_Argentina.png */; };
 		F19A39812BD4246300A03651 /* Flag_of_Ireland.png in Resources */ = {isa = PBXBuildFile; fileRef = F19A397E2BD4246300A03651 /* Flag_of_Ireland.png */; };
+		F19B27582FAF5D8000DDA232 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F19B27572FAF5D7F00DDA232 /* SceneDelegate.swift */; };
+		F19B27592FAF5D8000DDA232 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F19B27572FAF5D7F00DDA232 /* SceneDelegate.swift */; };
 		F19B2C1C2EB7ABB600ADF568 /* SwiftGzip in Frameworks */ = {isa = PBXBuildFile; productRef = F19B2C1B2EB7ABB600ADF568 /* SwiftGzip */; };
 		F19B2C1E2EB7B18E00ADF568 /* YouTube.swift in Sources */ = {isa = PBXBuildFile; fileRef = F19B2C1D2EB7B18E00ADF568 /* YouTube.swift */; };
 		F19B2C202EB7B18E00ADF568 /* YouTube.swift in Sources */ = {isa = PBXBuildFile; fileRef = F19B2C1D2EB7B18E00ADF568 /* YouTube.swift */; };
@@ -503,6 +505,7 @@
 		F19A397A2BD4192A00A03651 /* simkl.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = simkl.png; sourceTree = "<group>"; };
 		F19A397D2BD4246300A03651 /* Flag_of_Argentina.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_Argentina.png; sourceTree = "<group>"; };
 		F19A397E2BD4246300A03651 /* Flag_of_Ireland.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Flag_of_Ireland.png; sourceTree = "<group>"; };
+		F19B27572FAF5D7F00DDA232 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		F19B2C1D2EB7B18E00ADF568 /* YouTube.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouTube.swift; sourceTree = "<group>"; };
 		F1A14E5C2C7A4E7B00082E06 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/iPad13p.storyboard; sourceTree = "<group>"; };
 		F1A14ED82C7A4EEE00082E06 /* SerieA-iPad13p.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SerieA-iPad13p.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -857,6 +860,7 @@
 				6279645E2099D32400ED5578 /* Database.swift */,
 				6208D96722352ACC00FE179F /* Notification.swift */,
 				6255DBD92083780900CA9BA3 /* Helpers.swift */,
+				F19B27572FAF5D7F00DDA232 /* SceneDelegate.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -1287,6 +1291,7 @@
 				F1D470AF2CD7CD0000EEF11B /* ViewExplorer.swift in Sources */,
 				F191E0072D25B347004E9991 /* ViewAdvisors.swift in Sources */,
 				F16263372D20593C00A7727D /* AppConfig.swift in Sources */,
+				F19B27592FAF5D8000DDA232 /* SceneDelegate.swift in Sources */,
 				62F8ECF42013775800A41EF7 /* EpisodeFiche.swift in Sources */,
 				F11F4CC028689862002EB3E3 /* SerieFicheDetails.swift in Sources */,
 				F16F63132763C92C008E459E /* Saison.swift in Sources */,
@@ -1347,6 +1352,7 @@
 				F1A14E6A2C7A4EEE00082E06 /* Constantes.swift in Sources */,
 				F1A14E6B2C7A4EEE00082E06 /* IMdb.swift in Sources */,
 				F1A14E6C2C7A4EEE00082E06 /* EpisodeFiche.swift in Sources */,
+				F19B27582FAF5D8000DDA232 /* SceneDelegate.swift in Sources */,
 				F1A14E6D2C7A4EEE00082E06 /* SerieFicheDetails.swift in Sources */,
 				F1A14E6E2C7A4EEE00082E06 /* Saison.swift in Sources */,
 				F1A14E6F2C7A4EEE00082E06 /* Episode.swift in Sources */,

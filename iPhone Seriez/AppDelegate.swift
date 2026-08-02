@@ -8,7 +8,7 @@
 
 import UIKit
 import UserNotifications
-
+import BackgroundTasks
 
 
 @UIApplicationMain
@@ -16,14 +16,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
 
-        // Intervalle de réveil pour les jobs schédulés
-        UIApplication.shared.setMinimumBackgroundFetchInterval(7200)
-        
-        
         // Demande d'uthorization de notifier
         let center = UNUserNotificationCenter.current()
         center.delegate = self
@@ -37,6 +32,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let startCategory = UNNotificationCategory(identifier: "START", actions: [], intentIdentifiers: [], options: UNNotificationCategoryOptions(rawValue: 0))
         let stopCategory = UNNotificationCategory(identifier: "STOP", actions: [], intentIdentifiers: [], options: UNNotificationCategoryOptions(rawValue: 0))
         center.setNotificationCategories([scheduledCategory, startCategory, stopCategory])
+        
+        BGTaskScheduler.shared.register(forTaskWithIdentifier: "Home.SerieA.refresh", using: nil) { task in
+            self.handleAppRefresh(task: task as! BGAppRefreshTask)
+        }
+        
+        self.scheduleAppRefresh()
 
         return true
     }
@@ -65,72 +66,88 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
-    
-    // Support for background fetch
-    func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        var fileUpdates : DataUpdates = db.loadDataUpdates()
-        
-        // Dates from TV Maze (une fois par jour)
-        if (Calendar.current.isDateInToday(fileUpdates.TVMaze_Dates) == false) {
-            loadDates()
-            fileUpdates.TVMaze_Dates = Date()
-            checkComingUp()
-            db.saveDataUpdates(dataUpdates: fileUpdates)
-        }
-
-        // Ratings from IMDB (une fois par jpur)
-        if ( Calendar.current.isDateInToday(fileUpdates.IMDB_Rates) == false ) {
-            loadIMDB()
-            fileUpdates.IMDB_Rates = Date()
-            db.saveDataUpdates(dataUpdates: fileUpdates)
-        }
-
-        // Visualisation from Trakt
-        db.quickRefresh()
-        db.finaliseDB()
-        fileUpdates.Trakt_Viewed = Date()
-        db.saveDataUpdates(dataUpdates: fileUpdates)
-
-        db.saveDB()
-        completionHandler(.newData)
-    }
-    
-    
-    func application(_ application: UIApplication,
-                     open url: URL,
-                     options: [UIApplication.OpenURLOptionsKey : Any] = [:] ) -> Bool {
-        
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         let components = NSURLComponents(url: url, resolvingAgainstBaseURL: true)
-        let source = components!.host
-        let params = components!.queryItems
+        let source = components?.host
+        let params = components?.queryItems
 
-        print("Redirect URI from :\(String(describing: source))")
+        print("<<<<< Dans le AppDelegate >>>>")
+        print("Redirect URI from: \(String(describing: source))")
+        print("Full URL: \(url.absoluteString)")
+        print("Query params: \(String(describing: params))")
 
         switch source {
         case "Trakt":
-            trakt.downloadToken(key: params?.first?.value ?? "")
-            break
-            
+            if let code = params?.first(where: { $0.name == "code" })?.value {
+                print("Authorization code received: \(code)")
+                trakt.downloadToken(key: code)
+                return true
+            } else {
+                print("Error: No authorization code found in URL")
+                return false
+            }
         case "ASuivre1":
             let navigationController = window!.rootViewController! as! UINavigationController
             navigationController.viewControllers.first?.performSegue(withIdentifier: "Go1", sender: nil)
-            break
-            
+            return true
+
         case "ASuivre2":
             let navigationController = window!.rootViewController! as! UINavigationController
             navigationController.viewControllers.first?.performSegue(withIdentifier: "Go2", sender: nil)
-            break
-        
+            return true
+
         case "ASuivre3":
             let navigationController = window!.rootViewController! as! UINavigationController
             navigationController.viewControllers.first?.performSegue(withIdentifier: "Go3", sender: nil)
-            break
-            
+            return true
+
         default:
-            break
+            print("Unknown URL scheme host: \(String(describing: source))")
+            return false
         }
+    }
+    
+    private func scheduleAppRefresh() {
+        let identifier = "Home.SerieA.refresh"
+        let request = BGAppRefreshTaskRequest(identifier: identifier)
+        request.earliestBeginDate = Date(timeIntervalSinceNow: 7200) // 2 hours
         
-        return true
+        do {
+            try BGTaskScheduler.shared.submit(request)
+            print("Background refresh planifié avec succès pour '\(identifier)'")
+        } catch let error as NSError {
+            print("Impossible de planifier le refresh for \(identifier). Error code : \(error.code)")
+        }
+    }
+
+    private func handleAppRefresh(task: BGAppRefreshTask) {
+        scheduleAppRefresh() // Schedule next refresh
+        task.expirationHandler = {
+            // Handle expiration if needed
+        }
+        DispatchQueue.global().async {
+            var fileUpdates: DataUpdates = db.loadDataUpdates()
+            // Dates from TV Maze (once per day)
+            if !Calendar.current.isDateInToday(fileUpdates.TVMaze_Dates) {
+                loadDates()
+                fileUpdates.TVMaze_Dates = Date()
+                checkComingUp()
+                db.saveDataUpdates(dataUpdates: fileUpdates)
+            }
+            // Ratings from IMDB (once per day)
+            if !Calendar.current.isDateInToday(fileUpdates.IMDB_Rates) {
+                loadIMDB()
+                fileUpdates.IMDB_Rates = Date()
+                db.saveDataUpdates(dataUpdates: fileUpdates)
+            }
+            // Visualisation from Trakt
+            db.quickRefresh()
+            db.finaliseDB()
+            fileUpdates.Trakt_Viewed = Date()
+            db.saveDataUpdates(dataUpdates: fileUpdates)
+            db.saveDB()
+            task.setTaskCompleted(success: true)
+        }
     }
 
 }
@@ -142,3 +159,4 @@ extension AppDelegate: UNUserNotificationCenterDelegate
         // Ca permet d'afficher l'alerte meme si l'application est en train de tourner (ou de la gérer depuis l'appli le cas échéant)
     }
 }
+
